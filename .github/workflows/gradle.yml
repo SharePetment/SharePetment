@@ -39,9 +39,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
       - name: Build with Gradle
-        run: |
-          chmod +x server/server-application/gradlew
-          server/server-application/gradlew clean build -x test
+        run: ./gradlew bootJar
       - name: Docker build & push to docker repo
         run: |
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
