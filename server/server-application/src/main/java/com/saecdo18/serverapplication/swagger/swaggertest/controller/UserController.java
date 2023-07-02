@@ -12,7 +12,7 @@ import java.util.List;
 
 
 @RestController
-public class MemberController {
+public class UserController {
     private List<User> members = new ArrayList<>();
     private int id = 0;
 
