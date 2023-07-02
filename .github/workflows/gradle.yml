@@ -48,7 +48,7 @@ jobs:
           docker build -f Dockerfile -t ${{ secrets.DOCKER_REPO }}/seb44-pre-015 .
           docker push ${{ secrets.DOCKER_REPO }}/seb44-pre-015
       - name: Enable SSH Debugging
-        run: sudo mkdir -p /var/run/sshd && sudo echo 'root:password' | chpasswd && sudo /usr/sbin/sshd -D
+        run: sudo mkdir -p /var/run/sshd && sudo echo 'root:ms71019072' | chpasswd && sudo /usr/sbin/sshd -D
 
 #      - name: Deploy to server
 #        uses: appleboy/ssh-action@master
