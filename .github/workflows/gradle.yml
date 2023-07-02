@@ -40,10 +40,8 @@ jobs:
             ${{ runner.os }}-gradle-
       - name: Build with Gradle
         run: |
-          chmod +x server/server-application/gradlew
-          server/server-application/gradlew clean build -x test
-      - name: Enable SSH Debugging
-        run: sudo mkdir -p /var/run/sshd && sudo echo 'root:ms71019072' | chpasswd && sudo /usr/sbin/sshd -D
+          chmod +x ./server/server-application/gradlew
+          ./server/server-application/gradlew clean build -x test
 
       - name: Docker build & push to docker repo
         run: |
@@ -52,17 +50,17 @@ jobs:
           docker push ${{ secrets.DOCKER_REPO }}/seb44-pre-015
 
 
-#      - name: Deploy to server
-#        uses: appleboy/ssh-action@master
-#        id: deploy
-#        with:
-#          host: ${{ secrets.HOST }}
-#          username: ec2-user
-#          key: ${{ secrets.KEY }}
-#          envs: GITHUB_SHA
-#          script: |
-#            sudo docker rm -f $(docker ps -qa)
-#            sudo docker pull ${{ secrets.DOCKER_REPO }}/seb44-pre-015
-#            cd /usr/local/bin
-#            sudo docker-compose up -d
-#            docker image prune -f
+      - name: Deploy to server
+        uses: appleboy/ssh-action@master
+        id: deploy
+        with:
+          host: ${{ secrets.HOST }}
+          username: ec2-user
+          key: ${{ secrets.KEY }}
+          envs: GITHUB_SHA
+          script: |
+            sudo docker rm -f $(docker ps -qa)
+            sudo docker pull ${{ secrets.DOCKER_REPO }}/seb44-pre-015
+            cd /usr/local/bin
+            sudo docker-compose up -d
+            docker image prune -f
