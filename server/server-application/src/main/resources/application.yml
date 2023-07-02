@@ -4,7 +4,7 @@ springdoc:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3307/testdb?createDatabaseIfNotExist=true
+    url: jdbc:mysql://172.31.44.214:3307/testdb?createDatabaseIfNotExist=true
     username: root
     password: 759802
   jpa:
