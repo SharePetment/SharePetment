@@ -40,8 +40,9 @@ jobs:
             ${{ runner.os }}-gradle-
       - name: Build with Gradle
         run: |
-          chmod +x ${{github.workspace}}/server/server-application/gradlew
-          ${{github.workspace}}/server/server-application/gradlew clean build -x test
+          cd server/server-application
+          chmod +x ./gradlew
+          ./gradlew clean build -x test
 
       - name: Docker build & push to docker repo
         run: |
