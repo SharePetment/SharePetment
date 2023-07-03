@@ -17,7 +17,7 @@ public class WalkMate {
     private Long walkMatePostId;
 
     @ManyToOne
-    @JoinColumn(name = "MEMBER")
+    @JoinColumn(name = "MEMBER_ID")
     private Member member;
 
     @Column(nullable = false)
