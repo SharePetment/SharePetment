@@ -1,6 +1,7 @@
 package com.saecdo18.serverapplication.feeds.entity;
 
 import com.saecdo18.serverapplication.base.BaseEntity;
+import com.saecdo18.serverapplication.member.entity.Member;
 
 import javax.persistence.*;
 import java.util.List;
@@ -21,9 +22,9 @@ public class Feed extends BaseEntity {
     @Column(nullable = false)
     private String url;
 
-//    @ManyToOne
-//    @JoinColumn(name = "member_id")
-//    private Object memberId;
+    @ManyToOne
+    @JoinColumn(name = "member_id")
+    private Member member;
 
     @OneToMany(mappedBy = "feed", cascade = CascadeType.REMOVE)
     private List<FeedLike> feedLikeList;

@@ -1,6 +1,7 @@
 package com.saecdo18.serverapplication.feeds.entity;
 
 import com.saecdo18.serverapplication.base.BaseEntity;
+import com.saecdo18.serverapplication.member.entity.Member;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -23,8 +24,8 @@ public class FeedComments extends BaseEntity {
     @JoinColumn(name = "feed_id")
     private Feed feed;
 
-//    @ManyToOne
-//    @JoinColumn(name = "member_id")
-//    private Member member;
+    @ManyToOne
+    @JoinColumn(name = "member_id")
+    private Member member;
 
 }
