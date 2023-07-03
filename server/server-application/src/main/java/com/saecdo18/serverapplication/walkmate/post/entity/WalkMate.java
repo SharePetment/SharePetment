@@ -7,7 +7,6 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Getter
-@Setter
 @NoArgsConstructor
 @Entity
 public class WalkMate {
@@ -39,7 +38,7 @@ public class WalkMate {
     private String time;
 
     @Column
-    private Boolean open;
+    private Boolean open=true;
 
     @Column(nullable = false)
     private int maximum;
