@@ -7,7 +7,7 @@ spring:
 #    url: jdbc:mysql://172.31.44.214:3307/testdb?createDatabaseIfNotExist=true
     url: jdbc:mysql://localhost:3306/testdb?createDatabaseIfNotExist=true
     username: root
-    password: 759802
+    password: gt1488
   jpa:
     show-sql: true
     hibernate:
