@@ -1,4 +1,4 @@
-package com.saecdo18.serverapplication;
+package com.saecdo18.petmily;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
