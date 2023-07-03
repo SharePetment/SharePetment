@@ -1,6 +1,8 @@
 package com.saecdo18.petmily.member.service;
 
+import com.saecdo18.petmily.member.dto.MemberDto;
 import com.saecdo18.petmily.member.entity.Member;
+import com.saecdo18.petmily.member.mapper.MemberMapper;
 import com.saecdo18.petmily.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,15 +17,28 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class MemberService {
     private final MemberRepository memberRepository;
+    private final MemberMapper memberMapper;
     public Member createMember(Member member){
         Member findMember = methodVerifyNoneMember(member); //email를 통해 등록되지 않은 멤버이면 진행
         memberRepository.save(findMember);
         return findMember;
     }
 
+    public MemberDto.Response getMember(long memberId){
+        Member member = methodFindByMemberIdMember(memberId);
+
+        return memberMapper.memberToMemberResponseDto(member);
+    }
+
     public Member updateMemberStatus(long memberId, String nickname, String address){
         Member findMember = methodFindByMemberIdMember(memberId);
         findMember.update(nickname, address);
+        return findMember;
+    }
+
+    public Member updateMemberStatusMessage(long memberId, String statusMessage){
+        Member findMember = methodFindByMemberIdMember(memberId);
+        findMember.updateMessage(statusMessage);
         return findMember;
     }
 

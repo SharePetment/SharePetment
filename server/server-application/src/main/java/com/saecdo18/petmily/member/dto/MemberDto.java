@@ -32,6 +32,15 @@ public class MemberDto {
     }
 
     @Getter
+    @Setter
+    public static class PatchMessage{
+
+        private String statusMessage;
+
+
+    }
+
+    @Getter
     @Builder
     public static class Response{
         private Long memberId;

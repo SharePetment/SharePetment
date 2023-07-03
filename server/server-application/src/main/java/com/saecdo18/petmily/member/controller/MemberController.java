@@ -36,14 +36,30 @@ public class MemberController {
 //        return ResponseEntity.created(location).build();
     }
 
+    @GetMapping("/{member-id}")
+    public ResponseEntity getMember(@PathVariable("member-id") long memberId){
+        MemberDto.Response responseMember = memberService.getMember(memberId);
+        return new ResponseEntity(responseMember, HttpStatus.OK);
+    }
+
     @PatchMapping("/status/{member-id}")
     public ResponseEntity patchMember(@PathVariable("member-id") long memberId,
                                       @Valid @RequestBody MemberDto.Patch memberPatchDto){
         Member member = memberService.updateMemberStatus(memberId,
                 memberPatchDto.getNickname(),
                 memberPatchDto.getAddress());
-        MemberDto.Response responseDto = memberMapper.memberToMemberResponseDto(member);
-        return new ResponseEntity(responseDto, HttpStatus.OK);
+        MemberDto.Response responseMember = memberMapper.memberToMemberResponseDto(member);
+        return new ResponseEntity(responseMember, HttpStatus.OK);
+    }
+
+    @PatchMapping("/statusmessage/{member-id}")
+    public ResponseEntity patchMemberStatusMessage(@PathVariable("member-id") long memberId,
+                                                   @Valid @RequestBody MemberDto.PatchMessage memberPatchMessageDto){
+        Member member = memberService.updateMemberStatusMessage(memberId, memberPatchMessageDto.getStatusMessage());
+
+        MemberDto.Response responseMember = memberMapper.memberToMemberResponseDto(member);
+
+        return new ResponseEntity<>(responseMember, HttpStatus.OK);
     }
 
 }
