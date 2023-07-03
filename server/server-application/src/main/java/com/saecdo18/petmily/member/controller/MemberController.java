@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.net.URI;
 
 @RestController
 @CrossOrigin
@@ -18,10 +19,16 @@ import javax.validation.Valid;
 public class MemberController {
     private final MemberMapper memberMapper;
     private final MemberService memberService;
+    private final static String MEMBER_CREATE_URI = "localhost:8080/members";
+
     @PostMapping
     public ResponseEntity postMember(@Valid @RequestBody MemberDto.Post memberPostDto){
         Member mappingMember = memberMapper.memberPostDtoToMember(memberPostDto);
+
         long memberId = memberService.createMember(mappingMember);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+
+        URI location = memberService.uriBuilder(memberId, MEMBER_CREATE_URI);
+
+        return ResponseEntity.created(location).build();
     }
 }

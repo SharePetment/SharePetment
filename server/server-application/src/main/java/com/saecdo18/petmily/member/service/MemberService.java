@@ -5,7 +5,9 @@ import com.saecdo18.petmily.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
 import java.util.Optional;
 
 @Transactional
@@ -25,5 +27,13 @@ public class MemberService {
             throw new RuntimeException("이미 등록된 회원입니다.");
         }
         return member;
+    }
+
+    public URI uriBuilder(long memberId, String basicURL) {
+        return UriComponentsBuilder
+                .fromUriString(basicURL)
+                .path("/"+memberId)
+                .build()
+                .toUri();
     }
 }
