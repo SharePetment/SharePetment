@@ -9,12 +9,12 @@
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0 --fix",
     "preview": "vite preview",
     "prepare": "cd .. && husky install client/.husky",
-    "list-staged": "cd client && lint-staged"
+    "lint-staged": "lint-staged"
   },
   "lint-staged": {
-    "[*.ts, *.tsx]": [
-      "eslint --fix",
-      "git add"
+    "*.{ts,tsx}": [
+      "prettier --write",
+      "eslint --fix"
     ]
   },
   "dependencies": {
