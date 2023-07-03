@@ -8,13 +8,12 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Getter
-@Setter
 @Entity
 @NoArgsConstructor
 public class FollowMember {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long followMemberId;
+    private Long followMemberId;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)

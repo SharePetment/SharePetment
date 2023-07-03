@@ -9,13 +9,12 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Getter
-@Setter
 @Entity
 @NoArgsConstructor
 public class Pet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long petId;
+    private Long petId;
     @Column(nullable = false)
     private String profile;
     @Column(nullable = false)
