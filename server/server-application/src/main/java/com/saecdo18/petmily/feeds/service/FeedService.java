@@ -13,4 +13,6 @@ public interface FeedService {
 
     public FeedDto.Response getFeed(long feedId);
 
+
+    public void methodSaveImage(Feed feed, String originalFilename, String uploadFileURL);
 }

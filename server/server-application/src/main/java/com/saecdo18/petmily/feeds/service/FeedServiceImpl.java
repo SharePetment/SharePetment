@@ -14,11 +14,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
 import java.net.URI;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -58,6 +56,7 @@ public class FeedServiceImpl implements FeedService {
     }
 
 
+    @Override
     public void methodSaveImage(Feed feed, String originalFilename, String uploadFileURL) {
         Image image = Image.builder()
                 .originalFileName(originalFilename)
