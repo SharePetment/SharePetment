@@ -13,7 +13,7 @@ import javax.persistence.*;
 public class FollowMember {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long followMemberId;
+    private Long followMemberId;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)

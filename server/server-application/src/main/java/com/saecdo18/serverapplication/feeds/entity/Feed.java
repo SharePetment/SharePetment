@@ -2,10 +2,12 @@ package com.saecdo18.serverapplication.feeds.entity;
 
 import com.saecdo18.serverapplication.base.BaseEntity;
 import com.saecdo18.serverapplication.member.entity.Member;
+import lombok.Getter;
 
 import javax.persistence.*;
 import java.util.List;
 
+@Getter
 @Entity
 public class Feed extends BaseEntity {
 

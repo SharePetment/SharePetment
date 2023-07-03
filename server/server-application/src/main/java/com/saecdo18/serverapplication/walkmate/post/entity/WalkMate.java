@@ -1,5 +1,6 @@
 package com.saecdo18.serverapplication.walkmate.post.entity;
 
+import com.saecdo18.serverapplication.member.entity.Member;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,11 +14,11 @@ public class WalkMate {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long walkMatePostId;
+    private Long walkMatePostId;
 
     @ManyToOne
-    @JoinColumn(name = "MEMBER_ID")
-    private long memberId;
+    @JoinColumn(name = "MEMBER")
+    private Member member;
 
     @Column(nullable = false)
     private String title;

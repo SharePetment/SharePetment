@@ -2,11 +2,13 @@ package com.saecdo18.serverapplication.image.entity;
 
 import com.saecdo18.serverapplication.base.BaseEntity;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Entity
+@Getter
 @NoArgsConstructor
 public class Image extends BaseEntity {
 

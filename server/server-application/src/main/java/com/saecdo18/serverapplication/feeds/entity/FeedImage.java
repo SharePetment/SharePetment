@@ -3,11 +3,13 @@ package com.saecdo18.serverapplication.feeds.entity;
 import com.saecdo18.serverapplication.base.BaseEntity;
 import com.saecdo18.serverapplication.image.entity.Image;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Entity
+@Getter
 @NoArgsConstructor
 public class FeedImage extends BaseEntity {
 
