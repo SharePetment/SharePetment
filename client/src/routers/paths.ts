@@ -6,6 +6,7 @@ export enum Direction {
   Mypage = '/my-page',
   Userpage = '/users/:usersId',
   FeedPopUp = '/home/:feedId',
+  CopyPopUp = 'copy/:feedId',
   FeedPosting = '/feed-posting',
   FeedEditing = '/feed-posting/:feedId',
   WalkMate = '/walkmate',
