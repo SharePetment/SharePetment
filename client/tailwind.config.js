@@ -9,6 +9,7 @@ export default {
       lightgray: 'd4d4d8',
       green: '#69B783',
       lightgreen: '#CCE7C2',
+      white: '#FFFFFF',
     },
   },
   plugins: [],
