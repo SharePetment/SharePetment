@@ -44,12 +44,13 @@ public class MemberDto {
     @Builder
     public static class Response{
         private Long memberId;
-
+        private String kakaoName;
         private String email;
         private String nickname;
         private String address;
         private String statusMessage;
         private int followerCount;
+        private boolean animalParents;
         private String createdAt;
         private String updatedAt;
     }

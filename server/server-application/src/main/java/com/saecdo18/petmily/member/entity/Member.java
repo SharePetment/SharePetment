@@ -17,6 +17,8 @@ public class Member extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long memberId;
+
+    private String kakaoName;
     @Column(nullable = false)
     private String email;
     @Column(nullable = false)
@@ -26,6 +28,8 @@ public class Member extends BaseEntity {
     private String statusMessage;
 
     private int followerCount;
+
+    private boolean animalParents;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private List<Pet> pets;
@@ -44,5 +48,9 @@ public class Member extends BaseEntity {
 
     public void updateMessage(String statusMessage){
         this.statusMessage=statusMessage;
+    }
+
+    public void updateAnimalParents(boolean animalParents){
+        this.animalParents=animalParents;
     }
 }

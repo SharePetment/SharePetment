@@ -23,6 +23,10 @@ public class PetService {
         pet.updateMember(findMember);
         petRepository.save(pet);
 
+        if(!findMember.isAnimalParents()){
+            findMember.updateAnimalParents(true);
+        }
+
         return pet;
     }
 
