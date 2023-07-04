@@ -1,12 +1,15 @@
 package com.saecdo18.petmily.walkmate.post.entity;
 
 import com.saecdo18.petmily.member.entity.Member;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
 @Getter
+@Setter
 @NoArgsConstructor
 @Entity
 public class WalkMate {
@@ -45,5 +48,18 @@ public class WalkMate {
 
     @Column
     private Integer likes;
+
+    @Builder
+    public WalkMate(String title, String content, String mapURL, String chatURL, String location, String time, Boolean open, Integer maximum) {
+        this.title = title;
+        this.content = content;
+        this.mapURL = mapURL;
+        this.chatURL = chatURL;
+        this.location = location;
+        this.time = time;
+        this.open = open;
+        this.maximum = maximum;
+    }
+
 
 }

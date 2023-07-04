@@ -1,11 +1,12 @@
 package com.saecdo18.petmily.walkmate.post.dto;
 
-import lombok.Builder;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import lombok.*;
 
-@Builder
+@Getter
 public class WalkPostDto {
 
-    private long memberId;
+//    private Long memberId;
     private String title;
     private String content;
     private String mapURL;
@@ -13,5 +14,6 @@ public class WalkPostDto {
     private String location;
     private String time;
     private Boolean open;
-    private int maximum;
+    private Integer maximum;
+
 }
