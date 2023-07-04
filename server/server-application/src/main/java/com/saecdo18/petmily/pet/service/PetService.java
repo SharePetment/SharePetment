@@ -30,6 +30,14 @@ public class PetService {
         return pet;
     }
 
+    public Pet getPet(long petId){
+        return methodFindByPetId(petId);
+    }
+
+    private Pet methodFindByPetId(long petId) {
+        return petRepository.findById(petId).orElseThrow(() -> new RuntimeException("찾으시는 반려동물이 없습니다"));
+    }
+
     private Pet methodFindByMember(Member findMember) {
         return petRepository.findByMember(findMember)
                 .orElseThrow(() -> new RuntimeException("해당 멤버가 없습니다"));
