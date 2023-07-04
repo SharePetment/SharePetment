@@ -17,14 +17,14 @@ public class Image extends BaseEntity {
     private Long imageId;
 
     @Column(nullable = false)
-    private String originalFileName;
+    private String originalFilename;
 
     @Column(nullable = false)
     private String uploadFileURL;
 
     @Builder
-    public Image(String originalFileName, String uploadFileURL) {
-        this.originalFileName = originalFileName;
+    public Image(String originalFilename, String uploadFileURL) {
+        this.originalFilename = originalFilename;
         this.uploadFileURL = uploadFileURL;
     }
 }

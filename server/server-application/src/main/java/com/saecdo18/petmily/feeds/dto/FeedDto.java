@@ -41,5 +41,13 @@ public class FeedDto {
         private LocalDateTime modifiedAt;
     }
 
+    @Data
+    @Builder
+    public static class Like {
+        private int likeCount;
+        private boolean isLike;
+    }
+
+
 
 }

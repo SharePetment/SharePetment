@@ -20,10 +20,11 @@ public class FeedController {
 
     private final FeedServiceImpl feedService;
 
-    @GetMapping("/{feed-id}")
-    public ResponseEntity<?> getFeed(@PathVariable("feed-id") long feedId) {
-
-        return ResponseEntity.ok(null);
+    @GetMapping("/{feed-id}/{member-id}")
+    public ResponseEntity<?> getFeed(@PathVariable("feed-id") long feedId,
+                                     @PathVariable("member-id") long memberId) {
+        FeedDto.Response response = feedService.getFeed(feedId, memberId);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/noregister")
@@ -56,7 +57,7 @@ public class FeedController {
                 .images(List.of(images))
                 .build();
         URI uri = feedService.createFeed(post);
-        return ResponseEntity.ok(uri);
+        return ResponseEntity.created(uri).build();
     }
 
     @PatchMapping("/{feed-id}/{member-id}")
@@ -71,6 +72,7 @@ public class FeedController {
 
     @PatchMapping("/like/{feed-id}/{member-id}")
     public ResponseEntity<?> likeFeed(@PathVariable("feed-id") long feedId, @PathVariable("member-id") long memberId) {
-        return null;
+        FeedDto.Like response = feedService.likeByMember(feedId, memberId);
+        return ResponseEntity.ok(response);
     }
 }

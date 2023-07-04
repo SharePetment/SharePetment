@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 
 @Data
 public class FeedCommentDto {
-    private Long feedCommentId;
+    private Long feedCommentsId;
     private Long memberId;
     private int likes;
     private String content;

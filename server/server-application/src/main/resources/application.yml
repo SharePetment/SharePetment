@@ -2,6 +2,8 @@ springdoc:
   swagger-ui:
     path: /swagger-ui.html
 spring:
+  profiles:
+    active: local
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
 #    url: jdbc:mysql://172.31.44.214:3307/testdb?createDatabaseIfNotExist=true

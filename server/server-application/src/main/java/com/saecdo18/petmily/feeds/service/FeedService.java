@@ -11,8 +11,9 @@ public interface FeedService {
 
     public URI createFeed(FeedDto.Post post) throws IOException;
 
-    public FeedDto.Response getFeed(long feedId);
+    public FeedDto.Response getFeed(long feedId, long memberId);
 
+    public void saveImage(Feed feed, String originalFilename, String uploadFileURL);
 
-    public void methodSaveImage(Feed feed, String originalFilename, String uploadFileURL);
+    public FeedDto.Like likeByMember(long feedId, long memberId);
 }

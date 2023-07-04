@@ -33,7 +33,7 @@ public class Feed extends BaseEntity {
     @OneToMany(mappedBy = "feed", cascade = CascadeType.REMOVE)
     private List<FeedLike> feedLikeList;
 
-    @OneToMany(mappedBy = "feed", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "feed", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<FeedImage> feedImageList;
 
     @Builder
@@ -49,6 +49,13 @@ public class Feed extends BaseEntity {
                 .path(String.valueOf(feedId))
                 .build()
                 .toUri();
+    }
+
+    public void likeCount(boolean like) {
+        if(like)
+            likes++;
+        else
+            likes--;
     }
 
 }

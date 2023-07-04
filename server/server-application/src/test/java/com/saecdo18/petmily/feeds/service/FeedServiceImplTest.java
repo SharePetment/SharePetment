@@ -4,7 +4,10 @@ import com.saecdo18.petmily.awsConfig.S3UploadService;
 import com.saecdo18.petmily.feeds.dto.FeedDto;
 import com.saecdo18.petmily.feeds.entity.Feed;
 import com.saecdo18.petmily.feeds.entity.FeedImage;
+import com.saecdo18.petmily.feeds.mapper.FeedMapper;
+import com.saecdo18.petmily.feeds.repository.FeedCommentsRepository;
 import com.saecdo18.petmily.feeds.repository.FeedImageRepository;
+import com.saecdo18.petmily.feeds.repository.FeedLikeRepository;
 import com.saecdo18.petmily.feeds.repository.FeedRepository;
 import com.saecdo18.petmily.image.entity.Image;
 import com.saecdo18.petmily.image.repository.ImageRepository;
@@ -15,7 +18,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -46,12 +48,24 @@ class FeedServiceImplTest {
     @Mock
     private S3UploadService s3UploadService;
 
+    @Mock
+    private FeedCommentsRepository feedCommentsRepository;
+    @Mock
+    private FeedLikeRepository feedLikeRepository;
+
+    @Mock
+    private FeedMapper feedMapper;
+
+
     private static final String BASE_URI = "http://localhost:8080/feeds/";
+
+    FeedServiceImplTest() {
+    }
 
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        feedService = new FeedServiceImpl(feedRepository, memberRepository, imageRepository, feedImageRepository, s3UploadService);
+        feedService = new FeedServiceImpl(feedRepository, memberRepository, imageRepository, feedImageRepository, s3UploadService,feedCommentsRepository,feedLikeRepository, feedMapper);
     }
 
     @Test
