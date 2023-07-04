@@ -26,7 +26,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -166,11 +165,10 @@ public class FeedServiceImpl implements FeedService {
         FeedLike savedFeedLike = feedLikeRepository.save(feedLike);
         Feed savedFeed = feedRepository.save(findFeed);
 
-        FeedDto.Like like = FeedDto.Like.builder()
+        return FeedDto.Like.builder()
                 .likeCount(savedFeed.getLikes())
                 .isLike(savedFeedLike.isLike())
                 .build();
-        return like;
     }
 
     //----------------------------------------------------------------------
@@ -185,14 +183,14 @@ public class FeedServiceImpl implements FeedService {
                 () -> new RuntimeException("피드를 찾을 수 없습니다."));
     }
 
-    private List<FeedCommentDto> methodFindFeedCommentByFeedId(long feedId) {
+    private List<FeedCommentDto.Response> methodFindFeedCommentByFeedId(long feedId) {
         return feedCommentsRepository.findByFeedFeedId(feedId)
                 .map(feedCommentsList -> {
-                    List<FeedCommentDto> feedCommentDtoList = new ArrayList<>();
+                    List<FeedCommentDto.Response> feedCommentDtoList = new ArrayList<>();
                     for (FeedComments feedComments : feedCommentsList) {
-                        FeedCommentDto feedCommentDto = feedMapper.feedCommentsToFeedCommentDto(feedComments);
-                        feedCommentDto.setMemberId(feedComments.getMember().getMemberId());
-                        feedCommentDtoList.add(feedCommentDto);
+                        FeedCommentDto.Response response = feedMapper.feedCommentsToFeedCommentDto(feedComments);
+                        response.setMemberId(feedComments.getMember().getMemberId());
+                        feedCommentDtoList.add(response);
                     }
                     return feedCommentDtoList;
                 })
@@ -215,7 +213,7 @@ public class FeedServiceImpl implements FeedService {
 
     private FeedDto.Response changeFeedToFeedDtoResponse(Feed feed, long memberId) {
         FeedDto.Response response = feedMapper.FeedToFeedDtoResponse(feed);
-        List<FeedCommentDto> feedCommentDtoList = methodFindFeedCommentByFeedId(feed.getFeedId());
+        List<FeedCommentDto.Response> feedCommentDtoList = methodFindFeedCommentByFeedId(feed.getFeedId());
         if (!feedCommentDtoList.isEmpty()) {
             response.setFeedComments(feedCommentDtoList);
         }

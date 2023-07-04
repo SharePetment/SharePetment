@@ -41,7 +41,7 @@ public class FeedDto {
         private String content;
         private int likes;
         private boolean isLike;
-        private List<FeedCommentDto> feedComments;
+        private List<FeedCommentDto.Response> feedComments;
         private String shareURL;
         private LocalDateTime createdAt;
         private LocalDateTime modifiedAt;

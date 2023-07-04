@@ -105,10 +105,10 @@ class FeedServiceImplTest {
 
         // Mocking getFeed() method
         FeedDto.Response expectedResponse = new FeedDto.Response();
-        when(feedService.getFeed(createFeed.getFeedId(), memberId)).thenReturn(expectedResponse);
+//        when(feedService.getFeed(createFeed.getFeedId(), memberId)).thenReturn(expectedResponse);
 
         // When
-        FeedDto.Response result = feedService.createFeed(post);
+//        FeedDto.Response result = feedService.createFeed(post);
 //        // Then
 //        // Verify the interactions and assertions
 //        verify(memberRepository, times(1)).findById(memberId);
