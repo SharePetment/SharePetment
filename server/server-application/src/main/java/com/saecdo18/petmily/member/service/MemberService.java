@@ -30,17 +30,18 @@ public class MemberService {
         return memberMapper.memberToMemberResponseDto(member);
     }
 
-    public Member updateMemberStatus(long memberId, String nickname, String address){
+    public MemberDto.Response updateMemberStatus(long memberId, String nickname, String address){
         Member findMember = methodFindByMemberIdMember(memberId);
         findMember.update(nickname, address);
-        return findMember;
+        MemberDto.Response responseMember = memberMapper.memberToMemberResponseDto(findMember);
+        return responseMember;
     }
 
-    public Member updateMemberStatusMessage(long memberId, String statusMessage){
-        Member findMember = methodFindByMemberIdMember(memberId);
-        findMember.updateMessage(statusMessage);
-        return findMember;
-    }
+//    public Member updateMemberStatusMessage(long memberId, String statusMessage){
+//        Member findMember = methodFindByMemberIdMember(memberId);
+//        findMember.updateMessage(statusMessage);
+//        return findMember;
+//    }
 
     private Member methodFindByMemberIdMember(long memberId) {
         return memberRepository.findById(memberId)

@@ -2,6 +2,7 @@ package com.saecdo18.petmily.pet.service;
 
 import com.saecdo18.petmily.member.entity.Member;
 import com.saecdo18.petmily.member.repository.MemberRepository;
+import com.saecdo18.petmily.member.service.MemberService;
 import com.saecdo18.petmily.pet.PetMapper;
 import com.saecdo18.petmily.pet.dto.PetDto;
 import com.saecdo18.petmily.pet.entity.Pet;
@@ -17,8 +18,9 @@ public class PetService {
     private final PetRepository petRepository;
     private final PetMapper petMapper;
     private final MemberRepository memberRepository;
+    private final MemberService memberService;
 
-    public Pet createPet(long memberId, Pet pet){
+    public PetDto.Response createPet(long memberId, Pet pet){
         Member findMember = methodFindByMemberIdMember(memberId);
         pet.updateMember(findMember);
         petRepository.save(pet);
@@ -26,13 +28,52 @@ public class PetService {
         if(!findMember.isAnimalParents()){
             findMember.updateAnimalParents(true);
         }
+        PetDto.Response responsePet = petMapper.petToPetResponseDto(pet);
+        responsePet.setMemberId(pet.getMember().getMemberId());
 
-        return pet;
+        return responsePet;
     }
 
-    public Pet getPet(long petId){
-        return methodFindByPetId(petId);
+    public PetDto.Response getPet(long petId){
+        Pet findPet = methodFindByPetId(petId);
+        PetDto.Response response = petMapper.petToPetResponseDto(findPet);
+        response.setMemberId(findPet.getMember().getMemberId());
+        return response;
     }
+
+    public PetDto.Response updatePet(long memberId, long petId, Pet patchPet){
+        Pet findPet = methodFindByPetId(petId);
+        if(memberId == findPet.getMember().getMemberId()){
+            findPet.updatePatch(patchPet.getProfile(),
+                    patchPet.getName(),
+                    patchPet.getAge(),
+                    patchPet.getSex(),
+                    patchPet.getSpecies(),
+                    patchPet.getInformation(),
+                    patchPet.isWalkMated());
+
+//            Pet.PetBuilder findPetBuilder = findPet.nonePetIdAndMessage();
+//            findPetBuilder.profile(patchPet.getProfile());
+//            findPetBuilder.name(patchPet.getName());
+//            findPetBuilder.age(patchPet.getAge());
+//            findPetBuilder.sex(patchPet.getSex());
+//            findPetBuilder.species(patchPet.getSpecies());
+//            findPetBuilder.information(patchPet.getInformation());
+//            findPetBuilder.walkMated(patchPet.isWalkMated());
+
+
+        }
+        else {
+            throw new RuntimeException("반려동물의 수정권한이 없습니다.");
+        }
+
+        PetDto.Response response = petMapper.petToPetResponseDto(findPet);
+        return response;
+    }
+
+
+
+
 
     private Pet methodFindByPetId(long petId) {
         return petRepository.findById(petId).orElseThrow(() -> new RuntimeException("찾으시는 반려동물이 없습니다"));

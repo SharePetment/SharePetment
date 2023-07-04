@@ -31,14 +31,14 @@ public class MemberDto {
         private String address;
     }
 
-    @Getter
-    @Setter
-    public static class PatchMessage{
-
-        private String statusMessage;
-
-
-    }
+//    @Getter
+//    @Setter
+//    public static class PatchMessage{
+//
+//        private String statusMessage;
+//
+//
+//    }
 
     @Getter
     @Builder
@@ -48,7 +48,7 @@ public class MemberDto {
         private String email;
         private String nickname;
         private String address;
-        private String statusMessage;
+//        private String statusMessage;
         private int followerCount;
         private boolean animalParents;
         private String createdAt;

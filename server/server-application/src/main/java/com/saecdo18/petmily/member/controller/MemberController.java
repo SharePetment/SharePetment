@@ -45,21 +45,20 @@ public class MemberController {
     @PatchMapping("/status/{member-id}")
     public ResponseEntity patchMember(@PathVariable("member-id") long memberId,
                                       @Valid @RequestBody MemberDto.Patch memberPatchDto){
-        Member member = memberService.updateMemberStatus(memberId,
+        MemberDto.Response responseMember = memberService.updateMemberStatus(memberId,
                 memberPatchDto.getNickname(),
                 memberPatchDto.getAddress());
-        MemberDto.Response responseMember = memberMapper.memberToMemberResponseDto(member);
         return new ResponseEntity(responseMember, HttpStatus.OK);
     }
 
-    @PatchMapping("/statusmessage/{member-id}")
-    public ResponseEntity patchMemberStatusMessage(@PathVariable("member-id") long memberId,
-                                                   @Valid @RequestBody MemberDto.PatchMessage memberPatchMessageDto){
-        Member member = memberService.updateMemberStatusMessage(memberId, memberPatchMessageDto.getStatusMessage());
-
-        MemberDto.Response responseMember = memberMapper.memberToMemberResponseDto(member);
-
-        return new ResponseEntity<>(responseMember, HttpStatus.OK);
-    }
+//    @PatchMapping("/statusmessage/{member-id}")
+//    public ResponseEntity patchMemberStatusMessage(@PathVariable("member-id") long memberId,
+//                                                   @Valid @RequestBody MemberDto.PatchMessage memberPatchMessageDto){
+//        Member member = memberService.updateMemberStatusMessage(memberId, memberPatchMessageDto.getStatusMessage());
+//
+//        MemberDto.Response responseMember = memberMapper.memberToMemberResponseDto(member);
+//
+//        return new ResponseEntity<>(responseMember, HttpStatus.OK);
+//    }
 
 }

@@ -25,7 +25,7 @@ public class Member extends BaseEntity {
     private String nickname;
     @Column(nullable = false)
     private String address;
-    private String statusMessage;
+//    private String statusMessage;
 
     private int followerCount;
 
@@ -46,9 +46,9 @@ public class Member extends BaseEntity {
         this.address = address;
     }
 
-    public void updateMessage(String statusMessage){
-        this.statusMessage=statusMessage;
-    }
+//    public void updateMessage(String statusMessage){
+//        this.statusMessage=statusMessage;
+//    }
 
     public void updateAnimalParents(boolean animalParents){
         this.animalParents=animalParents;

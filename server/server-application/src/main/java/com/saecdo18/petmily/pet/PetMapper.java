@@ -8,6 +8,7 @@ import org.mapstruct.Mapper;
 public interface PetMapper {
     Pet petPostDtoToPet(PetDto.Post petPostDto);
 
+    Pet petPatchDtoToPet(PetDto.Patch petPatchDto);
 
     PetDto.Response petToPetResponseDto(Pet pet);
 }

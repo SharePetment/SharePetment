@@ -27,20 +27,26 @@ public class PetController {
                                   @Valid @RequestBody PetDto.Post petPostDto){
         Pet mappingPet = petMapper.petPostDtoToPet(petPostDto);
 
-        Pet pet = petService.createPet(memberId, mappingPet);
+        PetDto.Response responsePet = petService.createPet(memberId, mappingPet);
 
-        PetDto.Response responsePet = petMapper.petToPetResponseDto(pet);
-        responsePet.setMemberId(pet.getMember().getMemberId());
 
         return new ResponseEntity<>(responsePet, HttpStatus.CREATED);
     }
 
     @GetMapping("/{pet-id}")
     public ResponseEntity getPet(@PathVariable("pet-id") long petId){
-        Pet findPet = petService.getPet(petId);
-        PetDto.Response response = petMapper.petToPetResponseDto(findPet);
-        response.setMemberId(findPet.getMember().getMemberId());
+        PetDto.Response response = petService.getPet(petId);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PatchMapping("/status/{member-id}/{pet-id}")
+    public ResponseEntity patchPet(@PathVariable("member-id") long memberId,
+                                   @PathVariable("pet-id") long petId,
+                                   @Valid @RequestBody PetDto.Patch petPatchDto){
+        Pet pet = petMapper.petPatchDtoToPet(petPatchDto);
+        PetDto.Response response = petService.updatePet(memberId, petId, pet);
+
+        return new ResponseEntity<>(response,HttpStatus.OK);
     }
 }

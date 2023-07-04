@@ -25,6 +25,21 @@ public class PetDto {
     }
 
     @Getter
+    public static class Patch{
+        private String profile;
+
+        private String name;
+        private int age;
+
+        private String sex;
+
+        private String species;
+        private String information;
+        private boolean walkMated;
+
+    }
+
+    @Getter
     @Builder
     public static class Response{
         private Long petId;
@@ -34,11 +49,11 @@ public class PetDto {
         private String sex;
         private String species;
         private String information;
-        private String statusMessage;
+//        private String statusMessage;
         private boolean walkMated;
         private long memberId;
         private String createdAt;
-        private String updatedAt;
+        private String modifiedAt;
 
 
         public void setMemberId(long memberId) {
