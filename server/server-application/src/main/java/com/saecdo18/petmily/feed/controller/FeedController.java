@@ -64,8 +64,21 @@ public class FeedController {
     }
 
     @PatchMapping("/{feed-id}/{member-id}")
-    public ResponseEntity<?> patchFeed(@PathVariable("feed-id") long feedId, @PathVariable("member-id") long memberId) {
-        return null;
+    public ResponseEntity<?> patchFeed(@PathVariable("feed-id") long feedId,
+                                       @PathVariable("member-id") long memberId,
+                                       @RequestParam("content") String content,
+                                       @RequestParam("addImage") MultipartFile[] addImages,
+                                       @RequestParam("deleteImage") String[] deleteImages) throws IOException {
+
+        FeedDto.Patch patch = FeedDto.Patch.builder()
+                .feedId(feedId)
+                .memberId(memberId)
+                .content(content)
+                .addImages(List.of(addImages))
+                .deleteImages(List.of(deleteImages))
+                .build();
+        FeedDto.Response response = feedService.patchFeed(patch);
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{feed-id}/{member-id}")

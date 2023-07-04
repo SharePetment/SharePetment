@@ -19,7 +19,7 @@ public class Image extends BaseEntity {
     @Column(nullable = false)
     private String originalFilename;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 1000)
     private String uploadFileURL;
 
     @Builder

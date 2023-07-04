@@ -57,4 +57,8 @@ public class Feed extends BaseEntity {
             likes--;
     }
 
+    public void updateContent(String content) {
+        this.content = content;
+    }
+
 }

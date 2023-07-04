@@ -23,10 +23,17 @@ public class FeedDto {
     }
 
     @Data
-    public static class Patch{}
+    @Builder
+    public static class Patch{
+        private Long feedId;
+        private Long memberId;
+        private String content;
+        private List<MultipartFile> addImages;
+        private List<String> deleteImages;
+    }
 
     @Data
-    @Builder
+//    @Builder
     public static class Response {
         private Long feedId;
         private Long memberId;
