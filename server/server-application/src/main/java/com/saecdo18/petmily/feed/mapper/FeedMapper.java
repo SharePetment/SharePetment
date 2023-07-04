@@ -1,9 +1,9 @@
-package com.saecdo18.petmily.feeds.mapper;
+package com.saecdo18.petmily.feed.mapper;
 
-import com.saecdo18.petmily.feeds.dto.FeedCommentDto;
-import com.saecdo18.petmily.feeds.dto.FeedDto;
-import com.saecdo18.petmily.feeds.entity.Feed;
-import com.saecdo18.petmily.feeds.entity.FeedComments;
+import com.saecdo18.petmily.feed.dto.FeedCommentDto;
+import com.saecdo18.petmily.feed.dto.FeedDto;
+import com.saecdo18.petmily.feed.entity.Feed;
+import com.saecdo18.petmily.feed.entity.FeedComments;
 import com.saecdo18.petmily.image.dto.ImageDto;
 import com.saecdo18.petmily.image.entity.Image;
 import org.mapstruct.Mapper;

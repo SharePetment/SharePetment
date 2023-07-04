@@ -1,4 +1,4 @@
-package com.saecdo18.petmily.feeds.dto;
+package com.saecdo18.petmily.feed.dto;
 
 import lombok.Data;
 

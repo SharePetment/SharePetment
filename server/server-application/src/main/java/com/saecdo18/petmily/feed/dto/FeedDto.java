@@ -1,10 +1,8 @@
-package com.saecdo18.petmily.feeds.dto;
+package com.saecdo18.petmily.feed.dto;
 
 import com.saecdo18.petmily.image.dto.ImageDto;
 import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotBlank;
@@ -28,6 +26,7 @@ public class FeedDto {
     public static class Patch{}
 
     @Data
+    @Builder
     public static class Response {
         private Long feedId;
         private Long memberId;

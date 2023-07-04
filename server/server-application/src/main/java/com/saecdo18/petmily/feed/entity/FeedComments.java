@@ -1,6 +1,5 @@
-package com.saecdo18.petmily.feeds.entity;
+package com.saecdo18.petmily.feed.entity;
 
-import com.saecdo18.petmily.base.BaseEntity;
 import com.saecdo18.petmily.member.entity.Member;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

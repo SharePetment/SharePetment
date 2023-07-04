@@ -1,23 +1,26 @@
-package com.saecdo18.petmily.feeds.service;
+package com.saecdo18.petmily.feed.service;
 
 import com.saecdo18.petmily.awsConfig.S3UploadService;
-import com.saecdo18.petmily.feeds.dto.FeedCommentDto;
-import com.saecdo18.petmily.feeds.dto.FeedDto;
-import com.saecdo18.petmily.feeds.entity.Feed;
-import com.saecdo18.petmily.feeds.entity.FeedComments;
-import com.saecdo18.petmily.feeds.entity.FeedImage;
-import com.saecdo18.petmily.feeds.entity.FeedLike;
-import com.saecdo18.petmily.feeds.mapper.FeedMapper;
-import com.saecdo18.petmily.feeds.repository.FeedCommentsRepository;
-import com.saecdo18.petmily.feeds.repository.FeedImageRepository;
-import com.saecdo18.petmily.feeds.repository.FeedLikeRepository;
-import com.saecdo18.petmily.feeds.repository.FeedRepository;
+import com.saecdo18.petmily.feed.dto.FeedCommentDto;
+import com.saecdo18.petmily.feed.dto.FeedDto;
+import com.saecdo18.petmily.feed.entity.Feed;
+import com.saecdo18.petmily.feed.entity.FeedComments;
+import com.saecdo18.petmily.feed.entity.FeedImage;
+import com.saecdo18.petmily.feed.entity.FeedLike;
+import com.saecdo18.petmily.feed.mapper.FeedMapper;
+import com.saecdo18.petmily.feed.repository.FeedCommentsRepository;
+import com.saecdo18.petmily.feed.repository.FeedImageRepository;
+import com.saecdo18.petmily.feed.repository.FeedLikeRepository;
+import com.saecdo18.petmily.feed.repository.FeedRepository;
 import com.saecdo18.petmily.image.dto.ImageDto;
 import com.saecdo18.petmily.image.entity.Image;
 import com.saecdo18.petmily.image.repository.ImageRepository;
 import com.saecdo18.petmily.member.entity.Member;
 import com.saecdo18.petmily.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -45,13 +48,12 @@ public class FeedServiceImpl implements FeedService {
     private final static String BASE_URI = "http://localhost:8080/feeds/";
 
     @Override
-    public URI createFeed(FeedDto.Post post) throws IOException {
+    public FeedDto.Response createFeed(FeedDto.Post post) throws IOException {
         Member findMember = methodFindByMemberId(post.getMemberId());
         Feed createFeed = Feed.builder()
                 .content(post.getContent())
                 .member(findMember)
                 .build();
-        Feed saveFeed = feedRepository.save(createFeed);
 
         if (!post.getImages().isEmpty()) {
             for (MultipartFile multipartFile : post.getImages()) {
@@ -60,24 +62,30 @@ public class FeedServiceImpl implements FeedService {
                 saveImage(createFeed, originalFilename, uploadFileURL);
             }
         }
+        Feed saveFeed = feedRepository.save(createFeed);
 
-        return saveFeed.getShareURI(BASE_URI);
+        return getFeed(saveFeed.getFeedId(), findMember.getMemberId());
     }
 
     @Override
     public FeedDto.Response getFeed(long feedId, long memberId) {
         Feed findFeed = methodFindByFeedId(feedId);
-        FeedDto.Response response = feedMapper.FeedToFeedDtoResponse(findFeed);
-        List<FeedCommentDto> feedCommentDtoList = methodFindFeedCommentByFeedId(feedId);
-        if (!feedCommentDtoList.isEmpty()) {
-            response.setFeedComments(feedCommentDtoList);
-        }
-        response.setMemberId(findFeed.getMember().getMemberId());
-        response.setImages(feedImageToImageDtoList(findFeed.getFeedImageList()));
-        response.setLike(feedLikesByMember(findFeed, methodFindByMemberId(memberId)));
-        response.setShareURL(findFeed.getShareURI(BASE_URI).toString());
 
-        return response;
+        return changeFeedToFeedDtoResponse(findFeed, memberId);
+    }
+
+    @Override
+    public List<FeedDto.Response> getFeedsByNoRegister(int page, int size) {
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.DESC, "createdAt");
+        Page<Feed> feedPage = feedRepository.findAll(pageRequest);
+        List<Feed> feedList = feedPage.getContent();
+        List<FeedDto.Response> responseList = new ArrayList<>();
+        for (Feed feed : feedList) {
+            FeedDto.Response response = changeFeedToFeedDtoResponse(feed, 0);
+            responseList.add(response);
+        }
+
+        return responseList;
     }
 
     @Override
@@ -138,17 +146,17 @@ public class FeedServiceImpl implements FeedService {
 
     //----------------------------------------------------------------------
 
-    public Member methodFindByMemberId(long memberId) {
+    private Member methodFindByMemberId(long memberId) {
         return memberRepository.findById(memberId).orElseThrow(
                 () -> new RuntimeException("사용자를 찾을 수 없습니다."));
     }
 
-    public Feed methodFindByFeedId(long feedId) {
+    private Feed methodFindByFeedId(long feedId) {
         return feedRepository.findById(feedId).orElseThrow(
                 () -> new RuntimeException("피드를 찾을 수 없습니다."));
     }
 
-    public List<FeedCommentDto> methodFindFeedCommentByFeedId(long feedId) {
+    private List<FeedCommentDto> methodFindFeedCommentByFeedId(long feedId) {
         return feedCommentsRepository.findByFeedFeedId(feedId)
                 .map(feedCommentsList -> {
                     List<FeedCommentDto> feedCommentDtoList = new ArrayList<>();
@@ -162,7 +170,7 @@ public class FeedServiceImpl implements FeedService {
                 .orElseGet(Collections::emptyList);
     }
 
-    public List<ImageDto> feedImageToImageDtoList(List<FeedImage> feedImageList) {
+    private List<ImageDto> feedImageToImageDtoList(List<FeedImage> feedImageList) {
         List<ImageDto> imageDtoList = new ArrayList<>();
         for (FeedImage feedImage : feedImageList) {
             Image image = feedImage.getImage();
@@ -171,9 +179,28 @@ public class FeedServiceImpl implements FeedService {
         return imageDtoList;
     }
 
-    public boolean feedLikesByMember(Feed feed, Member member) {
+    private boolean feedLikesByMember(Feed feed, Member member) {
         Optional<FeedLike> feedLike = feedLikeRepository.findByMemberAndFeed(member, feed);
         return feedLike.map(FeedLike::isLike).orElse(false);
+    }
+
+    private FeedDto.Response changeFeedToFeedDtoResponse(Feed feed, long memberId) {
+        FeedDto.Response response = feedMapper.FeedToFeedDtoResponse(feed);
+        List<FeedCommentDto> feedCommentDtoList = methodFindFeedCommentByFeedId(feed.getFeedId());
+        if (!feedCommentDtoList.isEmpty()) {
+            response.setFeedComments(feedCommentDtoList);
+        }
+        response.setMemberId(feed.getMember().getMemberId());
+        List<FeedImage> feedImageList = feedImageRepository.findByFeed(feed);
+        response.setImages(feedImageToImageDtoList(feedImageList));
+        if (memberId == 0) {
+            response.setLike(false);
+        } else {
+            response.setLike(feedLikesByMember(feed, methodFindByMemberId(memberId)));
+        }
+        response.setShareURL(feed.getShareURI(BASE_URI).toString());
+
+        return response;
     }
 
 

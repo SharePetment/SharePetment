@@ -1,14 +1,13 @@
-package com.saecdo18.petmily.feeds.controller;
+package com.saecdo18.petmily.feed.controller;
 
-import com.saecdo18.petmily.feeds.dto.FeedDto;
-import com.saecdo18.petmily.feeds.service.FeedServiceImpl;
+import com.saecdo18.petmily.feed.dto.FeedDto;
+import com.saecdo18.petmily.feed.service.FeedServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.Valid;
 import java.io.IOException;
 import java.net.URI;
 import java.util.List;
@@ -28,8 +27,11 @@ public class FeedController {
     }
 
     @GetMapping("/noregister")
-    public ResponseEntity<?> getFeedsByNoRegister() {
-        return null;
+    public ResponseEntity<?> getFeedsByNoRegister(@RequestParam(defaultValue = "0") int page,
+                                                  @RequestParam(defaultValue = "10") int size) {
+
+        List<FeedDto.Response> responseList = feedService.getFeedsByNoRegister(page, size);
+        return ResponseEntity.ok(responseList);
     }
 
     @GetMapping("/myfeeds/{member-id}")
@@ -56,8 +58,9 @@ public class FeedController {
                 .content(content)
                 .images(List.of(images))
                 .build();
-        URI uri = feedService.createFeed(post);
-        return ResponseEntity.created(uri).build();
+        FeedDto.Response response = feedService.createFeed(post);
+
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @PatchMapping("/{feed-id}/{member-id}")
