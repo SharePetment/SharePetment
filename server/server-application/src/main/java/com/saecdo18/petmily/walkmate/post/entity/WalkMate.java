@@ -41,7 +41,7 @@ public class WalkMate {
     private String time;
 
     @Column
-    private Boolean open=true;
+    private Boolean open;
 
     @Column(nullable = false)
     private Integer maximum;
@@ -50,7 +50,10 @@ public class WalkMate {
     private Integer likes;
 
     @Builder
-    public WalkMate(String title, String content, String mapURL, String chatURL, String location, String time, Boolean open, Integer maximum) {
+    public WalkMate(Member member, String title, String content, String mapURL, String chatURL,
+                    String location, String time, Boolean open, Integer maximum, Integer likes) {
+
+        this.member = member;
         this.title = title;
         this.content = content;
         this.mapURL = mapURL;
@@ -59,6 +62,7 @@ public class WalkMate {
         this.time = time;
         this.open = open;
         this.maximum = maximum;
+        this.likes = likes;
     }
 
 

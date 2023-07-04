@@ -6,7 +6,6 @@ import lombok.*;
 @Getter
 public class WalkPostDto {
 
-//    private Long memberId;
     private String title;
     private String content;
     private String mapURL;
@@ -15,5 +14,6 @@ public class WalkPostDto {
     private String time;
     private Boolean open;
     private Integer maximum;
+    private Integer likes;
 
 }

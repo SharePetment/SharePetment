@@ -12,7 +12,7 @@ import lombok.Setter;
 public class WalkResponseDto {
 
     private Long walkMatePostId;
-//    private Long memberId;
+    private Long memberId;
     private String title;
     private String content;
     private String mapURL;
@@ -21,5 +21,5 @@ public class WalkResponseDto {
     private String time;
     private Boolean open;
     private Integer maximum;
-//    private Integer likes;
+    private Integer likes;
 }
