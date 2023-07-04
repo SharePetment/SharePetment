@@ -30,7 +30,7 @@ public class Member extends BaseEntity {
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private List<Pet> pets;
 
-    @Builder
+    @Builder(builderMethodName = "emailNicknameAddress")
     public Member(String email, String nickname, String address){
         this.email = email;
         this.nickname = nickname;
