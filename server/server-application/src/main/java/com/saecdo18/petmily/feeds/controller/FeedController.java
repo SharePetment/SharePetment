@@ -67,6 +67,7 @@ public class FeedController {
 
     @DeleteMapping("/{feed-id}/{member-id}")
     public ResponseEntity<?> deleteFeed(@PathVariable("feed-id") long feedId, @PathVariable("member-id") long memberId) {
+        feedService.deleteFeed(feedId, memberId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

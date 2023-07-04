@@ -13,6 +13,8 @@ public interface FeedService {
 
     public FeedDto.Response getFeed(long feedId, long memberId);
 
+    public void deleteFeed(long feedId, long memberId);
+
     public void saveImage(Feed feed, String originalFilename, String uploadFileURL);
 
     public FeedDto.Like likeByMember(long feedId, long memberId);

@@ -80,6 +80,18 @@ public class FeedServiceImpl implements FeedService {
         return response;
     }
 
+    @Override
+    public void deleteFeed(long feedId, long memberId) {
+        Feed findFeed = methodFindByFeedId(feedId);
+        if (findFeed.getMember().getMemberId() == memberId) {
+            for (FeedImage feedImage : findFeed.getFeedImageList()) {
+                s3UploadService.deleteImage(feedImage.getImage().getOriginalFilename());
+            }
+            feedRepository.delete(findFeed);
+        }else
+            throw new IllegalArgumentException("삭제할 권한이 없습니다.");
+    }
+
 
     @Override
     public void saveImage(Feed feed, String originalFilename, String uploadFileURL) {
