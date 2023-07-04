@@ -9,7 +9,6 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Getter
-@Setter
 @NoArgsConstructor
 @Entity
 public class WalkMate {
@@ -19,7 +18,7 @@ public class WalkMate {
     private Long walkMatePostId;
 
     @ManyToOne
-    @JoinColumn(name = "MEMBER_ID")
+    @JoinColumn(name = "member_id")
     private Member member;
 
     @Column(nullable = false)
@@ -65,5 +64,20 @@ public class WalkMate {
         this.likes = likes;
     }
 
+    public void updateWalk(String title, String content, String mapURL, String chatURL, String location,
+                    String time, Boolean open, Integer maximum) {
 
+        this.title = title;
+        this.content = content;
+        this.mapURL = mapURL;
+        this.chatURL = chatURL;
+        this.location = location;
+        this.time = time;
+        this.open = open;
+        this.maximum = maximum;
+    }
+
+    public void setMember(Member member){
+        this.member=member;
+    }
 }

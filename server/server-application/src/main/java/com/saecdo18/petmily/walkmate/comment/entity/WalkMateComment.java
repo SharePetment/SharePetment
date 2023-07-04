@@ -1,6 +1,7 @@
 package com.saecdo18.petmily.walkmate.comment.entity;
 
 import com.saecdo18.petmily.member.entity.Member;
+import com.saecdo18.petmily.walkmate.post.entity.WalkMate;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,7 +9,6 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Getter
-@Setter
 @Entity
 public class WalkMateComment {
 
@@ -24,18 +24,18 @@ public class WalkMateComment {
 
     @ManyToOne
     @JoinColumn(name = "WALKMATEPOST_ID")
-    private Long walkMatePostId;
+    private WalkMate walkMate;
 
     @ManyToOne
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
 
     @Builder
-    public WalkMateComment(String content, Integer likes, Long walkMatePostId, Member member) {
+    public WalkMateComment(String content, Integer likes, WalkMate walkMate, Member member) {
 
         this.content = content;
         this.likes = likes;
-        this.walkMatePostId = walkMatePostId;
+        this.walkMate = walkMate;
         this.member = member;
     }
 }
