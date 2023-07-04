@@ -1,6 +1,7 @@
 export enum Direction {
   Login = '/',
-  SignUp = '/sign-up',
+  Info = '/info',
+  InfoEditing = 'info/:userId',
   Home = '/home',
   Mypage = '/my-page',
   Userpage = '/users/:usersId',
