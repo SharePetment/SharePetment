@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Optional;
 
 @Transactional
@@ -67,20 +68,17 @@ public class MemberService {
             FollowMemberDto.Response response = followMemberMapper.followMemberToFollowMemberResponseDto(followMember);
             return  response;
         }
+    }
 
-
+    public List<FollowMemberDto.Response> followList(long followingId){
+        List<FollowMember> followMemberList = followMemberRepository.findByFollowingId(followingId);
+        List<FollowMemberDto.Response> responses = followMemberMapper.followMemberToFollowMemberResponseDtos(followMemberList);
+        return  responses;
     }
 
     private Member methodFindByFollowerInMember(long followerId) {
         return memberRepository.findById(followerId).orElseThrow(() -> new RuntimeException("팔로우 할 팔로워를 찾지 못했습니다"));
     }
-
-
-//    public Member updateMemberStatusMessage(long memberId, String statusMessage){
-//        Member findMember = methodFindByMemberIdMember(memberId);
-//        findMember.updateMessage(statusMessage);
-//        return findMember;
-//    }
 
     private Member methodFindByMemberIdMember(long memberId) {
         return memberRepository.findById(memberId)
@@ -103,4 +101,10 @@ public class MemberService {
                 .build()
                 .toUri();
     }
+
+    //    public Member updateMemberStatusMessage(long memberId, String statusMessage){
+//        Member findMember = methodFindByMemberIdMember(memberId);
+//        findMember.updateMessage(statusMessage);
+//        return findMember;
+//    }
 }

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @Validated
@@ -59,6 +60,12 @@ public class MemberController {
         FollowMemberDto.Response response = memberService.followMember(followerId,followingId);
 
         return new ResponseEntity(response,HttpStatus.OK);
+    }
+
+    @GetMapping("/following/list/{following-id}")
+    public ResponseEntity followingList(@PathVariable("following-id") long followingId){
+        List<FollowMemberDto.Response> responses = memberService.followList(followingId);
+        return new ResponseEntity<>(responses, HttpStatus.OK);
     }
 
 

@@ -4,6 +4,8 @@ import com.saecdo18.petmily.member.dto.FollowMemberDto;
 import com.saecdo18.petmily.member.entity.FollowMember;
 import org.mapstruct.Mapper;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring")
 public interface FollowMemberMapper {
     default FollowMemberDto.Response followMemberToFollowMemberResponseDto(FollowMember followMember){
@@ -17,5 +19,7 @@ public interface FollowMemberMapper {
 
         return response;
     }
+
+    List<FollowMemberDto.Response> followMemberToFollowMemberResponseDtos(List<FollowMember> followMembers);
 
 }
