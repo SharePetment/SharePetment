@@ -15,6 +15,7 @@ import com.saecdo18.petmily.image.dto.ImageDto;
 import com.saecdo18.petmily.image.entity.Image;
 import com.saecdo18.petmily.image.repository.ImageRepository;
 import com.saecdo18.petmily.member.entity.Member;
+import com.saecdo18.petmily.member.repository.FollowMemberRepository;
 import com.saecdo18.petmily.member.repository.MemberRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -48,6 +49,9 @@ class FeedServiceImplTest {
     private MemberRepository memberRepository;
 
     @Mock
+    private FollowMemberRepository followMemberRepository;
+
+    @Mock
     private ImageRepository imageRepository;
 
     @Mock
@@ -73,7 +77,7 @@ class FeedServiceImplTest {
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        feedService = new FeedServiceImpl(feedRepository, memberRepository, imageRepository, feedImageRepository, s3UploadService,feedCommentsRepository,feedLikeRepository, feedMapper);
+        feedService = new FeedServiceImpl(feedRepository, memberRepository,followMemberRepository, imageRepository, feedImageRepository, s3UploadService,feedCommentsRepository,feedLikeRepository, feedMapper);
     }
 
 
