@@ -31,6 +31,9 @@ public class Member extends BaseEntity {
 
     private boolean animalParents;
 
+    @OneToMany(mappedBy = "followerMember", cascade = CascadeType.REMOVE)
+    private List<FollowMember> followMembers;
+
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private List<Pet> pets;
 

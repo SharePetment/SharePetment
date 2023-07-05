@@ -1,6 +1,8 @@
 package com.saecdo18.petmily.member.controller;
 
+import com.saecdo18.petmily.member.dto.FollowMemberDto;
 import com.saecdo18.petmily.member.dto.MemberDto;
+import com.saecdo18.petmily.member.entity.FollowMember;
 import com.saecdo18.petmily.member.entity.Member;
 import com.saecdo18.petmily.member.mapper.MemberMapper;
 import com.saecdo18.petmily.member.service.MemberService;
@@ -50,6 +52,16 @@ public class MemberController {
                 memberPatchDto.getAddress());
         return new ResponseEntity(responseMember, HttpStatus.OK);
     }
+
+    @PostMapping("/following/{follower-id}/{following-id}")
+    public ResponseEntity followingMember(@PathVariable("follower-id") long followerId,
+                                          @PathVariable("following-id") long followingId){
+        FollowMemberDto.Response response = memberService.followMember(followerId,followingId);
+
+        return new ResponseEntity(response,HttpStatus.OK);
+    }
+
+
 
 //    @PatchMapping("/statusmessage/{member-id}")
 //    public ResponseEntity patchMemberStatusMessage(@PathVariable("member-id") long memberId,

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
+import java.time.LocalDateTime;
 
 @Data
 public class MemberDto {
@@ -51,7 +52,7 @@ public class MemberDto {
 //        private String statusMessage;
         private int followerCount;
         private boolean animalParents;
-        private String createdAt;
-        private String updatedAt;
+        private LocalDateTime createdAt;
+        private LocalDateTime modifiedAt;
     }
 }
