@@ -1,6 +1,6 @@
 import { ReactComponent as Github } from '../../assets/github.svg';
 import { ReactComponent as Notion } from '../../assets/notion.svg';
-import { Container, TopContainer, Text } from './footer.styled';
+import { Container, TopContainer, Text } from './Footer.styled';
 
 export default function Footer() {
   return (
