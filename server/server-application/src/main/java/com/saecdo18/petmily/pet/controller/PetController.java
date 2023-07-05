@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.IOException;
+import java.util.List;
 
 @RestController
 @Validated
@@ -22,20 +24,27 @@ public class PetController {
     private final PetService petService;
     private final PetMapper petMapper;
 
-    @PostMapping("/{member-id}")
-    public ResponseEntity postPet(@PathVariable("member-id") long memberId,
-                                  @Valid @RequestBody PetDto.Post petPostDto
-//                                  @RequestParam("images") MultipartFile[] profile,
-//                                  @RequestParam("name") String name,
-//                                  @RequestParam("age") int age,
-//                                  @RequestParam("sex") String sex,
-//                                  @RequestParam("species") String species,
-//                                  @RequestParam("information") String information,
-//                                  @RequestParam("walkMated") boolean walkMated
-    ){
-        Pet mappingPet = petMapper.petPostDtoToPet(petPostDto);
+    @PostMapping
+    public ResponseEntity<?> postPet(@RequestParam("memberId") long memberId,
+                                  @RequestParam("images") MultipartFile[] images,
+                                  @RequestParam("name") String name,
+                                  @RequestParam("age") int age,
+                                  @RequestParam("sex") String sex,
+                                  @RequestParam("species") String species,
+                                  @RequestParam("information") String information,
+                                  @RequestParam("walkMated") boolean walkMated) throws IOException {
 
-        PetDto.Response responsePet = petService.createPet(memberId, mappingPet);
+        PetDto.Post petPostDto = PetDto.Post.builder()
+                .images(List.of(images))
+                .name(name)
+                .age(age)
+                .sex(sex)
+                .species(species)
+                .information(information)
+                .walkMated(walkMated)
+                .build();
+//        Pet mappingPet = petMapper.petPostDtoToPet(petPostDto);
+        PetDto.Response responsePet = petService.createPet(memberId, petPostDto);
 
 
         return new ResponseEntity<>(responsePet, HttpStatus.CREATED);
