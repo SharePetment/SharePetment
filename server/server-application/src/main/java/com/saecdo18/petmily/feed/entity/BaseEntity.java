@@ -1,4 +1,4 @@
-package com.saecdo18.petmily.base;
+package com.saecdo18.petmily.feed.entity;
 
 
 import lombok.Getter;

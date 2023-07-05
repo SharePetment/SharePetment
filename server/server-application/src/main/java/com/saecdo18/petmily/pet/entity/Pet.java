@@ -1,7 +1,8 @@
 package com.saecdo18.petmily.pet.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.saecdo18.petmily.base.BaseEntity;
+
+import com.saecdo18.petmily.feed.entity.BaseEntity;
 import com.saecdo18.petmily.member.entity.Member;
 import lombok.Builder;
 import lombok.Getter;
@@ -27,7 +28,7 @@ public class Pet extends BaseEntity {
     @Column(nullable = false)
     private String species;
     private String information;
-    private String statusMessage;
+//    private String statusMessage;
 
     private boolean walkMated=true;
 
@@ -40,6 +41,18 @@ public class Pet extends BaseEntity {
     public Pet(String profile, String name, int age,
                String sex, String species, String information,
                boolean walkMated){
+        this.profile=profile;
+        this.name=name;
+        this.age=age;
+        this.sex=sex;
+        this.species=species;
+        this.information=information;
+        this.walkMated=walkMated;
+    }
+
+    public void updatePatch(String profile, String name, int age,
+                            String sex, String species, String information,
+                            boolean walkMated){
         this.profile=profile;
         this.name=name;
         this.age=age;

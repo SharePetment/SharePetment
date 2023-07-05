@@ -1,6 +1,5 @@
-package com.saecdo18.petmily.feeds.entity;
+package com.saecdo18.petmily.feed.entity;
 
-import com.saecdo18.petmily.base.BaseEntity;
 import com.saecdo18.petmily.image.entity.Image;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,7 +20,7 @@ public class FeedImage extends BaseEntity {
     @JoinColumn(name = "feed_id")
     private Feed feed;
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "image_id")
     private Image image;
 

@@ -1,6 +1,5 @@
-package com.saecdo18.petmily.feeds.entity;
+package com.saecdo18.petmily.feed.entity;
 
-import com.saecdo18.petmily.base.BaseEntity;
 import com.saecdo18.petmily.member.entity.Member;
 import lombok.Builder;
 import lombok.Getter;
@@ -56,6 +55,10 @@ public class Feed extends BaseEntity {
             likes++;
         else
             likes--;
+    }
+
+    public void updateContent(String content) {
+        this.content = content;
     }
 
 }
