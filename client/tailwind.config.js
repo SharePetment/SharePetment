@@ -12,6 +12,15 @@ export default {
         lightgreen: '#CCE7C2',
       },
     },
+    keyframes: {
+      fadeInUp: {
+        from: { opacity: 0, transform: 'translate3d(0, 30%, 0)' },
+        to: { opacity: 1, transform: 'translateZ(0)' },
+      },
+    },
+    animation: {
+      fadeInUp: 'fadeInUp 0.4s ease-in-out',
+    },
   },
   plugins: [],
 };
