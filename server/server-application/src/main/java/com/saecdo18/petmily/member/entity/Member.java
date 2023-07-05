@@ -1,6 +1,7 @@
 package com.saecdo18.petmily.member.entity;
 
-import com.saecdo18.petmily.base.BaseEntity;
+
+import com.saecdo18.petmily.feed.entity.BaseEntity;
 import com.saecdo18.petmily.pet.entity.Pet;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,14 +26,20 @@ public class Member extends BaseEntity {
     private String nickname;
     @Column(nullable = false)
     private String address;
-    private String statusMessage;
+//    private String statusMessage;
 
     private int followerCount;
 
     private boolean animalParents;
 
+    private boolean guestFollowStatus;
+
+    @OneToMany(mappedBy = "followerMember", cascade = CascadeType.REMOVE)
+    private List<FollowMember> followMembers;
+
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private List<Pet> pets;
+
 
     @Builder(builderMethodName = "emailNicknameAddress")
     public Member(String email, String nickname, String address){
@@ -46,11 +53,25 @@ public class Member extends BaseEntity {
         this.address = address;
     }
 
-    public void updateMessage(String statusMessage){
-        this.statusMessage=statusMessage;
+    public void updateFollowerCount(boolean follow) {
+        if (follow) {
+            followerCount++;
+        } else {
+            followerCount--;
+        }
     }
 
     public void updateAnimalParents(boolean animalParents){
         this.animalParents=animalParents;
     }
+
+    public void updateGuestFollowStatus(boolean guestFollowStatus){
+        this.guestFollowStatus = guestFollowStatus;
+    }
+
+    public void updatePetList(List<Pet> pets){ this.pets=pets; }
+
+    //    public void updateMessage(String statusMessage){
+//        this.statusMessage=statusMessage;
+//    }
 }
