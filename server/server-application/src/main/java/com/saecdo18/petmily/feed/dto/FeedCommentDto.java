@@ -1,5 +1,6 @@
 package com.saecdo18.petmily.feed.dto;
 
+import com.saecdo18.petmily.member.dto.MemberDto;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
@@ -13,7 +14,7 @@ public class FeedCommentDto {
     @Data
     public static class Response {
         private Long feedCommentsId;
-        private Long memberId;
+        private MemberDto.Info memberInfo;
         private String content;
         private LocalDateTime createdAt;
         private LocalDateTime modifiedAt;

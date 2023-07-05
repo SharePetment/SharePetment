@@ -28,6 +28,9 @@ public class Member extends BaseEntity {
     private String address;
 //    private String statusMessage;
 
+    @Column(length = 1000)
+    private String imageURL;
+
     private int followerCount;
 
     private boolean animalParents;
