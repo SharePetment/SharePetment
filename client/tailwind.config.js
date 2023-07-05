@@ -10,6 +10,8 @@ export default {
         lightgray: '#d4d4d8',
         deepgreen: '#69B783',
         lightgreen: '#CCE7C2',
+        white: '#FFFFFF',
+        popup: '#a1a1aa',
       },
     },
     keyframes: {
