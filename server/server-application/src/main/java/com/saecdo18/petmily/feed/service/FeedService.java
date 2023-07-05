@@ -13,7 +13,7 @@ public interface FeedService {
 
     public FeedDto.Response getFeed(long feedId, long memberId);
 
-    public List<FeedDto.Response> getFeedsByNoRegister(int page, int size);
+    public List<FeedDto.Response> getFeedsRandom(FeedDto.PreviousListIds listIds);
 
     public FeedDto.Response patchFeed(FeedDto.Patch patch) throws IOException;
 

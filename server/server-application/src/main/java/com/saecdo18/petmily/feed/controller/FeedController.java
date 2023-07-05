@@ -26,11 +26,9 @@ public class FeedController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/noregister")
-    public ResponseEntity<?> getFeedsByNoRegister(@RequestParam(defaultValue = "0") int page,
-                                                  @RequestParam(defaultValue = "10") int size) {
-
-        List<FeedDto.Response> responseList = feedService.getFeedsByNoRegister(page, size);
+    @GetMapping("/list/random")
+    public ResponseEntity<?> getFeedsRandom(@RequestBody FeedDto.PreviousListIds listIds) {
+        List<FeedDto.Response> responseList = feedService.getFeedsRandom(listIds);
         return ResponseEntity.ok(responseList);
     }
 
@@ -44,10 +42,6 @@ public class FeedController {
         return null;
     }
 
-    @GetMapping("/list/random")
-    public ResponseEntity<?> getFeedsByRandom() {
-        return null;
-    }
 
     @PostMapping
     public ResponseEntity<?> createFeed(@RequestParam("memberId") long memberID,

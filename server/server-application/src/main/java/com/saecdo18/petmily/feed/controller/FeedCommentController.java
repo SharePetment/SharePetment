@@ -36,9 +36,4 @@ public class FeedCommentController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-//    @PatchMapping("/like/{comment-id}/{member-id}")
-//    public ResponseEntity<?> likeComment(@PathVariable("comment-id") long commentId,
-//                                         @PathVariable("member-id") long memberId) {
-//
-//    }
 }

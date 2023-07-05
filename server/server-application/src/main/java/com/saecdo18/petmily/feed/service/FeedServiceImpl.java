@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -74,10 +75,28 @@ public class FeedServiceImpl implements FeedService {
     }
 
     @Override
-    public List<FeedDto.Response> getFeedsByNoRegister(int page, int size) {
-        PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.DESC, "createdAt");
-        Page<Feed> feedPage = feedRepository.findAll(pageRequest);
-        List<Feed> feedList = feedPage.getContent();
+    public List<FeedDto.Response> getFeedsRandom(FeedDto.PreviousListIds listIds) {
+        int newDataCount = 10;
+        PageRequest pageRequest = PageRequest.of(0, newDataCount, Sort.by(Sort.Direction.DESC, "createdAt"));
+
+        List<Feed> feedList = new ArrayList<>();
+        int page = 0;
+        long totalCount = feedRepository.count();
+
+        while (feedList.size() < newDataCount) {
+            List<Feed> pageDataList = feedRepository.findAll(pageRequest).getContent();
+            List<Feed> filteredDataList = pageDataList.stream()
+                    .filter(data -> !listIds.getPreviousListIds().contains(data.getFeedId()))
+                    .collect(Collectors.toList());
+            feedList.addAll(filteredDataList);
+            page++;
+
+            if((long) page * newDataCount >= totalCount)
+                break;
+
+            pageRequest = PageRequest.of(0, newDataCount, Sort.by(Sort.Direction.DESC, "createdAt"));
+        }
+
         List<FeedDto.Response> responseList = new ArrayList<>();
         for (Feed feed : feedList) {
             FeedDto.Response response = changeFeedToFeedDtoResponse(feed, 0);

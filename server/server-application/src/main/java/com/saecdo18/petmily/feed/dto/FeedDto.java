@@ -54,6 +54,12 @@ public class FeedDto {
         private boolean isLike;
     }
 
+    @Data
+    public static class PreviousListIds {
+        private List<Long> previousListIds;
+    }
+
+
 
 
 }
