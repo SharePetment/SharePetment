@@ -3,12 +3,14 @@ package com.saecdo18.petmily.pet.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import com.saecdo18.petmily.feed.entity.BaseEntity;
+import com.saecdo18.petmily.feed.entity.FeedImage;
 import com.saecdo18.petmily.member.entity.Member;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @Entity
@@ -17,8 +19,6 @@ public class Pet extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long petId;
-    @Column(nullable = false)
-    private String profile;
     @Column(nullable = false)
     private String name;
     @Column(nullable = false)
@@ -37,11 +37,14 @@ public class Pet extends BaseEntity {
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
 
+    @OneToMany(mappedBy = "pet", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    private List<PetImage> petImageList;
+
     @Builder(builderMethodName = "nonePetIdAndMessage")
-    public Pet(String profile, String name, int age,
+    public Pet( String name, int age,
                String sex, String species, String information,
                boolean walkMated){
-        this.profile=profile;
+
         this.name=name;
         this.age=age;
         this.sex=sex;
@@ -50,10 +53,10 @@ public class Pet extends BaseEntity {
         this.walkMated=walkMated;
     }
 
-    public void updatePatch(String profile, String name, int age,
+    public void updatePatch( String name, int age,
                             String sex, String species, String information,
                             boolean walkMated){
-        this.profile=profile;
+
         this.name=name;
         this.age=age;
         this.sex=sex;
