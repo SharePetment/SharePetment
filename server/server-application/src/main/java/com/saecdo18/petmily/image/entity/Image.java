@@ -1,6 +1,6 @@
 package com.saecdo18.petmily.image.entity;
 
-import com.saecdo18.petmily.base.BaseEntity;
+import com.saecdo18.petmily.feed.entity.BaseEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,7 +19,7 @@ public class Image extends BaseEntity {
     @Column(nullable = false)
     private String originalFilename;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 1000)
     private String uploadFileURL;
 
     @Builder

@@ -1,10 +1,8 @@
-package com.saecdo18.petmily.feeds.dto;
+package com.saecdo18.petmily.feed.dto;
 
 import com.saecdo18.petmily.image.dto.ImageDto;
 import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotBlank;
@@ -25,9 +23,17 @@ public class FeedDto {
     }
 
     @Data
-    public static class Patch{}
+    @Builder
+    public static class Patch{
+        private Long feedId;
+        private Long memberId;
+        private String content;
+        private List<MultipartFile> addImages;
+        private List<String> deleteImages;
+    }
 
     @Data
+//    @Builder
     public static class Response {
         private Long feedId;
         private Long memberId;
@@ -35,7 +41,7 @@ public class FeedDto {
         private String content;
         private int likes;
         private boolean isLike;
-        private List<FeedCommentDto> feedComments;
+        private List<FeedCommentDto.Response> feedComments;
         private String shareURL;
         private LocalDateTime createdAt;
         private LocalDateTime modifiedAt;
@@ -47,6 +53,12 @@ public class FeedDto {
         private int likeCount;
         private boolean isLike;
     }
+
+    @Data
+    public static class PreviousListIds {
+        private List<Long> previousListIds;
+    }
+
 
 
 

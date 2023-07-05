@@ -1,14 +1,13 @@
-package com.saecdo18.petmily.feeds.controller;
+package com.saecdo18.petmily.feed.controller;
 
-import com.saecdo18.petmily.feeds.dto.FeedDto;
-import com.saecdo18.petmily.feeds.service.FeedServiceImpl;
+import com.saecdo18.petmily.feed.dto.FeedDto;
+import com.saecdo18.petmily.feed.service.FeedServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.Valid;
 import java.io.IOException;
 import java.net.URI;
 import java.util.List;
@@ -27,14 +26,18 @@ public class FeedController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/noregister")
-    public ResponseEntity<?> getFeedsByNoRegister() {
-        return null;
+    @GetMapping("/list/random")
+    public ResponseEntity<?> getFeedsRandom(@RequestBody FeedDto.PreviousListIds listIds) {
+        List<FeedDto.Response> responseList = feedService.getFeedsRandom(listIds);
+        return ResponseEntity.ok(responseList);
     }
 
-    @GetMapping("/myfeeds/{member-id}")
-    public ResponseEntity<?> getFeedsByMember(@PathVariable("member-id") long memberId) {
-        return null;
+    @GetMapping("/my-feed/{member-id}")
+    public ResponseEntity<?> getFeedsByMember(@PathVariable("member-id") Long memberId,
+                                              @RequestParam(defaultValue = "0") int page,
+                                              @RequestParam(defaultValue = "10") int size) {
+        List<FeedDto.Response> responseList = feedService.getFeedsByMember(page, size, memberId);
+        return ResponseEntity.ok(responseList);
     }
 
     @GetMapping("/list/{member-id}")
@@ -42,27 +45,37 @@ public class FeedController {
         return null;
     }
 
-    @GetMapping("/list/random")
-    public ResponseEntity<?> getFeedsByRandom() {
-        return null;
-    }
 
     @PostMapping
-    public ResponseEntity<?> createFeed(@RequestParam("memberId") long memberID,
+    public ResponseEntity<?> createFeed(@RequestParam("memberId") long memberId,
                                         @RequestParam("content") String content,
                                         @RequestParam("images")MultipartFile[] images) throws IOException {
         FeedDto.Post post = FeedDto.Post.builder()
-                .memberId(memberID)
+                .memberId(memberId)
                 .content(content)
                 .images(List.of(images))
                 .build();
-        URI uri = feedService.createFeed(post);
-        return ResponseEntity.created(uri).build();
+        FeedDto.Response response = feedService.createFeed(post);
+
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @PatchMapping("/{feed-id}/{member-id}")
-    public ResponseEntity<?> patchFeed(@PathVariable("feed-id") long feedId, @PathVariable("member-id") long memberId) {
-        return null;
+    public ResponseEntity<?> patchFeed(@PathVariable("feed-id") long feedId,
+                                       @PathVariable("member-id") long memberId,
+                                       @RequestParam("content") String content,
+                                       @RequestParam("addImage") MultipartFile[] addImages,
+                                       @RequestParam("deleteImage") String[] deleteImages) throws IOException {
+
+        FeedDto.Patch patch = FeedDto.Patch.builder()
+                .feedId(feedId)
+                .memberId(memberId)
+                .content(content)
+                .addImages(List.of(addImages))
+                .deleteImages(List.of(deleteImages))
+                .build();
+        FeedDto.Response response = feedService.patchFeed(patch);
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{feed-id}/{member-id}")
