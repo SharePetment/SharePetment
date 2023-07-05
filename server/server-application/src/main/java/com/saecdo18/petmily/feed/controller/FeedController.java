@@ -32,9 +32,12 @@ public class FeedController {
         return ResponseEntity.ok(responseList);
     }
 
-    @GetMapping("/myfeeds/{member-id}")
-    public ResponseEntity<?> getFeedsByMember(@PathVariable("member-id") long memberId) {
-        return null;
+    @GetMapping("/my-feed/{member-id}")
+    public ResponseEntity<?> getFeedsByMember(@PathVariable("member-id") Long memberId,
+                                              @RequestParam(defaultValue = "0") int page,
+                                              @RequestParam(defaultValue = "10") int size) {
+        List<FeedDto.Response> responseList = feedService.getFeedsByMember(page, size, memberId);
+        return ResponseEntity.ok(responseList);
     }
 
     @GetMapping("/list/{member-id}")
@@ -44,11 +47,11 @@ public class FeedController {
 
 
     @PostMapping
-    public ResponseEntity<?> createFeed(@RequestParam("memberId") long memberID,
+    public ResponseEntity<?> createFeed(@RequestParam("memberId") long memberId,
                                         @RequestParam("content") String content,
                                         @RequestParam("images")MultipartFile[] images) throws IOException {
         FeedDto.Post post = FeedDto.Post.builder()
-                .memberId(memberID)
+                .memberId(memberId)
                 .content(content)
                 .images(List.of(images))
                 .build();

@@ -70,7 +70,6 @@ public class FeedServiceImpl implements FeedService {
     @Override
     public FeedDto.Response getFeed(long feedId, long memberId) {
         Feed findFeed = methodFindByFeedId(feedId);
-
         return changeFeedToFeedDtoResponse(findFeed, memberId);
     }
 
@@ -97,13 +96,18 @@ public class FeedServiceImpl implements FeedService {
             pageRequest = PageRequest.of(0, newDataCount, Sort.by(Sort.Direction.DESC, "createdAt"));
         }
 
-        List<FeedDto.Response> responseList = new ArrayList<>();
-        for (Feed feed : feedList) {
-            FeedDto.Response response = changeFeedToFeedDtoResponse(feed, 0);
-            responseList.add(response);
-        }
+        return changeFeedListToFeedResponseDto(feedList);
+    }
 
-        return responseList;
+    @Override
+    public List<FeedDto.Response> getFeedsByMember(int page, int size, long memberId) {
+        Member findMember = methodFindByMemberId(memberId);
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
+
+        Page<Feed> feedPage = feedRepository.findAllByMemberOrderByCreatedAtDesc(findMember, pageRequest);
+        List<Feed> feedList = feedPage.getContent();
+
+        return changeFeedListToFeedResponseDto(feedList);
     }
 
     @Override
@@ -249,5 +253,13 @@ public class FeedServiceImpl implements FeedService {
         return response;
     }
 
+    private List<FeedDto.Response> changeFeedListToFeedResponseDto(List<Feed> feedList) {
+        List<FeedDto.Response> responseList = new ArrayList<>();
+        for (Feed feed : feedList) {
+            FeedDto.Response response = changeFeedToFeedDtoResponse(feed, 0);
+            responseList.add(response);
+        }
 
+        return responseList;
+    }
 }

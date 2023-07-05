@@ -20,7 +20,7 @@ public class FeedImage extends BaseEntity {
     @JoinColumn(name = "feed_id")
     private Feed feed;
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "image_id")
     private Image image;
 

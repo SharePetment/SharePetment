@@ -15,6 +15,8 @@ public interface FeedService {
 
     public List<FeedDto.Response> getFeedsRandom(FeedDto.PreviousListIds listIds);
 
+    public List<FeedDto.Response> getFeedsByMember(int page, int size, long memberId);
+
     public FeedDto.Response patchFeed(FeedDto.Patch patch) throws IOException;
 
     public void deleteFeed(long feedId, long memberId);
