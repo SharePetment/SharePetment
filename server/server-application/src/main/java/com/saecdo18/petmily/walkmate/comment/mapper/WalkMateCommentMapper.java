@@ -1,9 +1,46 @@
 package com.saecdo18.petmily.walkmate.comment.mapper;
 
+import com.saecdo18.petmily.walkmate.comment.dto.WalkMateCommentDto;
 import com.saecdo18.petmily.walkmate.comment.entity.WalkMateComment;
+import com.saecdo18.petmily.walkmate.post.dto.WalkMateDto;
+import com.saecdo18.petmily.walkmate.post.entity.WalkMate;
 import org.mapstruct.Mapper;
+import org.mapstruct.ReportingPolicy;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface WalkMateCommentMapper {
 
+    public default WalkMateComment commentPostDtoToComment(WalkMateCommentDto.Post post){
+        if (post == null) {
+            return null;
+        } else {
+            WalkMateComment.WalkMateCommentBuilder comment = WalkMateComment.builder();
+            comment.content(post.getContent());
+            return comment.build();
+        }
+    }
+
+    public default WalkMateComment commentPatchDtoToComment(WalkMateCommentDto.Patch patch){
+        if (patch == null) {
+            return null;
+        } else {
+            WalkMateComment.WalkMateCommentBuilder comment = WalkMateComment.builder();
+            comment.content(patch.getContent());
+            return comment.build();
+        }
+    }
+
+    public default WalkMateCommentDto.Response commentToCommentResponseDto(WalkMateComment comment){
+        if (comment == null) {
+            return null;
+        } else {
+            WalkMateCommentDto.Response response = new WalkMateCommentDto.Response();
+            response.setCommentId(comment.getWalkMateCommentsId());
+            response.setWalkMatePostId(comment.getWalkMate().getWalkMatePostId());
+            response.setMemberId(comment.getMember().getMemberId());
+            response.setContent(comment.getContent());
+            response.setLikes(comment.getLikes());
+            return response;
+        }
+    }
 }

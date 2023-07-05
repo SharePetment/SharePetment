@@ -1,6 +1,5 @@
 package com.saecdo18.petmily.walkmate.post.controller;
 
-import com.saecdo18.petmily.member.entity.Member;
 import com.saecdo18.petmily.member.repository.MemberRepository;
 import com.saecdo18.petmily.walkmate.post.dto.WalkMateDto;
 import com.saecdo18.petmily.walkmate.post.entity.WalkMate;

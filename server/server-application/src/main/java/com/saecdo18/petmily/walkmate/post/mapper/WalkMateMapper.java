@@ -5,6 +5,8 @@ import com.saecdo18.petmily.walkmate.post.entity.WalkMate;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
+import java.util.ArrayList;
+
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface WalkMateMapper {
 
@@ -22,6 +24,7 @@ public interface WalkMateMapper {
             walkMate.open(post.getOpen());
             walkMate.maximum(post.getMaximum());
             walkMate.likes(0);
+            walkMate.comments(new ArrayList<>());
             return walkMate.build();
         }
     }
@@ -58,6 +61,7 @@ public interface WalkMateMapper {
             response.setOpen(walkMate.getOpen());
             response.setMaximum(walkMate.getMaximum());
             response.setLikes(walkMate.getLikes());
+            response.setComments(walkMate.getComments());
             return response;
         }
     }

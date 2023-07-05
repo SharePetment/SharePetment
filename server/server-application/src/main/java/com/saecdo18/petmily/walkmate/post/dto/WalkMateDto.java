@@ -1,6 +1,9 @@
 package com.saecdo18.petmily.walkmate.post.dto;
 
+import com.saecdo18.petmily.walkmate.comment.entity.WalkMateComment;
 import lombok.*;
+
+import java.util.List;
 
 @Data
 public class WalkMateDto {
@@ -21,6 +24,7 @@ public class WalkMateDto {
         private Boolean open;
         private Integer maximum;
         private Integer likes;
+//        private List<WalkMateComment> comments;
     }
 
     @Getter
@@ -57,5 +61,6 @@ public class WalkMateDto {
         private Boolean open;
         private Integer maximum;
         private Integer likes;
+        private List<WalkMateComment> comments;
     }
 }

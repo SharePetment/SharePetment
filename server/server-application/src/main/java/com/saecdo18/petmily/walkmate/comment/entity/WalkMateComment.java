@@ -4,11 +4,13 @@ import com.saecdo18.petmily.member.entity.Member;
 import com.saecdo18.petmily.walkmate.post.entity.WalkMate;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 
 @Getter
+@NoArgsConstructor
 @Entity
 public class WalkMateComment {
 
@@ -23,7 +25,7 @@ public class WalkMateComment {
     private Integer likes;
 
     @ManyToOne
-    @JoinColumn(name = "WALKMATEPOST_ID")
+    @JoinColumn(name = "walkmatepost_id")
     private WalkMate walkMate;
 
     @ManyToOne
@@ -37,5 +39,16 @@ public class WalkMateComment {
         this.likes = likes;
         this.walkMate = walkMate;
         this.member = member;
+    }
+
+//    public void setWalkMate(WalkMate walkMate){
+//        this.walkMate = walkMate;
+//    }
+//    public void setMember(Member member){
+//        this.member = member;
+//    }
+
+    public void setContent(String content){
+        this.content = content;
     }
 }
