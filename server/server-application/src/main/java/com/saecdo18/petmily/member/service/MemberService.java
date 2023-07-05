@@ -8,6 +8,10 @@ import com.saecdo18.petmily.member.mapper.FollowMemberMapper;
 import com.saecdo18.petmily.member.mapper.MemberMapper;
 import com.saecdo18.petmily.member.repository.FollowMemberRepository;
 import com.saecdo18.petmily.member.repository.MemberRepository;
+import com.saecdo18.petmily.pet.dto.PetDto;
+import com.saecdo18.petmily.pet.mapper.PetMapper;
+import com.saecdo18.petmily.pet.entity.Pet;
+import com.saecdo18.petmily.pet.repository.PetRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,8 +27,10 @@ import java.util.Optional;
 public class MemberService {
     private final MemberRepository memberRepository;
     private final FollowMemberRepository followMemberRepository;
+    private final PetRepository petRepository;
     private final MemberMapper memberMapper;
     private final FollowMemberMapper followMemberMapper;
+    private final PetMapper petMapper;
 
     public Member createMember(Member member){
         Member findMember = methodVerifyNoneMember(member); //email를 통해 등록되지 않은 멤버이면 진행
@@ -35,6 +41,9 @@ public class MemberService {
     public MemberDto.Response getMember(long hostMemberId, long guestMemberId){
         Member hostMember = methodFindByMemberIdMember(hostMemberId);
 
+        List<Pet> petList = petRepository.findByMember(hostMember);
+        hostMember.updatePetList(petList);
+        List<PetDto.Response> responsePets = petMapper.petsToPetResponseDtos(petList);
 
         Optional<FollowMember> findFollowStatus = followMemberRepository.findByFollowerMemberAndFollowingId(hostMember, guestMemberId);
         if (findFollowStatus.isEmpty()){
@@ -43,7 +52,8 @@ public class MemberService {
         else {
             hostMember.updateGuestFollowStatus(findFollowStatus.get().isFollow());
         }
-
+        MemberDto.Response response = memberMapper.memberToMemberResponseDto(hostMember);
+        response.setPets(responsePets);
         return memberMapper.memberToMemberResponseDto(hostMember);
     }
 

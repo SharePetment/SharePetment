@@ -54,10 +54,14 @@ public class MemberDto {
         private int followerCount;
         private boolean animalParents;
         private boolean guestFollowStatus;
-//        private List<PetDto.Response> pets;
+        private List<PetDto.Response> pets;
         private LocalDateTime createdAt;
         private LocalDateTime modifiedAt;
 
 //        private String statusMessage;
+
+        public void setPets(List<PetDto.Response> pets) {
+            this.pets = pets;
+        }
     }
 }

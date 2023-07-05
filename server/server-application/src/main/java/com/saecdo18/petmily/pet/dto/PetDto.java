@@ -1,8 +1,11 @@
 package com.saecdo18.petmily.pet.dto;
 
+import com.saecdo18.petmily.image.dto.ImageDto;
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotBlank;
+import java.util.List;
 
 @Data
 public class PetDto {
@@ -10,8 +13,9 @@ public class PetDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class Post{
-        @NotBlank
+
         private String profile;
+//        private List<MultipartFile> profile;
         @NotBlank
         private String name;
         private int age;
@@ -27,6 +31,7 @@ public class PetDto {
     @Getter
     public static class Patch{
         private String profile;
+//        private List<MultipartFile> profile;
 
         private String name;
         private int age;
@@ -44,6 +49,7 @@ public class PetDto {
     public static class Response{
         private Long petId;
         private String profile;
+//        private List<ImageDto> profile;
         private String name;
         private int age;
         private String sex;
@@ -56,9 +62,6 @@ public class PetDto {
         private String modifiedAt;
 
 
-        public void setMemberId(long memberId) {
-            this.memberId = memberId;
-        }
 
         public void setWalkMated(boolean walkMated){
             this.walkMated=walkMated;

@@ -3,7 +3,7 @@ package com.saecdo18.petmily.pet.service;
 import com.saecdo18.petmily.member.entity.Member;
 import com.saecdo18.petmily.member.repository.MemberRepository;
 import com.saecdo18.petmily.member.service.MemberService;
-import com.saecdo18.petmily.pet.PetMapper;
+import com.saecdo18.petmily.pet.mapper.PetMapper;
 import com.saecdo18.petmily.pet.dto.PetDto;
 import com.saecdo18.petmily.pet.entity.Pet;
 import com.saecdo18.petmily.pet.repository.PetRepository;
@@ -29,7 +29,7 @@ public class PetService {
             findMember.updateAnimalParents(true);
         }
         PetDto.Response responsePet = petMapper.petToPetResponseDto(pet);
-        responsePet.setMemberId(pet.getMember().getMemberId());
+
 
         return responsePet;
     }
@@ -37,9 +37,10 @@ public class PetService {
     public PetDto.Response getPet(long petId){
         Pet findPet = methodFindByPetId(petId);
         PetDto.Response response = petMapper.petToPetResponseDto(findPet);
-        response.setMemberId(findPet.getMember().getMemberId());
+
         return response;
     }
+
 
     public PetDto.Response updatePet(long memberId, long petId, Pet patchPet){
         Pet findPet = methodFindByPetId(petId);
@@ -79,10 +80,6 @@ public class PetService {
         return petRepository.findById(petId).orElseThrow(() -> new RuntimeException("찾으시는 반려동물이 없습니다"));
     }
 
-    private Pet methodFindByMember(Member findMember) {
-        return petRepository.findByMember(findMember)
-                .orElseThrow(() -> new RuntimeException("해당 멤버가 없습니다"));
-    }
 
     private Member methodFindByMemberIdMember(long memberId) {
         return memberRepository.findById(memberId)

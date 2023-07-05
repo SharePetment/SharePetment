@@ -39,6 +39,7 @@ public class Member extends BaseEntity {
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private List<Pet> pets;
 
+
     @Builder(builderMethodName = "emailNicknameAddress")
     public Member(String email, String nickname, String address){
         this.email = email;
@@ -66,6 +67,8 @@ public class Member extends BaseEntity {
     public void updateGuestFollowStatus(boolean guestFollowStatus){
         this.guestFollowStatus = guestFollowStatus;
     }
+
+    public void updatePetList(List<Pet> pets){ this.pets=pets; }
 
     //    public void updateMessage(String statusMessage){
 //        this.statusMessage=statusMessage;
