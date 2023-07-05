@@ -1,6 +1,7 @@
+import { Link } from 'react-router-dom';
 import { ReactComponent as Github } from '../../assets/github.svg';
 import { ReactComponent as Notion } from '../../assets/notion.svg';
-import { Container, TopContainer, Text } from './footer.styled';
+import { Container, TopContainer, Text } from './Footer.styled';
 
 export default function Footer() {
   return (
@@ -8,16 +9,16 @@ export default function Footer() {
       <TopContainer>
         <div className="flex items-center">
           <Notion />
-          <a href="https://www.notion.so/codestates/18-e6a765fcd5f84d6ba6ef261cd16a69cd">
+          <Link to="https://www.notion.so/codestates/18-e6a765fcd5f84d6ba6ef261cd16a69cd">
             <Text>노션</Text>
-          </a>
+          </Link>
         </div>
 
         <div className="flex items-center">
           <Github />
-          <a href="https://github.com/codestates-seb/seb44_main_018">
+          <Link to="https://github.com/codestates-seb/seb44_main_018">
             <Text>깃허브</Text>
-          </a>
+          </Link>
         </div>
 
         <div className="pt-[3px] flex gap-2">

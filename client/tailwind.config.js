@@ -14,6 +14,15 @@ export default {
         popup: '#a1a1aa',
       },
     },
+    keyframes: {
+      fadeInUp: {
+        from: { opacity: 0, transform: 'translate3d(0, 30%, 0)' },
+        to: { opacity: 1, transform: 'translateZ(0)' },
+      },
+    },
+    animation: {
+      fadeInUp: 'fadeInUp 0.4s ease-in-out',
+    },
   },
   plugins: [],
 };
