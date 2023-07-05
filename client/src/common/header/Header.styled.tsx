@@ -10,4 +10,8 @@ export const HeaderContainer = tw.div`
 export const NavList = tw.ul`
 flex gap-5
 items-center
+
+li {
+  text-9xl	
+}
 `;

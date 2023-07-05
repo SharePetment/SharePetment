@@ -31,45 +31,87 @@
 //   );
 // }
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ReactComponent as Paw } from '../../assets/paw.svg';
 import Path from '../../routers/paths';
+import Button from '../button/Button';
 import Profile from '../profile/Profile';
 import { HeaderContainer, NavList } from './Header.styled';
 
-export default function Header() {
+interface HeaderProps {
+  isloginuser: string;
+}
+
+export default function Header({ isloginuser }: HeaderProps) {
+  const navigate = useNavigate();
+
   return (
-    <HeaderContainer>
-      <div>
-        <Link to={Path.Home}>
-          <Paw />
-        </Link>
-      </div>
-      <nav>
-        <NavList
-          onClick={e => {
-            console.log(e);
-          }}>
-          <li>
-            <Link to={Path.Home}>홈</Link>
-          </li>
-          <li>
-            <Link to={Path.WalkMate}>산책</Link>
-          </li>
-          <li>
-            <Link to={Path.WalkFeed}>포스트</Link>
-          </li>
-          <li>
-            <Link to={Path.MyPage}>
-              <Profile
-                size="md"
-                url="https://huchu.link/MZFVNjh"
-                isgreen="false"
-              />
+    <>
+      {isloginuser === 'true' ? (
+        <HeaderContainer>
+          <div>
+            <Link to={Path.Home}>
+              <Paw />
             </Link>
-          </li>
-        </NavList>
-      </nav>
-    </HeaderContainer>
+          </div>
+          <nav>
+            <NavList
+              onClick={e => {
+                console.log(e);
+              }}>
+              <li>
+                <Link to={Path.Home}>홈</Link>
+              </li>
+              <li>
+                <Link to={Path.WalkMate}>산책</Link>
+              </li>
+              <li>
+                <Link to={Path.FeedPosting}>포스트</Link>
+              </li>
+              <li>
+                <Link to={Path.MyPage}>
+                  <Profile
+                    size="md"
+                    url="https://huchu.link/MZFVNjh"
+                    isgreen="true"
+                  />
+                </Link>
+              </li>
+              <li>
+                <Button
+                  size="sm"
+                  text="로그아웃"
+                  isgreen="true"
+                  handler={() => navigate('/')}
+                />
+              </li>
+            </NavList>
+          </nav>
+        </HeaderContainer>
+      ) : (
+        <HeaderContainer>
+          <div>
+            <Link to={Path.Home}>
+              <Paw />
+            </Link>
+          </div>
+          <nav>
+            <NavList>
+              <li>
+                <Link to={Path.Home}>홈</Link>
+              </li>
+              <li>
+                <Button
+                  size="sm"
+                  text="로그인"
+                  isgreen="true"
+                  handler={() => navigate('/')}
+                />
+              </li>
+            </NavList>
+          </nav>
+        </HeaderContainer>
+      )}
+    </>
   );
 }
