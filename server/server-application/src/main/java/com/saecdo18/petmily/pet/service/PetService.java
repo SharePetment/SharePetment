@@ -76,34 +76,42 @@ public class PetService {
     }
 
 
-    public PetDto.Response updatePet(long memberId, long petId, Pet patchPet){
+    public PetDto.Response updatePet(long memberId, long petId, PetDto.Patch patchPet)throws IOException{
         Pet findPet = methodFindByPetId(petId);
-        if(memberId == findPet.getMember().getMemberId()){
-            findPet.updatePatch(
-                    patchPet.getName(),
-                    patchPet.getAge(),
-                    patchPet.getSex(),
-                    patchPet.getSpecies(),
-                    patchPet.getInformation(),
-                    patchPet.isWalkMated());
 
-//            Pet.PetBuilder findPetBuilder = findPet.nonePetIdAndMessage();
-//            findPetBuilder.profile(patchPet.getProfile());
-//            findPetBuilder.name(patchPet.getName());
-//            findPetBuilder.age(patchPet.getAge());
-//            findPetBuilder.sex(patchPet.getSex());
-//            findPetBuilder.species(patchPet.getSpecies());
-//            findPetBuilder.information(patchPet.getInformation());
-//            findPetBuilder.walkMated(patchPet.isWalkMated());
-
-
-        }
-        else {
+        if(memberId != findPet.getMember().getMemberId()){
             throw new RuntimeException("반려동물의 수정권한이 없습니다.");
         }
 
-        PetDto.Response response = petMapper.petToPetResponseDto(findPet);
-        return response;
+        findPet.updatePatch(
+                patchPet.getName(),
+                patchPet.getAge(),
+                patchPet.getSex(),
+                patchPet.getSpecies(),
+                patchPet.getInformation(),
+                patchPet.isWalkMated());
+        if (!patchPet.getAddImages().isEmpty()) {
+            for (MultipartFile multipartFile : patchPet.getAddImages()) {
+                String originalFilename = multipartFile.getOriginalFilename();
+                String uploadFileURL = s3UploadService.saveFile(multipartFile);
+                savePetImage(findPet, originalFilename, uploadFileURL);
+            }
+        }
+
+        if (!patchPet.getDeleteImages().isEmpty()) {
+            for (String originalFilename : patchPet.getDeleteImages()) {
+                for (PetImage petImage : findPet.getPetImageList()) {
+                    if (originalFilename.equals(petImage.getImage().getOriginalFilename())) {
+                        System.out.println(originalFilename+"!!!!!!!!!!!!!!"+petImage.getImage().getOriginalFilename());
+                        s3UploadService.deleteImage(petImage.getImage().getOriginalFilename());
+                        petImageRepository.delete(petImage);
+                    }
+                }
+            }
+        }
+
+
+        return changePetToPetDtoResponse(findPet);
     }
 
     private PetDto.Response changePetToPetDtoResponse(Pet pet) {

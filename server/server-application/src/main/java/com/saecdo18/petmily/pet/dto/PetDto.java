@@ -16,7 +16,6 @@ public class PetDto {
     @Builder
     public static class Post{
 
-//        private String profile;
         private List<MultipartFile> images;
         @NotBlank
         private String name;
@@ -31,10 +30,11 @@ public class PetDto {
     }
 
     @Getter
+    @Builder
     public static class Patch{
 //        private String profile;
-        private List<MultipartFile> images;
-
+        private List<MultipartFile> addImages;
+        private List<String> deleteImages;
         private String name;
         private int age;
 

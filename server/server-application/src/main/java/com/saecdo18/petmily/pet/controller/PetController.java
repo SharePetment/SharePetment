@@ -61,9 +61,25 @@ public class PetController {
     @PatchMapping("/status/{member-id}/{pet-id}")
     public ResponseEntity patchPet(@PathVariable("member-id") long memberId,
                                    @PathVariable("pet-id") long petId,
-                                   @Valid @RequestBody PetDto.Patch petPatchDto){
-        Pet pet = petMapper.petPatchDtoToPet(petPatchDto);
-        PetDto.Response response = petService.updatePet(memberId, petId, pet);
+                                   @RequestParam("images") MultipartFile[] images,
+                                   @RequestParam("deleteImage") String[] deleteImages,
+                                   @RequestParam("name") String name,
+                                   @RequestParam("age") int age,
+                                   @RequestParam("sex") String sex,
+                                   @RequestParam("species") String species,
+                                   @RequestParam("information") String information,
+                                   @RequestParam("walkMated") boolean walkMated) throws IOException {
+        PetDto.Patch petPatchDto = PetDto.Patch.builder()
+                .addImages(List.of(images))
+                .deleteImages(List.of(deleteImages))
+                .name(name)
+                .age(age)
+                .sex(sex)
+                .species(species)
+                .information(information)
+                .walkMated(walkMated)
+                .build();
+        PetDto.Response response = petService.updatePet(memberId, petId, petPatchDto);
 
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
