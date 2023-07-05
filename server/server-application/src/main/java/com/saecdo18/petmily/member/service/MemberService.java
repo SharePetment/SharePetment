@@ -9,6 +9,7 @@ import com.saecdo18.petmily.member.mapper.MemberMapper;
 import com.saecdo18.petmily.member.repository.FollowMemberRepository;
 import com.saecdo18.petmily.member.repository.MemberRepository;
 import com.saecdo18.petmily.pet.dto.PetDto;
+import com.saecdo18.petmily.pet.entity.PetImage;
 import com.saecdo18.petmily.pet.mapper.PetMapper;
 import com.saecdo18.petmily.pet.entity.Pet;
 import com.saecdo18.petmily.pet.repository.PetRepository;
@@ -97,6 +98,25 @@ public class MemberService {
         List<FollowMember> followMemberList = followMemberRepository.findByFollowingId(followingId);
         List<FollowMemberDto.Response> responses = followMemberMapper.followMemberToFollowMemberResponseDtos(followMemberList);
         return  responses;
+    }
+
+    public MemberDto.Info changeImage(long memberId, long petId) {
+        Member findMember = methodFindByMemberIdMember(memberId);
+        Pet findPet = petRepository.findById(petId).orElseThrow(
+                () -> new RuntimeException("펫을 찾을 수 없습니다.")
+        );
+
+        List<PetImage> petImageList = findPet.getPetImageList();
+
+        for (PetImage petImage : petImageList) {
+            findMember.updateImageUrl(petImage.getImage().getUploadFileURL());
+        }
+        Member saveMember = memberRepository.save(findMember);
+        return MemberDto.Info.builder()
+                .nickname(saveMember.getNickname())
+                .memberId(saveMember.getMemberId())
+                .imageURL(saveMember.getImageURL())
+                .build();
     }
 
     private Member methodFindByFollowerInMember(long followerId) {
