@@ -1,19 +1,17 @@
-import { Link } from 'react-router-dom';
+import { BooleanStr, BtnSize, Handler } from '../../types/buttonType';
 import { Btn } from './button.styled';
 
 interface Prop {
-  size: string; //lg, md, sm
+  size: BtnSize; //lg, md, sm
   text: string;
-  isgreen: string;
-  path: string;
+  isgreen: BooleanStr;
+  handler: Handler;
 }
 
-export default function Button({ size, text, isgreen, path }: Prop) {
+export default function Button({ size, text, isgreen, handler }: Prop) {
   return (
-    <Link to={path ? path : '#'}>
-      <Btn isgreen={isgreen} size={size}>
-        {text}
-      </Btn>
-    </Link>
+    <Btn isgreen={isgreen} size={size} onClick={handler}>
+      {text}
+    </Btn>
   );
 }
