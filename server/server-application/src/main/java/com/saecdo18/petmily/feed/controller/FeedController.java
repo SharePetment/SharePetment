@@ -42,6 +42,7 @@ public class FeedController {
 
     @GetMapping("/list/{member-id}")
     public ResponseEntity<?> getFeedsByMemberFollow(@PathVariable("member-id") long memberId) {
+
         return null;
     }
 

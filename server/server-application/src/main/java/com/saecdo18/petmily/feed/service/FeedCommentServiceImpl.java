@@ -6,6 +6,7 @@ import com.saecdo18.petmily.feed.entity.FeedComments;
 import com.saecdo18.petmily.feed.mapper.FeedMapper;
 import com.saecdo18.petmily.feed.repository.FeedCommentsRepository;
 import com.saecdo18.petmily.feed.repository.FeedRepository;
+import com.saecdo18.petmily.member.dto.MemberDto;
 import com.saecdo18.petmily.member.entity.Member;
 import com.saecdo18.petmily.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +32,7 @@ public class FeedCommentServiceImpl implements FeedCommentService{
 
         FeedComments saveComment = feedCommentsRepository.save(feedComments);
         FeedCommentDto.Response response = feedMapper.feedCommentsToFeedCommentDto(saveComment);
-        response.setMemberId(findMember.getMemberId());
+        response.setMemberInfo(memberIdToMemberInfoDto(findMember.getMemberId()));
 
         return response;
     }
@@ -44,7 +45,7 @@ public class FeedCommentServiceImpl implements FeedCommentService{
         feedComments.updateContent(patch.getContent());
         FeedComments saveFeedComments = feedCommentsRepository.save(feedComments);
         FeedCommentDto.Response response = feedMapper.feedCommentsToFeedCommentDto(saveFeedComments);
-        response.setMemberId(memberId);
+        response.setMemberInfo(memberIdToMemberInfoDto(memberId));
         return response;
     }
 
@@ -80,5 +81,17 @@ public class FeedCommentServiceImpl implements FeedCommentService{
         return feedRepository.findById(feedId).orElseThrow(
                 () -> new RuntimeException("피드를 찾을 수 없습니다")
         );
+    }
+
+    private MemberDto.Info memberIdToMemberInfoDto(long memberId) {
+        Member findMember = memberRepository.findById(memberId).orElseThrow(
+                () -> new RuntimeException("사용자를 찾을 수 없습니다.")
+        );
+
+        return MemberDto.Info.builder()
+                .memberId(findMember.getMemberId())
+                .imageURL(findMember.getImageURL())
+                .nickname(findMember.getNickname())
+                .build();
     }
 }

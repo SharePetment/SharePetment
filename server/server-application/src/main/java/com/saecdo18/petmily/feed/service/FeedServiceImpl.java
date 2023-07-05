@@ -15,6 +15,7 @@ import com.saecdo18.petmily.feed.repository.FeedRepository;
 import com.saecdo18.petmily.image.dto.ImageDto;
 import com.saecdo18.petmily.image.entity.Image;
 import com.saecdo18.petmily.image.repository.ImageRepository;
+import com.saecdo18.petmily.member.dto.MemberDto;
 import com.saecdo18.petmily.member.entity.Member;
 import com.saecdo18.petmily.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -212,13 +213,26 @@ public class FeedServiceImpl implements FeedService {
                     List<FeedCommentDto.Response> feedCommentDtoList = new ArrayList<>();
                     for (FeedComments feedComments : feedCommentsList) {
                         FeedCommentDto.Response response = feedMapper.feedCommentsToFeedCommentDto(feedComments);
-                        response.setMemberId(feedComments.getMember().getMemberId());
+                        response.setMemberInfo(memberIdToMemberInfoDto(feedComments.getMember().getMemberId()));
                         feedCommentDtoList.add(response);
                     }
                     return feedCommentDtoList;
                 })
                 .orElseGet(Collections::emptyList);
     }
+
+    private MemberDto.Info memberIdToMemberInfoDto(long memberId) {
+        Member findMember = memberRepository.findById(memberId).orElseThrow(
+                () -> new RuntimeException("사용자를 찾을 수 없습니다.")
+        );
+
+        return MemberDto.Info.builder()
+                .memberId(findMember.getMemberId())
+                .imageURL(findMember.getImageURL())
+                .nickname(findMember.getNickname())
+                .build();
+    }
+
 
     private List<ImageDto> feedImageToImageDtoList(List<FeedImage> feedImageList) {
         List<ImageDto> imageDtoList = new ArrayList<>();
@@ -240,7 +254,7 @@ public class FeedServiceImpl implements FeedService {
         if (!feedCommentDtoList.isEmpty()) {
             response.setFeedComments(feedCommentDtoList);
         }
-        response.setMemberId(feed.getMember().getMemberId());
+        response.setMemberInfo(memberIdToMemberInfoDto(feed.getMember().getMemberId()));
         List<FeedImage> feedImageList = feedImageRepository.findByFeed(feed);
         response.setImages(feedImageToImageDtoList(feedImageList));
         if (memberId == 0) {

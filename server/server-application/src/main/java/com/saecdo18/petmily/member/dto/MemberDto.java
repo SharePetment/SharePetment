@@ -11,6 +11,15 @@ import java.util.List;
 
 @Data
 public class MemberDto {
+
+    @Data
+    @Builder
+    public static class Info{
+        private Long memberId;
+        private String nickname;
+        private String imageURL;
+    }
+
     @Getter
     @AllArgsConstructor
     @NoArgsConstructor

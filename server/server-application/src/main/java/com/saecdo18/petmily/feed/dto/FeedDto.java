@@ -1,6 +1,7 @@
 package com.saecdo18.petmily.feed.dto;
 
 import com.saecdo18.petmily.image.dto.ImageDto;
+import com.saecdo18.petmily.member.dto.MemberDto;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
@@ -36,7 +37,7 @@ public class FeedDto {
 //    @Builder
     public static class Response {
         private Long feedId;
-        private Long memberId;
+        private MemberDto.Info memberInfo;
         private List<ImageDto> images;
         private String content;
         private int likes;
