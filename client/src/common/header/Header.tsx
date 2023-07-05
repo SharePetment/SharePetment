@@ -1,42 +1,10 @@
-// import { ReactComponent as Github } from '../../assets/github.svg';
-// import { ReactComponent as Notion } from '../../assets/notion.svg';
-// import { Container, TopContainer, Text } from './Header.styled';
-
-// export default function Footer() {
-//   return (
-//     <Container>
-//       <TopContainer>
-//         <div className="flex items-center">
-//           <Notion />
-//           <a href="https://www.notion.so/codestates/18-e6a765fcd5f84d6ba6ef261cd16a69cd">
-//             <Text>노션</Text>
-//           </a>
-//         </div>
-
-//         <div className="flex items-center">
-//           <Github />
-//           <a href="https://github.com/codestates-seb/seb44_main_018">
-//             <Text>깃허브</Text>
-//           </a>
-//         </div>
-
-//         <div className="pt-[3px] flex gap-2">
-//           <Text>개인정보처리방침</Text>
-//           <Text>약관</Text>
-//           <Text>연락처</Text>
-//         </div>
-//       </TopContainer>
-//       <Text>@2023 Petgram from 색도18</Text>
-//     </Container>
-//   );
-// }
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ReactComponent as Paw } from '../../assets/paw.svg';
 import Path from '../../routers/paths';
 import Button from '../button/Button';
 import Profile from '../profile/Profile';
-import { HeaderContainer, NavList } from './Header.styled';
+import { HeaderContainer, NavItem, NavList } from './Header.styled';
 
 interface HeaderProps {
   isloginuser: string;
@@ -44,6 +12,16 @@ interface HeaderProps {
 
 export default function Header({ isloginuser }: HeaderProps) {
   const navigate = useNavigate();
+  const [currentTab, setCurrentTab] = useState(0);
+  const selectTabHandler = (index: number) => {
+    setCurrentTab(index);
+  };
+
+  const tabs = [
+    { name: '홈', link: Path.Home },
+    { name: '산책', link: Path.WalkMate },
+    { name: '포스트', link: Path.FeedPosting },
+  ];
 
   return (
     <>
@@ -55,25 +33,22 @@ export default function Header({ isloginuser }: HeaderProps) {
             </Link>
           </div>
           <nav>
-            <NavList
-              onClick={e => {
-                console.log(e);
-              }}>
-              <li>
-                <Link to={Path.Home}>홈</Link>
-              </li>
-              <li>
-                <Link to={Path.WalkMate}>산책</Link>
-              </li>
-              <li>
-                <Link to={Path.FeedPosting}>포스트</Link>
-              </li>
+            <NavList>
+              {tabs.map((tab, index) => (
+                <NavItem
+                  key={index}
+                  onClick={() => selectTabHandler(index)}
+                  currenttab={currentTab}
+                  idx={index}>
+                  <Link to={tab.link}>{tab.name}</Link>
+                </NavItem>
+              ))}
               <li>
                 <Link to={Path.MyPage}>
                   <Profile
                     size="md"
                     url="https://huchu.link/MZFVNjh"
-                    isgreen="true"
+                    isgreen="false"
                   />
                 </Link>
               </li>
