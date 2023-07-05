@@ -57,6 +57,8 @@ public class MemberService {
                     .build();
             followMemberRepository.save(followMember);
 
+            findFollower.updateFollowerCount(followMember.isFollow()); //member followerCount update
+
             FollowMemberDto.Response response = followMemberMapper.followMemberToFollowMemberResponseDto(followMember);
             return  response;
         }
@@ -64,6 +66,8 @@ public class MemberService {
             FollowMember followMember = optionalFollowMember.get();
             boolean follow = followMember.isFollow();
             followMember.updateFollow(!follow);
+
+            findFollower.updateFollowerCount(followMember.isFollow());
 
             FollowMemberDto.Response response = followMemberMapper.followMemberToFollowMemberResponseDto(followMember);
             return  response;

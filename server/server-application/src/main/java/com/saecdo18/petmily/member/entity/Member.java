@@ -49,11 +49,19 @@ public class Member extends BaseEntity {
         this.address = address;
     }
 
-//    public void updateMessage(String statusMessage){
-//        this.statusMessage=statusMessage;
-//    }
+    public void updateFollowerCount(boolean follow) {
+        if (follow) {
+            followerCount++;
+        } else {
+            followerCount--;
+        }
+    }
 
     public void updateAnimalParents(boolean animalParents){
         this.animalParents=animalParents;
     }
+
+    //    public void updateMessage(String statusMessage){
+//        this.statusMessage=statusMessage;
+//    }
 }
