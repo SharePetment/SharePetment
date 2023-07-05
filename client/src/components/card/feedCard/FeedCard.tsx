@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Profile from '../../../common/profile/Profile';
 import {
   Container,
@@ -11,12 +12,14 @@ import {
 } from './FeedCard.styled';
 
 interface Prop {
+  memberid: number;
   username: string;
   context: string;
-  userimg: string;
+  url: string;
 }
 
-export default function FeedCard({ username, context }: Prop) {
+export default function FeedCard({ memberid, username, context, url }: Prop) {
+  const navigate = useNavigate();
   const [isMore, setIsMore] = useState(false);
 
   return (
@@ -24,8 +27,8 @@ export default function FeedCard({ username, context }: Prop) {
       <Feed onClick={() => setIsMore(false)} />
 
       <ContentContainer>
-        <Wrap>
-          <Profile size="sm" isgreen="false" />
+        <Wrap onClick={() => navigate(`/users/${memberid}`)}>
+          <Profile size="sm" isgreen="false" url={url} />
           <UserName>{username}</UserName>
         </Wrap>
 
