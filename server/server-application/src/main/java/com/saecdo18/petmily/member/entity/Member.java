@@ -31,6 +31,8 @@ public class Member extends BaseEntity {
 
     private boolean animalParents;
 
+    private boolean guestFollowStatus;
+
     @OneToMany(mappedBy = "followerMember", cascade = CascadeType.REMOVE)
     private List<FollowMember> followMembers;
 
@@ -59,6 +61,10 @@ public class Member extends BaseEntity {
 
     public void updateAnimalParents(boolean animalParents){
         this.animalParents=animalParents;
+    }
+
+    public void updateGuestFollowStatus(boolean guestFollowStatus){
+        this.guestFollowStatus = guestFollowStatus;
     }
 
     //    public void updateMessage(String statusMessage){

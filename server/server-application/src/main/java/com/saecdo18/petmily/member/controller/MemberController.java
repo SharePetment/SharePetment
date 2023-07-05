@@ -39,9 +39,10 @@ public class MemberController {
 //        return ResponseEntity.created(location).build();
     }
 
-    @GetMapping("/{member-id}")
-    public ResponseEntity getMember(@PathVariable("member-id") long memberId){
-        MemberDto.Response responseMember = memberService.getMember(memberId);
+    @GetMapping("/{host-member-id}/{guest-member-id}")
+    public ResponseEntity getMember(@PathVariable("host-member-id") long hostMemberId,
+                                    @PathVariable("guest-member-id") long guestMemberId){
+        MemberDto.Response responseMember = memberService.getMember(hostMemberId, guestMemberId);
         return new ResponseEntity(responseMember, HttpStatus.OK);
     }
 

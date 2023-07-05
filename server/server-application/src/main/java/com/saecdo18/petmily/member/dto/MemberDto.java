@@ -2,10 +2,12 @@ package com.saecdo18.petmily.member.dto;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.saecdo18.petmily.pet.dto.PetDto;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 public class MemberDto {
@@ -49,10 +51,13 @@ public class MemberDto {
         private String email;
         private String nickname;
         private String address;
-//        private String statusMessage;
         private int followerCount;
         private boolean animalParents;
+        private boolean guestFollowStatus;
+//        private List<PetDto.Response> pets;
         private LocalDateTime createdAt;
         private LocalDateTime modifiedAt;
+
+//        private String statusMessage;
     }
 }

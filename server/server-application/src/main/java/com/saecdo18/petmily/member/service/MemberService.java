@@ -32,10 +32,19 @@ public class MemberService {
         return findMember;
     }
 
-    public MemberDto.Response getMember(long memberId){
-        Member member = methodFindByMemberIdMember(memberId);
+    public MemberDto.Response getMember(long hostMemberId, long guestMemberId){
+        Member hostMember = methodFindByMemberIdMember(hostMemberId);
 
-        return memberMapper.memberToMemberResponseDto(member);
+
+        Optional<FollowMember> findFollowStatus = followMemberRepository.findByFollowerMemberAndFollowingId(hostMember, guestMemberId);
+        if (findFollowStatus.isEmpty()){
+            hostMember.updateGuestFollowStatus(false);
+        }
+        else {
+            hostMember.updateGuestFollowStatus(findFollowStatus.get().isFollow());
+        }
+
+        return memberMapper.memberToMemberResponseDto(hostMember);
     }
 
     public MemberDto.Response updateMemberStatus(long memberId, String nickname, String address){
