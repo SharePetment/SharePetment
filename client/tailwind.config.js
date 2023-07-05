@@ -4,11 +4,11 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: '#fafafa',
-        text: '#171717',
+        defaultbg: '#fafafa',
+        defaulttext: '#171717',
         deepgray: '#a1a1aa',
-        lightgray: 'd4d4d8',
-        darkgreen: '#69B783',
+        lightgray: '#d4d4d8',
+        deepgreen: '#69B783',
         lightgreen: '#CCE7C2',
         white: '#FFFFFF',
         popup: '#a1a1aa',
