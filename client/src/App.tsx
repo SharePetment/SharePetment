@@ -1,13 +1,15 @@
-import tw from 'tailwind-styled-components';
-
-const Button = tw.button`
-  w-9
-  h-9
-  bg-[lightgray]
-`;
+import { Outlet } from 'react-router-dom';
+import Footer from './common/footer/Footer';
+import Header from './common/header/Header';
 
 function App() {
-  return <Button>안녕하세용</Button>;
+  return (
+    <>
+      <Header />
+      <Outlet />
+      <Footer />
+    </>
+  );
 }
 
 export default App;
