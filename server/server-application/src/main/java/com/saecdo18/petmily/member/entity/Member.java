@@ -1,6 +1,7 @@
 package com.saecdo18.petmily.member.entity;
 
-import com.saecdo18.petmily.base.BaseEntity;
+
+import com.saecdo18.petmily.feed.entity.BaseEntity;
 import com.saecdo18.petmily.pet.entity.Pet;
 import lombok.Builder;
 import lombok.Getter;

@@ -1,7 +1,8 @@
 package com.saecdo18.petmily.member.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.saecdo18.petmily.base.BaseEntity;
+
+import com.saecdo18.petmily.feed.entity.BaseEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
