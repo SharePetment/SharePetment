@@ -1,13 +1,11 @@
-import tw from 'tailwind-styled-components';
-
-const Button = tw.button`
-  w-9
-  h-9
-  bg-[lightgray]
-`;
+import Button from './common/button/Button';
 
 function App() {
-  return <Button>안녕하세용</Button>;
+  return (
+    <div className="w-screen h-screen flex justify-center items-center">
+      <Button size="sm" isgreen="true" text={'button'} path={'app'} />
+    </div>
+  );
 }
 
 export default App;
