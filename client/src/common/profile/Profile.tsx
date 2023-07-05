@@ -1,11 +1,10 @@
-import { ProfileContainer } from './Profile.styled';
+import { ProfileImage } from './Profile.styled';
 
-export interface ProfileProps {
-  size: string;
-  url: string;
+interface ProfileProps {
+  size: 'lg' | 'md' | 'sm';
   isgreened: string;
 }
 
-export default function Profile({ size, url, isgreened }: ProfileProps) {
-  return <ProfileContainer size={size} url={url} isgreened={isgreened} />;
+export default function Profile({ size, isgreened }: ProfileProps) {
+  return <ProfileImage size={size} isgreened={isgreened} />;
 }
