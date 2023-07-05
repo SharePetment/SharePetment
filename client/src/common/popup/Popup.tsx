@@ -1,4 +1,4 @@
-import { BooleanStr, BtnSize, Handler } from '../../types/buttonType';
+import { BooleanStr, Size, Handler } from '../../types/propType';
 import Button from '../button/Button';
 import { PopupBackGround, PopupBox, Title, ButtonBox } from './popup.styled';
 
@@ -6,7 +6,7 @@ interface Prop {
   title: string;
   handler: Handler[];
   isgreen: BooleanStr[];
-  btnsize: BtnSize[];
+  btnsize: Size[];
   buttontext: string[];
   countbtn: 1 | 2;
   popupcontrol: Handler;

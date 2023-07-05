@@ -4,12 +4,13 @@ import { ReactComponent as Delete } from '../../../assets/button/delete.svg';
 import { ReactComponent as Edit } from '../../../assets/button/edit.svg';
 import { ReactComponent as Like } from '../../../assets/button/like.svg';
 import { ReactComponent as Share } from '../../../assets/button/share.svg';
+import { BooleanStr } from '../../../types/propType';
 import { Container, Wrap, Text } from './SideNav.styled';
 
 interface Prop {
   feedid: number;
   direction: 'row' | 'col';
-  inperson: 'true' | 'false';
+  inperson: BooleanStr;
 }
 
 export default function SideNav({ feedid, direction, inperson }: Prop) {

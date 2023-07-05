@@ -1,9 +1,9 @@
 import tw from 'tailwind-styled-components';
-import { BooleanStr, BtnSize } from '../../types/buttonType';
+import { BooleanStr, Size } from '../../types/propType';
 
 interface BtnProp {
   isgreen: BooleanStr;
-  size: BtnSize;
+  size: Size;
 }
 
 export const Btn = tw.button<BtnProp>`

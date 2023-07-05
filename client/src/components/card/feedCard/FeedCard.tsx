@@ -1,6 +1,12 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Navigation } from 'swiper/modules';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+import 'swiper/css/pagination';
+import 'swiper/css/navigation';
 import Profile from '../../../common/profile/Profile';
+import './styles.css';
 import {
   Container,
   Feed,
@@ -24,27 +30,38 @@ export default function FeedCard({ memberid, username, context, url }: Prop) {
 
   return (
     <Container>
-      <Feed onClick={() => setIsMore(false)} />
+      <Swiper
+        pagination={{
+          type: 'fraction',
+        }}
+        navigation={true}
+        modules={[Navigation]}
+        className="mySwiper">
+        <SwiperSlide>
+          <Feed onClick={() => setIsMore(false)} />
+          <ContentContainer>
+            <Wrap onClick={() => navigate(`/users/${memberid}`)}>
+              <Profile size="sm" isgreen="false" url={url} />
+              <UserName>{username}</UserName>
+            </Wrap>
 
-      <ContentContainer>
-        <Wrap onClick={() => navigate(`/users/${memberid}`)}>
-          <Profile size="sm" isgreen="false" url={url} />
-          <UserName>{username}</UserName>
-        </Wrap>
+            {!isMore && (
+              <Wrap>
+                <Context ismore="false">{context.slice(0, 15)}</Context>
+                <More onClick={() => setIsMore(true)}>더보기</More>
+              </Wrap>
+            )}
 
-        {!isMore && (
-          <Wrap>
-            <Context ismore="false">{context.slice(0, 15)}</Context>
-            <More onClick={() => setIsMore(true)}>더보기</More>
-          </Wrap>
-        )}
-
-        {isMore && (
-          <Wrap>
-            <Context ismore="true">{context}</Context>
-          </Wrap>
-        )}
-      </ContentContainer>
+            {isMore && (
+              <Wrap>
+                <Context ismore="true">{context}</Context>
+              </Wrap>
+            )}
+          </ContentContainer>
+        </SwiperSlide>
+        <SwiperSlide>Slide 2</SwiperSlide>
+        <SwiperSlide>Slide 3</SwiperSlide>
+      </Swiper>
     </Container>
   );
 }
