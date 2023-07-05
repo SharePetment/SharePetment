@@ -1,9 +1,9 @@
-export enum Direction {
+enum Path {
   Login = '/',
   Info = '/info',
   InfoEditing = 'info/:userId',
   Home = '/home',
-  Mypage = '/my-page',
+  MyPage = '/my-page',
   Userpage = '/users/:usersId',
   FeedPopUp = '/home/:feedId',
   CopyPopUp = 'copy/:feedId',
@@ -14,3 +14,5 @@ export enum Direction {
   WalkPosting = '/walk-posting',
   WalkEditing = '/walk-posting/:postId',
 }
+
+export default Path;
