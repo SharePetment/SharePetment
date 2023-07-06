@@ -80,34 +80,31 @@ public class PetService {
     }
 
 
-    public PetDto.Response updatePet(long memberId, long petId, Pet patchPet){
+    public PetDto.Response updatePet(long memberId, long petId, PetDto.Patch patchPet)throws IOException{
         Pet findPet = methodFindByPetId(petId);
-        if(memberId == findPet.getMember().getMemberId()){
-            findPet.updatePatch(
-                    patchPet.getName(),
-                    patchPet.getAge(),
-                    patchPet.getSex(),
-                    patchPet.getSpecies(),
-                    patchPet.getInformation(),
-                    patchPet.isWalkMated());
 
-//            Pet.PetBuilder findPetBuilder = findPet.nonePetIdAndMessage();
-//            findPetBuilder.profile(patchPet.getProfile());
-//            findPetBuilder.name(patchPet.getName());
-//            findPetBuilder.age(patchPet.getAge());
-//            findPetBuilder.sex(patchPet.getSex());
-//            findPetBuilder.species(patchPet.getSpecies());
-//            findPetBuilder.information(patchPet.getInformation());
-//            findPetBuilder.walkMated(patchPet.isWalkMated());
-
-
-        }
-        else {
+        if(memberId != findPet.getMember().getMemberId()){
             throw new RuntimeException("반려동물의 수정권한이 없습니다.");
         }
 
-        PetDto.Response response = petMapper.petToPetResponseDto(findPet);
-        return response;
+        findPet.updatePatch(
+                patchPet.getName(),
+                patchPet.getAge(),
+                patchPet.getSex(),
+                patchPet.getSpecies(),
+                patchPet.getInformation(),
+                patchPet.isWalkMated());
+        if (!patchPet.getImages().isEmpty()) {
+            s3UploadService.deleteImage(findPet.getPetImage().getImage().getOriginalFilename());
+            petImageRepository.delete(findPet.getPetImage());
+
+            String originalFilename = patchPet.getImages().getOriginalFilename();
+            String uploadFileURL = s3UploadService.saveFile(patchPet.getImages());
+            savePetImage(findPet, originalFilename, uploadFileURL);
+
+        }
+
+        return getPet(findPet.getPetId());
     }
 
     public void deletePet(long memberId, long petId) {
@@ -123,10 +120,10 @@ public class PetService {
             Optional<Pet> firstPet = petRepository.findFirstByMemberOrderByCreatedAtAsc(findMember);
             if (firstPet.isPresent()) {
                 Pet pet = firstPet.get();
-                List<PetImage> images = pet.getPetImageList();
-                for (PetImage petImage : images) {
-                    findMember.updateImageUrl(petImage.getImage().getUploadFileURL());
-                }
+                PetImage images = pet.getPetImage();
+
+                findMember.updateImageUrl(images.getImage().getUploadFileURL());
+
             }
         }
     }
@@ -135,8 +132,10 @@ public class PetService {
         PetDto.Response response = petMapper.petToPetResponseDto(pet);
 
         response.setMemberId(pet.getMember().getMemberId());
-        List<PetImage> petImageList = petImageRepository.findByPet(pet);
-        response.setImages(petImageToImageDtoList(petImageList));
+        PetImage petImage = petImageRepository.findFirstByPetOrderByCreatedAtDesc(pet);
+        Image image = petImage.getImage();
+        ImageDto imageDto = petMapper.imageToImageDto(image);
+        response.setImages(imageDto);
 
         return response;
     }

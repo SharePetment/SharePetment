@@ -16,7 +16,6 @@ public class PetDto {
     @Builder
     public static class Post{
 
-//        private String profile;
         private MultipartFile images;
         @NotBlank
         private String name;
@@ -31,9 +30,10 @@ public class PetDto {
     }
 
     @Getter
+    @Builder
     public static class Patch{
 //        private String profile;
-        private List<MultipartFile> images;
+        private MultipartFile images;
 
         private String name;
         private int age;
@@ -51,7 +51,7 @@ public class PetDto {
     public static class Response{
         private Long petId;
 //        private String profile;
-        private List<ImageDto> images;
+        private ImageDto images;
         private String name;
         private int age;
         private String sex;
@@ -67,7 +67,7 @@ public class PetDto {
             this.memberId = memberId;
         }
 
-        public void setImages(List<ImageDto> images) {
+        public void setImages(ImageDto images) {
             this.images = images;
         }
 
