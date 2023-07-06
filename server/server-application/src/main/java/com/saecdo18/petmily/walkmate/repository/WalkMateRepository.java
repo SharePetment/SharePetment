@@ -1,9 +1,7 @@
-package com.saecdo18.petmily.walkmate.post.repository;
+package com.saecdo18.petmily.walkmate.repository;
 
-import com.saecdo18.petmily.walkmate.post.entity.WalkMate;
+import com.saecdo18.petmily.walkmate.entity.WalkMate;
 import org.springframework.data.jpa.repository.JpaRepository;
-
-import java.util.List;
 
 public interface WalkMateRepository extends JpaRepository<WalkMate, Long> {
 

@@ -1,7 +1,7 @@
-package com.saecdo18.petmily.walkmate.post.mapper;
+package com.saecdo18.petmily.walkmate.mapper;
 
-import com.saecdo18.petmily.walkmate.post.dto.WalkMateDto;
-import com.saecdo18.petmily.walkmate.post.entity.WalkMate;
+import com.saecdo18.petmily.walkmate.dto.WalkMateDto;
+import com.saecdo18.petmily.walkmate.entity.WalkMate;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
@@ -23,7 +23,7 @@ public interface WalkMateMapper {
             walkMate.time(post.getTime());
             walkMate.open(post.getOpen());
             walkMate.maximum(post.getMaximum());
-            walkMate.likes(0);
+            walkMate.likeCount(0);
             walkMate.comments(new ArrayList<>());
             return walkMate.build();
         }
@@ -60,7 +60,7 @@ public interface WalkMateMapper {
             response.setTime(walkMate.getTime());
             response.setOpen(walkMate.getOpen());
             response.setMaximum(walkMate.getMaximum());
-            response.setLikes(walkMate.getLikes());
+            response.setLikeCount(walkMate.getLikeCount());
             response.setCreatedAt(walkMate.getCreatedAt());
             response.setModifiedAt(walkMate.getModifiedAt());
             response.setComments(walkMate.getComments());

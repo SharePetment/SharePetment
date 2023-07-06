@@ -1,6 +1,6 @@
-package com.saecdo18.petmily.walkmate.post.dto;
+package com.saecdo18.petmily.walkmate.dto;
 
-import com.saecdo18.petmily.walkmate.comment.entity.WalkMateComment;
+import com.saecdo18.petmily.walkmate.entity.WalkMateComment;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -24,7 +24,7 @@ public class WalkMateDto {
         private String time;
         private Boolean open;
         private Integer maximum;
-        private Integer likes;
+        private Integer likeCount;
 //        private List<WalkMateComment> comments;
     }
 
@@ -43,7 +43,7 @@ public class WalkMateDto {
         private String time;
         private Boolean open;
         private Integer maximum;
-//        private Integer likes;
+//        private Integer likeCount;
     }
 
     @Getter
@@ -61,9 +61,16 @@ public class WalkMateDto {
         private String time;
         private Boolean open;
         private Integer maximum;
-        private Integer likes;
+        private Integer likeCount;
         private LocalDateTime createdAt;
         private LocalDateTime modifiedAt;
         private List<WalkMateComment> comments;
+    }
+
+    @Data
+    @Builder
+    public static class Like{
+        private int likeCount;
+        private boolean isLike;
     }
 }

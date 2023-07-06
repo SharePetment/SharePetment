@@ -1,11 +1,11 @@
-package com.saecdo18.petmily.walkmate.post.controller;
+package com.saecdo18.petmily.walkmate.controller;
 
 import com.saecdo18.petmily.member.repository.MemberRepository;
-import com.saecdo18.petmily.walkmate.post.dto.WalkMateDto;
-import com.saecdo18.petmily.walkmate.post.entity.WalkMate;
-import com.saecdo18.petmily.walkmate.post.mapper.WalkMateMapper;
-import com.saecdo18.petmily.walkmate.post.repository.WalkMateRepository;
-import com.saecdo18.petmily.walkmate.post.service.WalkMateService;
+import com.saecdo18.petmily.walkmate.dto.WalkMateDto;
+import com.saecdo18.petmily.walkmate.entity.WalkMate;
+import com.saecdo18.petmily.walkmate.mapper.WalkMateMapper;
+import com.saecdo18.petmily.walkmate.repository.WalkMateRepository;
+import com.saecdo18.petmily.walkmate.service.WalkMateService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -78,5 +78,13 @@ public class WalkMateController {
         walkMateService.deleteWalk(walkId, memberId);
 
         return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
+
+    @PatchMapping("/like/{walk-id}/{member-id}")
+    public ResponseEntity likeWalk(@PathVariable("walk-id") long walkId,
+                                   @PathVariable("member-id") long memberId){
+
+        WalkMateDto.Like response = walkMateService.likeByMember(walkId, memberId);
+        return new ResponseEntity(response, HttpStatus.OK);
     }
 }

@@ -1,9 +1,7 @@
-package com.saecdo18.petmily.walkmate.comment.mapper;
+package com.saecdo18.petmily.walkmate.mapper;
 
-import com.saecdo18.petmily.walkmate.comment.dto.WalkMateCommentDto;
-import com.saecdo18.petmily.walkmate.comment.entity.WalkMateComment;
-import com.saecdo18.petmily.walkmate.post.dto.WalkMateDto;
-import com.saecdo18.petmily.walkmate.post.entity.WalkMate;
+import com.saecdo18.petmily.walkmate.dto.WalkMateCommentDto;
+import com.saecdo18.petmily.walkmate.entity.WalkMateComment;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 

@@ -1,10 +1,9 @@
-package com.saecdo18.petmily.walkmate.comment.controller;
+package com.saecdo18.petmily.walkmate.controller;
 
-import com.saecdo18.petmily.walkmate.comment.dto.WalkMateCommentDto;
-import com.saecdo18.petmily.walkmate.comment.entity.WalkMateComment;
-import com.saecdo18.petmily.walkmate.comment.mapper.WalkMateCommentMapper;
-import com.saecdo18.petmily.walkmate.comment.repository.WalkMateCommentRepository;
-import com.saecdo18.petmily.walkmate.comment.service.WalkMateCommentService;
+import com.saecdo18.petmily.walkmate.dto.WalkMateCommentDto;
+import com.saecdo18.petmily.walkmate.entity.WalkMateComment;
+import com.saecdo18.petmily.walkmate.mapper.WalkMateCommentMapper;
+import com.saecdo18.petmily.walkmate.service.WalkMateCommentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

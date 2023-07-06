@@ -1,12 +1,10 @@
-package com.saecdo18.petmily.walkmate.comment.entity;
+package com.saecdo18.petmily.walkmate.entity;
 
 import com.saecdo18.petmily.feed.entity.BaseEntity;
 import com.saecdo18.petmily.member.entity.Member;
-import com.saecdo18.petmily.walkmate.post.entity.WalkMate;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
 

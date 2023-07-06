@@ -1,14 +1,9 @@
-package com.saecdo18.petmily.walkmate.comment.dto;
+package com.saecdo18.petmily.walkmate.dto;
 
-import com.saecdo18.petmily.member.entity.Member;
-import com.saecdo18.petmily.walkmate.post.entity.WalkMate;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import java.time.LocalDateTime;
 
 @Data

@@ -1,14 +1,13 @@
-package com.saecdo18.petmily.walkmate.comment.service;
+package com.saecdo18.petmily.walkmate.service;
 
 import com.saecdo18.petmily.member.entity.Member;
 import com.saecdo18.petmily.member.repository.MemberRepository;
-import com.saecdo18.petmily.walkmate.comment.entity.WalkMateComment;
-import com.saecdo18.petmily.walkmate.comment.repository.WalkMateCommentRepository;
-import com.saecdo18.petmily.walkmate.post.entity.WalkMate;
-import com.saecdo18.petmily.walkmate.post.repository.WalkMateRepository;
+import com.saecdo18.petmily.walkmate.entity.WalkMateComment;
+import com.saecdo18.petmily.walkmate.repository.WalkMateCommentRepository;
+import com.saecdo18.petmily.walkmate.entity.WalkMate;
+import com.saecdo18.petmily.walkmate.repository.WalkMateRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;

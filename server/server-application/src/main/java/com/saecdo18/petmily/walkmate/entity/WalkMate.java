@@ -1,12 +1,10 @@
-package com.saecdo18.petmily.walkmate.post.entity;
+package com.saecdo18.petmily.walkmate.entity;
 
 import com.saecdo18.petmily.feed.entity.BaseEntity;
 import com.saecdo18.petmily.member.entity.Member;
-import com.saecdo18.petmily.walkmate.comment.entity.WalkMateComment;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.List;
@@ -49,8 +47,10 @@ public class WalkMate extends BaseEntity {
     private Integer maximum;
 
     @Column
-    private Integer likes;
+    private Integer likeCount;
 
+//    @OneToMany(mappedBy = "walkmate", cascade = CascadeType.REMOVE)
+//    private List<WalkMateLike> walkMateLikeList;
 
 
     @Column
@@ -59,7 +59,7 @@ public class WalkMate extends BaseEntity {
 
     @Builder
     public WalkMate(Member member, String title, String content, String mapURL, String chatURL,
-                    String location, String time, Boolean open, Integer maximum, Integer likes,
+                    String location, String time, Boolean open, Integer maximum, Integer likeCount,
                     List<WalkMateComment> comments) {
 
         this.member = member;
@@ -71,7 +71,7 @@ public class WalkMate extends BaseEntity {
         this.time = time;
         this.open = open;
         this.maximum = maximum;
-        this.likes = likes;
+        this.likeCount = likeCount;
         this.comments = comments;
     }
 
@@ -90,5 +90,12 @@ public class WalkMate extends BaseEntity {
 
     public void setMember(Member member){
         this.member=member;
+    }
+
+    public void likeCount(boolean like){
+        if (like)
+            likeCount++;
+        else
+            likeCount--;
     }
 }
