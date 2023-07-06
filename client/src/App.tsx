@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { useNavigate, Outlet } from 'react-router-dom';
 import Footer from './common/footer/Footer';
@@ -14,12 +15,11 @@ function App() {
     setIsOpened(false);
     navigate('/123');
   };
+
   return (
     <>
       <Header isloginuser="true" />
-      <div className="w-screen h-screen flex justify-center items-center bg-slate">
-        <Outlet />
-      </div>
+      <Outlet />
       <Footer />
       {isOpened && (
         <Popup
@@ -37,3 +37,4 @@ function App() {
 }
 
 export default App;
+
