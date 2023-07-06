@@ -12,7 +12,6 @@ export const HeaderContainer = tw.div`
 export const NavList = tw.ul`
   flex gap-5
   items-center
-
 `;
 
 export const NavItem = tw.li<{ currenttab: number; idx: number }>`
