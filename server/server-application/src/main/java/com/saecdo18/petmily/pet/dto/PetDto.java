@@ -9,13 +9,15 @@ import java.util.List;
 
 @Data
 public class PetDto {
+
+//    @AllArgsConstructor
+//    @NoArgsConstructor
     @Getter
-    @AllArgsConstructor
-    @NoArgsConstructor
+    @Builder
     public static class Post{
 
-        private String profile;
-//        private List<MultipartFile> profile;
+//        private String profile;
+        private MultipartFile images;
         @NotBlank
         private String name;
         private int age;
@@ -30,8 +32,8 @@ public class PetDto {
 
     @Getter
     public static class Patch{
-        private String profile;
-//        private List<MultipartFile> profile;
+//        private String profile;
+        private List<MultipartFile> images;
 
         private String name;
         private int age;
@@ -48,8 +50,8 @@ public class PetDto {
     @Builder
     public static class Response{
         private Long petId;
-        private String profile;
-//        private List<ImageDto> profile;
+//        private String profile;
+        private List<ImageDto> images;
         private String name;
         private int age;
         private String sex;
@@ -61,7 +63,13 @@ public class PetDto {
         private String createdAt;
         private String modifiedAt;
 
+        public void setMemberId(long memberId) {
+            this.memberId = memberId;
+        }
 
+        public void setImages(List<ImageDto> images) {
+            this.images = images;
+        }
 
         public void setWalkMated(boolean walkMated){
             this.walkMated=walkMated;

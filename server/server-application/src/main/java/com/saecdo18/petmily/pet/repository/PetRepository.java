@@ -10,4 +10,5 @@ import java.util.Optional;
 public interface PetRepository extends JpaRepository<Pet, Long> {
 
     List<Pet> findByMember(Member member);
+    Optional<Pet> findFirstByMemberOrderByCreatedAtAsc(Member member);
 }

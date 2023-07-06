@@ -15,21 +15,22 @@ import com.saecdo18.petmily.feed.repository.FeedRepository;
 import com.saecdo18.petmily.image.dto.ImageDto;
 import com.saecdo18.petmily.image.entity.Image;
 import com.saecdo18.petmily.image.repository.ImageRepository;
+import com.saecdo18.petmily.member.dto.MemberDto;
+import com.saecdo18.petmily.member.entity.FollowMember;
 import com.saecdo18.petmily.member.entity.Member;
+import com.saecdo18.petmily.member.repository.FollowMemberRepository;
 import com.saecdo18.petmily.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -39,6 +40,7 @@ public class FeedServiceImpl implements FeedService {
 
     private final FeedRepository feedRepository;
     private final MemberRepository memberRepository;
+    private final FollowMemberRepository followMemberRepository;
     private final ImageRepository imageRepository;
     private final FeedImageRepository feedImageRepository;
     private final S3UploadService s3UploadService;
@@ -74,7 +76,7 @@ public class FeedServiceImpl implements FeedService {
     }
 
     @Override
-    public List<FeedDto.Response> getFeedsRandom(FeedDto.PreviousListIds listIds) {
+    public List<FeedDto.Response> getFeedsRecent(FeedDto.PreviousListIds listIds) {
         int newDataCount = 10;
         PageRequest pageRequest = PageRequest.of(0, newDataCount, Sort.by(Sort.Direction.DESC, "createdAt"));
 
@@ -108,6 +110,53 @@ public class FeedServiceImpl implements FeedService {
         List<Feed> feedList = feedPage.getContent();
 
         return changeFeedListToFeedResponseDto(feedList);
+    }
+
+    @Override
+    public List<FeedDto.Response> getFeedsByMemberFollow(long memberId, FeedDto.PreviousListIds listIds) {
+        List<FollowMember> followMemberList = followMemberRepository.findByFollowingIdAndFollowTrue(memberId)
+                .orElseThrow(() -> new RuntimeException("팔로우한 멤버가 없습니다."));
+
+        Set<Feed> feedSet = new HashSet<>();
+        int dataCount = 20;
+        int totalFeedCount = 0;
+
+        while (feedSet.size() < dataCount && totalFeedCount < dataCount) {
+            boolean added = false;
+            for (FollowMember followMember : followMemberList) {
+                PageRequest pageRequest = PageRequest.of(0, 3, Sort.by(Sort.Direction.DESC, "createdAt"));
+                List<Feed> memberFeedList = feedRepository
+                        .findAllByMemberOrderByCreatedAtDesc(followMember.getFollowerMember(), pageRequest)
+                        .getContent();
+                for (Feed feed : memberFeedList) {
+                    if (!feedSet.contains(feed)) {
+                        feedSet.add(feed);
+                        totalFeedCount++;
+                        added = true;
+                    }
+                }
+            }
+            feedSet = new HashSet<>(filterFeedsByPreviousListIds(new ArrayList<>(feedSet), listIds));
+            if (!added) {
+                break;
+            }
+        }
+
+        List<Feed> feedList = new ArrayList<>(feedSet);
+
+        Collections.shuffle(feedList);
+
+        return changeFeedListToFeedResponseDto(feedList);
+    }
+
+    private List<Feed> filterFeedsByPreviousListIds(List<Feed> feedList, FeedDto.PreviousListIds listIds) {
+        List<Feed> filterFeeds = new ArrayList<>();
+        for (Feed feed : feedList) {
+            if (!listIds.getPreviousListIds().contains(feed.getFeedId())) {
+                filterFeeds.add(feed);
+            }
+        }
+        return filterFeeds;
     }
 
     @Override
@@ -212,13 +261,26 @@ public class FeedServiceImpl implements FeedService {
                     List<FeedCommentDto.Response> feedCommentDtoList = new ArrayList<>();
                     for (FeedComments feedComments : feedCommentsList) {
                         FeedCommentDto.Response response = feedMapper.feedCommentsToFeedCommentDto(feedComments);
-                        response.setMemberId(feedComments.getMember().getMemberId());
+                        response.setMemberInfo(memberIdToMemberInfoDto(feedComments.getMember().getMemberId()));
                         feedCommentDtoList.add(response);
                     }
                     return feedCommentDtoList;
                 })
                 .orElseGet(Collections::emptyList);
     }
+
+    private MemberDto.Info memberIdToMemberInfoDto(long memberId) {
+        Member findMember = memberRepository.findById(memberId).orElseThrow(
+                () -> new RuntimeException("사용자를 찾을 수 없습니다.")
+        );
+
+        return MemberDto.Info.builder()
+                .memberId(findMember.getMemberId())
+                .imageURL(findMember.getImageURL())
+                .nickname(findMember.getNickname())
+                .build();
+    }
+
 
     private List<ImageDto> feedImageToImageDtoList(List<FeedImage> feedImageList) {
         List<ImageDto> imageDtoList = new ArrayList<>();
@@ -240,7 +302,7 @@ public class FeedServiceImpl implements FeedService {
         if (!feedCommentDtoList.isEmpty()) {
             response.setFeedComments(feedCommentDtoList);
         }
-        response.setMemberId(feed.getMember().getMemberId());
+        response.setMemberInfo(memberIdToMemberInfoDto(feed.getMember().getMemberId()));
         List<FeedImage> feedImageList = feedImageRepository.findByFeed(feed);
         response.setImages(feedImageToImageDtoList(feedImageList));
         if (memberId == 0) {
