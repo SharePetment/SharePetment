@@ -1,7 +1,7 @@
 import tw from 'tailwind-styled-components';
 
 export const Container = tw.div`
-  drop-shadow-lg
+  shadow-lg
 `;
 
 export const Feed = tw.img`

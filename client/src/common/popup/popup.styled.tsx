@@ -1,15 +1,25 @@
 import tw from 'tailwind-styled-components';
 
+export const Overlay = tw.div`
+    absolute
+    w-screen
+    h-screen
+    bg-zinc-900
+    opacity-70
+    z-40
+`;
+
 export const PopupBackGround = tw.div`
+    absolute
     fixed
     top-0
     right-0
     w-full
     h-full
-    bg-popup
     flex
     justify-center 
     items-center
+    z-50
 `;
 
 export const PopupBox = tw.div`
@@ -24,6 +34,7 @@ export const PopupBox = tw.div`
     px-2.5
     max-sm:w-3/4
     w-1/3
+    border
 `;
 
 export const Title = tw.h1`
