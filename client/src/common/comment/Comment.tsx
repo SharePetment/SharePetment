@@ -115,13 +115,8 @@ export default function Comment(props: CommentProp) {
                   {...register('comment', {
                     required: true,
                     maxLength: 100,
-                    minLength: 10,
-                    pattern: /^\S(.*\S)?$/gm,
                   })}
                 />
-                {errors.comment && (
-                  <span>문장의 양끝에 공백이 있으면 안됩니다.</span>
-                )}
                 <WriteBtn>
                   <Write type="submit" />
                 </WriteBtn>
