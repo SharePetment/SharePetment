@@ -26,9 +26,10 @@ public class FeedController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/list/random")
-    public ResponseEntity<?> getFeedsRandom(@RequestBody FeedDto.PreviousListIds listIds) {
-        List<FeedDto.Response> responseList = feedService.getFeedsRecent(listIds);
+    @GetMapping("/list/random/{member-id}")
+    public ResponseEntity<?> getFeedsRandom(@RequestBody FeedDto.PreviousListIds listIds,
+                                            @PathVariable("member-id") long memberId) {
+        List<FeedDto.Response> responseList = feedService.getFeedsRecent(listIds, memberId);
         return ResponseEntity.ok(responseList);
     }
 
