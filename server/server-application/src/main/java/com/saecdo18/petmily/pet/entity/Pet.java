@@ -37,8 +37,8 @@ public class Pet extends BaseEntity {
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
 
-    @OneToMany(mappedBy = "pet", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
-    private List<PetImage> petImageList;
+    @OneToOne(mappedBy = "pet", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    private PetImage petImage;
 
     @Builder(builderMethodName = "nonePetIdAndMessage")
     public Pet( String name, int age,

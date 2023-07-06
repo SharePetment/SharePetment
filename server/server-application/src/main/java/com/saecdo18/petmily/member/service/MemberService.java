@@ -106,11 +106,11 @@ public class MemberService {
                 () -> new RuntimeException("펫을 찾을 수 없습니다.")
         );
 
-        List<PetImage> petImageList = findPet.getPetImageList();
+        PetImage petImage = findPet.getPetImage();
 
-        for (PetImage petImage : petImageList) {
-            findMember.updateImageUrl(petImage.getImage().getUploadFileURL());
-        }
+
+        findMember.updateImageUrl(petImage.getImage().getUploadFileURL());
+
         Member saveMember = memberRepository.save(findMember);
         return MemberDto.Info.builder()
                 .nickname(saveMember.getNickname())

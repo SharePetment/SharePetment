@@ -94,25 +94,24 @@ public class PetService {
                 patchPet.getSpecies(),
                 patchPet.getInformation(),
                 patchPet.isWalkMated());
-        if (!patchPet.getAddImages().isEmpty()) {
-            for (MultipartFile multipartFile : patchPet.getAddImages()) {
-                String originalFilename = multipartFile.getOriginalFilename();
-                String uploadFileURL = s3UploadService.saveFile(multipartFile);
-                savePetImage(findPet, originalFilename, uploadFileURL);
-            }
+        if (!patchPet.getImages().isEmpty()) {
+            String originalFilename = patchPet.getImages().getOriginalFilename();
+            String uploadFileURL = s3UploadService.saveFile(patchPet.getImages());
+            savePetImage(findPet, originalFilename, uploadFileURL);
+
         }
 
-        if (!patchPet.getDeleteImages().isEmpty()) {
-            for (String originalFilename : patchPet.getDeleteImages()) {
-                for (PetImage petImage : findPet.getPetImageList()) {
-                    if (originalFilename.equals(petImage.getImage().getOriginalFilename())) {
-                        System.out.println(originalFilename+"!!!!!!!!!!!!!!"+petImage.getImage().getOriginalFilename());
-                        s3UploadService.deleteImage(petImage.getImage().getOriginalFilename());
-                        petImageRepository.delete(petImage);
-                    }
-                }
-            }
-        }
+//        if (!patchPet.getDeleteImages().isEmpty()) {
+//            for (String originalFilename : patchPet.getDeleteImages()) {
+//                for (PetImage petImage : findPet.getPetImageList()) {
+//                    if (originalFilename.equals(petImage.getImage().getOriginalFilename())) {
+//                        System.out.println(originalFilename+"!!!!!!!!!!!!!!"+petImage.getImage().getOriginalFilename());
+//                        s3UploadService.deleteImage(petImage.getImage().getOriginalFilename());
+//                        petImageRepository.delete(petImage);
+//                    }
+//                }
+//            }
+//        }
 
 
         return changePetToPetDtoResponse(findPet);
@@ -131,10 +130,10 @@ public class PetService {
             Optional<Pet> firstPet = petRepository.findFirstByMemberOrderByCreatedAtAsc(findMember);
             if (firstPet.isPresent()) {
                 Pet pet = firstPet.get();
-                List<PetImage> images = pet.getPetImageList();
-                for (PetImage petImage : images) {
-                    findMember.updateImageUrl(petImage.getImage().getUploadFileURL());
-                }
+                PetImage images = pet.getPetImage();
+
+                findMember.updateImageUrl(images.getImage().getUploadFileURL());
+
             }
         }
     }
@@ -143,8 +142,10 @@ public class PetService {
         PetDto.Response response = petMapper.petToPetResponseDto(pet);
 
         response.setMemberId(pet.getMember().getMemberId());
-        List<PetImage> petImageList = petImageRepository.findByPet(pet);
-        response.setImages(petImageToImageDtoList(petImageList));
+        PetImage petImage = petImageRepository.findFirstByPetOrderByCreatedAtDesc(pet);
+        Image image = petImage.getImage();
+        ImageDto imageDto = petMapper.imageToImageDto(image);
+        response.setImages(imageDto);
 
         return response;
     }

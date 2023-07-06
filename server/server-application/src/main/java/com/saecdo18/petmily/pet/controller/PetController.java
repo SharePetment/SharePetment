@@ -61,8 +61,7 @@ public class PetController {
     @PatchMapping("/status/{member-id}/{pet-id}")
     public ResponseEntity patchPet(@PathVariable("member-id") long memberId,
                                    @PathVariable("pet-id") long petId,
-                                   @RequestParam("images") MultipartFile[] images,
-                                   @RequestParam("deleteImage") String[] deleteImages,
+                                   @RequestParam("images") MultipartFile images,
                                    @RequestParam("name") String name,
                                    @RequestParam("age") int age,
                                    @RequestParam("sex") String sex,
@@ -70,8 +69,7 @@ public class PetController {
                                    @RequestParam("information") String information,
                                    @RequestParam("walkMated") boolean walkMated) throws IOException {
         PetDto.Patch petPatchDto = PetDto.Patch.builder()
-                .addImages(List.of(images))
-                .deleteImages(List.of(deleteImages))
+                .images(images)
                 .name(name)
                 .age(age)
                 .sex(sex)

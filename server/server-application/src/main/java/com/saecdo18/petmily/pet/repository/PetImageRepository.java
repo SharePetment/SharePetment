@@ -7,5 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface PetImageRepository extends JpaRepository<PetImage, Long> {
-    List<PetImage> findByPet(Pet pet);
+    PetImage findByPet(Pet pet);
+    PetImage findFirstByPetOrderByCreatedAtDesc(Pet pet);
+
 }
