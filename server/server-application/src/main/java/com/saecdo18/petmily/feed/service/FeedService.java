@@ -13,7 +13,7 @@ public interface FeedService {
 
     public FeedDto.Response getFeed(long feedId, long memberId);
 
-    public List<FeedDto.Response> getFeedsRecent(FeedDto.PreviousListIds listIds);
+    public List<FeedDto.Response> getFeedsRecent(FeedDto.PreviousListIds listIds, long memberId);
 
     public List<FeedDto.Response> getFeedsByMember(int page, int size, long memberId);
 

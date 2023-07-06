@@ -76,7 +76,7 @@ public class FeedServiceImpl implements FeedService {
     }
 
     @Override
-    public List<FeedDto.Response> getFeedsRecent(FeedDto.PreviousListIds listIds) {
+    public List<FeedDto.Response> getFeedsRecent(FeedDto.PreviousListIds listIds, long memberId) {
         int newDataCount = 10;
         PageRequest pageRequest = PageRequest.of(0, newDataCount, Sort.by(Sort.Direction.DESC, "createdAt"));
 
@@ -86,10 +86,19 @@ public class FeedServiceImpl implements FeedService {
 
         while (feedList.size() < newDataCount) {
             List<Feed> pageDataList = feedRepository.findAll(pageRequest).getContent();
-            List<Feed> filteredDataList = pageDataList.stream()
-                    .filter(data -> !listIds.getPreviousListIds().contains(data.getFeedId()))
-                    .collect(Collectors.toList());
+            List<Feed> filteredDataList;
+            if (memberId == 0) {
+                filteredDataList = pageDataList.stream()
+                        .filter(data -> !listIds.getPreviousListIds().contains(data.getFeedId()))
+                        .collect(Collectors.toList());
+            } else {
+                filteredDataList = pageDataList.stream()
+                        .filter(data -> !listIds.getPreviousListIds().contains(data.getFeedId()))
+                        .filter(data -> data.getMember().getMemberId() != memberId)
+                        .collect(Collectors.toList());
+            }
             feedList.addAll(filteredDataList);
+
             page++;
 
             if((long) page * newDataCount >= totalCount)
