@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ReactComponent as Paw } from '../../assets/paw.svg';
+import { ReactComponent as Like } from '../../assets/button/like.svg';
 import Path from '../../routers/paths';
 import Button from '../button/Button';
 import Profile from '../profile/Profile';
@@ -29,7 +29,7 @@ export default function Header({ isloginuser }: HeaderProps) {
         <HeaderContainer>
           <div>
             <Link to={Path.Home}>
-              <Paw />
+              <Like className=" w-6 h-6 stroke-defaulttext" />
             </Link>
           </div>
           <nav>
