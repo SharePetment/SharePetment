@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useNavigate, Outlet } from 'react-router-dom';
 import Footer from './common/footer/Footer';
@@ -37,4 +36,3 @@ function App() {
 }
 
 export default App;
-

@@ -5,6 +5,7 @@ import { ReactComponent as Close } from '../../../assets/button/close.svg';
 import { ReactComponent as Plus } from '../../../assets/button/plus.svg';
 import { ReactComponent as Write } from '../../../assets/button/write.svg';
 import Popup from '../../../common/popup/Popup';
+import { parseImg, deleteImg } from '../../../util/parseImg';
 import {
   Container,
   Wrap,
@@ -21,52 +22,21 @@ import './carousel.css';
 
 export default function FeedEditCard() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [savedFile, setSavedFiled] = useState<string[]>([]);
+  const [savedFile, setSavedFile] = useState<string[]>([]);
 
   // const imgFile = new FormData();
 
   const handleUpload = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      let files: File[] | undefined;
-      if (e.target.files) {
-        if (e.target.files.length >= 4) {
-          setIsOpen(true);
-          files = Array.from(e.target.files);
-          files = files.slice(0, 3);
-        } else if (savedFile.length + e.target.files.length >= 4) {
-          setIsOpen(true);
-          const maximum = 3 - savedFile.length;
-          files = Array.from(e.target.files);
-          files = files.slice(0, maximum);
-        } else {
-          files = Array.from(e.target.files);
-        }
-
-        const readAndPreview = (file: File) => {
-          if (/\.(jpe?g|png)$/i.test(file.name)) {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            return new Promise<void>(resolve => {
-              reader.onload = () => {
-                setSavedFiled(prev => [...prev, reader.result as string]); // 파일의 컨텐츠
-                resolve();
-              };
-            });
-          }
-        };
-        if (files) {
-          [].forEach.call(files, readAndPreview);
-        }
-      }
+      parseImg({ e, setIsOpen, setSavedFile, savedFile });
     },
     [savedFile],
   );
 
-  const handleSemiClose = (order: number) => {
-    let copy = savedFile;
-    copy = copy.filter((file, idx) => idx !== order);
-    setSavedFiled(copy);
-  };
+  const handleSemiClose = useCallback(
+    (order: number) => deleteImg({ order, savedFile, setSavedFile }),
+    [savedFile],
+  );
 
   return (
     <>
