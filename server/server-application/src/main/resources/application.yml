@@ -2,11 +2,14 @@ springdoc:
   swagger-ui:
     path: /swagger-ui.html
 spring:
+  profiles:
+    active: local
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://172.31.44.214:3307/testdb?createDatabaseIfNotExist=true
-    username: root
-    password: 759802
+#    url: jdbc:mysql://172.31.44.214:3307/testdb?createDatabaseIfNotExist=true
+    url: jdbc:mysql://localhost:3306/testdb?createDatabaseIfNotExist=true
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
   jpa:
     show-sql: true
     hibernate:
@@ -14,3 +17,36 @@ spring:
     properties:
       hibernate:
         format_sql: true
+  security:
+    oauth2:
+      client:
+        registration:
+          kakao:
+            client-id: ${REST_API_KEY}
+            redirect-uri: "http://localhost:8080/auth/kakao/callback"
+            client-authentication-method: POST
+            authorization-grant-type: authorization_code
+            scope: profile_nickname, profile_image, account_email
+            client-name: Kakao
+        provider:
+          kakao:
+            authorization_uri: https://kauth.kakao.com/oauth/authorize
+            token_uri: https://kauth.kakao.com/oauth/token
+            user-info-uri: https://kapi.kakao.com/v2/user/me
+            user_name_attribute: id
+
+cloud:
+  aws:
+    s3:
+      bucket: main-project-junyoung
+    credentials:
+      access-key: ${ACCESS_KEY}
+      secret-key: ${SECRET_KEY}
+    region:
+      static: ap-northeast-2
+      auto: false
+    stack:
+      auto: false
+
+
+
