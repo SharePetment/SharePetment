@@ -95,26 +95,16 @@ public class PetService {
                 patchPet.getInformation(),
                 patchPet.isWalkMated());
         if (!patchPet.getImages().isEmpty()) {
+            s3UploadService.deleteImage(findPet.getPetImage().getImage().getOriginalFilename());
+            petImageRepository.delete(findPet.getPetImage());
+
             String originalFilename = patchPet.getImages().getOriginalFilename();
             String uploadFileURL = s3UploadService.saveFile(patchPet.getImages());
             savePetImage(findPet, originalFilename, uploadFileURL);
 
         }
 
-//        if (!patchPet.getDeleteImages().isEmpty()) {
-//            for (String originalFilename : patchPet.getDeleteImages()) {
-//                for (PetImage petImage : findPet.getPetImageList()) {
-//                    if (originalFilename.equals(petImage.getImage().getOriginalFilename())) {
-//                        System.out.println(originalFilename+"!!!!!!!!!!!!!!"+petImage.getImage().getOriginalFilename());
-//                        s3UploadService.deleteImage(petImage.getImage().getOriginalFilename());
-//                        petImageRepository.delete(petImage);
-//                    }
-//                }
-//            }
-//        }
-
-
-        return changePetToPetDtoResponse(findPet);
+        return getPet(findPet.getPetId());
     }
 
     public void deletePet(long memberId, long petId) {

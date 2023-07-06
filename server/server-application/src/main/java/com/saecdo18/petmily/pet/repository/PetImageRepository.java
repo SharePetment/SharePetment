@@ -9,5 +9,5 @@ import java.util.List;
 public interface PetImageRepository extends JpaRepository<PetImage, Long> {
     PetImage findByPet(Pet pet);
     PetImage findFirstByPetOrderByCreatedAtDesc(Pet pet);
-
+    PetImage findFirstByPetOrderByCreatedAtAsc(Pet pet);
 }
