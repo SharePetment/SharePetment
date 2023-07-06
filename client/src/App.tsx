@@ -3,6 +3,7 @@ import { useNavigate, Outlet } from 'react-router-dom';
 import Footer from './common/footer/Footer';
 import Header from './common/header/Header';
 import Popup from './common/popup/Popup';
+import FeedWriteCard from './components/card/feedwritecard/FeedWriteCard';
 
 function App() {
   const navigate = useNavigate();
@@ -16,11 +17,6 @@ function App() {
   };
   return (
     <>
-      <Header isloginuser="true" />
-      <div className="w-screen h-screen flex justify-center items-center bg-slate">
-        <Outlet />
-      </div>
-      <Footer />
       {isOpened && (
         <Popup
           title="회원가입을 하셔야 사용합니다"
@@ -32,6 +28,7 @@ function App() {
           popupcontrol={handleClose}
         />
       )}
+      <FeedWriteCard />
     </>
   );
 }
