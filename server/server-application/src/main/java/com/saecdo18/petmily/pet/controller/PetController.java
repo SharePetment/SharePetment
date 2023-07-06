@@ -26,16 +26,16 @@ public class PetController {
 
     @PostMapping
     public ResponseEntity<?> postPet(@RequestParam("memberId") long memberId,
-                                  @RequestParam("images") MultipartFile[] images,
-                                  @RequestParam("name") String name,
-                                  @RequestParam("age") int age,
-                                  @RequestParam("sex") String sex,
-                                  @RequestParam("species") String species,
-                                  @RequestParam("information") String information,
-                                  @RequestParam("walkMated") boolean walkMated) throws IOException {
+                                     @RequestParam("images") MultipartFile images,
+                                     @RequestParam("name") String name,
+                                     @RequestParam("age") int age,
+                                     @RequestParam("sex") String sex,
+                                     @RequestParam("species") String species,
+                                     @RequestParam("information") String information,
+                                     @RequestParam("walkMated") boolean walkMated) throws IOException {
 
         PetDto.Post petPostDto = PetDto.Post.builder()
-                .images(List.of(images))
+                .images(images)
                 .name(name)
                 .age(age)
                 .sex(sex)
@@ -51,7 +51,7 @@ public class PetController {
     }
 
     @GetMapping("/{pet-id}")
-    public ResponseEntity getPet(@PathVariable("pet-id") long petId){
+    public ResponseEntity getPet(@PathVariable("pet-id") long petId) {
         PetDto.Response response = petService.getPet(petId);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -61,10 +61,17 @@ public class PetController {
     @PatchMapping("/status/{member-id}/{pet-id}")
     public ResponseEntity patchPet(@PathVariable("member-id") long memberId,
                                    @PathVariable("pet-id") long petId,
-                                   @Valid @RequestBody PetDto.Patch petPatchDto){
+                                   @Valid @RequestBody PetDto.Patch petPatchDto) {
         Pet pet = petMapper.petPatchDtoToPet(petPatchDto);
         PetDto.Response response = petService.updatePet(memberId, petId, pet);
 
-        return new ResponseEntity<>(response,HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{member-id}/{pet-id}")
+    public ResponseEntity<?> deletePet(@PathVariable("member-id") long memberId,
+                                       @PathVariable("pet-id") long petId) {
+        petService.deletePet(memberId, petId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

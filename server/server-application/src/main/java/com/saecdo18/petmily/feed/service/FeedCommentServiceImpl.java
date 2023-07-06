@@ -58,12 +58,6 @@ public class FeedCommentServiceImpl implements FeedCommentService{
         feedCommentsRepository.delete(feedComments);
     }
 
-//    @Override
-//    public FeedCommentDto.Like likeComment(long commentId, long memberId) {
-//        FeedComments feedComments = methodFindByCommentId(commentId);
-//
-//        return null;
-//    }
 
     private FeedComments methodFindByCommentId(long commentId) {
         return feedCommentsRepository.findById(commentId).orElseThrow(

@@ -17,7 +17,7 @@ public class PetDto {
     public static class Post{
 
 //        private String profile;
-        private List<MultipartFile> images;
+        private MultipartFile images;
         @NotBlank
         private String name;
         private int age;

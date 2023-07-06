@@ -28,7 +28,7 @@ public class FeedController {
 
     @GetMapping("/list/random")
     public ResponseEntity<?> getFeedsRandom(@RequestBody FeedDto.PreviousListIds listIds) {
-        List<FeedDto.Response> responseList = feedService.getFeedsRandom(listIds);
+        List<FeedDto.Response> responseList = feedService.getFeedsRecent(listIds);
         return ResponseEntity.ok(responseList);
     }
 
@@ -41,9 +41,10 @@ public class FeedController {
     }
 
     @GetMapping("/list/{member-id}")
-    public ResponseEntity<?> getFeedsByMemberFollow(@PathVariable("member-id") long memberId) {
-
-        return null;
+    public ResponseEntity<?> getFeedsByMemberFollow(@RequestBody FeedDto.PreviousListIds listIds,
+                                                    @PathVariable("member-id") long memberId) {
+        List<FeedDto.Response> responseList = feedService.getFeedsByMemberFollow(memberId, listIds);
+        return ResponseEntity.ok(responseList);
     }
 
 
