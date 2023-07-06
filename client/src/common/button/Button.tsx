@@ -1,8 +1,8 @@
-import { BooleanStr, BtnSize, Handler } from '../../types/buttonType';
+import { BooleanStr, Size, Handler } from '../../types/propType';
 import { Btn } from './button.styled';
 
 interface Prop {
-  size: BtnSize; //lg, md, sm
+  size: Size; //lg, md, sm
   text: string;
   isgreen: BooleanStr;
   handler: Handler;
