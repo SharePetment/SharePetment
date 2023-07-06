@@ -2,6 +2,9 @@
 export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
+    fontFamily: {
+      sans: ['IBMPlexSansKR-Regular', 'Arial', 'sans-serif'],
+    },
     extend: {
       colors: {
         defaultbg: '#fafafa',
