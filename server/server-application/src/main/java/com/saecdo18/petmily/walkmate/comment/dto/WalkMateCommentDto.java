@@ -9,6 +9,7 @@ import lombok.Setter;
 import javax.persistence.Column;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import java.time.LocalDateTime;
 
 @Data
 public class WalkMateCommentDto {
@@ -40,5 +41,7 @@ public class WalkMateCommentDto {
         private Long memberId;
         private String content;
         private Integer likes;
+        private LocalDateTime createdAt;
+        private LocalDateTime modifiedAt;
     }
 }

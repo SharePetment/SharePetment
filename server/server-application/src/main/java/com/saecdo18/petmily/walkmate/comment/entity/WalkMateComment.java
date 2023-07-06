@@ -1,5 +1,6 @@
 package com.saecdo18.petmily.walkmate.comment.entity;
 
+import com.saecdo18.petmily.feed.entity.BaseEntity;
 import com.saecdo18.petmily.member.entity.Member;
 import com.saecdo18.petmily.walkmate.post.entity.WalkMate;
 import lombok.Builder;
@@ -12,7 +13,7 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 @Entity
-public class WalkMateComment {
+public class WalkMateComment extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -61,6 +61,8 @@ public interface WalkMateMapper {
             response.setOpen(walkMate.getOpen());
             response.setMaximum(walkMate.getMaximum());
             response.setLikes(walkMate.getLikes());
+            response.setCreatedAt(walkMate.getCreatedAt());
+            response.setModifiedAt(walkMate.getModifiedAt());
             response.setComments(walkMate.getComments());
             return response;
         }

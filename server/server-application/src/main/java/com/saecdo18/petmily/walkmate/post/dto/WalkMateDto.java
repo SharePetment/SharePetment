@@ -3,6 +3,7 @@ package com.saecdo18.petmily.walkmate.post.dto;
 import com.saecdo18.petmily.walkmate.comment.entity.WalkMateComment;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -61,6 +62,8 @@ public class WalkMateDto {
         private Boolean open;
         private Integer maximum;
         private Integer likes;
+        private LocalDateTime createdAt;
+        private LocalDateTime modifiedAt;
         private List<WalkMateComment> comments;
     }
 }

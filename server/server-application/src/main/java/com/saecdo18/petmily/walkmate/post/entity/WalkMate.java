@@ -1,5 +1,6 @@
 package com.saecdo18.petmily.walkmate.post.entity;
 
+import com.saecdo18.petmily.feed.entity.BaseEntity;
 import com.saecdo18.petmily.member.entity.Member;
 import com.saecdo18.petmily.walkmate.comment.entity.WalkMateComment;
 import lombok.Builder;
@@ -13,7 +14,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @Entity
-public class WalkMate {
+public class WalkMate extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,6 +50,8 @@ public class WalkMate {
 
     @Column
     private Integer likes;
+
+
 
     @Column
     @OneToMany

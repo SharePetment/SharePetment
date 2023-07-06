@@ -40,6 +40,8 @@ public interface WalkMateCommentMapper {
             response.setMemberId(comment.getMember().getMemberId());
             response.setContent(comment.getContent());
             response.setLikes(comment.getLikes());
+            response.setCreatedAt(comment.getCreatedAt());
+            response.setModifiedAt(comment.getModifiedAt());
             return response;
         }
     }
