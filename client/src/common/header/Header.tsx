@@ -67,7 +67,7 @@ export default function Header({ isloginuser }: HeaderProps) {
         <HeaderContainer>
           <div>
             <Link to={Path.Home}>
-              <Paw />
+              <Like />
             </Link>
           </div>
           <nav>
