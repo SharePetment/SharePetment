@@ -6,7 +6,7 @@ export const Overlay = tw.div`
     h-screen
     bg-zinc-900
     opacity-70
-    z-20
+    z-40
 `;
 
 export const PopupBackGround = tw.div`

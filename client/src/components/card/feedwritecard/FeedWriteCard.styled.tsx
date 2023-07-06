@@ -9,14 +9,13 @@ export const Container = tw.div`
   border
   border-lightgray
   shadow-lg
-  m-auto
   flex
   flex-col
   items-center
   relative
   gap-5
   bg-white
-
+  z-20
 `;
 
 export const Wrap = tw.div`
