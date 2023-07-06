@@ -74,6 +74,10 @@ public class Member extends BaseEntity {
 
     public void updatePetList(List<Pet> pets){ this.pets=pets; }
 
+    public void updateImageUrl(String imageURL) {
+        this.imageURL = imageURL;
+    }
+
     //    public void updateMessage(String statusMessage){
 //        this.statusMessage=statusMessage;
 //    }

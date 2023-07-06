@@ -13,9 +13,11 @@ public interface FeedService {
 
     public FeedDto.Response getFeed(long feedId, long memberId);
 
-    public List<FeedDto.Response> getFeedsRandom(FeedDto.PreviousListIds listIds);
+    public List<FeedDto.Response> getFeedsRecent(FeedDto.PreviousListIds listIds);
 
     public List<FeedDto.Response> getFeedsByMember(int page, int size, long memberId);
+
+    public List<FeedDto.Response> getFeedsByMemberFollow(long memberId, FeedDto.PreviousListIds listIds);
 
     public FeedDto.Response patchFeed(FeedDto.Patch patch) throws IOException;
 

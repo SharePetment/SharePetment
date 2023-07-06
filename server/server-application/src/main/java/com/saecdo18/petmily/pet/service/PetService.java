@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Transactional
 @Service
@@ -37,6 +38,7 @@ public class PetService {
     private final ImageRepository imageRepository;
     private final S3UploadService s3UploadService;
     private final MemberService memberService;
+    private final static String BASE_IMAGE_URL = "https://main-project-junyoung.s3.ap-northeast-2.amazonaws.com/%E1%84%80%E1%85%B5%E1%84%87%E1%85%A9%E1%86%AB%E1%84%8B%E1%85%B5%E1%84%86%E1%85%B5%E1%84%8C%E1%85%B5%E1%84%91%E1%85%B3%E1%84%89%E1%85%A1.jpeg";
 
     public PetDto.Response createPet(long memberId, PetDto.Post petPostDto) throws IOException {
         Member findMember = methodFindByMemberIdMember(memberId);
@@ -51,22 +53,24 @@ public class PetService {
                         .build();
 
         pet.updateMember(findMember);
+        String uploadFileURL = BASE_IMAGE_URL;
 
         if (!petPostDto.getImages().isEmpty()) {
-            for (MultipartFile multipartFile : petPostDto.getImages()) {
-                String originalFilename = multipartFile.getOriginalFilename();
-                String uploadFileURL = s3UploadService.saveFile(multipartFile);
-                savePetImage(pet, originalFilename, uploadFileURL);
-            }
+            String originalFilename = petPostDto.getImages().getOriginalFilename();
+            uploadFileURL = s3UploadService.saveFile(petPostDto.getImages());
+            savePetImage(pet, originalFilename, uploadFileURL);
         }
         Pet savePet = petRepository.save(pet);
 
         if(!findMember.isAnimalParents()){
             findMember.updateAnimalParents(true);
+            findMember.updateImageUrl(uploadFileURL);
         }
 
         return getPet(savePet.getPetId());
     }
+
+
 
     public PetDto.Response getPet(long petId){
         Pet findPet = methodFindByPetId(petId);
@@ -112,6 +116,27 @@ public class PetService {
 
 
         return changePetToPetDtoResponse(findPet);
+    }
+
+    public void deletePet(long memberId, long petId) {
+        Member findMember = methodFindByMemberIdMember(memberId);
+        Pet findPet = methodFindByPetId(petId);
+        petRepository.delete(findPet);
+        petRepository.flush();
+
+        if (findMember.getPets().isEmpty()) {
+            findMember.updateAnimalParents(false);
+            findMember.updateImageUrl(BASE_IMAGE_URL);
+        } else {
+            Optional<Pet> firstPet = petRepository.findFirstByMemberOrderByCreatedAtAsc(findMember);
+            if (firstPet.isPresent()) {
+                Pet pet = firstPet.get();
+                List<PetImage> images = pet.getPetImageList();
+                for (PetImage petImage : images) {
+                    findMember.updateImageUrl(petImage.getImage().getUploadFileURL());
+                }
+            }
+        }
     }
 
     private PetDto.Response changePetToPetDtoResponse(Pet pet) {
