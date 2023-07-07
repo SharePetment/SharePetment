@@ -1,12 +1,6 @@
 import { BooleanStr, Size, Handler } from '../../types/propType';
 import Button from '../button/Button';
-import {
-  PopupBackGround,
-  PopupBox,
-  Title,
-  ButtonBox,
-  Overlay,
-} from './popup.styled';
+import { PopupBackGround, PopupBox, Title, ButtonBox } from './popup.styled';
 
 interface Prop {
   title: string;
@@ -28,8 +22,7 @@ export default function Popup({
   popupcontrol,
 }: Prop) {
   return (
-    <div className="relative">
-      <Overlay />
+    <>
       <PopupBackGround
         onClick={e => {
           e.preventDefault();
@@ -68,6 +61,6 @@ export default function Popup({
           </ButtonBox>
         </PopupBox>
       </PopupBackGround>
-    </div>
+    </>
   );
 }

@@ -5,6 +5,7 @@ type ErrorMessage = {
   error?:
     | string
     | FieldError
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     | Merge<FieldError, FieldErrorsImpl<any>>
     | undefined;
 };

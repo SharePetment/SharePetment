@@ -3,7 +3,7 @@ import { ProfileImage } from './Profile.styled';
 interface ProfileProps {
   size: 'lg' | 'md' | 'sm';
   isgreen: string;
-  url: string;
+  url: string | undefined;
 }
 
 export default function Profile({ size, isgreen, url }: ProfileProps) {
