@@ -10,7 +10,7 @@ function App() {
     <>
       {!(matchHome || matchInfo) && <Header isloginuser="true" />}
       <Outlet />
-      <Footer />
+      {!matchHome && <Footer />}
     </>
   );
 }

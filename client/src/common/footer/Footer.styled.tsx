@@ -5,6 +5,7 @@ export const Container = tw.div`
   flex-col
   items-center
   gap-2
+  bg-defaultbg
 `;
 
 export const TopContainer = tw.div`
