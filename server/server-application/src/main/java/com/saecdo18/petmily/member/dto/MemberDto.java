@@ -17,6 +17,18 @@ public class MemberDto {
         private String KakaoName;
         private String email;
     }
+    @Getter
+    @Builder
+    public static class NickCheckRequest{
+        @NotBlank
+        private String nickname;
+    }
+    @Getter
+    @Builder
+    public static class NickCheckResponse{
+        private String checkMessage;
+        private boolean enable;
+    }
 
     @Data
     @Builder

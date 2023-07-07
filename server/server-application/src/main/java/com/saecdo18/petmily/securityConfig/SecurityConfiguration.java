@@ -1,7 +1,8 @@
 package com.saecdo18.petmily.securityConfig;
 
 
-import com.saecdo18.petmily.oauth.CustomOAuth2UserService;
+import com.saecdo18.petmily.jwt.JwtAuthenticationFilter;
+//import com.saecdo18.petmily.oauth.CustomOAuth2UserService;
 import com.saecdo18.petmily.oauth.OAuth2SuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -13,14 +14,16 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfiguration {
 
-    private final CustomOAuth2UserService customOAuth2UserService;
+//    private final CustomOAuth2UserService customOAuth2UserService;
     private final OAuth2SuccessHandler oAuth2SuccessHandler;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
@@ -40,16 +43,17 @@ public class SecurityConfiguration {
             .and()
 
                 .authorizeHttpRequests()
-                .antMatchers("/","/oauth/**","/feeds/all/**","/auth/**").permitAll()
-                .anyRequest().authenticated()
-            .and()
-
-                .oauth2Login()
-                .userInfoEndpoint()
-                .userService(customOAuth2UserService)
-
-                .and()
-                .successHandler(oAuth2SuccessHandler);
+                .antMatchers("/","/oauth/**","/feeds/all/**","/auth/**","/login/**").permitAll()
+                .anyRequest().authenticated();
+//            .and()
+//
+//                .oauth2Login()
+//                .userInfoEndpoint()
+//                .userService(customOAuth2UserService)
+//
+//                .and()
+//                .successHandler(oAuth2SuccessHandler);
+        http.addFilterAfter(jwtAuthenticationFilter, CorsFilter.class);
 
         return http.build();
     }

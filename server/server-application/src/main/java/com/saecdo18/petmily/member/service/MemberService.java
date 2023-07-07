@@ -119,6 +119,20 @@ public class MemberService {
                 .build();
     }
 
+    public MemberDto.NickCheckResponse checkNickname(MemberDto.NickCheckRequest checkRequest){
+        String message = "";
+        boolean enable=false;
+        if(memberRepository.findByNickname(checkRequest.getNickname()).isPresent()){
+            message = "중복된 닉네임입니다";
+
+        }
+        else {
+            message = "사용가능한 닉네임입니다";
+            enable=true;
+        }
+        return MemberDto.NickCheckResponse.builder().checkMessage(message).enable(enable).build();
+    }
+
     private Member methodFindByFollowerInMember(long followerId) {
         return memberRepository.findById(followerId).orElseThrow(() -> new RuntimeException("팔로우 할 팔로워를 찾지 못했습니다"));
     }

@@ -65,6 +65,7 @@ public class PetService {
         if(!findMember.isAnimalParents()){
             findMember.updateAnimalParents(true);
             findMember.updateImageUrl(uploadFileURL);
+            findMember.updateUserRole();
         }
 
         return getPet(savePet.getPetId());
@@ -116,6 +117,7 @@ public class PetService {
         if (findMember.getPets().isEmpty()) {
             findMember.updateAnimalParents(false);
             findMember.updateImageUrl(BASE_IMAGE_URL);
+            findMember.updateGuestRole();
         } else {
             Optional<Pet> firstPet = petRepository.findFirstByMemberOrderByCreatedAtAsc(findMember);
             if (firstPet.isPresent()) {

@@ -40,6 +40,7 @@ public class MemberController {
 //        return ResponseEntity.created(location).build();
     }
 
+
     @GetMapping("/{host-member-id}/{guest-member-id}")
     public ResponseEntity getMember(@PathVariable("host-member-id") long hostMemberId,
                                     @PathVariable("guest-member-id") long guestMemberId) {
@@ -74,6 +75,12 @@ public class MemberController {
     public ResponseEntity<?> changeImage(@PathVariable("member-id") long memberId,
                                          @PathVariable("pet-id") long petId) {
         MemberDto.Info response = memberService.changeImage(memberId, petId);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PostMapping("/nickname-check")
+    public ResponseEntity checkNickname(@Valid @RequestBody MemberDto.NickCheckRequest checkRequest){
+        MemberDto.NickCheckResponse response = memberService.checkNickname(checkRequest);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
