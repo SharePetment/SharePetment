@@ -75,4 +75,11 @@ public class WalkMateDto {
         private int likeCount;
         private boolean isLike;
     }
+
+    @Data
+    @Builder
+    public static class Open{
+        private Long walkMatePostId;
+        private Boolean open;
+    }
 }

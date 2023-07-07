@@ -32,7 +32,7 @@ public class WalkMateController {
     }
 
 
-    @PostMapping("/post/{member-id}")
+    @PostMapping("/{member-id}")
     public ResponseEntity postWalk(@PathVariable("member-id") long memberId,
                                    @RequestBody WalkMateDto.Post walkPostDto){
 
@@ -43,7 +43,7 @@ public class WalkMateController {
         return new ResponseEntity(responseDto, HttpStatus.CREATED);
     }
 
-    @PatchMapping("/patch/{walk-id}/{member-id}")
+    @PatchMapping("/{walk-id}/{member-id}")
     public ResponseEntity updateWalk(@PathVariable("walk-id") long walkId,
                                   @PathVariable("member-id") long memberId,
                                   @RequestBody WalkMateDto.Patch walkPatchDto){
@@ -53,17 +53,18 @@ public class WalkMateController {
         return new ResponseEntity(response, HttpStatus.OK);
     }
 
-    @GetMapping("/get/{walk-id}")
+    @GetMapping("/{walk-id}")
     public ResponseEntity getWalk(@PathVariable("walk-id") long walkId){
 
         WalkMateDto.Response response = walkMateService.findWalk(walkId);
         return new ResponseEntity(response, HttpStatus.OK);
     }
 
-    @GetMapping("/get/walks")
-    public ResponseEntity getWalks(){
+    @GetMapping("/walks")
+    public ResponseEntity getWalks(@RequestParam("location") String location){
 
-        List<WalkMate> walks = walkMateService.findWalks();
+        List<WalkMate> walks = walkMateService.searchWalksMatchWithLocation(location);
+        walkMateService.sortByLatest(walks);
         List<WalkMateDto.Response> response =
                 walks.stream()
                         .map(walk -> walkMateService.findWalk(walk.getWalkMatePostId()))
@@ -72,7 +73,7 @@ public class WalkMateController {
         return new ResponseEntity(response, HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete/{walk-id}/{member-id}")
+    @DeleteMapping("/{walk-id}/{member-id}")
     public ResponseEntity deleteWalk(@PathVariable("walk-id") long walkId,
                                      @PathVariable("member-id") long memberId){
 
@@ -86,6 +87,15 @@ public class WalkMateController {
                                    @PathVariable("member-id") long memberId){
 
         WalkMateDto.Like response = walkMateService.likeByMember(walkId, memberId);
+        return new ResponseEntity(response, HttpStatus.OK);
+    }
+
+    @PatchMapping("/openstatus/{status}/{walk-id}/{member-id}")
+    public ResponseEntity changeOpenStatus(@PathVariable("status") boolean status,
+                                           @PathVariable("walk-id") long walkId,
+                                           @PathVariable("member-id") long memberId){
+
+        WalkMateDto.Open response = walkMateService.changeOpenStatus(status, walkId, memberId);
         return new ResponseEntity(response, HttpStatus.OK);
     }
 }

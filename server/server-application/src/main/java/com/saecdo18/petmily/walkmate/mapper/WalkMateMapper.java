@@ -67,4 +67,17 @@ public interface WalkMateMapper {
             return response;
         }
     }
+
+    public default WalkMateDto.Open walkMateToWalkMateOpenDto(WalkMate walkMate){
+        if (walkMate == null) {
+            return null;
+        } else {
+
+            WalkMateDto.Open response = WalkMateDto.Open.builder()
+                    .walkMatePostId(walkMate.getWalkMatePostId())
+                    .open(walkMate.getOpen())
+                    .build();
+            return response;
+        }
+    }
 }

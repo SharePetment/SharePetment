@@ -14,6 +14,8 @@ import com.saecdo18.petmily.walkmate.repository.WalkMateCommentRepository;
 import com.saecdo18.petmily.walkmate.repository.WalkMateRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -148,6 +150,40 @@ public class WalkMateService {
                 .likeCount(savedWalk.getLikeCount())
                 .isLike(savedWalkMateLike.isLike())
                 .build();
+    }
+
+    public List<WalkMate> searchWalksMatchWithLocation(String location){
+
+        List<WalkMate> allWalks = findWalks();
+        List<WalkMate> matchWalks = allWalks.stream()
+                .filter(walk -> walk.getLocation().equals(location))
+                .collect(Collectors.toList());
+
+        return matchWalks;
+    }
+
+    public List<WalkMate> sortByLatest(List<WalkMate> walks){
+
+        int newDataCount = 10;
+        Collections.sort(walks, Comparator.comparing(WalkMate::getCreatedAt).reversed());
+
+        return walks;
+    }
+
+    public WalkMateDto.Open changeOpenStatus(boolean status, long walkId, long memberId){
+
+        WalkMate walk = findWalkByWalkId(walkId);
+
+        if(memberId!=walk.getMember().getMemberId()){
+            throw new IllegalArgumentException("수정할 권한이 없습니다.");
+        }
+
+        WalkMateDto.Open response = WalkMateDto.Open.builder()
+                .walkMatePostId(walkId)
+                .open(status)
+                .build();
+
+        return response;
     }
 
     //-------------------------------------------------------------------//
