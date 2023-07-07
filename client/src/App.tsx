@@ -26,7 +26,7 @@ function App() {
           handler={[handleClose, handleNavigate]}
           btnsize={['md', 'md']}
           countbtn={2}
-          buttontext={['닫기', '확인']}
+          buttontext={['닫기입니다.', '확인입니다.']}
           isgreen={['true', 'false']}
           popupcontrol={handleClose}
         />
