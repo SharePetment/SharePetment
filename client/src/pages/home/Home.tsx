@@ -16,7 +16,7 @@ export function Component() {
         modules={[Mousewheel, Pagination]}
         className="w-full h-full flex flex-col items-center justify-center">
         <SwiperSlide className="w-96">
-          <div className="flex justify-center items-center gap-5">
+          <div className="flex justify-center items-center gap-5 max-sm:flex-col">
             <FeedCard
               memberid={1}
               username="hello_wolrd"
@@ -43,11 +43,15 @@ export function Component() {
                 },
               ]}
             />
-            <SideNav feedid={9} direction="col" inperson="true" />
+            <SideNav
+              feedid={9}
+              direction={window.innerWidth < 400 ? 'row' : 'col'}
+              inperson="true"
+            />
           </div>
         </SwiperSlide>
         <SwiperSlide className="w-96">
-          <div className="flex justify-center items-center gap-5">
+          <div className="flex justify-center items-center gap-5 max-sm:flex-col">
             <FeedCard
               memberid={1}
               username="hello_wolrd"
@@ -74,11 +78,15 @@ export function Component() {
                 },
               ]}
             />
-            <SideNav feedid={9} direction="col" inperson="true" />
+            <SideNav
+              feedid={9}
+              direction={window.innerWidth < 400 ? 'row' : 'col'}
+              inperson="true"
+            />
           </div>
         </SwiperSlide>
         <SwiperSlide className="w-96">
-          <div className="flex justify-center items-center gap-5">
+          <div className="flex justify-center items-center gap-5 max-sm:flex-col">
             <FeedCard
               memberid={1}
               username="hello_wolrd"
@@ -105,7 +113,11 @@ export function Component() {
                 },
               ]}
             />
-            <SideNav feedid={9} direction="col" inperson="true" />
+            <SideNav
+              feedid={9}
+              direction={window.innerWidth < 400 ? 'row' : 'col'}
+              inperson="true"
+            />
           </div>
         </SwiperSlide>
       </Swiper>

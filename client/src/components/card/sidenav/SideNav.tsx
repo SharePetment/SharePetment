@@ -19,7 +19,7 @@ export default function SideNav({ feedid, direction, inperson }: Prop) {
   return (
     <Container direction={direction}>
       <Wrap>
-        <Like className="cursor-pointer ml-2" />
+        <Like className="cursor-pointer ml-2" stroke="black" />
         <Text>10.3만</Text>
       </Wrap>
 
