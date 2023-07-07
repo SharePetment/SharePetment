@@ -47,6 +47,8 @@ export function Component() {
               feedid={9}
               direction={window.innerWidth < 640 ? 'row' : 'col'}
               inperson="true"
+              likes={200}
+              like="true"
             />
           </div>
         </SwiperSlide>
@@ -82,6 +84,8 @@ export function Component() {
               feedid={9}
               direction={window.innerWidth < 640 ? 'row' : 'col'}
               inperson="true"
+              likes={10}
+              like="true"
             />
           </div>
         </SwiperSlide>
@@ -117,6 +121,8 @@ export function Component() {
               feedid={9}
               direction={window.innerWidth < 640 ? 'row' : 'col'}
               inperson="true"
+              likes={300}
+              like="false"
             />
           </div>
         </SwiperSlide>

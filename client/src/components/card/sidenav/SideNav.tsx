@@ -11,21 +11,34 @@ interface Prop {
   feedid: number;
   direction: 'row' | 'col';
   inperson: BooleanStr;
+  likes: number;
+  like: BooleanStr;
 }
 
-export default function SideNav({ feedid, direction, inperson }: Prop) {
+export default function SideNav({
+  feedid,
+  direction,
+  inperson,
+  likes,
+  like,
+}: Prop) {
   const navigate = useNavigate();
 
   return (
     <Container direction={direction}>
       <Wrap>
-        <Like className="cursor-pointer ml-2" stroke="black" />
-        <Text>10.3만</Text>
+        {like === 'true' && (
+          <Like className="cursor-pointer ml-1" stroke="black" fill="#69B783" />
+        )}
+        {like === 'false' && (
+          <Like className="cursor-pointer ml-1" stroke="black" />
+        )}
+
+        <Text>{likes}</Text>
       </Wrap>
 
       <Wrap onClick={() => navigate(`/home/${feedid}`)}>
         <Comment className="cursor-pointer ml-2" />
-        <Text>10.3만</Text>
       </Wrap>
 
       <Wrap>
