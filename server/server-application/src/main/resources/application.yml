@@ -18,7 +18,6 @@ spring:
       hibernate:
         format_sql: true
 
-
 cloud:
   aws:
     s3:
