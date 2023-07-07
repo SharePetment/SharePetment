@@ -15,7 +15,7 @@ export function Component() {
         mousewheel={true}
         modules={[Mousewheel, Pagination]}
         className="w-full h-full flex flex-col items-center justify-center">
-        <SwiperSlide className="w-96">
+        <SwiperSlide className="w-96 max-sm:w-full max-sm:h-full">
           <div className="flex justify-center items-center gap-5 max-sm:flex-col">
             <FeedCard
               memberid={1}
@@ -45,7 +45,7 @@ export function Component() {
             />
             <SideNav
               feedid={9}
-              direction={window.innerWidth < 400 ? 'row' : 'col'}
+              direction={window.innerWidth < 640 ? 'row' : 'col'}
               inperson="true"
             />
           </div>
@@ -80,7 +80,7 @@ export function Component() {
             />
             <SideNav
               feedid={9}
-              direction={window.innerWidth < 400 ? 'row' : 'col'}
+              direction={window.innerWidth < 640 ? 'row' : 'col'}
               inperson="true"
             />
           </div>
@@ -115,7 +115,7 @@ export function Component() {
             />
             <SideNav
               feedid={9}
-              direction={window.innerWidth < 400 ? 'row' : 'col'}
+              direction={window.innerWidth < 640 ? 'row' : 'col'}
               inperson="true"
             />
           </div>
