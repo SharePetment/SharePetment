@@ -37,7 +37,7 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
 	implementation 'com.auth0:java-jwt:4.2.2'
-	implementation 'org.springframework.boot:spring-boot-starter-security'
+//	implementation 'org.springframework.boot:spring-boot-starter-security'
 
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
