@@ -15,7 +15,7 @@ public class WalkMateDto {
 //    @Builder
     public static class Post{
 
-//        private Long walkMatePostId;
+        //        private Long walkMatePostId;
         private Long memberId;
         private String title;
         private String content;
@@ -34,7 +34,7 @@ public class WalkMateDto {
 //    @Builder
     public static class Patch{
 
-//        private Long walkMatePostId;
+        //        private Long walkMatePostId;
         private Long memberId;
         private String title;
         private String content;

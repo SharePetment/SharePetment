@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface WalkMateRepository extends JpaRepository<WalkMate, Long> {
 
-//    List<WalkMate> findAllDesc();
+    //    List<WalkMate> findAllDesc();
     Page<WalkMate> findByLocation(Pageable pageable, String location);
 }

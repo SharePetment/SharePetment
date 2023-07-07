@@ -96,4 +96,4 @@ public class WalkMate extends BaseEntity {
         else
             likeCount--;
     }
-}
+

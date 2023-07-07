@@ -73,10 +73,10 @@ public class WalkMateService {
 
         Member member = methodFindByMemberId(walk.getMember().getMemberId());
         MemberDto.Info info = MemberDto.Info.builder()
-                        .memberId(member.getMemberId())
-                        .imageURL(member.getImageURL())
-                        .nickname(member.getNickname())
-                        .build();
+                .memberId(member.getMemberId())
+                .imageURL(member.getImageURL())
+                .nickname(member.getNickname())
+                .build();
         response.setMemberInfo(info);
 
         return response;
@@ -164,16 +164,16 @@ public class WalkMateService {
         return matchWalks;
     }
 
-    public List<WalkMate> sortByLatest(List<WalkMate> walks){
+    public List<WalkMate> recentPage(int page, int size, String location, boolean openFilter){
 
-        Collections.sort(walks, Comparator.comparing(WalkMate::getCreatedAt).reversed());
-
-        return walks;
-    }
-    public List<WalkMate> recentPage(int page, int size, String location){
 
         PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
         List<WalkMate> response = walkMateRepository.findByLocation(pageRequest, location).getContent();
+
+        if(openFilter){
+            onlyOpenWalk(response);
+        }
+
         return response;
 
     }
@@ -192,6 +192,16 @@ public class WalkMateService {
                 .build();
 
         return response;
+    }
+
+    public List<WalkMate> onlyOpenWalk(List<WalkMate> walkMates){
+
+        List<WalkMate> allWalks = findWalks();
+        List<WalkMate> openWalks = allWalks.stream()
+                .filter(walk -> walk.getOpen().equals(true))
+                .collect(Collectors.toList());
+
+        return openWalks;
     }
 
     //-------------------------------------------------------------------//

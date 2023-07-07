@@ -23,7 +23,7 @@ public class WalkMateCommentController {
         this.mapper = mapper;
     }
 
-    @PostMapping("/post/{walk-id}/{member-id}")
+    @PostMapping("/{walk-id}/{member-id}")
     private ResponseEntity postComment(@PathVariable("walk-id") long walkId,
                                        @PathVariable("member-id") long memberId,
                                        @RequestBody WalkMateCommentDto.Post commentPostDto){
@@ -35,7 +35,7 @@ public class WalkMateCommentController {
         return new ResponseEntity(response, HttpStatus.CREATED);
     }
 
-    @GetMapping("/get/bywalk/{walk-id}")
+    @GetMapping("/bywalk/{walk-id}")
     private ResponseEntity getCommentsByWalk(@PathVariable("walk-id") long walkId){
 
         List<WalkMateComment> comments = walkMateCommentService.findCommentsByWalkId(walkId);
@@ -47,7 +47,7 @@ public class WalkMateCommentController {
         return new ResponseEntity(response, HttpStatus.OK);
     }
 
-    @GetMapping("/get/bymember/{member-id}")
+    @GetMapping("/bymember/{member-id}")
     private ResponseEntity getCommentsByMember(@PathVariable("member-id") long memberId) {
 
         List<WalkMateComment> comments = walkMateCommentService.findCommentsByMemberId(memberId);
@@ -59,7 +59,7 @@ public class WalkMateCommentController {
         return new ResponseEntity(response, HttpStatus.OK);
     }
 
-    @GetMapping("/get/allcomments")
+    @GetMapping("/allcomments")
     private ResponseEntity getAllComments(){
 
         List<WalkMateComment> comments = walkMateCommentService.findAllComments();
@@ -71,7 +71,7 @@ public class WalkMateCommentController {
         return new ResponseEntity(response, HttpStatus.OK);
     }
 
-    @PatchMapping("/patch/{comment-id}/{member-id}")
+    @PatchMapping("/{comment-id}/{member-id}")
     private ResponseEntity patchComment(@PathVariable("comment-id") long commentId,
                                         @PathVariable("member-id") long memberId,
                                         @RequestBody WalkMateCommentDto.Patch commentPatchDto) {
@@ -83,7 +83,7 @@ public class WalkMateCommentController {
         return new ResponseEntity(response, HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete/{comment-id}/{member-id}")
+    @DeleteMapping("/{comment-id}/{member-id}")
     private ResponseEntity deleteComment(@PathVariable("comment-id") long commentId,
                                          @PathVariable("member-id") long memberId){
 
