@@ -11,6 +11,12 @@ import java.util.List;
 
 @Data
 public class MemberDto {
+    @Getter
+    @Builder
+    public static class Oauth{
+        private String KakaoName;
+        private String email;
+    }
 
     @Data
     @Builder

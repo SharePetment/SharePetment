@@ -23,7 +23,7 @@ public class OAuth2Attribute {
     }
 
     static OAuth2Attribute of(String provider, String attributeKey, Map<String, Object> attributes){
-        return ofKakao(attributeKey, attributes);
+        return ofKakao("id", attributes);
     }
 
     private static OAuth2Attribute ofKakao(String attributeKey,

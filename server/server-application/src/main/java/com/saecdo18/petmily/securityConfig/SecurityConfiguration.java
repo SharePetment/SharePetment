@@ -2,6 +2,7 @@ package com.saecdo18.petmily.securityConfig;
 
 
 import com.saecdo18.petmily.oauth.CustomOAuth2UserService;
+import com.saecdo18.petmily.oauth.OAuth2SuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,6 +20,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 public class SecurityConfiguration {
 
     private final CustomOAuth2UserService customOAuth2UserService;
+    private final OAuth2SuccessHandler oAuth2SuccessHandler;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
@@ -38,7 +40,7 @@ public class SecurityConfiguration {
             .and()
 
                 .authorizeHttpRequests()
-                .antMatchers("/","/oauth/**","/feeds/all/**").permitAll()
+                .antMatchers("/","/oauth/**","/feeds/all/**","/auth/**").permitAll()
                 .anyRequest().authenticated()
             .and()
 
@@ -47,7 +49,7 @@ public class SecurityConfiguration {
                 .userService(customOAuth2UserService)
 
                 .and()
-                .successHandler();
+                .successHandler(oAuth2SuccessHandler);
 
         return http.build();
     }
