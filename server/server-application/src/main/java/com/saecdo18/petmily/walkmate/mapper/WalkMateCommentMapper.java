@@ -33,7 +33,7 @@ public interface WalkMateCommentMapper {
             return null;
         } else {
             WalkMateCommentDto.Response response = new WalkMateCommentDto.Response();
-            response.setCommentId(comment.getWalkMateCommentsId());
+            response.setCommentId(comment.getWalkMateCommentId());
             response.setWalkMatePostId(comment.getWalkMate().getWalkMatePostId());
             response.setMemberId(comment.getMember().getMemberId());
             response.setContent(comment.getContent());

@@ -41,7 +41,7 @@ public class WalkMateCommentController {
         List<WalkMateComment> comments = walkMateCommentService.findCommentsByWalkId(walkId);
         List<WalkMateCommentDto.Response> response =
                 comments.stream()
-                        .map(comment -> mapper.commentToCommentResponseDto(comment))
+                        .map(comment -> walkMateCommentService.findComment(comment.getWalkMateCommentId()))
                         .collect(Collectors.toList());
 
         return new ResponseEntity(response, HttpStatus.OK);
@@ -53,7 +53,7 @@ public class WalkMateCommentController {
         List<WalkMateComment> comments = walkMateCommentService.findCommentsByMemberId(memberId);
         List<WalkMateCommentDto.Response> response =
                 comments.stream()
-                        .map(comment -> mapper.commentToCommentResponseDto(comment))
+                        .map(comment -> walkMateCommentService.findComment(comment.getWalkMateCommentId()))
                         .collect(Collectors.toList());
 
         return new ResponseEntity(response, HttpStatus.OK);
@@ -65,7 +65,7 @@ public class WalkMateCommentController {
         List<WalkMateComment> comments = walkMateCommentService.findAllComments();
         List<WalkMateCommentDto.Response> response =
                 comments.stream()
-                        .map(comment -> mapper.commentToCommentResponseDto(comment))
+                        .map(comment -> walkMateCommentService.findComment(comment.getWalkMateCommentId()))
                         .collect(Collectors.toList());
 
         return new ResponseEntity(response, HttpStatus.OK);

@@ -1,5 +1,6 @@
 package com.saecdo18.petmily.walkmate.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.saecdo18.petmily.feed.entity.BaseEntity;
 import com.saecdo18.petmily.member.entity.Member;
 import lombok.Builder;
@@ -15,7 +16,7 @@ public class WalkMateComment extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long walkMateCommentsId;
+    private Long walkMateCommentId;
 
     @Column(nullable = false)
     private String content;
@@ -23,6 +24,7 @@ public class WalkMateComment extends BaseEntity {
     @Column(nullable = false)
     private Integer likes;
 
+//    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "walkmatepost_id")
     private WalkMate walkMate;
@@ -39,13 +41,6 @@ public class WalkMateComment extends BaseEntity {
         this.walkMate = walkMate;
         this.member = member;
     }
-
-//    public void setWalkMate(WalkMate walkMate){
-//        this.walkMate = walkMate;
-//    }
-//    public void setMember(Member member){
-//        this.member = member;
-//    }
 
     public void setContent(String content){
         this.content = content;

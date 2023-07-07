@@ -1,5 +1,6 @@
 package com.saecdo18.petmily.walkmate.controller;
 
+import com.saecdo18.petmily.member.dto.MemberDto;
 import com.saecdo18.petmily.member.repository.MemberRepository;
 import com.saecdo18.petmily.walkmate.dto.WalkMateDto;
 import com.saecdo18.petmily.walkmate.entity.WalkMate;
@@ -55,7 +56,7 @@ public class WalkMateController {
     @GetMapping("/get/{walk-id}")
     public ResponseEntity getWalk(@PathVariable("walk-id") long walkId){
 
-        WalkMateDto.Response response = mapper.walkMateToWalkMateResponseDto(walkMateService.findWalk(walkId));
+        WalkMateDto.Response response = walkMateService.findWalk(walkId);
         return new ResponseEntity(response, HttpStatus.OK);
     }
 
@@ -65,7 +66,7 @@ public class WalkMateController {
         List<WalkMate> walks = walkMateService.findWalks();
         List<WalkMateDto.Response> response =
                 walks.stream()
-                        .map(walk -> mapper.walkMateToWalkMateResponseDto(walk))
+                        .map(walk -> walkMateService.findWalk(walk.getWalkMatePostId()))
                         .collect(Collectors.toList());
 
         return new ResponseEntity(response, HttpStatus.OK);

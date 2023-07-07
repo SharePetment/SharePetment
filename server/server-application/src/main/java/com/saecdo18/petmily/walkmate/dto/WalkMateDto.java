@@ -1,5 +1,6 @@
 package com.saecdo18.petmily.walkmate.dto;
 
+import com.saecdo18.petmily.member.dto.MemberDto;
 import com.saecdo18.petmily.walkmate.entity.WalkMateComment;
 import lombok.*;
 
@@ -53,6 +54,7 @@ public class WalkMateDto {
 
         private Long walkMatePostId;
         private Long memberId;
+        private MemberDto.Info memberInfo;
         private String title;
         private String content;
         private String mapURL;
@@ -64,7 +66,7 @@ public class WalkMateDto {
         private Integer likeCount;
         private LocalDateTime createdAt;
         private LocalDateTime modifiedAt;
-        private List<WalkMateComment> comments;
+        private List<WalkMateCommentDto.Response> comments;
     }
 
     @Data

@@ -49,18 +49,14 @@ public class WalkMate extends BaseEntity {
     @Column
     private Integer likeCount;
 
-//    @OneToMany(mappedBy = "walkmate", cascade = CascadeType.REMOVE)
-//    private List<WalkMateLike> walkMateLikeList;
-
-
-    @Column
-    @OneToMany
+    @OneToMany(mappedBy = "walkMate", cascade = CascadeType.REMOVE)
     private List<WalkMateComment> comments;
+
+//    fetch = FetchType.EAGER
 
     @Builder
     public WalkMate(Member member, String title, String content, String mapURL, String chatURL,
-                    String location, String time, Boolean open, Integer maximum, Integer likeCount,
-                    List<WalkMateComment> comments) {
+                    String location, String time, Boolean open, Integer maximum, Integer likeCount) {
 
         this.member = member;
         this.title = title;
@@ -72,7 +68,6 @@ public class WalkMate extends BaseEntity {
         this.open = open;
         this.maximum = maximum;
         this.likeCount = likeCount;
-        this.comments = comments;
     }
 
     public void updateWalk(String title, String content, String mapURL, String chatURL, String location,
@@ -90,6 +85,9 @@ public class WalkMate extends BaseEntity {
 
     public void setMember(Member member){
         this.member=member;
+    }
+    public void setComments(List<WalkMateComment> comments){
+        this.comments=comments;
     }
 
     public void likeCount(boolean like){
