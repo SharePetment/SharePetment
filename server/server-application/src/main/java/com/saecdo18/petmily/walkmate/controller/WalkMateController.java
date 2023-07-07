@@ -61,11 +61,12 @@ public class WalkMateController {
     }
 
     @GetMapping("/walks")
-    public ResponseEntity getWalks(@RequestParam("location") String location,
+    public ResponseEntity getWalks(@RequestParam("openFilter") boolean open,
+                                   @RequestParam("location") String location,
                                    @RequestParam("page") int page,
                                    @RequestParam("size") int size){
 
-        List<WalkMate> response = walkMateService.recentPage(page, size, location);
+        List<WalkMate> response = walkMateService.recentPage(page, size, location, open);
 
         return new ResponseEntity(response, HttpStatus.OK);
     }
