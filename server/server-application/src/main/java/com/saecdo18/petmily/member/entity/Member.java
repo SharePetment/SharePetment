@@ -26,7 +26,9 @@ public class Member extends BaseEntity {
     private String nickname;
     @Column(nullable = false)
     private String address;
-//    private String statusMessage;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     @Column(length = 1000)
     private String imageURL;
@@ -36,6 +38,8 @@ public class Member extends BaseEntity {
     private boolean animalParents;
 
     private boolean guestFollowStatus;
+
+    private String refreshToken;
 
     @OneToMany(mappedBy = "followerMember", cascade = CascadeType.REMOVE)
     private List<FollowMember> followMembers;
@@ -83,6 +87,10 @@ public class Member extends BaseEntity {
 
     public void updateImageUrl(String imageURL) {
         this.imageURL = imageURL;
+    }
+
+    public void updateRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
     }
 
     //    public void updateMessage(String statusMessage){
