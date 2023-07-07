@@ -18,7 +18,7 @@ import {
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
-import './carousel.css';
+import '../../../common/carousel/carousel.css';
 
 export default function FeedWriteCard() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -65,10 +65,15 @@ export default function FeedWriteCard() {
             }}
             navigation={true}
             modules={[Navigation]}
-            className="mySwiper">
+            className="w-80 h-[360px] rounded-lg">
             {savedFile.map((file, idx) => (
-              <SwiperSlide key={idx}>
-                <img src={file} />
+              <SwiperSlide
+                key={idx}
+                className="bg-lightgray flex justify-center items-center relative rounded-lg">
+                <img
+                  src={file}
+                  className="rounded-lg border border-lightgray"
+                />
                 <Close
                   className="absolute top-3 right-3 cursor-pointer"
                   fill="#a1a1aa"

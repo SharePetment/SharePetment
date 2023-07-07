@@ -6,7 +6,7 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import Profile from '../../../common/profile/Profile';
-import './styles.css';
+import '../../../common/carousel/carousel.css';
 import {
   Container,
   Feed,
@@ -36,8 +36,8 @@ export default function FeedCard({ memberid, username, context, url }: Prop) {
         }}
         navigation={true}
         modules={[Navigation]}
-        className="mySwiper">
-        <SwiperSlide>
+        className="w-96 h-[568px] rounded-[28px]">
+        <SwiperSlide className="flex justify-center items-center relative bg-slate-100">
           <Feed onClick={() => setIsMore(false)} />
           <ContentContainer>
             <Wrap onClick={() => navigate(`/users/${memberid}`)}>
