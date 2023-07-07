@@ -33,11 +33,9 @@ public class WalkMateCommentDto {
     public static class Response{
 
         private Long commentId;
-        private Long walkMatePostId;
-        private Long memberId;
         private MemberDto.Info memberInfo;
+        private Long walkMatePostId;
         private String content;
-        private Integer likes;
         private LocalDateTime createdAt;
         private LocalDateTime modifiedAt;
     }

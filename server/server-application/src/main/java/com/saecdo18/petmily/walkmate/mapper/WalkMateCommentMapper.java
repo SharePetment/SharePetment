@@ -35,9 +35,7 @@ public interface WalkMateCommentMapper {
             WalkMateCommentDto.Response response = new WalkMateCommentDto.Response();
             response.setCommentId(comment.getWalkMateCommentId());
             response.setWalkMatePostId(comment.getWalkMate().getWalkMatePostId());
-            response.setMemberId(comment.getMember().getMemberId());
             response.setContent(comment.getContent());
-            response.setLikes(comment.getLikes());
             response.setCreatedAt(comment.getCreatedAt());
             response.setModifiedAt(comment.getModifiedAt());
             return response;
