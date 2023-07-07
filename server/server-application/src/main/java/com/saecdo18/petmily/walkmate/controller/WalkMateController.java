@@ -61,14 +61,11 @@ public class WalkMateController {
     }
 
     @GetMapping("/walks")
-    public ResponseEntity getWalks(@RequestParam("location") String location){
+    public ResponseEntity getWalks(@RequestParam("location") String location,
+                                   @RequestParam("page") int page,
+                                   @RequestParam("size") int size){
 
-        List<WalkMate> walks = walkMateService.searchWalksMatchWithLocation(location);
-        walkMateService.sortByLatest(walks);
-        List<WalkMateDto.Response> response =
-                walks.stream()
-                        .map(walk -> walkMateService.findWalk(walk.getWalkMatePostId()))
-                        .collect(Collectors.toList());
+        List<WalkMate> response = walkMateService.recentPage(page, size, location);
 
         return new ResponseEntity(response, HttpStatus.OK);
     }

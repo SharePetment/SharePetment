@@ -12,6 +12,8 @@ import com.saecdo18.petmily.walkmate.mapper.WalkMateMapper;
 import com.saecdo18.petmily.walkmate.repository.WalkLikeRepository;
 import com.saecdo18.petmily.walkmate.repository.WalkMateCommentRepository;
 import com.saecdo18.petmily.walkmate.repository.WalkMateRepository;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -164,10 +166,16 @@ public class WalkMateService {
 
     public List<WalkMate> sortByLatest(List<WalkMate> walks){
 
-        int newDataCount = 10;
         Collections.sort(walks, Comparator.comparing(WalkMate::getCreatedAt).reversed());
 
         return walks;
+    }
+    public List<WalkMate> recentPage(int page, int size, String location){
+
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
+        List<WalkMate> response = walkMateRepository.findByLocation(pageRequest, location).getContent();
+        return response;
+
     }
 
     public WalkMateDto.Open changeOpenStatus(boolean status, long walkId, long memberId){
