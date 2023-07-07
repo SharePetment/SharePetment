@@ -27,7 +27,7 @@ export default function Footer() {
           <Text>연락처</Text>
         </div>
       </TopContainer>
-      <Text>@2023 Petgram from 색도18</Text>
+      <Text>@{new Date().getFullYear()} Share Petment</Text>
     </Container>
   );
 }
