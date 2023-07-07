@@ -49,7 +49,7 @@ export default function FeedCard({
         }}
         navigation={true}
         modules={[Navigation]}
-        className="w-96 max-sm:w-80 h-[520px] rounded-[28px]">
+        className="w-96 max-sm:w-80 h-[540px] rounded-[28px]">
         {images.map(image => (
           <SwiperSlide
             className="flex justify-center items-center relative bg-slate-100"
