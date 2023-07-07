@@ -5,9 +5,10 @@ export const Container = tw.div`
     flex-col
     justify-center
     items-center
-    w-1/3
-    max-sm:w-2/3
-    h-5/6
+    w-100
+    py-5
+    px-10
+    h-90
     bg-white
     rounded-2xl
 `;
@@ -20,7 +21,7 @@ mb-3
 
 export const Form = tw.form`
 mt-2
-w-3/4
+w-2/3
 flex
 flex-col
 items-center
@@ -35,4 +36,5 @@ justify-around
 flex
 py-3.5
 px-5
+max-sm:w-3/4
 `;

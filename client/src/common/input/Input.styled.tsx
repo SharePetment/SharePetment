@@ -13,6 +13,11 @@ type ErrorMessage = {
 export const InputContainer = tw.div`
   w-80
   relative
+  max-sm:flex
+  max-sm:flex-col
+  max-sm:items-center
+
+
 `;
 
 export const Label = tw.label`
@@ -23,6 +28,7 @@ export const Label = tw.label`
 
 export const InputText = tw.input<ErrorMessage>`
   w-full
+  max-sm:w-3/4
   py-3.5
   px-5
   border
@@ -30,6 +36,8 @@ export const InputText = tw.input<ErrorMessage>`
 
   ${prop => prop.error === undefined && `border-deepgray`}
   ${prop => typeof prop.error === 'string' && `border-[#FF7B7B]`}
+
+
 `;
 
 export const ErrorNotice = tw.p`

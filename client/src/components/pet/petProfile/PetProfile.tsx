@@ -89,8 +89,8 @@ export default function PetProfile({
             ref={cropperRef}
             src={image}
             viewMode={1}
-            width={800}
-            height={800}
+            width={400}
+            height={400}
             background={false}
             responsive
             autoCropArea={1}
