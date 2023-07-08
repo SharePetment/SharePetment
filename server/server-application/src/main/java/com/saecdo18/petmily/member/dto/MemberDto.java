@@ -63,6 +63,7 @@ public class MemberDto {
 
     @Getter
     @Builder
+    @Setter
     public static class Response{
         private Long memberId;
         private String name;
@@ -80,9 +81,9 @@ public class MemberDto {
 //        private String statusMessage;
 
 
-        public void setGuestFollow(boolean guestFollow) {
-            this.guestFollow = guestFollow;
-        }
+//        public void setGuestFollow(boolean guestFollow) {
+//            this.guestFollow = guestFollow;
+//        }
 
         public void setPets(List<PetDto.Response> pets) {
             this.pets = pets;

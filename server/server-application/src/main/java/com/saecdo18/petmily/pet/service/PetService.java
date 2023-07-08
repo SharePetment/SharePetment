@@ -132,7 +132,7 @@ public class PetService {
         PetDto.Response response = petMapper.petToPetResponseDto(pet);
 
         response.setMemberId(pet.getMember().getMemberId());
-        PetImage petImage = petImageRepository.findFirstByPetOrderByCreatedAtDesc(pet);
+        PetImage petImage = petImageRepository.findByPet(pet);
         Image image = petImage.getImage();
         ImageDto imageDto = petMapper.imageToImageDto(image);
         response.setImages(imageDto);

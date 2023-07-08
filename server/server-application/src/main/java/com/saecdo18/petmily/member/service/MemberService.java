@@ -59,7 +59,7 @@ public class MemberService {
             PetDto.Response petDto = petMapper.petToPetResponseDto(pet);
 //            System.out.println(pet.getMember().getMemberId()+"pet.getMember().getMemberId()@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
             petDto.setMemberId(pet.getMember().getMemberId());
-            PetImage petImage = petImageRepository.findFirstByPetOrderByCreatedAtDesc(pet);
+            PetImage petImage = petImageRepository.findByPet(pet);
             Image image = petImage.getImage();
             ImageDto imageDto = petMapper.imageToImageDto(image);
             petDto.setImages(imageDto);
@@ -87,7 +87,7 @@ public class MemberService {
 
         response.setPets(responsePets);
 
-        return memberMapper.memberToMemberResponseDto(hostMember);
+        return response;
     }
 
     public MemberDto.Response updateMemberStatus(long memberId, String nickname, String address){
