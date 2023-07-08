@@ -10,7 +10,7 @@ type ErrorMessage = {
 };
 
 export const FormContainer = tw.div`
-  pt-3
+  mt-4
   pb-10
 `;
 

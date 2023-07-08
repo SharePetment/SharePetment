@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import { fillUserInfo, editUserInfo } from '../../api/mutationfn';
 import { getUserInfo } from '../../api/queryfn';
+import { ReactComponent as Like } from '../../assets/button/like.svg';
 import { ReactComponent as Logo } from '../../assets/logo.svg';
 import Button from '../../common/button/Button';
 import {
@@ -15,7 +16,12 @@ import {
   Label,
 } from '../../common/input/Input.styled';
 import Select from '../../common/select/Select';
-import { ConfirmButton, DuplicateNotice, InfoForm } from './Info.styled';
+import {
+  ConfirmButton,
+  DuplicateNotice,
+  ExtraInfoLogo,
+  InfoForm,
+} from './Info.styled';
 
 type InfoProps = {
   nickname: string;
@@ -122,13 +128,20 @@ export function Component() {
 
   return (
     <>
-      <Logo
-        width="400"
-        className="ml-8 max-sm:w-80 max-sm:mx-auto cursor-pointer"
-        onClick={() => {
-          navigate(-1);
-        }}
-      />
+      {userId ? (
+        <Logo
+          width="400"
+          className="ml-8 max-sm:w-80 max-sm:mx-auto cursor-pointer"
+          onClick={() => {
+            navigate('/my-page');
+          }}
+        />
+      ) : (
+        <ExtraInfoLogo>
+          <Like className="stroke-defaulttext fill-defaulttext w-7 h-7" />
+          <span className="ml-2 text-3xl font-black">추가정보 입력</span>
+        </ExtraInfoLogo>
+      )}
 
       <FormContainer>
         <InfoForm onSubmit={handleSubmit(onSubmit)}>
