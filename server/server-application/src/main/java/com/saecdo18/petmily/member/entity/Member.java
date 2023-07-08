@@ -20,11 +20,11 @@ public class Member extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long memberId;
-//    @Column(nullable = false)
+
     private String name;
-//    @Column(nullable = false)
+
     private String email;
-//    @Column(nullable = false)
+
     private String nickname;
 
     private String address;

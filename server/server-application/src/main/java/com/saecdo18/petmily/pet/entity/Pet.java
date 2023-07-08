@@ -28,7 +28,7 @@ public class Pet extends BaseEntity {
     @Column(nullable = false)
     private String species;
     private String information;
-//    private String statusMessage;
+
 
 
     @JsonIgnore

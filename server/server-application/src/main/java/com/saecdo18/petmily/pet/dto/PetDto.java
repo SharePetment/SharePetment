@@ -48,6 +48,7 @@ public class PetDto {
 
     @Getter
     @Builder
+    @Setter
     public static class Response {
         private Long petId;
         //        private String profile;
@@ -61,14 +62,6 @@ public class PetDto {
         private String createdAt;
         private String modifiedAt;
 
-
-        public void setMemberId(long memberId) {
-            this.memberId = memberId;
-        }
-
-        public void setImages(ImageDto images) {
-            this.images = images;
-        }
 
     }
 
