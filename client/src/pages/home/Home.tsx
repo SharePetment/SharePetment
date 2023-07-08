@@ -17,6 +17,8 @@ export function Component() {
         />
       )}
     </>
+  );
+}
 
 // import { Mousewheel, Pagination } from 'swiper/modules';
 // import { Swiper, SwiperSlide } from 'swiper/react';
