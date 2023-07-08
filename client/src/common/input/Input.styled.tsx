@@ -10,6 +10,11 @@ type ErrorMessage = {
     | undefined;
 };
 
+export const FormContainer = tw.div`
+  pt-20
+  pb-10
+`;
+
 export const InputContainer = tw.div`
   w-80
   relative
@@ -22,8 +27,9 @@ export const InputContainer = tw.div`
 
 export const Label = tw.label`
   block
-  font-extrabold
+  font-bold
   text-defaulttext
+  mb-1
 `;
 
 export const InputText = tw.input<ErrorMessage>`
@@ -34,7 +40,7 @@ export const InputText = tw.input<ErrorMessage>`
   border
   rounded-[10px]
 
-  ${prop => prop.error === undefined && `border-deepgray`}
+  ${prop => prop.error === undefined && `border-lightgray`}
   ${prop => typeof prop.error === 'string' && `border-[#FF7B7B]`}
 
 

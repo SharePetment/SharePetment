@@ -24,4 +24,5 @@ export const Wrap = tw.div`
 
 export const Text = tw.span`
   text-xs
+  ml-1
 `;
