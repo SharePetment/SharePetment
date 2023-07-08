@@ -53,7 +53,6 @@ public class WalkMateDto {
     public static class Response {
 
         private Long walkMatePostId;
-        private Long memberId;
         private MemberDto.Info memberInfo;
         private String title;
         private String content;

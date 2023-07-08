@@ -31,19 +31,41 @@ public class WalkMateCommentService {
         this.walkMateCommentMapper = walkMateCommentMapper;
     }
 
-    public WalkMateComment createComments(WalkMateComment comment, long walkId, long memberId){
+//    public WalkMateComment createComments(WalkMateComment comment, long walkId, long memberId){
+//
+//        WalkMate walk = walkMateRepository.findById(walkId).orElseThrow();
+//        Member member = memberRepository.findById(memberId).orElseThrow();
+//
+//        WalkMateComment saveComment = WalkMateComment.builder()
+//                .walkMate(walk)
+//                .member(member)
+//                .content(comment.getContent())
+//                .likes(0)
+//                .build();
+//
+//        return walkMateCommentRepository.save(saveComment);
+//    }
 
-        WalkMate walk = walkMateRepository.findById(walkId).orElseThrow();
-        Member member = memberRepository.findById(memberId).orElseThrow();
+    public WalkMateCommentDto.Response createComments(WalkMateCommentDto.Post commentPostDto, long walkId, long memberId){
+
+        WalkMate walk = methodFindByWalkId(walkId);
+        Member member = methodFindByMemberId(memberId);
 
         WalkMateComment saveComment = WalkMateComment.builder()
                 .walkMate(walk)
                 .member(member)
-                .content(comment.getContent())
+                .content(commentPostDto.getContent())
                 .likes(0)
                 .build();
 
-        return walkMateCommentRepository.save(saveComment);
+        MemberDto.Info info = getMemberInfoByComment(saveComment);
+
+        WalkMateCommentDto.Response response = walkMateCommentMapper.commentToCommentResponseDto(saveComment);
+        response.setMemberInfo(info);
+
+        walkMateCommentRepository.save(saveComment);
+
+        return response;
     }
 
     public WalkMateComment findComments(long commentId){
@@ -95,7 +117,7 @@ public class WalkMateCommentService {
         return findComments;
     }
 
-    public WalkMateComment updateComment(WalkMateComment comment, long commentId, long memberId){
+    public WalkMateCommentDto.Response updateComment(WalkMateCommentDto.Patch commentPatchDto, long commentId, long memberId){
 
         WalkMateComment findComment = walkMateCommentRepository.findById(commentId).orElseThrow();
 
@@ -103,9 +125,15 @@ public class WalkMateCommentService {
             throw new IllegalArgumentException("수정할 권한이 없습니다.");
         }
 
-        findComment.setContent(comment.getContent());
+        findComment.setContent(commentPatchDto.getContent());
+        walkMateCommentRepository.save(findComment);
 
-        return walkMateCommentRepository.save(findComment);
+        MemberDto.Info info = getMemberInfoByComment(findComment);
+
+        WalkMateCommentDto.Response response = walkMateCommentMapper.commentToCommentResponseDto(findComment);
+        response.setMemberInfo(info);
+
+        return response;
     }
 
     public void deleteComment(long commentId, long memberId){
@@ -124,5 +152,21 @@ public class WalkMateCommentService {
         return memberRepository.findById(memberId).orElseThrow(
                 () -> new RuntimeException("사용자를 찾을 수 없습니다.")
         );
+    }
+
+    private WalkMate methodFindByWalkId(long walkId){
+        return walkMateRepository.findById(walkId).orElseThrow(
+                () -> new RuntimeException("산책 게시글을 찾을 수 없습니다.")
+        );
+    }
+
+    private MemberDto.Info getMemberInfoByComment(WalkMateComment comment) {
+        Member member = methodFindByMemberId(comment.getMember().getMemberId());
+        MemberDto.Info info = MemberDto.Info.builder()
+                .memberId(member.getMemberId())
+                .imageURL(member.getImageURL())
+                .nickname(member.getNickname())
+                .build();
+        return info;
     }
 }
