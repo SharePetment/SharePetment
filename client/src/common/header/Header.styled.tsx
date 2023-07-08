@@ -7,6 +7,7 @@ export const HeaderContainer = tw.div`
   items-center
   px-6
   py-4
+  z-10
   bg-defaultbg
   border-lightgray
   shadow-md
