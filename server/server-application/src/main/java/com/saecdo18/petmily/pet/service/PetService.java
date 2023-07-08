@@ -49,7 +49,6 @@ public class PetService {
                         .sex(petPostDto.getSex())
                         .species(petPostDto.getSpecies())
                         .information(petPostDto.getInformation())
-                        .walkMated(petPostDto.isWalkMated())
                         .build();
 
         pet.updateMember(findMember);
@@ -93,8 +92,7 @@ public class PetService {
                 patchPet.getAge(),
                 patchPet.getSex(),
                 patchPet.getSpecies(),
-                patchPet.getInformation(),
-                patchPet.isWalkMated());
+                patchPet.getInformation());
         if (!patchPet.getImages().isEmpty()) {
             s3UploadService.deleteImage(findPet.getPetImage().getImage().getOriginalFilename());
             petImageRepository.delete(findPet.getPetImage());

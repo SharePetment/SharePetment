@@ -46,14 +46,18 @@ public class MemberService {
         hostMember.updatePetList(petList);
         List<PetDto.Response> responsePets = petMapper.petsToPetResponseDtos(petList);
 
+        boolean guestfollowing = false;
         Optional<FollowMember> findFollowStatus = followMemberRepository.findByFollowerMemberAndFollowingId(hostMember, guestMemberId);
         if (findFollowStatus.isEmpty()){
-            hostMember.updateGuestFollowStatus(false);
+
         }
         else {
-            hostMember.updateGuestFollowStatus(findFollowStatus.get().isFollow());
+            FollowMember followMember = findFollowStatus.get();
+            guestfollowing = followMember.isFollow();
         }
+
         MemberDto.Response response = memberMapper.memberToMemberResponseDto(hostMember);
+        response.setGuestFollow(guestfollowing);
         response.setPets(responsePets);
         return memberMapper.memberToMemberResponseDto(hostMember);
     }

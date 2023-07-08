@@ -3,6 +3,7 @@ package com.saecdo18.petmily.jwt;
 import com.saecdo18.petmily.member.entity.Member;
 import com.saecdo18.petmily.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
@@ -22,6 +23,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Component
+@Slf4j
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
@@ -33,7 +35,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-
+        log.info("requestURL = {}",request.getRequestURI());
         if (NO_CHECK_URLS.stream().anyMatch(request.getRequestURI()::startsWith)) {
             filterChain.doFilter(request, response);
             return;
@@ -42,7 +44,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String refreshToken = tokenProvider.extractRefreshToken(request)
                 .filter(tokenProvider::isTokenValid)
                 .orElse(null);
-
+        log.info("refreshToken = {}",refreshToken);
         if (refreshToken != null) {
             checkRefreshTokenAndReIssueAccessToken(response, refreshToken);
             return;
@@ -55,6 +57,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     private void checkRefreshTokenAndReIssueAccessToken(HttpServletResponse response, String refreshToken) {
+        log.info("checkRefreshTokenAndReIssueAccessToken 진입");
         memberRepository.findByRefreshToken(refreshToken).ifPresent(member -> {
             String reIssuedRefreshToken = reIssuedRefreshToken(member);
             tokenProvider.sendAccessAndRefreshToken(response, tokenProvider.createAccessToken(member.getMemberId()), reIssuedRefreshToken);
@@ -70,6 +73,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 
     private void checkAccessTokenAndAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        log.info("checkAccessTokenAndAuthentication 진입");
         tokenProvider.extractAccessToken(request)
                 .filter(tokenProvider::isTokenValid)
                 .ifPresent(accessToken -> tokenProvider.extractMemberId(accessToken)

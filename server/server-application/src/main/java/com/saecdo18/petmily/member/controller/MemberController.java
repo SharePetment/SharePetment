@@ -27,18 +27,18 @@ public class MemberController {
     private final MemberService memberService;
     private final static String MEMBER_CREATE_URI = "localhost:8080/members";
 
-    @PostMapping
-    public ResponseEntity postMember(@Valid @RequestBody MemberDto.Post memberPostDto) {
-        Member mappingMember = memberMapper.memberPostDtoToMember(memberPostDto);
-
-        Member member = memberService.createMember(mappingMember);
-        MemberDto.Response responseDto = memberMapper.memberToMemberResponseDto(member);
-
-//        URI location = memberService.uriBuilder(memberId, MEMBER_CREATE_URI);
-
-        return new ResponseEntity(responseDto, HttpStatus.CREATED);
-//        return ResponseEntity.created(location).build();
-    }
+//    @PostMapping
+//    public ResponseEntity postMember(@Valid @RequestBody MemberDto.Post memberPostDto) {
+//        Member mappingMember = memberMapper.memberPostDtoToMember(memberPostDto);
+//
+//        Member member = memberService.createMember(mappingMember);
+//        MemberDto.Response responseDto = memberMapper.memberToMemberResponseDto(member);
+//
+////        URI location = memberService.uriBuilder(memberId, MEMBER_CREATE_URI);
+//
+//        return new ResponseEntity(responseDto, HttpStatus.CREATED);
+////        return ResponseEntity.created(location).build();
+//    }
 
 
     @GetMapping("/{host-member-id}/{guest-member-id}")
@@ -83,7 +83,7 @@ public class MemberController {
         MemberDto.NickCheckResponse response = memberService.checkNickname(checkRequest);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-
+//localhost:8080/members/nickname-check
 
 //    @PatchMapping("/statusmessage/{member-id}")
 //    public ResponseEntity patchMemberStatusMessage(@PathVariable("member-id") long memberId,

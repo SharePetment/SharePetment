@@ -39,7 +39,6 @@ public class Member extends BaseEntity {
 
     private boolean animalParents;
 
-    private boolean guestFollowStatus;
 
     private String refreshToken;
 
@@ -88,9 +87,6 @@ public class Member extends BaseEntity {
         this.animalParents=animalParents;
     }
 
-    public void updateGuestFollowStatus(boolean guestFollowStatus){
-        this.guestFollowStatus = guestFollowStatus;
-    }
 
     public void updatePetList(List<Pet> pets){ this.pets=pets; }
 

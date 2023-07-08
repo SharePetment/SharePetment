@@ -42,8 +42,7 @@ public class MemberDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class Post{
-        @NotBlank
-        private String email;
+
         @NotBlank
         private String nickname;
         @NotBlank
@@ -74,18 +73,23 @@ public class MemberDto {
     @Builder
     public static class Response{
         private Long memberId;
-        private String kakaoName;
+        private String name;
         private String email;
         private String nickname;
         private String address;
         private int followerCount;
         private boolean animalParents;
-        private boolean guestFollowStatus;
+        private boolean guestFollow;
         private List<PetDto.Response> pets;
         private LocalDateTime createdAt;
         private LocalDateTime modifiedAt;
 
 //        private String statusMessage;
+
+
+        public void setGuestFollow(boolean guestFollow) {
+            this.guestFollow = guestFollow;
+        }
 
         public void setPets(List<PetDto.Response> pets) {
             this.pets = pets;

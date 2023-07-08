@@ -31,8 +31,8 @@ public class PetController {
                                      @RequestParam("age") int age,
                                      @RequestParam("sex") String sex,
                                      @RequestParam("species") String species,
-                                     @RequestParam("information") String information,
-                                     @RequestParam("walkMated") boolean walkMated) throws IOException {
+                                     @RequestParam("information") String information
+                                     ) throws IOException {
 
         PetDto.Post petPostDto = PetDto.Post.builder()
                 .images(images)
@@ -41,7 +41,6 @@ public class PetController {
                 .sex(sex)
                 .species(species)
                 .information(information)
-                .walkMated(walkMated)
                 .build();
 //        Pet mappingPet = petMapper.petPostDtoToPet(petPostDto);
         PetDto.Response responsePet = petService.createPet(memberId, petPostDto);
@@ -66,8 +65,7 @@ public class PetController {
                                    @RequestParam("age") int age,
                                    @RequestParam("sex") String sex,
                                    @RequestParam("species") String species,
-                                   @RequestParam("information") String information,
-                                   @RequestParam("walkMated") boolean walkMated) throws IOException {
+                                   @RequestParam("information") String information) throws IOException {
         PetDto.Patch petPatchDto = PetDto.Patch.builder()
                 .images(images)
                 .name(name)
@@ -75,7 +73,6 @@ public class PetController {
                 .sex(sex)
                 .species(species)
                 .information(information)
-                .walkMated(walkMated)
                 .build();
         PetDto.Response response = petService.updatePet(memberId, petId, petPatchDto);
 

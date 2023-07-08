@@ -25,7 +25,7 @@ public class PetDto {
         @NotBlank
         private String species;
         private String information;
-        private boolean walkMated;
+
 
     }
 
@@ -42,26 +42,25 @@ public class PetDto {
 
         private String species;
         private String information;
-        private boolean walkMated;
+
 
     }
 
     @Getter
     @Builder
-    public static class Response{
+    public static class Response {
         private Long petId;
-//        private String profile;
+        //        private String profile;
         private ImageDto images;
         private String name;
         private int age;
         private String sex;
         private String species;
         private String information;
-//        private String statusMessage;
-        private boolean walkMated;
         private long memberId;
         private String createdAt;
         private String modifiedAt;
+
 
         public void setMemberId(long memberId) {
             this.memberId = memberId;
@@ -71,25 +70,8 @@ public class PetDto {
             this.images = images;
         }
 
-        public void setWalkMated(boolean walkMated){
-            this.walkMated=walkMated;
-        }
-
-
-
-        //        @Builder(builderMethodName = "NoneStatusMessageAndMemberId")
-//        public Response(Long petId,String profile,
-//                        String name,int age,
-//                        String sex,String species,String information,
-//                        boolean isWalkMated){
-//            this.petId=petId;
-//            this.profile=profile;
-//            this.name=name;
-//            this.age=age;
-//            this.sex=sex;
-//            this.species=species;
-//            this.information=information;
-//            this.isWalkMated=isWalkMated;
-//        }
     }
+
+
+
 }

@@ -71,7 +71,7 @@ public class WalkMate extends BaseEntity {
     }
 
     public void updateWalk(String title, String content, String mapURL, String chatURL, String location,
-                    String time, Boolean open, Integer maximum) {
+                           String time, Boolean open, Integer maximum) {
 
         this.title = title;
         this.content = content;
@@ -83,17 +83,19 @@ public class WalkMate extends BaseEntity {
         this.maximum = maximum;
     }
 
-    public void setMember(Member member){
-        this.member=member;
-    }
-    public void setComments(List<WalkMateComment> comments){
-        this.comments=comments;
+    public void setMember(Member member) {
+        this.member = member;
     }
 
-    public void likeCount(boolean like){
+    public void setComments(List<WalkMateComment> comments) {
+        this.comments = comments;
+    }
+
+    public void likeCount(boolean like) {
         if (like)
             likeCount++;
         else
             likeCount--;
     }
+}
 
