@@ -18,3 +18,22 @@ export const getLocal = async (pattern: string) => {
     }
   }
 };
+
+/* -------------------------------- 회원정보 가져오기 ------------------------------- */
+
+export const getUserInfo = async (
+  hostId: string | undefined,
+  guestId: string | undefined,
+) => {
+  const URL = '';
+  try {
+    const result = await axios.get(`${URL}/members/${hostId}/${guestId}`);
+    return result.data;
+  } catch (error) {
+    if (isAxiosError(error)) {
+      const errMessage = (error.response as AxiosResponse<{ message: string }>)
+        ?.data.message;
+      return errMessage;
+    }
+  }
+};
