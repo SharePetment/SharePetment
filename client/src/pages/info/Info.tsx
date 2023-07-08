@@ -1,8 +1,10 @@
 import { ErrorMessage } from '@hookform/error-message';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
-import { useReadLocalStorage } from 'usehooks-ts';
+import { useParams } from 'react-router-dom';
+import { fillUserInfo, editUserInfo } from '../../api/mutationfn';
+import { getUserInfo } from '../../api/queryfn';
 import Button from '../../common/button/Button';
 import {
   ErrorNotice,
@@ -21,28 +23,47 @@ type InfoProps = {
   address: string;
 };
 
+interface IPets {
+  petId: number;
+  profile: string;
+  name: string;
+  age: number;
+  sex: string;
+  species: string;
+  information: string;
+  memberId: number;
+  createdAt: string;
+  modifiedAt: string;
+}
+interface IUserInfo {
+  memberId: number;
+  kakaoName: string | number | readonly string[] | undefined;
+  email: string;
+  nickname: string;
+  address: string;
+  followerCount: number;
+  animalParents: boolean;
+  guestFollowStatus: boolean;
+  pets: IPets[];
+  createdAt: number[];
+  modifiedAt: number[];
+}
+
 export function Component() {
   const {
     register,
     handleSubmit,
+    watch,
+    trigger,
     formState: { errors },
-  } = useForm<InfoProps>();
+  } = useForm<InfoProps>({ mode: 'onChange' });
 
-  // TODO: submit 버튼을 눌렀을 때 회원가입이면 POST/members, 회원수정이면 PATCH/members
-  const onSubmit = (data: InfoProps) => {
-    data = { ...data, address: '서울특별시 중랑구' };
-    console.log(data);
-    // 서버에 받은 정보를 가지고 중복확인
-    // 중복 응답을 받은 경우, ErrorNotice로 중복된 이름입니다라는 에러보여주기
-    setNoticeMessage('중복된 닉네임입니다.');
-  };
-
-  /* ----------------------------- useLocalStorage ---------------------------- */
-  const accessToken = useReadLocalStorage('accessToken');
-  const navigate = useNavigate();
-  const [nickname, setNickname] = useState('');
   const [noticeMessage, setNoticeMessage] = useState('');
-  // 중복확인이 체크되었을때만 submit이 이뤄져야 한다.
+  const nicknameValue = watch('nickname');
+
+  const { userId } = useParams();
+
+  // const accessToken = useReadLocalStorage('accessToken');
 
   // 비회원 로그인이 직접적으로 '/info'로 접근했을 때 확인해야 함
   // useEffect(() => {
@@ -51,75 +72,111 @@ export function Component() {
   //   }
   // }, [accessToken, navigate]);
 
-  // login with kakao 눌렀을 때 ->
-  // 백엔드에선 해당 이메일로 멤버인지 아닌지 확인하고
-  // 없으면 추가정보로 리다이렉트
-  // 회원이라면 accessToken과 함께 '/home'으로 리다이렉트
+  useEffect(() => {
+    if (!nicknameValue?.length) setNoticeMessage('');
+  }, [nicknameValue]);
 
-  // TODO: 서버에서 받아온 사용자 기본 정보로 이름과 이메일 작성
+  // 회원정보 가져오기
+  // const { data, isLoading } = useQuery<IUserInfo>({
+  //   queryKey: ['userInfo'],
+  //   queryFn: () => getUserInfo(userId, userId),
+  // });
+
+  // 추가정보 등록 POST
+  const userInfoFillMutation = useMutation({
+    mutationFn: fillUserInfo,
+  });
+
+  // 정보 수정 PATCH
+  const userInfoEditMutation = useMutation({
+    mutationFn: editUserInfo,
+  });
+
+  // 중복확인 체크
+  const handleCheckNickname = async (e: React.MouseEvent, nickname: string) => {
+    e.preventDefault();
+    const resultBeforeValidate = await trigger('nickname');
+    if (!resultBeforeValidate) return;
+    // const result = await axios.post(
+    //   'localhost:8080/members/nickname-check',
+    //   nickname,
+    // );
+
+    // setNoticeMessage(
+    //   result.data ? '사용가능한 닉네임입니다.' : '사용불가능한 닉네임입니다. ',
+    // );
+
+    setNoticeMessage('사용 불가능한 닉네임입니다.');
+  };
+
+  // POST/members
+  const onSubmit = (data: InfoProps) => {
+    data = { ...data, address: '' };
+
+    // userId params가 존재하면 userInfoEditMutation
+    if (userId) userInfoEditMutation.mutate(data);
+    else userInfoFillMutation.mutate(data);
+  };
 
   return (
-    <FormContainer>
-      <InfoForm onSubmit={handleSubmit(onSubmit)}>
-        {/* 이름 */}
-        <InputContainer>
-          <Label htmlFor="name">이름</Label>
-          <InputText
-            id="nickname"
-            {...register('name')}
-            value="이재린"
-            readOnly
-          />
-        </InputContainer>
+    <div>
+      <div></div>
+      <FormContainer>
+        <InfoForm onSubmit={handleSubmit(onSubmit)}>
+          {/* 이름 */}
+          <InputContainer>
+            <Label htmlFor="name">이름</Label>
+            <InputText id="nickname" value="김댕댕" disabled />
+          </InputContainer>
 
-        {/* 닉네임*/}
-        <InputContainer>
-          <Label htmlFor="nickname">닉네임</Label>
-          <InputText
-            id="nickname"
-            {...register('nickname', {
-              required: '텍스트 필수입니다.',
-              pattern: {
-                value: /^(?!.*\s)[\p{L}\p{N}]+$/u,
-                message: '공백과 특수기호를 제거해주세요 ;)',
-              },
-              maxLength: {
-                value: 10,
-                message: '10자 이내로 작성해주세요 ;)',
-              },
-            })}
-            error={errors.nickname?.message}
-          />
-          {noticeMessage !== '' && (
-            <DuplicateNotice>{noticeMessage}</DuplicateNotice>
-          )}
-          <ErrorMessage
-            errors={errors}
-            name="nickname"
-            render={({ message }) => <ErrorNotice>{message}</ErrorNotice>}
-          />
-          <ConfirmButton>중복확인</ConfirmButton>
-        </InputContainer>
+          {/* 닉네임*/}
+          <InputContainer>
+            <Label htmlFor="nickname">닉네임</Label>
+            <InputText
+              id="nickname"
+              {...register('nickname', {
+                required: '텍스트 필수입니다.',
+                pattern: {
+                  value: /^(?!.*\s)[\p{L}\p{N}]+$/u,
+                  message: '공백과 특수기호를 제거해주세요 ;)',
+                },
+                maxLength: {
+                  value: 10,
+                  message: '10자 이내로 작성해주세요 ;)',
+                },
+              })}
+              error={errors.nickname?.message}
+            />
+            {<DuplicateNotice>{noticeMessage}</DuplicateNotice>}
+            <ErrorMessage
+              errors={errors}
+              name="nickname"
+              render={({ message }) => <ErrorNotice>{message}</ErrorNotice>}
+            />
+            <ConfirmButton onClick={e => handleCheckNickname(e, 'nickname')}>
+              중복확인
+            </ConfirmButton>
+          </InputContainer>
 
-        {/* 이메일 */}
-        <InputContainer>
-          <Label htmlFor="email">이메일</Label>
-          <InputText
-            id="email"
-            {...register('email')}
-            value="jrlee_0922@naver.com"
-            readOnly
-          />
-        </InputContainer>
+          {/* 이메일 */}
+          <InputContainer>
+            <Label htmlFor="email">이메일</Label>
+            <InputText id="email" value="daengdaeng@gmail.com" disabled />
+          </InputContainer>
 
-        {/* 주소 */}
-        <div>
-          <Label>주소</Label>
-          <Select size="lg" direction="column" />
-        </div>
-        <Button size="lg" text="회원가입" isgreen="true" />
-      </InfoForm>
-    </FormContainer>
+          {/* 주소 */}
+          <div>
+            <Label>주소</Label>
+            <Select size="lg" direction="column" />
+          </div>
+          <Button
+            size="lg"
+            text={userId ? '회원정보 수정' : '회원가입'}
+            isgreen="true"
+          />
+        </InfoForm>
+      </FormContainer>
+    </div>
   );
 }
 
