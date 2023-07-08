@@ -36,6 +36,7 @@ public class Member extends BaseEntity {
     private String imageURL;
 
     private int followerCount;
+    private int feedCount;
 
     private boolean animalParents;
 
@@ -66,6 +67,13 @@ public class Member extends BaseEntity {
     public void update(String nickname, String address) {
         this.nickname = nickname;
         this.address = address;
+    }
+
+    public void upCountFeed(){
+        feedCount++;
+    }
+    public void downCountFeed(){
+        feedCount--;
     }
     public void updateUserRole(){
         this.role=Role.USER;

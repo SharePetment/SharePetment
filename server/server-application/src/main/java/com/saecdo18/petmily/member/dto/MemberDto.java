@@ -70,6 +70,7 @@ public class MemberDto {
         private String nickname;
         private String address;
         private int followerCount;
+        private int feedCount;
         private boolean animalParents;
         private boolean guestFollow;
         private List<PetDto.Response> pets;

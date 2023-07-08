@@ -66,6 +66,8 @@ public class FeedServiceImpl implements FeedService {
         }
         Feed saveFeed = feedRepository.save(createFeed);
 
+        findMember.upCountFeed(); // 피드 생성시 해당 멤버 feedCount 증가
+
         return getFeed(saveFeed.getFeedId(), findMember.getMemberId());
     }
 
@@ -201,6 +203,10 @@ public class FeedServiceImpl implements FeedService {
     public void deleteFeed(long feedId, long memberId) {
         Feed findFeed = methodFindByFeedId(feedId);
         if (findFeed.getMember().getMemberId() == memberId) {
+
+            Member findMember = memberRepository.findById(memberId).get();
+            findMember.downCountFeed();      // 피드 삭제시 멤버의 피드카운트 삭감
+
             for (FeedImage feedImage : findFeed.getFeedImageList()) {
                 s3UploadService.deleteImage(feedImage.getImage().getOriginalFilename());
             }
