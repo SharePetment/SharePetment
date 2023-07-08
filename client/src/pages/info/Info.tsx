@@ -2,9 +2,10 @@ import { ErrorMessage } from '@hookform/error-message';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { fillUserInfo, editUserInfo } from '../../api/mutationfn';
 import { getUserInfo } from '../../api/queryfn';
+import { ReactComponent as Logo } from '../../assets/logo.svg';
 import Button from '../../common/button/Button';
 import {
   ErrorNotice,
@@ -62,6 +63,7 @@ export function Component() {
   const nicknameValue = watch('nickname');
 
   const { userId } = useParams();
+  const navigate = useNavigate();
 
   // const accessToken = useReadLocalStorage('accessToken');
 
@@ -119,8 +121,15 @@ export function Component() {
   };
 
   return (
-    <div>
-      <div></div>
+    <>
+      <Logo
+        width="400"
+        className="ml-8 max-sm:w-80 max-sm:mx-auto cursor-pointer"
+        onClick={() => {
+          navigate(-1);
+        }}
+      />
+
       <FormContainer>
         <InfoForm onSubmit={handleSubmit(onSubmit)}>
           {/* 이름 */}
@@ -176,7 +185,7 @@ export function Component() {
           />
         </InfoForm>
       </FormContainer>
-    </div>
+    </>
   );
 }
 
