@@ -47,7 +47,7 @@ public class FeedServiceImpl implements FeedService {
     private final FeedCommentsRepository feedCommentsRepository;
     private final FeedLikeRepository feedLikeRepository;
     private final FeedMapper feedMapper;
-    private final static String BASE_URI = "http://localhost:8080/feeds/";
+    private final static String BASE_URI = "http://localhost:8080/feeds/all/";
 
     @Override
     public FeedDto.Response createFeed(FeedDto.Post post) throws IOException {
@@ -319,7 +319,7 @@ public class FeedServiceImpl implements FeedService {
         } else {
             response.setLike(feedLikesByMember(feed, methodFindByMemberId(memberId)));
         }
-        response.setShareURL(feed.getShareURI(BASE_URI).toString());
+        response.setShareURL(feed.getShareURI(BASE_URI).toString()+"/0");
 
         return response;
     }

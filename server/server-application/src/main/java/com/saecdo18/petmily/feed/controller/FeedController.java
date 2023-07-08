@@ -19,14 +19,14 @@ public class FeedController {
 
     private final FeedServiceImpl feedService;
 
-    @GetMapping("/{feed-id}/{member-id}")
+    @GetMapping("/all/{feed-id}/{member-id}")
     public ResponseEntity<?> getFeed(@PathVariable("feed-id") long feedId,
                                      @PathVariable("member-id") long memberId) {
         FeedDto.Response response = feedService.getFeed(feedId, memberId);
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/list/random/{member-id}")
+    @GetMapping("/all/list/random/{member-id}")
     public ResponseEntity<?> getFeedsRandom(@RequestBody FeedDto.PreviousListIds listIds,
                                             @PathVariable("member-id") long memberId) {
         List<FeedDto.Response> responseList = feedService.getFeedsRecent(listIds, memberId);
