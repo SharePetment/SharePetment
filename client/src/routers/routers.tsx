@@ -20,7 +20,7 @@ export const router = createBrowserRouter([
       },
       {
         path: Path.InfoEditing,
-        lazy: () => import('../pages/infoEditing/InfoEditing'),
+        lazy: () => import('../pages/info/Info'),
       },
       {
         path: Path.Home,

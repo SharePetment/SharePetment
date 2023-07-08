@@ -5,12 +5,15 @@ import Header from './common/header/Header';
 function App() {
   const matchHome = useMatch('/'); //object || null
   const matchInfo = useMatch('/info'); //object || null
+  const matchInfoEditing = useMatch('/info/:userId'); //object || null
 
   return (
     <>
-      {!(matchHome || matchInfo) && <Header isloginuser="true" />}
+      {!(matchHome || matchInfo || matchInfoEditing) && (
+        <Header isloginuser="true" />
+      )}
       <Outlet />
-      {!(matchHome || matchInfo) && <Footer />}
+      {!(matchHome || matchInfo || matchInfoEditing) && <Footer />}
     </>
   );
 }
