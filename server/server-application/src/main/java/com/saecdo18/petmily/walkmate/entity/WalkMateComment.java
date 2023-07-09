@@ -24,7 +24,7 @@ public class WalkMateComment extends BaseEntity {
     @Column(nullable = false)
     private Integer likes;
 
-    //    @JsonIgnore
+
     @ManyToOne
     @JoinColumn(name = "walkmatepost_id")
     private WalkMate walkMate;

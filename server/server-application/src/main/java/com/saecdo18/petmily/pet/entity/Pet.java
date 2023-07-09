@@ -28,9 +28,8 @@ public class Pet extends BaseEntity {
     @Column(nullable = false)
     private String species;
     private String information;
-//    private String statusMessage;
 
-    private boolean walkMated=true;
+
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
@@ -42,27 +41,25 @@ public class Pet extends BaseEntity {
 
     @Builder(builderMethodName = "nonePetIdAndMessage")
     public Pet( String name, int age,
-               String sex, String species, String information,
-               boolean walkMated){
+               String sex, String species, String information){
 
         this.name=name;
         this.age=age;
         this.sex=sex;
         this.species=species;
         this.information=information;
-        this.walkMated=walkMated;
+
     }
 
     public void updatePatch( String name, int age,
-                            String sex, String species, String information,
-                            boolean walkMated){
+                            String sex, String species, String information){
 
         this.name=name;
         this.age=age;
         this.sex=sex;
         this.species=species;
         this.information=information;
-        this.walkMated=walkMated;
+
     }
 
     public void updateMember(Member member){

@@ -11,6 +11,24 @@ import java.util.List;
 
 @Data
 public class MemberDto {
+    @Getter
+    @Builder
+    public static class Oauth{
+        private String KakaoName;
+        private String email;
+    }
+    @Getter
+    @Builder
+    public static class NickCheckRequest{
+        @NotBlank
+        private String nickname;
+    }
+    @Getter
+    @Builder
+    public static class NickCheckResponse{
+        private String checkMessage;
+        private boolean enable;
+    }
 
     @Data
     @Builder
@@ -24,8 +42,7 @@ public class MemberDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class Post{
-        @NotBlank
-        private String email;
+
         @NotBlank
         private String nickname;
         @NotBlank
@@ -43,31 +60,30 @@ public class MemberDto {
         private String address;
     }
 
-//    @Getter
-//    @Setter
-//    public static class PatchMessage{
-//
-//        private String statusMessage;
-//
-//
-//    }
 
     @Getter
     @Builder
+    @Setter
     public static class Response{
         private Long memberId;
-        private String kakaoName;
+        private String name;
         private String email;
         private String nickname;
         private String address;
         private int followerCount;
+        private int feedCount;
         private boolean animalParents;
-        private boolean guestFollowStatus;
+        private boolean guestFollow;
         private List<PetDto.Response> pets;
         private LocalDateTime createdAt;
         private LocalDateTime modifiedAt;
 
 //        private String statusMessage;
+
+
+//        public void setGuestFollow(boolean guestFollow) {
+//            this.guestFollow = guestFollow;
+//        }
 
         public void setPets(List<PetDto.Response> pets) {
             this.pets = pets;
