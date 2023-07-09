@@ -57,7 +57,7 @@ public class WalkMateService {
         return response;
     }
 
-    public WalkMateDto.Response findWalk(long walkMateId){
+    public WalkMateDto.Response findWalkByWalkId(long walkMateId){
 
         WalkMate walk = methodFindByWalkId(walkMateId);
 
@@ -74,6 +74,27 @@ public class WalkMateService {
 
         return response;
     }
+
+    public List<WalkMateDto.Response> findWalksByMemberId(long memberId){
+
+        List<WalkMate> allWalks = findWalks();
+        List<WalkMate> myWalks = allWalks.stream()
+                .filter(walk -> walk.getMember().getMemberId().equals(memberId))
+                .collect(Collectors.toList());
+
+        List<WalkMateDto.Response> responseList = new ArrayList<>();
+
+        for(WalkMate walk : myWalks){
+
+            WalkMateDto.Response response = walkMateMapper.walkMateToWalkMateResponseDto(walk);
+            MemberDto.Info info = getMemberInfoByWalk(walk);
+            response.setMemberInfo(info);
+            responseList.add(response);
+        }
+
+        return responseList;
+    }
+
 
     public List<WalkMateDto.Response> findCommentedWalks(long memberId){
 
