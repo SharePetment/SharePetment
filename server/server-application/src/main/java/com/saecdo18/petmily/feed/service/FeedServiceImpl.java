@@ -47,7 +47,7 @@ public class FeedServiceImpl implements FeedService {
     private final FeedCommentsRepository feedCommentsRepository;
     private final FeedLikeRepository feedLikeRepository;
     private final FeedMapper feedMapper;
-    private final static String BASE_URI = "http://localhost:8080/feeds/";
+    private final static String BASE_URI = "http://localhost:8080/feeds/all/";
 
     @Override
     public FeedDto.Response createFeed(FeedDto.Post post) throws IOException {
@@ -65,6 +65,8 @@ public class FeedServiceImpl implements FeedService {
             }
         }
         Feed saveFeed = feedRepository.save(createFeed);
+
+        findMember.upCountFeed(); // 피드 생성시 해당 멤버 feedCount 증가
 
         return getFeed(saveFeed.getFeedId(), findMember.getMemberId());
     }
@@ -201,6 +203,10 @@ public class FeedServiceImpl implements FeedService {
     public void deleteFeed(long feedId, long memberId) {
         Feed findFeed = methodFindByFeedId(feedId);
         if (findFeed.getMember().getMemberId() == memberId) {
+
+            Member findMember = memberRepository.findById(memberId).get();
+            findMember.downCountFeed();      // 피드 삭제시 멤버의 피드카운트 삭감
+
             for (FeedImage feedImage : findFeed.getFeedImageList()) {
                 s3UploadService.deleteImage(feedImage.getImage().getOriginalFilename());
             }
@@ -319,7 +325,7 @@ public class FeedServiceImpl implements FeedService {
         } else {
             response.setLike(feedLikesByMember(feed, methodFindByMemberId(memberId)));
         }
-        response.setShareURL(feed.getShareURI(BASE_URI).toString());
+        response.setShareURL(feed.getShareURI(BASE_URI).toString()+"/0");
 
         return response;
     }

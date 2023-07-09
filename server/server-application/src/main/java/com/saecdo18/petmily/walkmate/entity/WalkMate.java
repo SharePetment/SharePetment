@@ -83,17 +83,19 @@ public class WalkMate extends BaseEntity {
         this.maximum = maximum;
     }
 
-    public void setMember(Member member){
-        this.member=member;
-    }
-    public void setComments(List<WalkMateComment> comments){
-        this.comments=comments;
+    public void setMember(Member member) {
+        this.member = member;
     }
 
-    public void likeCount(boolean like){
+    public void setComments(List<WalkMateComment> comments) {
+        this.comments = comments;
+    }
+
+    public void likeCount(boolean like) {
         if (like)
             likeCount++;
         else
             likeCount--;
     }
 }
+
