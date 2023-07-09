@@ -60,9 +60,12 @@ public class WalkMateController {
     }
 
     @GetMapping("/bymember/{member-id}")
-    public ResponseEntity getWalksByMemberId(@PathVariable("member-id") long memberId){
+    public ResponseEntity getWalksByMemberId(@RequestParam("openFilter") boolean open,
+                                            @RequestParam("page") int page,
+                                            @RequestParam("size") int size,
+                                            @PathVariable("member-id") long memberId){
 
-        List<WalkMateDto.Response> response = walkMateService.findWalksByMemberId(memberId);
+        List<WalkMateDto.Response> response = walkMateService.findWalksByMemberId(page, size, memberId, open);
         return new ResponseEntity(response, HttpStatus.OK);
     }
 
