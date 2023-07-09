@@ -49,7 +49,6 @@ public class PetService {
                         .sex(petPostDto.getSex())
                         .species(petPostDto.getSpecies())
                         .information(petPostDto.getInformation())
-                        .walkMated(petPostDto.isWalkMated())
                         .build();
 
         pet.updateMember(findMember);
@@ -65,6 +64,7 @@ public class PetService {
         if(!findMember.isAnimalParents()){
             findMember.updateAnimalParents(true);
             findMember.updateImageUrl(uploadFileURL);
+            findMember.updateUserRole();
         }
 
         return getPet(savePet.getPetId());
@@ -92,8 +92,7 @@ public class PetService {
                 patchPet.getAge(),
                 patchPet.getSex(),
                 patchPet.getSpecies(),
-                patchPet.getInformation(),
-                patchPet.isWalkMated());
+                patchPet.getInformation());
         if (!patchPet.getImages().isEmpty()) {
             s3UploadService.deleteImage(findPet.getPetImage().getImage().getOriginalFilename());
             petImageRepository.delete(findPet.getPetImage());
@@ -116,6 +115,7 @@ public class PetService {
         if (findMember.getPets().isEmpty()) {
             findMember.updateAnimalParents(false);
             findMember.updateImageUrl(BASE_IMAGE_URL);
+            findMember.updateGuestRole();
         } else {
             Optional<Pet> firstPet = petRepository.findFirstByMemberOrderByCreatedAtAsc(findMember);
             if (firstPet.isPresent()) {
@@ -132,7 +132,7 @@ public class PetService {
         PetDto.Response response = petMapper.petToPetResponseDto(pet);
 
         response.setMemberId(pet.getMember().getMemberId());
-        PetImage petImage = petImageRepository.findFirstByPetOrderByCreatedAtDesc(pet);
+        PetImage petImage = petImageRepository.findByPet(pet);
         Image image = petImage.getImage();
         ImageDto imageDto = petMapper.imageToImageDto(image);
         response.setImages(imageDto);

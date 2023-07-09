@@ -1,5 +1,7 @@
 package com.saecdo18.petmily.member.service;
 
+import com.saecdo18.petmily.image.dto.ImageDto;
+import com.saecdo18.petmily.image.entity.Image;
 import com.saecdo18.petmily.member.dto.FollowMemberDto;
 import com.saecdo18.petmily.member.dto.MemberDto;
 import com.saecdo18.petmily.member.entity.FollowMember;
@@ -12,13 +14,16 @@ import com.saecdo18.petmily.pet.dto.PetDto;
 import com.saecdo18.petmily.pet.entity.PetImage;
 import com.saecdo18.petmily.pet.mapper.PetMapper;
 import com.saecdo18.petmily.pet.entity.Pet;
+import com.saecdo18.petmily.pet.repository.PetImageRepository;
 import com.saecdo18.petmily.pet.repository.PetRepository;
+import com.saecdo18.petmily.pet.service.PetService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,6 +37,7 @@ public class MemberService {
     private final MemberMapper memberMapper;
     private final FollowMemberMapper followMemberMapper;
     private final PetMapper petMapper;
+    private final PetImageRepository petImageRepository;
 
     public Member createMember(Member member){
         Member findMember = methodVerifyNoneMember(member); //email를 통해 등록되지 않은 멤버이면 진행
@@ -44,18 +50,44 @@ public class MemberService {
 
         List<Pet> petList = petRepository.findByMember(hostMember);
         hostMember.updatePetList(petList);
-        List<PetDto.Response> responsePets = petMapper.petsToPetResponseDtos(petList);
+        List<PetDto.Response> responsePets = new ArrayList<>();
 
+
+        for(int i=0;i< petList.size();i++){
+            Pet pet = petList.get(i);
+
+            PetDto.Response petDto = petMapper.petToPetResponseDto(pet);
+//            System.out.println(pet.getMember().getMemberId()+"pet.getMember().getMemberId()@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+            petDto.setMemberId(pet.getMember().getMemberId());
+            PetImage petImage = petImageRepository.findByPet(pet);
+            Image image = petImage.getImage();
+            ImageDto imageDto = petMapper.imageToImageDto(image);
+            petDto.setImages(imageDto);
+
+
+            responsePets.add(petDto);
+        }
+
+        boolean guestfollowing;
         Optional<FollowMember> findFollowStatus = followMemberRepository.findByFollowerMemberAndFollowingId(hostMember, guestMemberId);
+
         if (findFollowStatus.isEmpty()){
-            hostMember.updateGuestFollowStatus(false);
+            guestfollowing=false;
         }
         else {
-            hostMember.updateGuestFollowStatus(findFollowStatus.get().isFollow());
+            FollowMember followMember = findFollowStatus.get();
+            guestfollowing = followMember.isFollow();
+            System.out.println(followMember.isFollow()+"follow@@@@@@@@@@@@@@@@@@@@@");
         }
+
         MemberDto.Response response = memberMapper.memberToMemberResponseDto(hostMember);
+
+        System.out.println(guestfollowing+"guestfollowing@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+        response.setGuestFollow(guestfollowing);
+
         response.setPets(responsePets);
-        return memberMapper.memberToMemberResponseDto(hostMember);
+
+        return response;
     }
 
     public MemberDto.Response updateMemberStatus(long memberId, String nickname, String address){
@@ -119,6 +151,20 @@ public class MemberService {
                 .build();
     }
 
+    public MemberDto.NickCheckResponse checkNickname(MemberDto.NickCheckRequest checkRequest){
+        String message = "";
+        boolean enable=false;
+        if(memberRepository.findByNickname(checkRequest.getNickname()).isPresent()){
+            message = "중복된 닉네임입니다";
+
+        }
+        else {
+            message = "사용가능한 닉네임입니다";
+            enable=true;
+        }
+        return MemberDto.NickCheckResponse.builder().checkMessage(message).enable(enable).build();
+    }
+
     private Member methodFindByFollowerInMember(long followerId) {
         return memberRepository.findById(followerId).orElseThrow(() -> new RuntimeException("팔로우 할 팔로워를 찾지 못했습니다"));
     }
@@ -145,9 +191,5 @@ public class MemberService {
                 .toUri();
     }
 
-    //    public Member updateMemberStatusMessage(long memberId, String statusMessage){
-//        Member findMember = methodFindByMemberIdMember(memberId);
-//        findMember.updateMessage(statusMessage);
-//        return findMember;
-//    }
+
 }

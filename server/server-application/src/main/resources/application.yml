@@ -22,11 +22,11 @@ spring:
       client:
         registration:
           kakao:
-            client-id: ${REST_API_KEY}
+            client-id: 07df97c2858e60b2e19f630c2c397b31 #${REST_API_KEY}
             redirect-uri: "http://localhost:8080/auth/kakao/callback"
             client-authentication-method: POST
             authorization-grant-type: authorization_code
-            scope: profile_nickname, profile_image, account_email
+            scope: profile_nickname, account_email
             client-name: Kakao
         provider:
           kakao:
@@ -47,6 +47,16 @@ cloud:
       auto: false
     stack:
       auto: false
+
+
+jwt:
+  secretKey: SDFJSDLKJFSDIFOJSDIFSDLFJSDKFJLSDJFLSDKJFSDIFJLJSDKJFSDLKJF
+  access:
+    expiration: 3600000000
+    header: Authorization
+  refresh:
+    expiration: 1209600000
+    header: Authorization-refresh
 
 
 
