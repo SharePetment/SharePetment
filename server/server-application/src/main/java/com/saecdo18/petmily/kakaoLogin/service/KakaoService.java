@@ -119,6 +119,7 @@ public class KakaoService {
         else {
             response.sendRedirect("http://localhost:5374/info");
         }
+        response.setHeader("UID", refreshMember.getMemberId().toString());
 
         return response;
     }

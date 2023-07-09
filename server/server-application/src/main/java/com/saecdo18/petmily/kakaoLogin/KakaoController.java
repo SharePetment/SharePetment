@@ -24,7 +24,7 @@ public class KakaoController {
         String accessToken = kakaoService.getAccessToken(code);
         KakaoProfile kakaoProfile = kakaoService.getKakaoProfile(accessToken);
         MemberInfoAndJwtDto memberInfoAndJwtDto = kakaoService.login(kakaoProfile);
-        response = kakaoService.setJwtTokenInHeader(response, memberInfoAndJwtDto);
+        kakaoService.setJwtTokenInHeader(response, memberInfoAndJwtDto);
         return memberInfoAndJwtDto;
     }
 }
