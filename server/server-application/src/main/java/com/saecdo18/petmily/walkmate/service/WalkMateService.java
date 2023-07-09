@@ -57,7 +57,7 @@ public class WalkMateService {
         return response;
     }
 
-    public WalkMateDto.Response findWalk(long walkMateId){
+    public WalkMateDto.Response findWalkByWalkId(long walkMateId){
 
         WalkMate walk = methodFindByWalkId(walkMateId);
 
@@ -74,6 +74,54 @@ public class WalkMateService {
 
         return response;
     }
+
+    public List<WalkMateDto.Response> findWalksByMemberId(int page, int size, long memberId, boolean open){
+
+//        List<WalkMate> allWalks = findWalks();
+//        List<WalkMate> myWalks = allWalks.stream()
+//                .filter(walk -> walk.getMember().getMemberId().equals(memberId))
+//                .collect(Collectors.toList());
+
+        List<WalkMate> myWalks = recentPageMember(memberId, page, size, open);
+        List<WalkMateDto.Response> responseList = new ArrayList<>();
+
+        for(WalkMate walk : myWalks){
+
+            WalkMateDto.Response response = walkMateMapper.walkMateToWalkMateResponseDto(walk);
+            MemberDto.Info info = getMemberInfoByWalk(walk);
+            response.setMemberInfo(info);
+            responseList.add(response);
+        }
+
+        return responseList;
+    }
+
+    public List<WalkMate> recentPageMember(long memberId, int page, int size, boolean openFilter){
+
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
+        Member member = methodFindByMemberId(memberId);
+        List<WalkMate> response = walkMateRepository.findByMember(pageRequest, member).getContent();
+
+        if(openFilter){
+            onlyOpenWalk(response);
+        }
+
+        return response;
+    }
+
+//    public List<WalkMate> recentPage(int page, int size, String location, boolean openFilter){
+//
+//
+//        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
+//        List<WalkMate> response = walkMateRepository.findByLocation(pageRequest, location).getContent();
+//
+//        if(openFilter){
+//            onlyOpenWalk(response);
+//        }
+//
+//        return response;
+//
+//    }
 
     public List<WalkMateDto.Response> findCommentedWalks(long memberId){
 
