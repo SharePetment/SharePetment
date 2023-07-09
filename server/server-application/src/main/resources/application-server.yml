@@ -28,3 +28,12 @@ cloud:
       auto: false
     stack:
       auto: false
+
+jwt:
+  secretKey: SDFJSDLKJFSDIFOJSDIFSDLFJSDKFJLSDJFLSDKJFSDIFJLJSDKJFSDLKJF
+  access:
+    expiration: 3600000000
+    header: Authorization
+  refresh:
+    expiration: 1209600000
+    header: Authorization-refresh
