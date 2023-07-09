@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/walkmate/comment")
+@RequestMapping("/walkmates/comments")
 public class WalkMateCommentController {
 
     private final WalkMateCommentService walkMateCommentService;
@@ -28,9 +28,7 @@ public class WalkMateCommentController {
                                        @PathVariable("member-id") long memberId,
                                        @RequestBody WalkMateCommentDto.Post commentPostDto){
 
-        WalkMateComment mappingComment = mapper.commentPostDtoToComment(commentPostDto);
-        WalkMateComment comment = walkMateCommentService.createComments(mappingComment, walkId, memberId);
-        WalkMateCommentDto.Response response = mapper.commentToCommentResponseDto(comment);
+        WalkMateCommentDto.Response response = walkMateCommentService.createComments(commentPostDto, walkId, memberId);
 
         return new ResponseEntity(response, HttpStatus.CREATED);
     }
@@ -76,9 +74,7 @@ public class WalkMateCommentController {
                                         @PathVariable("member-id") long memberId,
                                         @RequestBody WalkMateCommentDto.Patch commentPatchDto) {
 
-        WalkMateComment findComment = mapper.commentPatchDtoToComment(commentPatchDto);
-        WalkMateComment responseComment = walkMateCommentService.updateComment(findComment, commentId, memberId);
-        WalkMateCommentDto.Response response = mapper.commentToCommentResponseDto(responseComment);
+        WalkMateCommentDto.Response response = walkMateCommentService.updateComment(commentPatchDto, commentId, memberId);
 
         return new ResponseEntity(response, HttpStatus.OK);
     }

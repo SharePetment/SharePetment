@@ -51,7 +51,6 @@ public interface WalkMateMapper {
         } else {
             WalkMateDto.Response response = new WalkMateDto.Response();
             response.setWalkMatePostId(walkMate.getWalkMatePostId());
-            response.setMemberId(walkMate.getMember().getMemberId());
             response.setTitle(walkMate.getTitle());
             response.setContent(walkMate.getContent());
             response.setMapURL(walkMate.getMapURL());

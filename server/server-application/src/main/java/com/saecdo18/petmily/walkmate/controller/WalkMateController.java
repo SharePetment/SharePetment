@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/walkmate")
+@RequestMapping("/walkmates")
 public class WalkMateController {
 
     private final WalkMateService walkMateService;
@@ -37,10 +37,9 @@ public class WalkMateController {
                                    @RequestBody WalkMateDto.Post walkPostDto){
 
         WalkMate mappingWalkMate = mapper.walkPostDtoToWalkMate(walkPostDto);
-        WalkMate walkMate = walkMateService.createWalk(mappingWalkMate, memberId);
-        WalkMateDto.Response responseDto = mapper.walkMateToWalkMateResponseDto(walkMate);
+        WalkMateDto.Response response = walkMateService.createWalk(mappingWalkMate, memberId);
 
-        return new ResponseEntity(responseDto, HttpStatus.CREATED);
+        return new ResponseEntity(response, HttpStatus.CREATED);
     }
 
     @PatchMapping("/{walk-id}/{member-id}")
@@ -48,7 +47,7 @@ public class WalkMateController {
                                   @PathVariable("member-id") long memberId,
                                   @RequestBody WalkMateDto.Patch walkPatchDto){
 
-        WalkMateDto.Response response = mapper.walkMateToWalkMateResponseDto(walkMateService.updateWalkMate(walkPatchDto, walkId, memberId));
+        WalkMateDto.Response response = walkMateService.updateWalkMate(walkPatchDto, walkId, memberId);
 
         return new ResponseEntity(response, HttpStatus.OK);
     }
@@ -67,6 +66,14 @@ public class WalkMateController {
                                    @RequestParam("size") int size){
 
         List<WalkMate> response = walkMateService.recentPage(page, size, location, open);
+
+        return new ResponseEntity(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/have/comments/{member-id}")
+    public ResponseEntity getCommentedWalk(@PathVariable("member-id") long memberId){
+
+        List<WalkMateDto.Response> response = walkMateService.findCommentedWalks(memberId);
 
         return new ResponseEntity(response, HttpStatus.OK);
     }

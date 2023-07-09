@@ -16,10 +16,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -46,23 +43,24 @@ public class WalkMateService {
         this.walkMateMapper = walkMateMapper;
     }
 
-    public WalkMate createWalk(WalkMate walkMate, long memberId) {
+    public WalkMateDto.Response createWalk(WalkMate walkMate, long memberId) {
 
-        Member member = memberRepository.findById(memberId).orElseThrow();
+        Member member = methodFindByMemberId(memberId);
         walkMate.setMember(member);
+        walkMateRepository.save(walkMate);
 
-        return walkMateRepository.save(walkMate);
-    }
+        WalkMateDto.Response response = walkMateMapper.walkMateToWalkMateResponseDto(walkMate);
 
-    public WalkMate findWalkByWalkId(long walkMateId){
+        MemberDto.Info info = getMemberInfoByWalk(walkMate);
+        response.setMemberInfo(info);
 
-        WalkMate walk = walkMateRepository.findById(walkMateId).orElseThrow();
-        return walk;
+        return response;
     }
 
     public WalkMateDto.Response findWalk(long walkMateId){
 
-        WalkMate walk = walkMateRepository.findById(walkMateId).orElseThrow();
+        WalkMate walk = methodFindByWalkId(walkMateId);
+
         WalkMateDto.Response response = walkMateMapper.walkMateToWalkMateResponseDto(walk);
         List<WalkMateComment> allComments = walkMateCommentService.findCommentsByWalkId(walkMateId);
         List<WalkMateCommentDto.Response> comments = allComments.stream()
@@ -71,17 +69,45 @@ public class WalkMateService {
 
         response.setComments(comments);
 
-        Member member = methodFindByMemberId(walk.getMember().getMemberId());
-        MemberDto.Info info = MemberDto.Info.builder()
-                .memberId(member.getMemberId())
-                .imageURL(member.getImageURL())
-                .nickname(member.getNickname())
-                .build();
+        MemberDto.Info info = getMemberInfoByWalk(walk);
         response.setMemberInfo(info);
 
         return response;
     }
 
+    public List<WalkMateDto.Response> findCommentedWalks(long memberId){
+
+        //1. 해당 memberId의 모든 comment 가져오기
+        List<WalkMateComment> myCommentsList = walkMateCommentService.findCommentsByMemberId(memberId);
+        List<WalkMate> myWalkMateList = myCommentsList.stream()
+                .map(comment -> comment.getWalkMate())
+                .collect(Collectors.toList());
+
+        //2. 각각의 comment의 postId를 가져오기
+        //3. 그 포스트 Id들 중에 중복을 제거하여 리스트로 만들어두기
+        //4. 각각을 walkMate로 변환하기
+
+        List<WalkMate> myUniqueWalkmateList = removeDuplicates(myWalkMateList);
+
+        //5. Dto.Response로 가공 테스트
+
+        List<WalkMateDto.Response> responseList=new ArrayList<>();
+
+        for(WalkMate walk : myUniqueWalkmateList){
+            WalkMateDto.Response response=walkMateMapper.walkMateToWalkMateResponseDto(walk);
+            MemberDto.Info info = getMemberInfoByWalk(walk);
+            response.setMemberInfo(info);
+            responseList.add(response);
+        }
+
+        return responseList;
+    }
+
+    public static <T> List<T> removeDuplicates(List<T> list){
+        return list.stream()
+                .distinct()
+                .collect(Collectors.toList());
+    }
 
     public List<WalkMate> findWalks(){
 
@@ -90,7 +116,7 @@ public class WalkMateService {
 
     public void deleteWalk(long walkMateId, long memberId){
 
-        WalkMate walk = findWalkByWalkId(walkMateId);
+        WalkMate walk = methodFindByWalkId(walkMateId);
 
         if(memberId!=walk.getMember().getMemberId()){
             throw new IllegalArgumentException("삭제할 권한이 없습니다.");
@@ -104,10 +130,10 @@ public class WalkMateService {
         walkMateRepository.delete(walk);
     }
 
-    public WalkMate updateWalkMate(WalkMateDto.Patch walkPatchDto,
+    public WalkMateDto.Response updateWalkMate(WalkMateDto.Patch walkPatchDto,
                                    long walkId, long memberId){
 
-        WalkMate walk = findWalkByWalkId(walkId);
+        WalkMate walk = methodFindByWalkId(walkId);
 
         if(memberId!=walk.getMember().getMemberId()){
             throw new IllegalArgumentException("수정할 권한이 없습니다.");
@@ -123,7 +149,13 @@ public class WalkMateService {
                 walkPatchDto.getOpen(),
                 walkPatchDto.getMaximum());
 
-        return walkMateRepository.save(walk);
+        WalkMateDto.Response response = walkMateMapper.walkMateToWalkMateResponseDto(walk);
+
+        MemberDto.Info info = getMemberInfoByWalk(walk);
+        response.setMemberInfo(info);
+        walkMateRepository.save(walk);
+
+        return response;
     }
 
     public WalkMateDto.Like likeByMember(long walkId, long memberId){
@@ -180,7 +212,7 @@ public class WalkMateService {
 
     public WalkMateDto.Open changeOpenStatus(boolean status, long walkId, long memberId){
 
-        WalkMate walk = findWalkByWalkId(walkId);
+        WalkMate walk = methodFindByWalkId(walkId);
 
         if(memberId!=walk.getMember().getMemberId()){
             throw new IllegalArgumentException("수정할 권한이 없습니다.");
@@ -228,6 +260,16 @@ public class WalkMateService {
                 .imageURL(findMember.getImageURL())
                 .nickname(findMember.getNickname())
                 .build();
+    }
+
+    private MemberDto.Info getMemberInfoByWalk(WalkMate walk) {
+        Member member = methodFindByMemberId(walk.getMember().getMemberId());
+        MemberDto.Info info = MemberDto.Info.builder()
+                .memberId(member.getMemberId())
+                .imageURL(member.getImageURL())
+                .nickname(member.getNickname())
+                .build();
+        return info;
     }
 
 }
