@@ -50,6 +50,7 @@ public class KakaoService {
 
         ObjectMapper objectMapper = new ObjectMapper();
         AccessTokenDto.Response accessToken= objectMapper.readValue(accessTokenRequest, AccessTokenDto.Response.class);
+        log.info("accessToken: {}@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",accessToken.getAccess_token());
         return accessToken.getAccess_token();
     }
 
@@ -65,6 +66,7 @@ public class KakaoService {
 
         ObjectMapper objectMapper = new ObjectMapper();
         KakaoProfile kakaoProfile = objectMapper.readValue(response, KakaoProfile.class);
+        log.info("kakaoProfileEmail: {}@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",kakaoProfile.getKakao_account().getEmail());
 
         return kakaoProfile;
     }
@@ -77,7 +79,8 @@ public class KakaoService {
     public MemberInfoAndJwtDto login(KakaoProfile kakaoProfile){
         String email = kakaoProfile.getKakao_account().getEmail();
         String nickname = kakaoProfile.getKakao_account().getProfile().getNickname();
-
+        log.info("Email: {}@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",email);
+        log.info("nickname: {}@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",nickname);
         Optional<Member> optionalMember = isRegister(email);
         Member responseMember;
         boolean present=false;
