@@ -89,7 +89,7 @@ public class WalkMateService {
 
         List<WalkMate> myUniqueWalkmateList = removeDuplicates(myWalkMateList);
 
-        //5. Dto.Response로 가공
+        //5. Dto.Response로 가공 테스트
 
         List<WalkMateDto.Response> responseList=new ArrayList<>();
 
