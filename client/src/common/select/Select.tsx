@@ -45,11 +45,13 @@ export default function SelectComponent({ size, direction, setZip }: Prop) {
     key: cityCode,
   });
 
+  // 초기 값 세팅
   useEffect(() => {
     if (!countryLoading) {
       setCountryCode(changeCountryCode(cityData?.regcodes[0].code as string));
       setZipNameCountry('서울특별시');
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [countryLoading]);
 
   useEffect(() => {
@@ -67,6 +69,7 @@ export default function SelectComponent({ size, direction, setZip }: Prop) {
         onChange={e => {
           const valueArr = e.target.value.split(' ');
           setCountryCode(changeCountryCode(valueArr[0]));
+          setCityCode('');
           setZipNameCountry(valueArr[1]);
           setZipNameCity('');
           setZipNameVillage('');
@@ -91,7 +94,7 @@ export default function SelectComponent({ size, direction, setZip }: Prop) {
           setZipNameVillage('');
         }}>
         <option value={''}>선택</option>
-        {cityData?.regcodes &&
+        {!cityLdading &&
           cityData?.regcodes.slice(1).map(({ code, name }) => (
             <option key={code} value={`${code} ${name.split(' ')[1]}`}>
               {name.split(' ')[1]}
