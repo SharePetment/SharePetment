@@ -58,12 +58,13 @@ public class WalkMateCommentService {
                 .likes(0)
                 .build();
 
-        MemberDto.Info info = getMemberInfoByComment(saveComment);
+        WalkMateComment savedComment = walkMateCommentRepository.save(saveComment);
+        MemberDto.Info info = getMemberInfoByComment(savedComment);
 
-        WalkMateCommentDto.Response response = walkMateCommentMapper.commentToCommentResponseDto(saveComment);
+        WalkMateCommentDto.Response response = walkMateCommentMapper.commentToCommentResponseDto(savedComment);
         response.setMemberInfo(info);
 
-        walkMateCommentRepository.save(saveComment);
+
 
         return response;
     }

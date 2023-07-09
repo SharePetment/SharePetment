@@ -32,7 +32,7 @@ public class WalkMateCommentDto {
     @Setter
     public static class Response{
 
-        private Long commentId;
+        private Long walkMateCommentId;
         private MemberDto.Info memberInfo;
         private Long walkMatePostId;
         private String content;
