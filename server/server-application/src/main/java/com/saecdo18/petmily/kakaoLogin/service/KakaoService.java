@@ -37,7 +37,7 @@ public class KakaoService {
 
         formData.add("grant_type" , "authorization_code");
         formData.add("client_id" , "07df97c2858e60b2e19f630c2c397b31");
-        formData.add("redirect_uri" , "http://ec2-52-79-250-145.ap-northeast-2.compute.amazonaws.com:8080/auth/kakao/callback");
+        formData.add("redirect_uri" , "http://ec2-52-79-149-146.ap-northeast-2.compute.amazonaws.com:8080/auth/kakao/callback");
         formData.add("code" , code);
 
         String accessTokenRequest = client.post()
