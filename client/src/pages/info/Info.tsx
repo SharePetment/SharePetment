@@ -30,13 +30,14 @@ export function Component() {
 
   // TODO: submit 버튼을 눌렀을 때 회원가입이면 POST/members, 회원수정이면 PATCH/members
   const onSubmit = (data: InfoProps) => {
-    data = { ...data, address: '서울특별시 중랑구' };
+    data = { ...data, address: zip.trim() };
     console.log(data);
     // 서버에 받은 정보를 가지고 중복확인
     // 중복 응답을 받은 경우, ErrorNotice로 중복된 이름입니다라는 에러보여주기
     setNoticeMessage('중복된 닉네임입니다.');
   };
-
+  // 주소 값 받아오기
+  const [zip, setZip] = useState('');
   /* ----------------------------- useLocalStorage ---------------------------- */
   const accessToken = useReadLocalStorage('accessToken');
   const navigate = useNavigate();
@@ -115,7 +116,7 @@ export function Component() {
         {/* 주소 */}
         <div>
           <Label>주소</Label>
-          <Select size="lg" direction="column" />
+          <Select size="lg" direction="column" setZip={setZip} />
         </div>
         <Button size="lg" text="회원가입" isgreen="true" />
       </InfoForm>
