@@ -1,6 +1,7 @@
 package com.saecdo18.petmily.pet.dto;
 
 import com.saecdo18.petmily.image.dto.ImageDto;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,6 +16,7 @@ public class PetDto {
 //    @NoArgsConstructor
     @Getter
     @Builder
+    @ApiModel(value = "펫 생성용 DTO")
     public static class Post{
         @ApiModelProperty(value = "펫 이미지", example = "string", required = true)
         private MultipartFile images;
@@ -37,6 +39,7 @@ public class PetDto {
 
     @Getter
     @Builder
+    @ApiModel(value = "펫 수정용 DTO")
     public static class Patch{
 //        private String profile;
         @ApiModelProperty(value = "펫 이미지", example = "string", required = true)
@@ -58,6 +61,7 @@ public class PetDto {
     @Getter
     @Builder
     @Setter
+    @ApiModel(value = "펫 응답용 DTO")
     public static class Response {
         @ApiModelProperty(value = "펫 식별자", example = "1", required = true)
         private Long petId;
