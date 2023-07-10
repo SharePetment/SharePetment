@@ -22,7 +22,7 @@ public class MemberDto {
     @Getter
     @Builder
     public static class NickCheckRequest{
-
+        @ApiModelProperty(value = "닉네임", example = "초코아빠", required = true)
         private String nickname;
     }
     @Getter
@@ -46,25 +46,13 @@ public class MemberDto {
         private String imageURL;
     }
 
-    @Getter
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class Post{
-
-        @NotBlank
-        private String nickname;
-        @NotBlank
-        private String address;
-
-
-    }
 
     @Getter
     @Setter
     public static class Patch{
-        @Schema(description = "닉네임")
+        @ApiModelProperty(value = "닉네임", example = "초코아빠", required = true)
         private String nickname;
-        @Schema(description = "주소")
+        @ApiModelProperty(value = "주소지", example = "서울시 강서구 마곡동", required = true)
         private String address;
     }
 
