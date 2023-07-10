@@ -5,7 +5,6 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useReadLocalStorage } from 'usehooks-ts';
-// eslint-disable-next-line import/namespace
 import { fillUserInfo, editUserInfo } from '../../api/mutationfn';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { getUserInfo } from '../../api/queryfn';

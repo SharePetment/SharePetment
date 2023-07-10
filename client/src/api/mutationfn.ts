@@ -1,4 +1,4 @@
-import axios, { isAxiosError } from 'axios';
+import axios, { AxiosResponse, isAxiosError } from 'axios';
 export interface Comment {
   id: string;
   content: string;
@@ -23,8 +23,6 @@ export const editComment = async (body: Comment) => {
     }
   }
 };
-
-
 
 /* -------------------------------- 회원 정보 추가 -------------------------------- */
 export interface UserInfo {
@@ -61,8 +59,11 @@ export const editUserInfo = async (body: UserInfo) => {
       const errMessage = (error.response as AxiosResponse<{ message: string }>)
         ?.data.message;
       return errMessage;
+    }
+  }
+};
 
-/* -------------------------------- 펫 등록, 수정 -------------------------------- */    
+/* -------------------------------- 펫 등록, 수정 -------------------------------- */
 type PostPetProp = {
   formData: FormData;
   method: 'post' | 'patch';
