@@ -7,10 +7,7 @@ import com.saecdo18.petmily.member.entity.FollowMember;
 import com.saecdo18.petmily.member.entity.Member;
 import com.saecdo18.petmily.member.mapper.MemberMapper;
 import com.saecdo18.petmily.member.service.MemberService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -54,17 +51,16 @@ public class MemberController {
 
     @GetMapping("/{host-member-id}/{guest-member-id}")
     @Operation(summary = "Get Member", description = "회원 조회")
-    public ResponseEntity<MemberDto.Response> getMember(@PathVariable("host-member-id") long hostMemberId,
-                                    @PathVariable("guest-member-id") long guestMemberId) {
+    public ResponseEntity<MemberDto.Response> getMember(@ApiParam("조회될 사용자 식별자") @PathVariable("host-member-id") long hostMemberId,
+                                                        @ApiParam("조회할 사용자 식별자")@PathVariable("guest-member-id") long guestMemberId) {
         MemberDto.Response responseMember = memberService.getMember(hostMemberId, guestMemberId);
         return new ResponseEntity(responseMember, HttpStatus.OK);
     }
 
     @PatchMapping("/status/{member-id}")
-    @ApiImplicitParam(name = "member-id", value = "사용자", required = true, dataType = "long", paramType = "path")
     @ApiOperation(value = "requestbody :  {\"nickname\":\"나만의 닉네임\", \"address\":\"서울시 강서구 마곡동\"}")
-    public ResponseEntity<MemberDto.Response> patchMember(@PathVariable("member-id") long memberId,
-                                      @RequestBody MemberDto.Patch memberPatchDto) {
+    public ResponseEntity<MemberDto.Response> patchMember(@ApiParam("수정할 사용자 식별자")@PathVariable("member-id") long memberId,
+                                                          @ApiParam("수정 사항")@RequestBody MemberDto.Patch memberPatchDto) {
         MemberDto.Response responseMember = memberService.updateMemberStatus(memberId,
                 memberPatchDto.getNickname(),
                 memberPatchDto.getAddress());
@@ -72,12 +68,8 @@ public class MemberController {
     }
 
     @PostMapping("/following/{follower-id}/{following-id}")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "follower-id", value = "팔로우 당할 사용자", required = true, dataType = "long", paramType = "path"),
-            @ApiImplicitParam(name = "following-id", value = "팔로우 할 사용자", required = true, dataType = "long", paramType = "path")
-    })
-    public ResponseEntity<FollowMemberDto.Response> followingMember(@PathVariable("follower-id") long followerId,
-                                          @PathVariable("following-id") long followingId) {
+    public ResponseEntity<FollowMemberDto.Response> followingMember(@ApiParam("팔로우 당할 사용자")@PathVariable("follower-id") long followerId,
+                                                                    @ApiParam("팔로우 할 사용자")@PathVariable("following-id") long followingId) {
         FollowMemberDto.Response response = memberService.followMember(followerId, followingId);
 
         return new ResponseEntity(response, HttpStatus.OK);
@@ -85,20 +77,20 @@ public class MemberController {
 
     @GetMapping("/following/list/{following-id}")
     @Operation(summary = "Get FollowingList", description = "팔로우회원 조회")
-    public ResponseEntity<List<FollowMemberDto.Response>> followingList(@PathVariable("following-id") long followingId) {
+    public ResponseEntity<List<FollowMemberDto.Response>> followingList(@ApiParam("팔로우 한 사용자")@PathVariable("following-id") long followingId) {
         List<FollowMemberDto.Response> responses = memberService.followList(followingId);
         return new ResponseEntity<>(responses, HttpStatus.OK);
     }
 
     @PatchMapping("/image/{member-id}/{pet-id}")
-    public ResponseEntity<MemberDto.Info> changeImage(@PathVariable("member-id") long memberId,
-                                         @PathVariable("pet-id") long petId) {
+    public ResponseEntity<MemberDto.Info> changeImage(@ApiParam("이미지 변경할 사용자")@PathVariable("member-id") long memberId,
+                                                      @ApiParam("변경할 이미지의 반려동물")@PathVariable("pet-id") long petId) {
         MemberDto.Info response = memberService.changeImage(memberId, petId);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping("/nickname-check/{nickname}")
-    public ResponseEntity<MemberDto.NickCheckResponse> checkNickname(@PathVariable String nickname){
+    public ResponseEntity<MemberDto.NickCheckResponse> checkNickname(@ApiParam("중복 확인 할 닉네임")@PathVariable String nickname){
 
         MemberDto.NickCheckResponse response = memberService.checkNickname(nickname);
         return new ResponseEntity<>(response, HttpStatus.OK);

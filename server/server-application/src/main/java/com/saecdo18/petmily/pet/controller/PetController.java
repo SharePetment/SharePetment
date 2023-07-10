@@ -4,6 +4,7 @@ import com.saecdo18.petmily.pet.mapper.PetMapper;
 import com.saecdo18.petmily.pet.dto.PetDto;
 import com.saecdo18.petmily.pet.entity.Pet;
 import com.saecdo18.petmily.pet.service.PetService;
+import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,13 +26,13 @@ public class PetController {
     private final PetMapper petMapper;
 
     @PostMapping
-    public ResponseEntity<PetDto.Response> postPet(@RequestParam("memberId") long memberId,
-                                     @RequestParam("images") MultipartFile images,
-                                     @RequestParam("name") String name,
-                                     @RequestParam("age") int age,
-                                     @RequestParam("sex") String sex,
-                                     @RequestParam("species") String species,
-                                     @RequestParam("information") String information
+    public ResponseEntity<PetDto.Response> postPet(@ApiParam("견주")@RequestParam("memberId") long memberId,
+                                                   @ApiParam("반려동물 이미지")@RequestParam("images") MultipartFile images,
+                                                   @ApiParam("반려동물 이름")@RequestParam("name") String name,
+                                                   @ApiParam("반려동물 나이")@RequestParam("age") int age,
+                                                   @ApiParam("반려동물 성별")@RequestParam("sex") String sex,
+                                                   @ApiParam("반려동물 종")@RequestParam("species") String species,
+                                                   @ApiParam("반려동물 정보")@RequestParam("information") String information
                                      ) throws IOException {
 
         PetDto.Post petPostDto = PetDto.Post.builder()
@@ -50,7 +51,7 @@ public class PetController {
     }
 
     @GetMapping("/{pet-id}")
-    public ResponseEntity<PetDto.Response> getPet(@PathVariable("pet-id") long petId) {
+    public ResponseEntity<PetDto.Response> getPet(@ApiParam("반려동물")@PathVariable("pet-id") long petId) {
         PetDto.Response response = petService.getPet(petId);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -58,14 +59,14 @@ public class PetController {
 
 
     @PatchMapping("/status/{member-id}/{pet-id}")
-    public ResponseEntity<PetDto.Response> patchPet(@PathVariable("member-id") long memberId,
-                                   @PathVariable("pet-id") long petId,
-                                   @RequestParam("images") MultipartFile images,
-                                   @RequestParam("name") String name,
-                                   @RequestParam("age") int age,
-                                   @RequestParam("sex") String sex,
-                                   @RequestParam("species") String species,
-                                   @RequestParam("information") String information) throws IOException {
+    public ResponseEntity<PetDto.Response> patchPet(@ApiParam("견주")@PathVariable("member-id") long memberId,
+                                                    @ApiParam("반려동물 식별자")@PathVariable("pet-id") long petId,
+                                                    @ApiParam("반려동물 이미지")@RequestParam("images") MultipartFile images,
+                                                    @ApiParam("반려동물 이름")@RequestParam("name") String name,
+                                                    @ApiParam("반려동물 나이")@RequestParam("age") int age,
+                                                    @ApiParam("반려동물 성별")@RequestParam("sex") String sex,
+                                                    @ApiParam("반려동물 종")@RequestParam("species") String species,
+                                                    @ApiParam("반려동물 정보")@RequestParam("information") String information) throws IOException {
         PetDto.Patch petPatchDto = PetDto.Patch.builder()
                 .images(images)
                 .name(name)
@@ -80,8 +81,8 @@ public class PetController {
     }
 
     @DeleteMapping("/{member-id}/{pet-id}")
-    public ResponseEntity<?> deletePet(@PathVariable("member-id") long memberId,
-                                       @PathVariable("pet-id") long petId) {
+    public ResponseEntity<?> deletePet(@ApiParam("견주")@PathVariable("member-id") long memberId,
+                                       @ApiParam("반려동물")@PathVariable("pet-id") long petId) {
         petService.deletePet(memberId, petId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
