@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ReactComponent as Like } from '../../assets/button/like.svg';
+import { ReactComponent as Logo } from '../../assets/logo.svg';
 import Path from '../../routers/paths';
 import Button from '../button/Button';
 import Profile from '../profile/Profile';
@@ -26,7 +27,7 @@ export default function Header() {
     <HeaderContainer>
       <div>
         <Link to={Path.Home}>
-          <Like className=" w-6 h-6 stroke-defaulttext" />
+          <Logo className="w-52 h-8" />
         </Link>
       </div>
       <nav>
