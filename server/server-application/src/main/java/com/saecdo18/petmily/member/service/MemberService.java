@@ -18,6 +18,7 @@ import com.saecdo18.petmily.pet.repository.PetImageRepository;
 import com.saecdo18.petmily.pet.repository.PetRepository;
 import com.saecdo18.petmily.pet.service.PetService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -29,6 +30,7 @@ import java.util.Optional;
 
 @Transactional
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class MemberService {
     private final MemberRepository memberRepository;
@@ -106,10 +108,12 @@ public class MemberService {
 
     public FollowMemberDto.Response followMember(long followerId,long followingId){
         Member findFollower = methodFindByFollowerInMember(followerId);
+        MemberDto.Info memberInfo = memberIdToMemberInfoDto(followerId);
         Optional<FollowMember> optionalFollowMember = followMemberRepository.findByFollowerMemberAndFollowingId(findFollower, followingId);
 
+        FollowMember followMember;
         if (optionalFollowMember.isEmpty()){
-            FollowMember followMember =FollowMember.builder()
+            followMember =FollowMember.builder()
                     .followerMember(findFollower)
                     .followingId(followingId)
                     .follow(true)
@@ -118,25 +122,27 @@ public class MemberService {
 
             findFollower.updateFollowerCount(followMember.isFollow()); //member followerCount update
 
-            FollowMemberDto.Response response = followMemberMapper.followMemberToFollowMemberResponseDto(followMember);
-            return  response;
+
         }
         else{
-            FollowMember followMember = optionalFollowMember.get();
+            followMember = optionalFollowMember.get();
             boolean follow = followMember.isFollow();
             followMember.updateFollow(!follow);
 
             findFollower.updateFollowerCount(followMember.isFollow());
 
-            FollowMemberDto.Response response = followMemberMapper.followMemberToFollowMemberResponseDto(followMember);
-            return  response;
         }
+        FollowMemberDto.Response response = followMemberMapper.followMemberToFollowMemberResponseDto(followMember);
+        response.setMemberInfo(memberInfo);
+        return  response;
     }
 
     public List<FollowMemberDto.Response> followList(long followingId){
         List<FollowMember> followMemberList = followMemberRepository.findByFollowingId(followingId);
+
         List<FollowMemberDto.Response> responses = new ArrayList<>();
         for(FollowMember followMember:followMemberList){
+
             MemberDto.Info memberInfo = memberIdToMemberInfoDto(followMember.getFollowerMember().getMemberId());
             FollowMemberDto.Response response = followMemberMapper.followMemberToFollowMemberResponseDto(followMember);
             response.setMemberInfo(memberInfo);
