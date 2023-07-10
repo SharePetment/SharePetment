@@ -97,7 +97,7 @@ public class MemberController {
     }
 
     @PostMapping("/nickname-check/{nickname}")
-    public ResponseEntity checkNickname(@PathVariable String nickname){
+    public ResponseEntity<MemberDto.NickCheckResponse> checkNickname(@PathVariable String nickname){
 
         MemberDto.NickCheckResponse response = memberService.checkNickname(nickname);
         return new ResponseEntity<>(response, HttpStatus.OK);

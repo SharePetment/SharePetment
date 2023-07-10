@@ -47,7 +47,7 @@ public class FeedServiceImpl implements FeedService {
     private final FeedCommentsRepository feedCommentsRepository;
     private final FeedLikeRepository feedLikeRepository;
     private final FeedMapper feedMapper;
-    private final static String BASE_URI = "43.202.86.53:8080/feeds/all/";
+    private final static String BASE_URI = "http://43.202.86.53:8080/feeds/all/";
 
     @Override
     public FeedDto.Response createFeed(FeedDto.Post post) throws IOException {

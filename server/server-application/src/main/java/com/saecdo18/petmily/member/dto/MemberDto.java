@@ -35,8 +35,12 @@ public class MemberDto {
     @Data
     @Builder
     public static class Info{
+
+        @ApiModelProperty(value = "사용자 아이디", example = "1", required = true)
         private Long memberId;
+        @ApiModelProperty(value = "사용자 닉네임", example = "nickname", required = true)
         private String nickname;
+        @ApiModelProperty(value = "대표 이미지 URL", example = "http://image.jpg", required = true)
         private String imageURL;
     }
 

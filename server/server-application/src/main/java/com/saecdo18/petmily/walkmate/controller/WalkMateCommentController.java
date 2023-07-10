@@ -24,7 +24,7 @@ public class WalkMateCommentController {
     }
 
     @PostMapping("/{walk-id}/{member-id}")
-    private ResponseEntity postComment(@PathVariable("walk-id") long walkId,
+    private ResponseEntity<WalkMateCommentDto.Response> postComment(@PathVariable("walk-id") long walkId,
                                        @PathVariable("member-id") long memberId,
                                        @RequestBody WalkMateCommentDto.Post commentPostDto){
 

@@ -15,7 +15,9 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Configuration
 @EnableWebMvc
@@ -28,6 +30,8 @@ public class SwaggerConfig {
     public Docket swaggerApi() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .useDefaultResponseMessages(false)
+                .consumes(getConsumeContentTypes())
+                .produces(getProduceContentTypes())
                 .securityContexts(List.of(this.securityContext())) // SecurityContext 설정
                 .securitySchemes(List.of(this.apiKey())) // ApiKey 설정
                 .select()
@@ -61,5 +65,19 @@ public class SwaggerConfig {
                 .title("SwaggerTest API")
                 .description("SwaggerTest API Docs")
                 .build();
+    }
+
+    private Set<String> getConsumeContentTypes() {
+        Set<String> consumes = new HashSet<>();
+        consumes.add("application/json;charset=UTF-8");
+        consumes.add("application/x-www-form-urlencoded");
+        consumes.add("multipart/form-data; boundary=<calculated when request is sent>");
+        return consumes;
+    }
+
+    private Set<String> getProduceContentTypes() {
+        Set<String> produces = new HashSet<>();
+        produces.add("application/json;charset=UTF-8");
+        return produces;
     }
 }
