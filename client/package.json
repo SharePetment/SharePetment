@@ -4,14 +4,12 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --port 5374",
     "build": "tsc && vite build",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0 --fix",
     "preview": "vite preview",
     "prepare": "cd .. && husky install client/.husky",
-    "lint-staged": "lint-staged",
-    "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "lint-staged": "lint-staged"
   },
   "lint-staged": {
     "*.{ts,tsx}": [
