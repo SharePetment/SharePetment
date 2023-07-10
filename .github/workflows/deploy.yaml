@@ -19,14 +19,13 @@ jobs:
       - name: SHOW AWS CLI VERSION
         run: |
           aws --version
-      - name: Sync Bucket
+      - name: Deploy to S3
+        uses: jaerin_Lee/s3-sync-action@fe-feat/page
+        with:
+          args: --delete
         env:
+          AWS_S3_BUCKET: ${{ secrets.AWS_STAGING_BUCKET_NAME }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_EC2_METADATA_DISABLED: true
-        run: |
-          aws s3 sync .\
-            --region ap-northeast-2\
-            dist s3://share-petment\
-            --delete
-        working-directory: ./client
+          AWS_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+          SOURCE_DIR: 'dist'
