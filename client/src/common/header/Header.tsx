@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ReactComponent as Like } from '../../assets/button/like.svg';
 import { ReactComponent as Logo } from '../../assets/logo.svg';
 import Path from '../../routers/paths';
 import Button from '../button/Button';

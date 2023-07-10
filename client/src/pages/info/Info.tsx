@@ -1,11 +1,10 @@
 import { ErrorMessage } from '@hookform/error-message';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useReadLocalStorage } from 'usehooks-ts';
 import { fillUserInfo, editUserInfo } from '../../api/mutationfn';
-import { getUserInfo } from '../../api/queryfn';
 import { ReactComponent as Like } from '../../assets/button/like.svg';
 import { ReactComponent as Logo } from '../../assets/logo.svg';
 import Button from '../../common/button/Button';
@@ -31,31 +30,31 @@ type InfoProps = {
   address: string;
 };
 
-interface IPets {
-  petId: number;
-  profile: string;
-  name: string;
-  age: number;
-  sex: string;
-  species: string;
-  information: string;
-  memberId: number;
-  createdAt: string;
-  modifiedAt: string;
-}
-interface IUserInfo {
-  memberId: number;
-  kakaoName: string | number | readonly string[] | undefined;
-  email: string;
-  nickname: string;
-  address: string;
-  followerCount: number;
-  animalParents: boolean;
-  guestFollowStatus: boolean;
-  pets: IPets[];
-  createdAt: number[];
-  modifiedAt: number[];
-}
+// interface IPets {
+//   petId: number;
+//   profile: string;
+//   name: string;
+//   age: number;
+//   sex: string;
+//   species: string;
+//   information: string;
+//   memberId: number;
+//   createdAt: string;
+//   modifiedAt: string;
+// }
+// interface IUserInfo {
+//   memberId: number;
+//   kakaoName: string | number | readonly string[] | undefined;
+//   email: string;
+//   nickname: string;
+//   address: string;
+//   followerCount: number;
+//   animalParents: boolean;
+//   guestFollowStatus: boolean;
+//   pets: IPets[];
+//   createdAt: number[];
+//   modifiedAt: number[];
+// }
 
 export function Component() {
   const {
@@ -111,7 +110,8 @@ export function Component() {
   });
 
   // 중복확인 체크
-  const handleCheckNickname = async (e: React.MouseEvent, nickname: string) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const handleCheckNickname = async (e: React.MouseEvent) => {
     e.preventDefault();
     const resultBeforeValidate = await trigger('nickname');
     if (!resultBeforeValidate) return;
