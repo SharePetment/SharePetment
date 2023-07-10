@@ -3,6 +3,7 @@ package com.saecdo18.petmily.member.dto;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.saecdo18.petmily.pet.dto.PetDto;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
@@ -54,9 +55,9 @@ public class MemberDto {
     @Getter
     @Setter
     public static class Patch{
-
+        @ApiModelProperty(value="닉네임")
         private String nickname;
-
+        @ApiModelProperty(value="주소")
         private String address;
     }
 
