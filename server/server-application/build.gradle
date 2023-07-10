@@ -2,8 +2,6 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '2.7.13'
 	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
-
-	id "org.asciidoctor.jvm.convert" version "3.3.2"
 }
 
 group = 'com.saecdo18'
@@ -12,31 +10,19 @@ version = '0.0.1-SNAPSHOT'
 java {
 	sourceCompatibility = '11'
 }
-//
-//configurations {
-//	asciidoctorExt
-//	compileOnly {
-//		extendsFrom annotationProcessor
-//	}
-//}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
 
 repositories {
 	mavenCentral()
 }
 
-ext {
-	set('snippetsDir', file("build/generated-snippets"))//
-}
-
-configurations {
-	asciidoctorExtensions //
-}
-
 dependencies {
-	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
-	asciidoctorExtensions 'org.springframework.restdocs:spring-restdocs-asciidoctor'
-	implementation 'com.google.code.gson:gson'
-	implementation 'org.springframework.restdocs:spring-restdocs-core:2.0.7.RELEASE'
+
 
 	implementation 'io.springfox:springfox-boot-starter:3.0.0'
 	implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '3.0.0'
@@ -64,30 +50,4 @@ dependencies {
 
 tasks.named('test') {
 	useJUnitPlatform()
-}
-
-// (7)
-tasks.named('asciidoctor') {
-	configurations "asciidoctorExtensions"
-	inputs.dir snippetsDir
-	dependsOn test
-}
-
-// (8)
-task copyDocument(type: Copy) {
-	dependsOn asciidoctor            // (8-1)
-	from file("${asciidoctor.outputDir}")   // (8-2)
-	into file("src/main/resources/static/docs")   // (8-3)
-}
-
-build {
-	dependsOn copyDocument  // (9)
-}
-
-// (10)
-bootJar {
-	dependsOn copyDocument    // (10-1)
-	from ("${asciidoctor.outputDir}") {  // (10-2)
-		into 'static/docs'     // (10-3)
-	}
 }
