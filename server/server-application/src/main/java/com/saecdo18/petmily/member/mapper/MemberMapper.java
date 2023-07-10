@@ -7,7 +7,6 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 
 @Mapper(componentModel = "spring")
 public interface MemberMapper {
-    Member memberPostDtoToMember(MemberDto.Post memberPostDto);
 
     default Member memberPatchDtoToMember(MemberDto.Patch memberPatchDto){
         Member member= Member.emailNicknameAddress()

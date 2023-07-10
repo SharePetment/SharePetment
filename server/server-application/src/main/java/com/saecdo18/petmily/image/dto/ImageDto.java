@@ -1,9 +1,11 @@
 package com.saecdo18.petmily.image.dto;
 
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 @Data
+@ApiModel(value = "이미지 정보 DTO")
 public class ImageDto {
     @ApiModelProperty(value = "이미지 아이디", example = "1", required = true)
     private Long imageId;

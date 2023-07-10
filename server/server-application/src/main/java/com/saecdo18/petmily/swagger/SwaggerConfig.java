@@ -27,30 +27,28 @@ public class SwaggerConfig {
         return new InternalResourceViewResolver();
     }
 
-    @Bean
-    public Docket swaggerApi2(){
-        return new Docket(DocumentationType.OAS_30)
-                .groupName("API 2")
-                .select()
-                .apis(RequestHandlerSelectors.basePackage("com.saecdo18.petmily.walkmate.controller"))
-                .paths(PathSelectors.any())
-                .build()
-                .apiInfo(mySwaggerInfo());
-    }
+//    @Bean
+//    public Docket swaggerApi2(){
+//        return new Docket(DocumentationType.OAS_30)
+//                .groupName("API 2")
+//                .select()
+//                .apis(RequestHandlerSelectors.basePackage("com.saecdo18.petmily.walkmate.controller"))
+//                .paths(PathSelectors.any())
+//                .build()
+//                .apiInfo(mySwaggerInfo());
+//    }
     @Bean
     public Docket swaggerApi() {
-        return new Docket(DocumentationType.SWAGGER_2)
+        return new Docket(DocumentationType.OAS_30)
                 .useDefaultResponseMessages(false)
                 .consumes(getConsumeContentTypes())
                 .produces(getProduceContentTypes())
                 .securityContexts(List.of(this.securityContext())) // SecurityContext 설정
                 .securitySchemes(List.of(this.apiKey())) // ApiKey 설정
                 .select()
-//                .apis(RequestHandlerSelectors.basePackage("com.saecdo18.serverapplication.member.controller"))
                 .apis(RequestHandlerSelectors.any())
                 .paths(PathSelectors.any())
                 .build()
-//                .pathMapping("/api")
                 .apiInfo(mySwaggerInfo());
     }
     private SecurityContext securityContext() {

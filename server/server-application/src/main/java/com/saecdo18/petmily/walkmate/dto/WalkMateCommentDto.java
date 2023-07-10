@@ -1,6 +1,7 @@
 package com.saecdo18.petmily.walkmate.dto;
 
 import com.saecdo18.petmily.member.dto.MemberDto;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.Getter;
@@ -13,6 +14,7 @@ public class WalkMateCommentDto {
 
     @Getter
     @Setter
+    @ApiModel(value = "산책 댓글 생성 DTO")
     public static class Post{
 
         @ApiModelProperty(value = "내용", example = "내용1", required = true)
@@ -21,6 +23,7 @@ public class WalkMateCommentDto {
 
     @Getter
     @Setter
+    @ApiModel(value = "산책 댓글 수정 DTO")
     public static class Patch{
 
         @ApiModelProperty(value = "내용", example = "내용1", required = true)
@@ -29,6 +32,7 @@ public class WalkMateCommentDto {
 
     @Getter
     @Setter
+    @ApiModel(value = "산책 댓글 응답 DTO")
     public static class Response{
 
         @ApiModelProperty(value = "댓글 식별자", example = "1", required = true)

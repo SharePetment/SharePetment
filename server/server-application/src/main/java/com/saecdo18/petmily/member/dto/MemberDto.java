@@ -3,6 +3,7 @@ package com.saecdo18.petmily.member.dto;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.saecdo18.petmily.pet.dto.PetDto;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
@@ -21,12 +22,14 @@ public class MemberDto {
     }
     @Getter
     @Builder
+    @ApiModel(value = "사용자 닉네임 중복 확인 요청 DTO")
     public static class NickCheckRequest{
         @ApiModelProperty(value = "닉네임", example = "초코아빠", required = true)
         private String nickname;
     }
     @Getter
     @Builder
+    @ApiModel(value = "사용자 닉네임 중복 확인 응답 DTO")
     public static class NickCheckResponse{
         @ApiModelProperty(value = "닉네임 중복확인 메세지", example = "중복된 닉네임입니다", required = true)
         private String checkMessage;
@@ -36,6 +39,7 @@ public class MemberDto {
 
     @Data
     @Builder
+    @ApiModel(value = "사용자 정보 DTO")
     public static class Info{
 
         @ApiModelProperty(value = "사용자 아이디", example = "1", required = true)
@@ -49,6 +53,7 @@ public class MemberDto {
 
     @Getter
     @Setter
+    @ApiModel(value = "사용자 정보 수정 DTO")
     public static class Patch{
         @ApiModelProperty(value = "닉네임", example = "초코아빠", required = true)
         private String nickname;
@@ -60,6 +65,7 @@ public class MemberDto {
     @Getter
     @Builder
     @Setter
+    @ApiModel(value = "사용자 정보 응답 DTO")
     public static class Response{
         @ApiModelProperty(value = "댓글 아이디", example = "1", required = true)
         private MemberDto.Info memberInfo;

@@ -2,6 +2,7 @@ package com.saecdo18.petmily.feed.dto;
 
 import com.saecdo18.petmily.image.dto.ImageDto;
 import com.saecdo18.petmily.member.dto.MemberDto;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
@@ -16,6 +17,7 @@ public class FeedDto {
 
     @Data
     @Builder
+    @ApiModel(value = "피드 생성용 DTO")
     public static class Post {
         @NotBlank
         @ApiModelProperty(value = "사용자 아이디", example = "1", required = true)
@@ -30,6 +32,7 @@ public class FeedDto {
 
     @Data
     @Builder
+    @ApiModel(value = "피드 수정용 DTO")
     public static class Patch{
         @ApiModelProperty(value = "피드 아이디", example = "1", required = true)
         private Long feedId;
@@ -45,6 +48,7 @@ public class FeedDto {
 
     @Data
 //    @Builder
+    @ApiModel(value = "피드 응답용 DTO")
     public static class Response {
         @ApiModelProperty(value = "피드 아이디", example = "1", required = true)
         private Long feedId;
@@ -77,6 +81,7 @@ public class FeedDto {
 
     @Data
     @Builder
+    @ApiModel(value = "피드 좋아요 DTO")
     public static class Like {
         @ApiModelProperty(value = "좋아요 수", example = "113", required = true)
         private int likeCount;
@@ -85,6 +90,7 @@ public class FeedDto {
     }
 
     @Data
+    @ApiModel(value = "이전 피드 아이디 리스트 DTO")
     public static class PreviousListIds {
         @ApiModelProperty(value = "이전에 받은 피드 아이디 리스트", required = true)
         private List<Long> previousListIds;

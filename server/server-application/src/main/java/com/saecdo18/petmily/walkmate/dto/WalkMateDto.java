@@ -2,6 +2,7 @@ package com.saecdo18.petmily.walkmate.dto;
 
 import com.saecdo18.petmily.member.dto.MemberDto;
 import com.saecdo18.petmily.walkmate.entity.WalkMateComment;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
@@ -14,6 +15,7 @@ public class WalkMateDto {
     @Getter
     @Setter
 //    @Builder
+    @ApiModel(value = "산책게시글 생성 DTO")
     public static class Post{
 
         //        private Long walkMatePostId;
@@ -43,6 +45,7 @@ public class WalkMateDto {
 
     @Getter
     @Setter
+    @ApiModel(value = "산책게시글 수정 DTO")
 //    @Builder
     public static class Patch{
 
@@ -70,6 +73,7 @@ public class WalkMateDto {
 
     @Getter
     @Setter
+    @ApiModel(value = "산책게시글 응답 DTO")
 //    @Builder
     public static class Response {
 
@@ -105,6 +109,7 @@ public class WalkMateDto {
 
     @Data
     @Builder
+    @ApiModel(value = "산책게시글 좋아요 DTO")
     public static class Like{
         @ApiModelProperty(value = "좋아요 수", example = "3", required = true)
         private int likeCount;
@@ -114,6 +119,7 @@ public class WalkMateDto {
 
     @Data
     @Builder
+    @ApiModel(value = "산책게시글 모집 여부 DTO")
     public static class Open{
         @ApiModelProperty(value = "게시글 식별자", example = "1", required = true)
         private Long walkMatePostId;

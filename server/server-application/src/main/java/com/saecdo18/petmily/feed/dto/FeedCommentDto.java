@@ -1,6 +1,7 @@
 package com.saecdo18.petmily.feed.dto;
 
 import com.saecdo18.petmily.member.dto.MemberDto;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,6 +16,7 @@ import java.time.LocalDateTime;
 public class FeedCommentDto {
 
     @Data
+    @ApiModel(value = "피드 댓글 응답 DTO")
     public static class Response {
         @ApiModelProperty(value = "댓글 아이디", example = "1", required = true)
         private Long feedCommentsId;
@@ -26,6 +28,7 @@ public class FeedCommentDto {
         private LocalDateTime modifiedAt;
     }
     @Data
+    @ApiModel(value = "피드 댓글 생성 DTO")
     public static class Post {
         @NotNull
         @ApiModelProperty(value = "사용자 아이디", example = "1", required = true)
@@ -39,6 +42,7 @@ public class FeedCommentDto {
     }
 
     @Data
+    @ApiModel(value = "피드 댓글 수정 DTO")
     public static class Patch {
         @ApiModelProperty(value = "피드 id", example = "1", required = true)
         @NotNull
