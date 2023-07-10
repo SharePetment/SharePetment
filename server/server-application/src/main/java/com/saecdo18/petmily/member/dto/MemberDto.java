@@ -22,7 +22,7 @@ public class MemberDto {
     @Getter
     @Builder
     public static class NickCheckRequest{
-        @NotBlank
+
         private String nickname;
     }
     @Getter

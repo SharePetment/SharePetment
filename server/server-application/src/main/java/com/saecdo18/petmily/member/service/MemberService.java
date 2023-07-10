@@ -153,10 +153,10 @@ public class MemberService {
                 .build();
     }
 
-    public MemberDto.NickCheckResponse checkNickname(MemberDto.NickCheckRequest checkRequest){
+    public MemberDto.NickCheckResponse checkNickname(String nickname){
         String message = "";
         boolean enable=false;
-        if(memberRepository.findByNickname(checkRequest.getNickname()).isPresent()){
+        if(memberRepository.findByNickname(nickname).isPresent()){
             message = "중복된 닉네임입니다";
 
         }

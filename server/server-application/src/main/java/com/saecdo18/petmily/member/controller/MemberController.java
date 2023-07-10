@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -25,6 +26,7 @@ import java.util.List;
 @CrossOrigin
 @RequestMapping("/members")
 @RequiredArgsConstructor
+@Slf4j
 public class MemberController {
     private final MemberMapper memberMapper;
     private final MemberService memberService;
@@ -85,9 +87,10 @@ public class MemberController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @PostMapping("/nickname-check")
-    public ResponseEntity checkNickname(@Valid @RequestBody MemberDto.NickCheckRequest checkRequest){
-        MemberDto.NickCheckResponse response = memberService.checkNickname(checkRequest);
+    @PostMapping("/nickname-check/{nickname}")
+    public ResponseEntity checkNickname(@PathVariable String nickname){
+
+        MemberDto.NickCheckResponse response = memberService.checkNickname(nickname);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 //localhost:8080/members/nickname-check
