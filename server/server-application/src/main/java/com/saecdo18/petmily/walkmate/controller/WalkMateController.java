@@ -7,6 +7,9 @@ import com.saecdo18.petmily.walkmate.entity.WalkMate;
 import com.saecdo18.petmily.walkmate.mapper.WalkMateMapper;
 import com.saecdo18.petmily.walkmate.repository.WalkMateRepository;
 import com.saecdo18.petmily.walkmate.service.WalkMateService;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -43,6 +46,11 @@ public class WalkMateController {
     }
 
     @PatchMapping("/{walk-id}/{member-id}")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "walk-id", value = "산책게시물 식별자", required = true, dataType = "long", paramType = "path"),
+            @ApiImplicitParam(name = "member-id", value = "게시글사용자 식별자", required = true, dataType = "long", paramType = "path")
+    })
+    @ApiOperation(value = "산책게시물 수정")
     public ResponseEntity updateWalk(@PathVariable("walk-id") long walkId,
                                   @PathVariable("member-id") long memberId,
                                   @RequestBody WalkMateDto.Patch walkPatchDto){

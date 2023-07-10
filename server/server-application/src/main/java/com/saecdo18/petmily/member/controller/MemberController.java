@@ -7,6 +7,10 @@ import com.saecdo18.petmily.member.entity.FollowMember;
 import com.saecdo18.petmily.member.entity.Member;
 import com.saecdo18.petmily.member.mapper.MemberMapper;
 import com.saecdo18.petmily.member.service.MemberService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -27,6 +31,7 @@ import java.util.List;
 @RequestMapping("/members")
 @RequiredArgsConstructor
 @Slf4j
+@Api(tags = {"member-Controller"})
 public class MemberController {
     private final MemberMapper memberMapper;
     private final MemberService memberService;
@@ -55,9 +60,10 @@ public class MemberController {
     }
 
     @PatchMapping("/status/{member-id}")
-    @Operation(summary = "Patch Member", description = "회원 조회")
+    @ApiImplicitParam(name = "member-id", value = "사용자", required = true, dataType = "long", paramType = "path")
+    @ApiOperation(value = "회원 정보 수정")
     public ResponseEntity patchMember(@PathVariable("member-id") long memberId,
-                                      @Parameter(description = "회원 수정 설명") @Valid @RequestBody MemberDto.Patch memberPatchDto) {
+                                      @Valid @RequestBody MemberDto.Patch memberPatchDto) {
         MemberDto.Response responseMember = memberService.updateMemberStatus(memberId,
                 memberPatchDto.getNickname(),
                 memberPatchDto.getAddress());
@@ -65,7 +71,10 @@ public class MemberController {
     }
 
     @PostMapping("/following/{follower-id}/{following-id}")
-    @Operation(summary = "Post FollowMember", description = "회원 조회")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "follower-id", value = "팔로우 당할 사용자", required = true, dataType = "long", paramType = "path"),
+            @ApiImplicitParam(name = "following-id", value = "팔로우 할 사용자", required = true, dataType = "long", paramType = "path")
+    })
     public ResponseEntity followingMember(@PathVariable("follower-id") long followerId,
                                           @PathVariable("following-id") long followingId) {
         FollowMemberDto.Response response = memberService.followMember(followerId, followingId);

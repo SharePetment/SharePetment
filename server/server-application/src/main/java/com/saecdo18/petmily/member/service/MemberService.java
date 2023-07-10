@@ -94,8 +94,10 @@ public class MemberService {
 
     public MemberDto.Response updateMemberStatus(long memberId, String nickname, String address){
         Member findMember = methodFindByMemberIdMember(memberId);
+        MemberDto.Info memberInfo= memberIdToMemberInfoDto(memberId);
         findMember.update(nickname, address);
         MemberDto.Response responseMember = memberMapper.memberToMemberResponseDto(findMember);
+        responseMember.setMemberInfo(memberInfo);
         return responseMember;
     }
 

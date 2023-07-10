@@ -90,7 +90,7 @@ public class KakaoService {
         Optional<Member> optionalMember = isRegister(email);
         Member responseMember;
         boolean present=false;
-        if(optionalMember.isPresent()){
+        if(optionalMember.isPresent() && optionalMember.get().getAddress() != null && optionalMember.get().getNickname() != null){
             responseMember= optionalMember.get();
             present=true;
         }
