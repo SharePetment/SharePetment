@@ -3,6 +3,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useReadLocalStorage } from 'usehooks-ts';
 import { fillUserInfo, editUserInfo } from '../../api/mutationfn';
 import { getUserInfo } from '../../api/queryfn';
 import { ReactComponent as Like } from '../../assets/button/like.svg';
@@ -65,7 +66,6 @@ export function Component() {
     formState: { errors },
   } = useForm<InfoProps>({ mode: 'onChange' });
 
-
   const [noticeMessage, setNoticeMessage] = useState('');
   const nicknameValue = watch('nickname');
 
@@ -77,33 +77,28 @@ export function Component() {
     // 서버에 받은 정보를 가지고 중복확인
     // 중복 응답을 받은 경우, ErrorNotice로 중복된 이름입니다라는 에러보여주기
     setNoticeMessage('중복된 닉네임입니다.');
+
+    // userId params가 존재하면 userInfoEditMutation
+    if (userId) userInfoEditMutation.mutate(data);
+    else userInfoFillMutation.mutate(data);
   };
-    
+
   // 주소 값 받아오기
   const [zip, setZip] = useState('');
-  
+
   /* ----------------------------- useLocalStorage ---------------------------- */
   const accessToken = useReadLocalStorage('accessToken');
   const navigate = useNavigate();
 
-  // const accessToken = useReadLocalStorage('accessToken');
-
-  // 비회원 로그인이 직접적으로 '/info'로 접근했을 때 확인해야 함
-  // useEffect(() => {
-  //   if (!accessToken) {
-  //     navigate('/');
-  //   }
-  // }, [accessToken, navigate]);
+  useEffect(() => {
+    if (!accessToken) {
+      navigate('/');
+    }
+  }, [accessToken, navigate]);
 
   useEffect(() => {
     if (!nicknameValue?.length) setNoticeMessage('');
   }, [nicknameValue]);
-
-  // 회원정보 가져오기
-  // const { data, isLoading } = useQuery<IUserInfo>({
-  //   queryKey: ['userInfo'],
-  //   queryFn: () => getUserInfo(userId, userId),
-  // });
 
   // 추가정보 등록 POST
   const userInfoFillMutation = useMutation({
@@ -130,15 +125,6 @@ export function Component() {
     // );
 
     setNoticeMessage('사용 불가능한 닉네임입니다.');
-  };
-
-  // POST/members
-  const onSubmit = (data: InfoProps) => {
-    data = { ...data, address: '' };
-
-    // userId params가 존재하면 userInfoEditMutation
-    if (userId) userInfoEditMutation.mutate(data);
-    else userInfoFillMutation.mutate(data);
   };
 
   return (
