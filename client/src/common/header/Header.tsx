@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ReactComponent as Like } from '../../assets/button/like.svg';
 import { ReactComponent as Logo } from '../../assets/logo.svg';
+import User from '../../assets/user.png';
 import Path from '../../routers/paths';
 import Button from '../button/Button';
 import Profile from '../profile/Profile';
@@ -73,7 +73,11 @@ export default function Header() {
             <Link to={Path.MyPage}>
               <Profile
                 size="md"
-                url="https://huchu.link/MZFVNjh"
+                url={
+                  animalParents
+                    ? 'https://cdn-icons-png.flaticon.com/512/3364/3364044.png'
+                    : ''
+                }
                 isgreen="false"
               />
             </Link>
