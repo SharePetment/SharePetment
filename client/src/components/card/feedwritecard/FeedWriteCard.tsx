@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Navigation } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { ReactComponent as Close } from '../../../assets/button/close.svg';
@@ -23,6 +24,7 @@ import '../../../common/carousel/carousel.css';
 export default function FeedWriteCard() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [savedFile, setSavedFile] = useState<string[]>([]);
+  const navigate = useNavigate();
 
   // const imgFile = new FormData();
 
@@ -54,7 +56,11 @@ export default function FeedWriteCard() {
 
       <div className="w-screen h-screen bg-zinc-900/70  absolute flex items-center justify-center">
         <Container>
-          <Close className="absolute right-6 top-6" fill="black" />
+          <Close
+            className="absolute right-6 top-6 cursor-pointer"
+            fill="black"
+            onClick={() => navigate(-1)}
+          />
           <Wrap>
             <Title>게시물 작성</Title>
           </Wrap>
