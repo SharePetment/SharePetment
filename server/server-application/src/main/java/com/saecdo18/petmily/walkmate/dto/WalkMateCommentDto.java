@@ -10,10 +10,6 @@ import java.time.LocalDateTime;
 @Data
 public class WalkMateCommentDto {
 
-    //    private String content;
-//    private Integer likes;
-//    private WalkMate walkMate;
-//    private Member member;
     @Getter
     @Setter
     public static class Post{
