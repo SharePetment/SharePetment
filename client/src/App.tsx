@@ -8,10 +8,11 @@ function App() {
   const matchInfoEditing = useMatch('/info/:userId'); //object || null
   const matchFeed = useMatch('/home');
   const matchFeedPosting = useMatch('/feed-posting');
+  const loadingFeed = useMatch('/loading');
 
   return (
     <>
-      {!(matchHome || matchInfo || matchInfoEditing || matchFeedPosting) && (
+      {!(matchHome || matchInfo || matchInfoEditing || matchFeedPosting || loadingFeed) && (
         <Header isloginuser="true" />
       )}
       <Outlet />

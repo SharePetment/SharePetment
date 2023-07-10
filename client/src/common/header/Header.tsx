@@ -1,16 +1,16 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ReactComponent as Like } from '../../assets/button/like.svg';
+import { ReactComponent as Logo } from '../../assets/logo.svg';
 import Path from '../../routers/paths';
 import Button from '../button/Button';
 import Profile from '../profile/Profile';
 import { HeaderContainer, NavItem, NavList } from './Header.styled';
 
-interface HeaderProps {
-  isloginuser: string;
-}
-
-export default function Header({ isloginuser }: HeaderProps) {
+export default function Header() {
+  const memberId = localStorage.getItem('memberId');
+  const animalParents = localStorage.getItem('animalParents');
+  console.log(typeof memberId);
   const navigate = useNavigate();
   const [currentTab, setCurrentTab] = useState(0);
   const selectTabHandler = (index: number) => {
@@ -24,17 +24,40 @@ export default function Header({ isloginuser }: HeaderProps) {
   ];
 
   return (
-    <>
-      {isloginuser === 'true' ? (
-        <HeaderContainer>
-          <div>
-            <Link to={Path.Home}>
-              <Like className=" w-6 h-6 stroke-defaulttext" />
-            </Link>
-          </div>
-          <nav>
-            <NavList>
-              {tabs.map((tab, index) => (
+    <HeaderContainer>
+      <div>
+        <Link to={Path.Home}>
+          <Logo className="w-52 h-8" />
+        </Link>
+      </div>
+      <nav>
+        <NavList>
+          {memberId === null && (
+            <NavItem
+              onClick={() => selectTabHandler(0)}
+              currenttab={currentTab}
+              idx={0}>
+              <Link to={Path.Home}>홈</Link>
+            </NavItem>
+          )}
+          {memberId !== null && animalParents === 'false' ? (
+            <>
+              <NavItem
+                onClick={() => selectTabHandler(0)}
+                currenttab={currentTab}
+                idx={0}>
+                <Link to={Path.Home}>홈</Link>
+              </NavItem>
+              <NavItem
+                onClick={() => selectTabHandler(1)}
+                currenttab={currentTab}
+                idx={1}>
+                <Link to={Path.FeedPosting}>포스트</Link>
+              </NavItem>
+            </>
+          ) : (
+            tabs.map((tab, index) => {
+              return (
                 <NavItem
                   key={index}
                   onClick={() => selectTabHandler(index)}
@@ -42,51 +65,29 @@ export default function Header({ isloginuser }: HeaderProps) {
                   idx={index}>
                   <Link to={tab.link}>{tab.name}</Link>
                 </NavItem>
-              ))}
-              <li>
-                <Link to={Path.MyPage}>
-                  <Profile
-                    size="md"
-                    url="https://huchu.link/MZFVNjh"
-                    isgreen="false"
-                  />
-                </Link>
-              </li>
-              <li>
-                <Button
-                  size="sm"
-                  text="로그아웃"
-                  isgreen="true"
-                  handler={() => navigate('/')}
-                />
-              </li>
-            </NavList>
-          </nav>
-        </HeaderContainer>
-      ) : (
-        <HeaderContainer>
-          <div>
-            <Link to={Path.Home}>
-              <Like />
+              );
+            })
+          )}
+
+          <li>
+            <Link to={Path.MyPage}>
+              <Profile
+                size="md"
+                url="https://huchu.link/MZFVNjh"
+                isgreen="false"
+              />
             </Link>
-          </div>
-          <nav>
-            <NavList>
-              <li>
-                <Link to={Path.Home}>홈</Link>
-              </li>
-              <li>
-                <Button
-                  size="sm"
-                  text="로그인"
-                  isgreen="true"
-                  handler={() => navigate('/')}
-                />
-              </li>
-            </NavList>
-          </nav>
-        </HeaderContainer>
-      )}
-    </>
+          </li>
+          <li>
+            <Button
+              size="sm"
+              text="로그아웃"
+              isgreen="true"
+              handler={() => navigate('/')}
+            />
+          </li>
+        </NavList>
+      </nav>
+    </HeaderContainer>
   );
 }
