@@ -34,9 +34,9 @@ public class SwaggerConfig {
 //                .apis(RequestHandlerSelectors.basePackage("com.saecdo18.serverapplication.member.controller"))
                 .apis(RequestHandlerSelectors.any())
                 .paths(PathSelectors.any())
-                .build()
+                .build();
 //                .pathMapping("/api")
-                .apiInfo(mySwaggerInfo());
+//                .apiInfo(mySwaggerInfo());
     }
     private SecurityContext securityContext() {
         return SecurityContext.builder()

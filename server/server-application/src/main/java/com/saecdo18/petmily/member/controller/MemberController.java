@@ -19,25 +19,26 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.*;
+
 
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
 @RestController
-@Validated
 @CrossOrigin
 @RequestMapping("/members")
-@RequiredArgsConstructor
-@Slf4j
-@Api(tags = {"member-Controller"})
 public class MemberController {
     private final MemberMapper memberMapper;
     private final MemberService memberService;
-    private final static String MEMBER_CREATE_URI = "localhost:8080/members";
 
-//    @PostMapping
+    public MemberController(MemberMapper memberMapper, MemberService memberService) {
+        this.memberMapper = memberMapper;
+        this.memberService = memberService;
+    }
+    //    @PostMapping
 //    public ResponseEntity postMember(@Valid @RequestBody MemberDto.Post memberPostDto) {
 //        Member mappingMember = memberMapper.memberPostDtoToMember(memberPostDto);
 //
@@ -53,7 +54,7 @@ public class MemberController {
 
     @GetMapping("/{host-member-id}/{guest-member-id}")
     @Operation(summary = "Get Member", description = "회원 조회")
-    public ResponseEntity getMember(@PathVariable("host-member-id") long hostMemberId,
+    public ResponseEntity<MemberDto.Response> getMember(@PathVariable("host-member-id") long hostMemberId,
                                     @PathVariable("guest-member-id") long guestMemberId) {
         MemberDto.Response responseMember = memberService.getMember(hostMemberId, guestMemberId);
         return new ResponseEntity(responseMember, HttpStatus.OK);
@@ -61,9 +62,9 @@ public class MemberController {
 
     @PatchMapping("/status/{member-id}")
     @ApiImplicitParam(name = "member-id", value = "사용자", required = true, dataType = "long", paramType = "path")
-    @ApiOperation(value = "회원 정보 수정")
-    public ResponseEntity patchMember(@PathVariable("member-id") long memberId,
-                                      @Valid @RequestBody MemberDto.Patch memberPatchDto) {
+    @ApiOperation(value = "requestbody :  {\"nickname\":\"나만의 닉네임\", \"address\":\"서울시 강서구 마곡동\"}")
+    public ResponseEntity<MemberDto.Response> patchMember(@PathVariable("member-id") long memberId,
+                                      @RequestBody MemberDto.Patch memberPatchDto) {
         MemberDto.Response responseMember = memberService.updateMemberStatus(memberId,
                 memberPatchDto.getNickname(),
                 memberPatchDto.getAddress());
@@ -75,7 +76,7 @@ public class MemberController {
             @ApiImplicitParam(name = "follower-id", value = "팔로우 당할 사용자", required = true, dataType = "long", paramType = "path"),
             @ApiImplicitParam(name = "following-id", value = "팔로우 할 사용자", required = true, dataType = "long", paramType = "path")
     })
-    public ResponseEntity followingMember(@PathVariable("follower-id") long followerId,
+    public ResponseEntity<FollowMemberDto.Response> followingMember(@PathVariable("follower-id") long followerId,
                                           @PathVariable("following-id") long followingId) {
         FollowMemberDto.Response response = memberService.followMember(followerId, followingId);
 
@@ -83,21 +84,21 @@ public class MemberController {
     }
 
     @GetMapping("/following/list/{following-id}")
-    @Operation(summary = "Get FollowingList", description = "회원 조회")
-    public ResponseEntity followingList(@PathVariable("following-id") long followingId) {
+    @Operation(summary = "Get FollowingList", description = "팔로우회원 조회")
+    public ResponseEntity<List<FollowMemberDto.Response>> followingList(@PathVariable("following-id") long followingId) {
         List<FollowMemberDto.Response> responses = memberService.followList(followingId);
         return new ResponseEntity<>(responses, HttpStatus.OK);
     }
 
     @PatchMapping("/image/{member-id}/{pet-id}")
-    public ResponseEntity<?> changeImage(@PathVariable("member-id") long memberId,
+    public ResponseEntity<MemberDto.Info> changeImage(@PathVariable("member-id") long memberId,
                                          @PathVariable("pet-id") long petId) {
         MemberDto.Info response = memberService.changeImage(memberId, petId);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping("/nickname-check/{nickname}")
-    public ResponseEntity checkNickname(@PathVariable String nickname){
+    public ResponseEntity<MemberDto.NickCheckResponse> checkNickname(@PathVariable String nickname){
 
         MemberDto.NickCheckResponse response = memberService.checkNickname(nickname);
         return new ResponseEntity<>(response, HttpStatus.OK);

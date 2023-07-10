@@ -25,7 +25,7 @@ public class PetController {
     private final PetMapper petMapper;
 
     @PostMapping
-    public ResponseEntity<?> postPet(@RequestParam("memberId") long memberId,
+    public ResponseEntity<PetDto.Response> postPet(@RequestParam("memberId") long memberId,
                                      @RequestParam("images") MultipartFile images,
                                      @RequestParam("name") String name,
                                      @RequestParam("age") int age,
@@ -50,7 +50,7 @@ public class PetController {
     }
 
     @GetMapping("/{pet-id}")
-    public ResponseEntity getPet(@PathVariable("pet-id") long petId) {
+    public ResponseEntity<PetDto.Response> getPet(@PathVariable("pet-id") long petId) {
         PetDto.Response response = petService.getPet(petId);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -58,7 +58,7 @@ public class PetController {
 
 
     @PatchMapping("/status/{member-id}/{pet-id}")
-    public ResponseEntity patchPet(@PathVariable("member-id") long memberId,
+    public ResponseEntity<PetDto.Response> patchPet(@PathVariable("member-id") long memberId,
                                    @PathVariable("pet-id") long petId,
                                    @RequestParam("images") MultipartFile images,
                                    @RequestParam("name") String name,

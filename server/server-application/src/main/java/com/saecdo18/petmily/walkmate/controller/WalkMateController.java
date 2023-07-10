@@ -46,10 +46,6 @@ public class WalkMateController {
     }
 
     @PatchMapping("/{walk-id}/{member-id}")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "walk-id", value = "산책게시물 식별자", required = true, dataType = "long", paramType = "path"),
-            @ApiImplicitParam(name = "member-id", value = "게시글사용자 식별자", required = true, dataType = "long", paramType = "path")
-    })
     @ApiOperation(value = "산책게시물 수정")
     public ResponseEntity updateWalk(@PathVariable("walk-id") long walkId,
                                   @PathVariable("member-id") long memberId,
