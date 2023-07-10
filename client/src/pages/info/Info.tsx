@@ -65,10 +65,25 @@ export function Component() {
     formState: { errors },
   } = useForm<InfoProps>({ mode: 'onChange' });
 
+
   const [noticeMessage, setNoticeMessage] = useState('');
   const nicknameValue = watch('nickname');
 
   const { userId } = useParams();
+  // TODO: submit 버튼을 눌렀을 때 회원가입이면 POST/members, 회원수정이면 PATCH/members
+  const onSubmit = (data: InfoProps) => {
+    data = { ...data, address: zip.trim() };
+    console.log(data);
+    // 서버에 받은 정보를 가지고 중복확인
+    // 중복 응답을 받은 경우, ErrorNotice로 중복된 이름입니다라는 에러보여주기
+    setNoticeMessage('중복된 닉네임입니다.');
+  };
+    
+  // 주소 값 받아오기
+  const [zip, setZip] = useState('');
+  
+  /* ----------------------------- useLocalStorage ---------------------------- */
+  const accessToken = useReadLocalStorage('accessToken');
   const navigate = useNavigate();
 
   // const accessToken = useReadLocalStorage('accessToken');
@@ -189,7 +204,7 @@ export function Component() {
           {/* 주소 */}
           <div>
             <Label>주소</Label>
-            <Select size="lg" direction="column" />
+            <Select size="lg" direction="column" setZip={setZip} />
           </div>
           <Button
             size="lg"

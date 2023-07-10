@@ -6,6 +6,7 @@ function App() {
   const matchHome = useMatch('/'); //object || null
   const matchInfo = useMatch('/info'); //object || null
   const matchInfoEditing = useMatch('/info/:userId'); //object || null
+  const matchFeed = useMatch('/home');
 
   return (
     <>
@@ -13,7 +14,7 @@ function App() {
         <Header isloginuser="true" />
       )}
       <Outlet />
-      {!(matchHome || matchInfo || matchInfoEditing) && <Footer />}
+      {!(matchHome || matchInfo || matchFeed || matchInfoEditing) && <Footer />}
     </>
   );
 }

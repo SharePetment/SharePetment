@@ -56,12 +56,7 @@ export default function Comment(props: CommentProp) {
     mutation.mutate(postData);
   };
 
-  const {
-    register,
-    handleSubmit,
-    setFocus,
-    formState: { errors },
-  } = useForm<Inputs>();
+  const { register, handleSubmit, setFocus } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = data => handleEditText(data);
   useEffect(() => {

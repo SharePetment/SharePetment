@@ -45,5 +45,6 @@ module.exports = {
     'import/no-unresolved': 'off',
     'import/export': 'off',
     'import/named': 0,
+    'import/no-named-as-default': 0,
   },
 };

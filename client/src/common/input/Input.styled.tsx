@@ -5,6 +5,7 @@ type ErrorMessage = {
   error?:
     | string
     | FieldError
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     | Merge<FieldError, FieldErrorsImpl<any>>
     | undefined;
 };
@@ -18,6 +19,9 @@ export const InputContainer = tw.div`
   w-80
   relative
   w-[320px] max-sm:w-[220px]
+  max-sm:flex
+  max-sm:flex-col
+  max-sm:items-center
 `;
 
 export const Label = tw.label`
@@ -29,6 +33,7 @@ export const Label = tw.label`
 
 export const InputText = tw.input<ErrorMessage>`
   w-full
+  max-sm:w-3/4
   py-3.5
   px-5
   border

@@ -15,7 +15,7 @@ export const Container = tw.div`
   relative
   gap-5
   bg-white
-  z-20
+  z-100
 `;
 
 export const Wrap = tw.div`

@@ -1,12 +1,10 @@
 import tw from 'tailwind-styled-components';
 
 export const Container = tw.div`
-  shadow-lg
 `;
 
 export const Feed = tw.img`
   w-96
-  h-[568px]
   bg-slate-400
   rounded-[28px]
   bg-lightgray
