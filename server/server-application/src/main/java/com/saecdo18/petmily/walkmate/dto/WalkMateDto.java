@@ -20,6 +20,7 @@ public class WalkMateDto {
         private String title;
         private String content;
         private String mapURL;
+        private String postswaggertest;
         private String chatURL;
         private String location;
         private String time;
@@ -38,6 +39,7 @@ public class WalkMateDto {
         private Long memberId;
         private String title;
         private String content;
+        private String patchswaggertest;
         private String mapURL;
         private String chatURL;
         private String location;

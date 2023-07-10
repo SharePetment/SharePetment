@@ -133,14 +133,18 @@ public class KakaoService {
     }
 
     private URI createUri(String accessToken, String refreshToken, MemberInfoAndJwtDto memberInfo){
+        long memberId = memberInfo.getMemberId();
+        Member member = memberRepository.findById(memberId).get();
+
         MultiValueMap<String, String> queryParams= new LinkedMultiValueMap<>();
         String enCodeName = UriUtils.encode(memberInfo.getName(), StandardCharsets.UTF_8);
         queryParams.add("accessToken", accessToken);
         queryParams.add("refreshToken", refreshToken);
-        queryParams.add("memberId", String.valueOf(memberInfo.getMemberId()));
+        queryParams.add("memberId", String.valueOf(memberId));
         queryParams.add("name", enCodeName);
         queryParams.add("email", memberInfo.getEmail());
         queryParams.add("present", String.valueOf(memberInfo.isPresent()));
+        queryParams.add("animalParents", String.valueOf(member.isAnimalParents()));
 
         return UriComponentsBuilder.newInstance()
                 .scheme("http")

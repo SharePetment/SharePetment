@@ -56,9 +56,9 @@ public class MemberDto {
     @Getter
     @Setter
     public static class Patch{
-        @Schema(description = "타입")
+        @ApiModelProperty(value = "사용자 닉네임", example = "홍길동", required = true)
         private String nickname;
-        @Schema(description = "타입")
+        @ApiModelProperty(value = "사용자 주소", example = "서울시 임시구 임시동", required = true)
         private String address;
     }
 
