@@ -19,9 +19,11 @@ jobs:
       - name: Npm Install
         run: |
           npm run install
+        working-directory: ./
       - name: Npm Build
         run: |
           npm run build
+        working-directory: ./
       - name: Deploy to S3
         uses: jaerin_Lee/s3-sync-action@fe-feat/page
         with:
