@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.saecdo18.petmily.pet.dto.PetDto;
 import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
@@ -55,9 +56,9 @@ public class MemberDto {
     @Getter
     @Setter
     public static class Patch{
-        @ApiModelProperty(value="닉네임")
+        @Schema(description = "타입")
         private String nickname;
-        @ApiModelProperty(value="주소")
+        @Schema(description = "타입")
         private String address;
     }
 
@@ -66,10 +67,8 @@ public class MemberDto {
     @Builder
     @Setter
     public static class Response{
-        private Long memberId;
+        private MemberDto.Info memberInfo;
         private String name;
-        private String email;
-        private String nickname;
         private String address;
         private int followerCount;
         private int feedCount;

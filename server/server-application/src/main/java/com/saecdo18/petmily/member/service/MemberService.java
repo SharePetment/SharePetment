@@ -57,7 +57,7 @@ public class MemberService {
             Pet pet = petList.get(i);
 
             PetDto.Response petDto = petMapper.petToPetResponseDto(pet);
-//            System.out.println(pet.getMember().getMemberId()+"pet.getMember().getMemberId()@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+
             petDto.setMemberId(pet.getMember().getMemberId());
             PetImage petImage = petImageRepository.findByPet(pet);
             Image image = petImage.getImage();
@@ -77,12 +77,14 @@ public class MemberService {
         else {
             FollowMember followMember = findFollowStatus.get();
             guestfollowing = followMember.isFollow();
-            System.out.println(followMember.isFollow()+"follow@@@@@@@@@@@@@@@@@@@@@");
+
         }
 
         MemberDto.Response response = memberMapper.memberToMemberResponseDto(hostMember);
 
-        System.out.println(guestfollowing+"guestfollowing@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+        MemberDto.Info memberInfo = memberIdToMemberInfoDto(hostMemberId);
+        response.setMemberInfo(memberInfo);
+
         response.setGuestFollow(guestfollowing);
 
         response.setPets(responsePets);
@@ -189,6 +191,18 @@ public class MemberService {
                 .path("/"+memberId)
                 .build()
                 .toUri();
+    }
+
+    private MemberDto.Info memberIdToMemberInfoDto(long memberId) {
+        Member findMember = memberRepository.findById(memberId).orElseThrow(
+                () -> new RuntimeException("사용자를 찾을 수 없습니다.")
+        );
+
+        return MemberDto.Info.builder()
+                .memberId(findMember.getMemberId())
+                .imageURL(findMember.getImageURL())
+                .nickname(findMember.getNickname())
+                .build();
     }
 
 

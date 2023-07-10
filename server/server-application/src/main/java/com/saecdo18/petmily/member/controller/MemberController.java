@@ -9,6 +9,7 @@ import com.saecdo18.petmily.member.mapper.MemberMapper;
 import com.saecdo18.petmily.member.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,7 +45,7 @@ public class MemberController {
 
 
     @GetMapping("/{host-member-id}/{guest-member-id}")
-    @Operation(summary = "Get User", description = "회원 조회")
+    @Operation(summary = "Get Member", description = "회원 조회")
     public ResponseEntity getMember(@PathVariable("host-member-id") long hostMemberId,
                                     @PathVariable("guest-member-id") long guestMemberId) {
         MemberDto.Response responseMember = memberService.getMember(hostMemberId, guestMemberId);
@@ -52,6 +53,7 @@ public class MemberController {
     }
 
     @PatchMapping("/status/{member-id}")
+    @Operation(summary = "Patch Member", description = "회원 조회")
     public ResponseEntity patchMember(@PathVariable("member-id") long memberId,
                                       @Parameter(description = "회원 수정 설명") @Valid @RequestBody MemberDto.Patch memberPatchDto) {
         MemberDto.Response responseMember = memberService.updateMemberStatus(memberId,
@@ -61,6 +63,7 @@ public class MemberController {
     }
 
     @PostMapping("/following/{follower-id}/{following-id}")
+    @Operation(summary = "Post FollowMember", description = "회원 조회")
     public ResponseEntity followingMember(@PathVariable("follower-id") long followerId,
                                           @PathVariable("following-id") long followingId) {
         FollowMemberDto.Response response = memberService.followMember(followerId, followingId);
@@ -69,6 +72,7 @@ public class MemberController {
     }
 
     @GetMapping("/following/list/{following-id}")
+    @Operation(summary = "Get FollowingList", description = "회원 조회")
     public ResponseEntity followingList(@PathVariable("following-id") long followingId) {
         List<FollowMemberDto.Response> responses = memberService.followList(followingId);
         return new ResponseEntity<>(responses, HttpStatus.OK);
