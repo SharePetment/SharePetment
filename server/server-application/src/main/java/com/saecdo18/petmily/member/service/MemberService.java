@@ -130,7 +130,15 @@ public class MemberService {
 
     public List<FollowMemberDto.Response> followList(long followingId){
         List<FollowMember> followMemberList = followMemberRepository.findByFollowingId(followingId);
-        List<FollowMemberDto.Response> responses = followMemberMapper.followMemberToFollowMemberResponseDtos(followMemberList);
+        List<FollowMemberDto.Response> responses = new ArrayList<>();
+        for(FollowMember followMember:followMemberList){
+            MemberDto.Info memberInfo = memberIdToMemberInfoDto(followMember.getFollowerMember().getMemberId());
+            FollowMemberDto.Response response = followMemberMapper.followMemberToFollowMemberResponseDto(followMember);
+            response.setMemberInfo(memberInfo);
+            responses.add(response);
+        }
+
+//        List<FollowMemberDto.Response> responses = followMemberMapper.followMemberToFollowMemberResponseDtos(followMemberList);
         return  responses;
     }
 
