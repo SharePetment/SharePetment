@@ -7,9 +7,7 @@ import com.saecdo18.petmily.walkmate.entity.WalkMate;
 import com.saecdo18.petmily.walkmate.mapper.WalkMateMapper;
 import com.saecdo18.petmily.walkmate.repository.WalkMateRepository;
 import com.saecdo18.petmily.walkmate.service.WalkMateService;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +17,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/walkmates")
+@Api(value = "WalkMate 컨트롤러 API", tags = "WalkMate API")
 public class WalkMateController {
 
     private final WalkMateService walkMateService;
@@ -36,8 +35,10 @@ public class WalkMateController {
 
 
     @PostMapping("/{member-id}")
-    public ResponseEntity postWalk(@PathVariable("member-id") long memberId,
-                                   @RequestBody WalkMateDto.Post walkPostDto){
+    @ApiOperation("산책 게시글 등록")
+    public ResponseEntity<WalkMateDto.Response> postWalk(
+            @ApiParam("회원 ID") @PathVariable("member-id") long memberId,
+            @ApiParam("게시글 등록 Dto") @RequestBody WalkMateDto.Post walkPostDto){
 
         WalkMate mappingWalkMate = mapper.walkPostDtoToWalkMate(walkPostDto);
         WalkMateDto.Response response = walkMateService.createWalk(mappingWalkMate, memberId);
@@ -46,14 +47,10 @@ public class WalkMateController {
     }
 
     @PatchMapping("/{walk-id}/{member-id}")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "walk-id", value = "산책게시물 식별자", required = true, dataType = "long", paramType = "path"),
-            @ApiImplicitParam(name = "member-id", value = "게시글사용자 식별자", required = true, dataType = "long", paramType = "path")
-    })
-    @ApiOperation(value = "산책게시물 수정")
-    public ResponseEntity updateWalk(@PathVariable("walk-id") long walkId,
-                                  @PathVariable("member-id") long memberId,
-                                  @RequestBody WalkMateDto.Patch walkPatchDto){
+    @ApiOperation("산책 게시글 수정")
+    public ResponseEntity<WalkMateDto.Response> updateWalk(@ApiParam("게시글 ID") @PathVariable("walk-id") long walkId,
+                                                           @ApiParam("회원 ID") @PathVariable("member-id") long memberId,
+                                                           @ApiParam("게시글 수정 Dto") @RequestBody WalkMateDto.Patch walkPatchDto){
 
         WalkMateDto.Response response = walkMateService.updateWalkMate(walkPatchDto, walkId, memberId);
 
@@ -61,17 +58,19 @@ public class WalkMateController {
     }
 
     @GetMapping("/bywalk/{walk-id}")
-    public ResponseEntity getWalkByWalkId(@PathVariable("walk-id") long walkId){
+    @ApiOperation("산책 게시글 조회(게시글 ID)")
+    public ResponseEntity<WalkMateDto.Response> getWalkByWalkId(@ApiParam("게시글 ID") @PathVariable("walk-id") long walkId){
 
         WalkMateDto.Response response = walkMateService.findWalkByWalkId(walkId);
         return new ResponseEntity(response, HttpStatus.OK);
     }
 
     @GetMapping("/bymember/{member-id}")
-    public ResponseEntity getWalksByMemberId(@RequestParam("openFilter") boolean open,
-                                            @RequestParam("page") int page,
-                                            @RequestParam("size") int size,
-                                            @PathVariable("member-id") long memberId){
+    @ApiOperation("산책 게시글 조회(회원 ID)")
+    public ResponseEntity<List<WalkMateDto.Response>> getWalksByMemberId(@ApiParam("모집 여부") @RequestParam("openFilter") boolean open,
+                                                                         @ApiParam("page") @RequestParam("page") int page,
+                                                                         @ApiParam("size") @RequestParam("size") int size,
+                                                                         @ApiParam("회원 ID") @PathVariable("member-id") long memberId){
 
         List<WalkMateDto.Response> response = walkMateService.findWalksByMemberId(page, size, memberId, open);
         return new ResponseEntity(response, HttpStatus.OK);
@@ -79,10 +78,11 @@ public class WalkMateController {
 
 
     @GetMapping("/walks")
-    public ResponseEntity getWalks(@RequestParam("openFilter") boolean open,
-                                   @RequestParam("location") String location,
-                                   @RequestParam("page") int page,
-                                   @RequestParam("size") int size){
+    @ApiOperation("산책 게시글 조회")
+    public ResponseEntity<List<WalkMate>> getWalks(@ApiParam("모집 여부") @RequestParam("openFilter") boolean open,
+                                                   @ApiParam("지역")@RequestParam("location") String location,
+                                                   @ApiParam("page") @RequestParam("page") int page,
+                                                   @ApiParam("size") @RequestParam("size") int size){
 
         List<WalkMate> response = walkMateService.recentPage(page, size, location, open);
 
@@ -90,7 +90,8 @@ public class WalkMateController {
     }
 
     @GetMapping("/have/comments/{member-id}")
-    public ResponseEntity getCommentedWalk(@PathVariable("member-id") long memberId){
+    @ApiOperation("산책 게시글 조회(특정 회원이 댓글 달은 모든 게시글)")
+    public ResponseEntity<List<WalkMateDto.Response>> getCommentedWalk(@ApiParam("회원 ID") @PathVariable("member-id") long memberId){
 
         List<WalkMateDto.Response> response = walkMateService.findCommentedWalks(memberId);
 
@@ -98,8 +99,9 @@ public class WalkMateController {
     }
 
     @DeleteMapping("/{walk-id}/{member-id}")
-    public ResponseEntity deleteWalk(@PathVariable("walk-id") long walkId,
-                                     @PathVariable("member-id") long memberId){
+    @ApiOperation("산책 게시글 삭제")
+    public ResponseEntity deleteWalk(@ApiParam("게시글 ID") @PathVariable("walk-id") long walkId,
+                                     @ApiParam("회원 ID") @PathVariable("member-id") long memberId){
 
         walkMateService.deleteWalk(walkId, memberId);
 
@@ -107,17 +109,19 @@ public class WalkMateController {
     }
 
     @PatchMapping("/like/{walk-id}/{member-id}")
-    public ResponseEntity likeWalk(@PathVariable("walk-id") long walkId,
-                                   @PathVariable("member-id") long memberId){
+    @ApiOperation("산책 게시글 좋아요")
+    public ResponseEntity<WalkMateDto.Like> likeWalk(@ApiParam("게시글 ID") @PathVariable("walk-id") long walkId,
+                                   @ApiParam("회원 ID") @PathVariable("member-id") long memberId){
 
         WalkMateDto.Like response = walkMateService.likeByMember(walkId, memberId);
         return new ResponseEntity(response, HttpStatus.OK);
     }
 
     @PatchMapping("/openstatus/{status}/{walk-id}/{member-id}")
-    public ResponseEntity changeOpenStatus(@PathVariable("status") boolean status,
-                                            @PathVariable("walk-id") long walkId,
-                                           @PathVariable("member-id") long memberId){
+    @ApiOperation("모집 여부만 수정")
+    public ResponseEntity<WalkMateDto.Open> changeOpenStatus(@ApiParam("모집 여부") @PathVariable("status") boolean status,
+                                           @ApiParam("게시글 ID") @PathVariable("walk-id") long walkId,
+                                           @ApiParam("회원 ID") @PathVariable("member-id") long memberId){
 
         WalkMateDto.Open response = walkMateService.changeOpenStatus(status, walkId, memberId);
         return new ResponseEntity(response, HttpStatus.OK);

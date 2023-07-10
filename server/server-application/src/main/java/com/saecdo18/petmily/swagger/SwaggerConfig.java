@@ -26,6 +26,17 @@ public class SwaggerConfig {
     public InternalResourceViewResolver defaultViewResolver() {
         return new InternalResourceViewResolver();
     }
+
+    @Bean
+    public Docket swaggerApi2(){
+        return new Docket(DocumentationType.OAS_30)
+                .groupName("API 2")
+                .select()
+                .apis(RequestHandlerSelectors.basePackage("com.saecdo18.petmily.walkmate.controller"))
+                .paths(PathSelectors.any())
+                .build()
+                .apiInfo(mySwaggerInfo());
+    }
     @Bean
     public Docket swaggerApi() {
         return new Docket(DocumentationType.SWAGGER_2)

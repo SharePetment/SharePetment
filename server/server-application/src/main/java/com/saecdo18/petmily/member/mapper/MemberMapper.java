@@ -9,6 +9,14 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 public interface MemberMapper {
     Member memberPostDtoToMember(MemberDto.Post memberPostDto);
 
+    default Member memberPatchDtoToMember(MemberDto.Patch memberPatchDto){
+        Member member= Member.emailNicknameAddress()
+                .nickname(memberPatchDto.getNickname())
+                .address(memberPatchDto.getAddress())
+                .build();
+        return member;
+    }
+
     MemberDto.Response memberToMemberResponseDto(Member member);
 
     MemberDto.Oauth oAuth2UserToMemberDto(OAuth2User oAuth2User);

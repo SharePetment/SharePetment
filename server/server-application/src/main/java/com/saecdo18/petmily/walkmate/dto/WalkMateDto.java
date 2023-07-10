@@ -17,17 +17,27 @@ public class WalkMateDto {
     public static class Post{
 
         //        private Long walkMatePostId;
+        @ApiModelProperty(value = "사용자 식별자", example = "1", required = true)
         private Long memberId;
+        @ApiModelProperty(value = "제목", example = "제목1", required = true)
         private String title;
+        @ApiModelProperty(value = "내용", example = "내용1", required = true)
         private String content;
+        @ApiModelProperty(value = "지도 URL", example = "kakaomap123", required = true)
         private String mapURL;
-        private String postswaggertest;
+        @ApiModelProperty(value = "채팅방 URL", example = "kakaopen123", required = true)
         private String chatURL;
+        @ApiModelProperty(value = "산책 장소", example = "서울시 강서구 마곡동", required = true)
         private String location;
+        @ApiModelProperty(value = "산책 시간", example = "2002.12.8", required = true)
         private String time;
+        @ApiModelProperty(value = "모집 상태", example = "true", required = true)
         private Boolean open;
+        @ApiModelProperty(value = "모집 인원", example = "3", required = true)
         private Integer maximum;
+        @ApiModelProperty(value = "좋아요 수", example = "3", required = true)
         private Integer likeCount;
+
 //        private List<WalkMateComment> comments;
     }
 
@@ -43,13 +53,11 @@ public class WalkMateDto {
         private String title;
         @ApiModelProperty(value = "내용", example = "내용1", required = true)
         private String content;
-        @ApiModelProperty(value = "이거 이스터에그", example = "이스터에그", required = true)
-        private String patchswaggertest;
-        @ApiModelProperty(value = "지도 URL", example = "hasfklasdjf", required = true)
+        @ApiModelProperty(value = "지도 URL", example = "kakaomap123", required = true)
         private String mapURL;
-        @ApiModelProperty(value = "대화방 URL", example = "asdfjalsdf", required = true)
+        @ApiModelProperty(value = "채팅방 URL", example = "kakaopen123", required = true)
         private String chatURL;
-        @ApiModelProperty(value = "산책 장소", example = "서울시 임시공원", required = true)
+        @ApiModelProperty(value = "산책 장소", example = "서울시 강서구 마곡동", required = true)
         private String location;
         @ApiModelProperty(value = "산책 시간", example = "2002.12.8", required = true)
         private String time;
@@ -65,33 +73,51 @@ public class WalkMateDto {
 //    @Builder
     public static class Response {
 
+        @ApiModelProperty(value = "게시글 식별자", example = "1", required = true)
         private Long walkMatePostId;
+        @ApiModelProperty(value = "회원 정보", example = "1", required = true)
         private MemberDto.Info memberInfo;
+        @ApiModelProperty(value = "제목", example = "제목1", required = true)
         private String title;
+        @ApiModelProperty(value = "내용", example = "내용1", required = true)
         private String content;
+        @ApiModelProperty(value = "지도 URL", example = "kakaomap123", required = true)
         private String mapURL;
+        @ApiModelProperty(value = "채팅방 URL", example = "kakaopen123", required = true)
         private String chatURL;
+        @ApiModelProperty(value = "산책 장소", example = "서울시 강서구 마곡동", required = true)
         private String location;
+        @ApiModelProperty(value = "산책 시간", example = "2002.12.8", required = true)
         private String time;
+        @ApiModelProperty(value = "모집 상태", example = "true", required = true)
         private Boolean open;
+        @ApiModelProperty(value = "모집 인원", example = "3", required = true)
         private Integer maximum;
+        @ApiModelProperty(value = "좋아요 수", example = "3", required = true)
         private Integer likeCount;
+        @ApiModelProperty(value = "생성 시간", example = "20231010", required = true)
         private LocalDateTime createdAt;
+        @ApiModelProperty(value = "수정 시간", example = "20231010", required = true)
         private LocalDateTime modifiedAt;
+        @ApiModelProperty(value = "댓글", example = "comments:...", required = true)
         private List<WalkMateCommentDto.Response> comments;
     }
 
     @Data
     @Builder
     public static class Like{
+        @ApiModelProperty(value = "좋아요 수", example = "3", required = true)
         private int likeCount;
+        @ApiModelProperty(value = "좋아요 눌렀는지 여부", example = "true", required = true)
         private boolean isLike;
     }
 
     @Data
     @Builder
     public static class Open{
+        @ApiModelProperty(value = "게시글 식별자", example = "1", required = true)
         private Long walkMatePostId;
+        @ApiModelProperty(value = "모집 상태", example = "true", required = true)
         private Boolean open;
     }
 }
