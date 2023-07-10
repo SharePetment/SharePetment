@@ -13,6 +13,7 @@ enum Path {
   WalkFeed = 'walkmate/:postId',
   WalkPosting = '/walk-posting',
   WalkEditing = '/walk-posting/:postId',
+  Loading = '/loading',
 }
 
 export default Path;

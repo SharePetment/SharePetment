@@ -7,11 +7,12 @@ function App() {
   const matchInfo = useMatch('/info'); //object || null
   const matchInfoEditing = useMatch('/info/:userId'); //object || null
   const matchFeed = useMatch('/home');
+  const loadingFeed = useMatch('/loading');
 
   return (
     <>
-      {!(matchHome || matchInfo || matchInfoEditing) && (
-        <Header isloginuser="true" />
+      {!(matchHome || matchInfo || matchInfoEditing || loadingFeed) && (
+        <Header />
       )}
       <Outlet />
       {!(matchHome || matchInfo || matchFeed || matchInfoEditing) && <Footer />}

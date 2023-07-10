@@ -66,6 +66,10 @@ export const router = createBrowserRouter([
         path: Path.WalkEditing,
         lazy: () => import('../pages/walkEditing/WalkEditing'),
       },
+      {
+        path: Path.Loading,
+        lazy: () => import('../pages/loading/Loading'),
+      },
     ],
   },
 ]);
