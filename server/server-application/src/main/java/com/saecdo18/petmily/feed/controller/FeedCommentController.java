@@ -16,13 +16,13 @@ public class FeedCommentController {
     private final FeedCommentServiceImpl feedCommentService;
 
     @PostMapping
-    public ResponseEntity<?> createComment(@Valid @RequestBody FeedCommentDto.Post post) {
+    public ResponseEntity<FeedCommentDto.Response> createComment(@Valid @RequestBody FeedCommentDto.Post post) {
         FeedCommentDto.Response response = feedCommentService.createComment(post);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @PatchMapping("/{comment-id}/{member-id}")
-    public ResponseEntity<?> patchComment(@PathVariable("comment-id") long commentId,
+    public ResponseEntity<FeedCommentDto.Response> patchComment(@PathVariable("comment-id") long commentId,
                                           @PathVariable("member-id") long memberId,
                                           @Valid @RequestBody FeedCommentDto.Patch patch) {
         FeedCommentDto.Response response = feedCommentService.updateComment(patch, commentId, memberId);

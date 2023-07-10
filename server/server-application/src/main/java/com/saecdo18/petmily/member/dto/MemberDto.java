@@ -22,43 +22,37 @@ public class MemberDto {
     @Getter
     @Builder
     public static class NickCheckRequest{
-
+        @ApiModelProperty(value = "닉네임", example = "초코아빠", required = true)
         private String nickname;
     }
     @Getter
     @Builder
     public static class NickCheckResponse{
+        @ApiModelProperty(value = "닉네임 중복확인 메세지", example = "중복된 닉네임입니다", required = true)
         private String checkMessage;
+        @ApiModelProperty(value = "닉네임 중복확인", example = "false", required = true)
         private boolean enable;
     }
 
     @Data
     @Builder
     public static class Info{
+
+        @ApiModelProperty(value = "사용자 아이디", example = "1", required = true)
         private Long memberId;
+        @ApiModelProperty(value = "사용자 닉네임", example = "nickname", required = true)
         private String nickname;
+        @ApiModelProperty(value = "대표 이미지 URL", example = "http://image.jpg", required = true)
         private String imageURL;
     }
 
-    @Getter
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class Post{
-
-        @NotBlank
-        private String nickname;
-        @NotBlank
-        private String address;
-
-
-    }
 
     @Getter
     @Setter
     public static class Patch{
-        @ApiModelProperty(value = "사용자 닉네임", example = "홍길동", required = true)
+        @ApiModelProperty(value = "닉네임", example = "초코아빠", required = true)
         private String nickname;
-        @ApiModelProperty(value = "사용자 주소", example = "서울시 임시구 임시동", required = true)
+        @ApiModelProperty(value = "주소지", example = "서울시 강서구 마곡동", required = true)
         private String address;
     }
 
@@ -67,13 +61,21 @@ public class MemberDto {
     @Builder
     @Setter
     public static class Response{
+        @ApiModelProperty(value = "댓글 아이디", example = "1", required = true)
         private MemberDto.Info memberInfo;
+        @ApiModelProperty(value = "카카오 이름", example = "김본명", required = true)
         private String name;
+        @ApiModelProperty(value = "주소지", example = "서울시 강서구 마곡동", required = true)
         private String address;
+        @ApiModelProperty(value = "팔로워 수", example = "7", required = true)
         private int followerCount;
+        @ApiModelProperty(value = "피드 수", example = "8", required = true)
         private int feedCount;
+        @ApiModelProperty(value = "견주 인증", example = "true", required = true)
         private boolean animalParents;
+        @ApiModelProperty(value = "구독버튼 on/off", example = "false", required = true)
         private boolean guestFollow;
+        @ApiModelProperty(value = "반려동물 리스트", example = "1111", required = true)
         private List<PetDto.Response> pets;
         private LocalDateTime createdAt;
         private LocalDateTime modifiedAt;
