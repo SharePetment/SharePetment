@@ -176,7 +176,7 @@ export function Component() {
               name="nickname"
               render={({ message }) => <ErrorNotice>{message}</ErrorNotice>}
             />
-            <ConfirmButton onClick={e => handleCheckNickname(e, 'nickname')}>
+            <ConfirmButton onClick={e => handleCheckNickname(e)}>
               중복확인
             </ConfirmButton>
           </InputContainer>
