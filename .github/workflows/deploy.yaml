@@ -20,7 +20,7 @@ jobs:
         run: |
           aws --version
       - name: Deploy to S3
-        uses: jaerin_Lee/s3-sync-action@fe-feat/page
+        uses: leejaelll/s3-sync-action@fe-feat/page
         with:
           args: --delete
         env:
