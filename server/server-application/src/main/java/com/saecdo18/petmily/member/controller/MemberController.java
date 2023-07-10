@@ -7,6 +7,8 @@ import com.saecdo18.petmily.member.entity.FollowMember;
 import com.saecdo18.petmily.member.entity.Member;
 import com.saecdo18.petmily.member.mapper.MemberMapper;
 import com.saecdo18.petmily.member.service.MemberService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,6 +44,7 @@ public class MemberController {
 
 
     @GetMapping("/{host-member-id}/{guest-member-id}")
+    @Operation(summary = "Get User", description = "회원 조회")
     public ResponseEntity getMember(@PathVariable("host-member-id") long hostMemberId,
                                     @PathVariable("guest-member-id") long guestMemberId) {
         MemberDto.Response responseMember = memberService.getMember(hostMemberId, guestMemberId);
@@ -50,7 +53,7 @@ public class MemberController {
 
     @PatchMapping("/status/{member-id}")
     public ResponseEntity patchMember(@PathVariable("member-id") long memberId,
-                                      @Valid @RequestBody MemberDto.Patch memberPatchDto) {
+                                      @Parameter(description = "회원 수정 설명") @Valid @RequestBody MemberDto.Patch memberPatchDto) {
         MemberDto.Response responseMember = memberService.updateMemberStatus(memberId,
                 memberPatchDto.getNickname(),
                 memberPatchDto.getAddress());

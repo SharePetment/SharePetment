@@ -17,10 +17,16 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.util.UriComponentsBuilder;
+import org.springframework.web.util.UriUtils;
 import reactor.core.publisher.Mono;
 
+
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
 @Service
@@ -50,7 +56,7 @@ public class KakaoService {
 
         ObjectMapper objectMapper = new ObjectMapper();
         AccessTokenDto.Response accessToken= objectMapper.readValue(accessTokenRequest, AccessTokenDto.Response.class);
-        log.info("accessToken: {}@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",accessToken.getAccess_token());
+
         return accessToken.getAccess_token();
     }
 
@@ -66,7 +72,7 @@ public class KakaoService {
 
         ObjectMapper objectMapper = new ObjectMapper();
         KakaoProfile kakaoProfile = objectMapper.readValue(response, KakaoProfile.class);
-        log.info("kakaoProfileEmail: {}@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",kakaoProfile.getKakao_account().getEmail());
+
 
         return kakaoProfile;
     }
@@ -79,8 +85,7 @@ public class KakaoService {
     public MemberInfoAndJwtDto login(KakaoProfile kakaoProfile){
         String email = kakaoProfile.getKakao_account().getEmail();
         String nickname = kakaoProfile.getKakao_account().getProfile().getNickname();
-        log.info("Email: {}@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",email);
-        log.info("nickname: {}@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",nickname);
+
         Optional<Member> optionalMember = isRegister(email);
         Member responseMember;
         boolean present=false;
@@ -115,16 +120,35 @@ public class KakaoService {
         tokenProvider.sendAccessAndRefreshToken(response, accessToken, refreshToken);
         Member refreshMember= memberRepository.findById(memberInfoAndJwtDto.getMemberId()).get();
         refreshMember.updateRefreshToken(refreshToken);
+        URI uri = createUri(accessToken,refreshToken,memberInfoAndJwtDto);
 
-        if(memberInfoAndJwtDto.isPresent()){
-            response.sendRedirect("http://localhost:5374/home");
-        }
-        else {
-            response.sendRedirect("http://localhost:5374/info");
-        }
-        response.setHeader("UID", refreshMember.getMemberId().toString());
+
+
+        response.sendRedirect(uri.toString());
+
+
 
         return response;
+    }
+
+    private URI createUri(String accessToken, String refreshToken, MemberInfoAndJwtDto memberInfo){
+        MultiValueMap<String, String> queryParams= new LinkedMultiValueMap<>();
+        String enCodeName = UriUtils.encode(memberInfo.getName(), StandardCharsets.UTF_8);
+        queryParams.add("accessToken", accessToken);
+        queryParams.add("refreshToken", refreshToken);
+        queryParams.add("memberId", String.valueOf(memberInfo.getMemberId()));
+        queryParams.add("name", enCodeName);
+        queryParams.add("email", memberInfo.getEmail());
+        queryParams.add("present", String.valueOf(memberInfo.isPresent()));
+
+        return UriComponentsBuilder.newInstance()
+                .scheme("http")
+                .host("localhost")
+                .port(5374)
+                .path("loading")
+                .queryParams(queryParams)
+                .build()
+                .toUri();
     }
 
 }
