@@ -6,7 +6,7 @@ export interface Comment {
   tag: string;
 }
 
-// 피드, 산책 댓글 수정
+/* ------------------------------ 피드, 산책 댓글 수정 ------------------------------ */
 export const editComment = async (body: Comment) => {
   const { id, content, url, tag } = body;
 
@@ -24,7 +24,45 @@ export const editComment = async (body: Comment) => {
   }
 };
 
-// 펫 등록, 수정
+
+
+/* -------------------------------- 회원 정보 추가 -------------------------------- */
+export interface UserInfo {
+  nickname: string;
+  address: string;
+}
+
+export const fillUserInfo = async (body: UserInfo) => {
+  const { nickname, address } = body;
+  const url = '';
+
+  try {
+    const result = await axios.patch(url, { nickname, address });
+    return result.data;
+  } catch (error) {
+    if (isAxiosError(error)) {
+      const errMessage = (error.response as AxiosResponse<{ message: string }>)
+        ?.data.message;
+      return errMessage;
+    }
+  }
+};
+
+/* -------------------------------- 회원 정보 수정 -------------------------------- */
+export const editUserInfo = async (body: UserInfo) => {
+  const { nickname, address } = body;
+  const url = '';
+
+  try {
+    const result = await axios.patch(url, { nickname, address });
+    return result.data;
+  } catch (error) {
+    if (isAxiosError(error)) {
+      const errMessage = (error.response as AxiosResponse<{ message: string }>)
+        ?.data.message;
+      return errMessage;
+
+/* -------------------------------- 펫 등록, 수정 -------------------------------- */    
 type PostPetProp = {
   formData: FormData;
   method: 'post' | 'patch';

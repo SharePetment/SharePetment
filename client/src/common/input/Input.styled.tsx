@@ -11,18 +11,17 @@ type ErrorMessage = {
 };
 
 export const FormContainer = tw.div`
-  pt-20
+  mt-4
   pb-10
 `;
 
 export const InputContainer = tw.div`
   w-80
   relative
+  w-[320px] max-sm:w-[220px]
   max-sm:flex
   max-sm:flex-col
   max-sm:items-center
-
-
 `;
 
 export const Label = tw.label`
@@ -39,11 +38,10 @@ export const InputText = tw.input<ErrorMessage>`
   px-5
   border
   rounded-[10px]
+  w-[320px] max-sm:w-[220px]
 
   ${prop => prop.error === undefined && `border-lightgray`}
   ${prop => typeof prop.error === 'string' && `border-[#FF7B7B]`}
-
-
 `;
 
 export const ErrorNotice = tw.p`
