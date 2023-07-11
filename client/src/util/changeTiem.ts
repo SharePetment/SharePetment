@@ -1,6 +1,6 @@
 import moment from 'moment';
 
-const changeTime = (dateArr: string[]) => {
+const changeTime = (dateArr: number[]) => {
   const date = dateArr.slice(0, dateArr.length - 1).map((item, index) => {
     if (index === 1) {
       return Number(item) - 1;

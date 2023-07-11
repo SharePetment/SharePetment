@@ -1,20 +1,20 @@
 // eslint-disable-next-line import/named
-import axios, { isAxiosError, AxiosResponse } from 'axios';
+import axios, { isAxiosError } from 'axios';
+import { SERVER_URL, ZIP_URL } from './url';
 
 // 쿼리함수를 관리합니다.
 
 //시군구 정보 가져오기
 export const getLocal = async (pattern: string) => {
-  const URL =
-    'https://grpc-proxy-server-mkvo6j4wsq-du.a.run.app/v1/regcodes?regcode_pattern=';
   try {
-    const result = await axios.get(`${URL}${pattern}`);
+    const result = await axios.get(`${ZIP_URL}${pattern}`);
     return result.data;
   } catch (error) {
     if (isAxiosError(error)) {
-      const errMessage = (error.response as AxiosResponse<{ message: string }>)
-        ?.data.message;
+      const errMessage = error.message;
       return errMessage;
+    } else {
+      return error;
     }
   }
 };
@@ -22,18 +22,36 @@ export const getLocal = async (pattern: string) => {
 /* -------------------------------- 회원정보 가져오기 ------------------------------- */
 
 export const getUserInfo = async (
-  hostId: string | undefined,
-  guestId: string | undefined,
+  hostId: string | undefined | null,
+  guestId: string | undefined | null,
 ) => {
-  const URL = '';
   try {
-    const result = await axios.get(`${URL}/members/${hostId}/${guestId}`);
+    const result = await axios.get(
+      `${SERVER_URL}/members/${hostId}/${guestId}`,
+    );
     return result.data;
   } catch (error) {
     if (isAxiosError(error)) {
-      const errMessage = (error.response as AxiosResponse<{ message: string }>)
-        ?.data.message;
+      const errMessage = error.message;
       return errMessage;
+    } else {
+      return error;
+    }
+  }
+};
+
+/* -------------------------------- 서버에서 데이터 가지고 오기 ------------------------------- */
+
+export const getServerData = async (url: string) => {
+  try {
+    const result = await axios.get(url);
+    return result.data;
+  } catch (error) {
+    if (isAxiosError(error)) {
+      const errMessage = error.message;
+      return errMessage;
+    } else {
+      return error;
     }
   }
 };

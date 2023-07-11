@@ -67,6 +67,7 @@ export const editUserInfo = async (body: UserInfo) => {
 };
 
 /* -------------------------------- 펫 등록, 수정 -------------------------------- */
+// 로직 분리하기
 type PostPetProp = {
   formData: FormData;
   method: 'post' | 'patch';
@@ -103,6 +104,19 @@ export const postPet = async (body: PostPetProp) => {
     }
   }
 };
+
+
+/* -------------------------------- 유저 프로필 변경-------------------------------- */
+
+export const patchUserProfile = async (url: string) => {
+  const result = await axios.patch(
+    url,
+    {},
+    {
+      withCredentials: true,
+    },
+  );
+  return result.data.imageURL;
 
 /* -------------------------------- 산책게시물 생성 -------------------------------- */
 interface FillWalkPosProp {

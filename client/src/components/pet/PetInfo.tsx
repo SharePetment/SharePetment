@@ -73,7 +73,8 @@ export default function PetInfo(prop: Prop) {
   // mutation 작성
   const mutation = useMutation({
     mutationFn: postPet,
-    onSuccess: () => {
+    onSuccess: data => {
+      console.log(data);
       setIsOpened(true);
     },
     onError: error => {
