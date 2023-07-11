@@ -25,7 +25,7 @@ export const getUserInfo = async (
   hostId: string | undefined | null,
   guestId: string | undefined | null,
 ) => {
-  const result = await axios.get(`${SERVER_URL}/members/${hostId}/${guestId}`);
+  const result = await axios.get(`${SERVER_URL}members/${hostId}/${guestId}`);
   console.log(result.status);
   return result.data;
 };

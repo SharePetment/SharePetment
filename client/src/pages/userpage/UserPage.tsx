@@ -44,7 +44,7 @@ export function Component() {
   // 유저가 작성한 랜선집사 리스트 가져오기
   const { data: feedData } = useQuery<Feed[]>({
     queryKey: ['userFeed', usersId],
-    queryFn: () => getServerData(`${SERVER_URL}${usersId}`),
+    queryFn: () => getServerData(`${SERVER_URL}feeds/my-feed/${usersId}`),
   });
 
   // 팔로잉 회원 리스트 조회
