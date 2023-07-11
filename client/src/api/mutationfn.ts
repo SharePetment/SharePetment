@@ -105,7 +105,6 @@ export const postPet = async (body: PostPetProp) => {
   }
 };
 
-
 /* -------------------------------- 유저 프로필 변경-------------------------------- */
 
 export const patchUserProfile = async (url: string) => {
@@ -117,6 +116,7 @@ export const patchUserProfile = async (url: string) => {
     },
   );
   return result.data.imageURL;
+};
 
 /* -------------------------------- 산책게시물 생성 -------------------------------- */
 interface FillWalkPosProp {
@@ -136,25 +136,15 @@ export const fillWalkPost = async (payload: FillWalkPosProp) => {
     payload;
   const url = '';
 
-  try {
-    const result = await axios.post(`${url}/walkmates/${payload.memberId}`, {
-      title,
-      content,
-      mapURL,
-      chatURL,
-      location,
-      time,
-      open,
-      maximum,
-    });
-    return result.data;
-  } catch (error) {
-    if (isAxiosError(error)) {
-      const errMessage = error.message;
-      console.log(errMessage);
-      return errMessage;
-    } else {
-      return error;
-    }
-  }
+  const result = await axios.post(`${url}/walkmates/${payload.memberId}`, {
+    title,
+    content,
+    mapURL,
+    chatURL,
+    location,
+    time,
+    open,
+    maximum,
+  });
+  return result.data;
 };
