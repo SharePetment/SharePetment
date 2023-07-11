@@ -105,9 +105,7 @@ export const postPet = async (body: PostPetProp) => {
   }
 };
 
-
 /* -------------------------------- 유저 프로필 변경-------------------------------- */
-
 export const patchUserProfile = async (url: string) => {
   const result = await axios.patch(
     url,
@@ -117,6 +115,7 @@ export const patchUserProfile = async (url: string) => {
     },
   );
   return result.data.imageURL;
+};
 
 /* -------------------------------- 산책게시물 생성 -------------------------------- */
 interface FillWalkPosProp {
