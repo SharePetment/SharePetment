@@ -18,7 +18,8 @@ export const SelectInput = tw.select<SelectProp>`
   ${prop => prop.selectsize === 'lg' && 'w-[320px] max-sm:w-[220px]'}
   ${prop => prop.selectsize === 'md' && 'w-[200px] max-sm:w-[120px]'}
   ${prop => prop.selectsize === 'sm' && 'w-[120px] max-sm:w-[80px]'}
-  ${prop => (prop.direction === 'row' ? 'mr-7' : 'mb-4')}
+  ${prop => (prop.direction === 'row' ? 'mr-4' : 'mb-4')}
+
 `;
 
 interface SelectDivProp {
@@ -27,7 +28,8 @@ interface SelectDivProp {
 
 export const SelectContainer = tw.div<SelectDivProp>`
     flex
-    ${prop => (prop.direction === 'row' ? 'flex-row' : 'flex-col')}
+    ${prop =>
+      prop.direction === 'row' ? 'flex-row max-sm:flex-col' : 'flex-col'}
     ${prop => (prop.direction === 'row' ? 'justify-end' : ' justify-center')}
     items-center
 `;
