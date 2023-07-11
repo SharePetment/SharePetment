@@ -1,4 +1,6 @@
 import axios, { isAxiosError } from 'axios';
+import { Subscribe } from '../types/subscribe';
+import { SERVER_URL } from './url';
 export interface Comment {
   id: string;
   content: string;
@@ -156,4 +158,10 @@ export const fillWalkPost = async (payload: FillWalkPosProp) => {
       return error;
     }
   }
+};
+
+/* -------------------------------- 구독 갱신 -------------------------------- */
+export const postSubscribe = async (url: string) => {
+  const result = await axios.post<Subscribe>(`${SERVER_URL}${url}`);
+  return result.data;
 };

@@ -25,33 +25,14 @@ export const getUserInfo = async (
   hostId: string | undefined | null,
   guestId: string | undefined | null,
 ) => {
-  try {
-    const result = await axios.get(
-      `${SERVER_URL}/members/${hostId}/${guestId}`,
-    );
-    return result.data;
-  } catch (error) {
-    if (isAxiosError(error)) {
-      const errMessage = error.message;
-      return errMessage;
-    } else {
-      return error;
-    }
-  }
+  const result = await axios.get(`${SERVER_URL}/members/${hostId}/${guestId}`);
+  console.log(result.status);
+  return result.data;
 };
 
 /* -------------------------------- 서버에서 데이터 가지고 오기 ------------------------------- */
 
 export const getServerData = async (url: string) => {
-  try {
-    const result = await axios.get(url);
-    return result.data;
-  } catch (error) {
-    if (isAxiosError(error)) {
-      const errMessage = error.message;
-      return errMessage;
-    } else {
-      return error;
-    }
-  }
+  const result = await axios.get(url);
+  return result.data;
 };

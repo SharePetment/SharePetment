@@ -6,6 +6,7 @@ import { getServerData, getUserInfo } from '../../api/queryfn';
 import { SERVER_URL } from '../../api/url';
 import Profile from '../../common/profile/Profile';
 import FollowList from '../../components/follow-list/FollowList';
+import Subscribe from '../../components/subscribe/Subscribe';
 import PetInfoBox from '../../components/user_my_page/petinfo-box/PetInfoBox';
 import { Feed } from '../../types/feedTypes';
 import { Follow, UserInfo } from '../../types/userType';
@@ -20,7 +21,7 @@ import {
 } from './userPage.styled';
 
 export function Component() {
-  const usersId = useParams();
+  const { usersId } = useParams();
   const memberId = useReadLocalStorage<string>('memberId');
 
   // userList 보여주기 & 팔로일 리스트 보여주기
@@ -30,38 +31,55 @@ export function Component() {
   };
 
   // 유저 데이터 가지고 오기ㅣ
-  const { data, isLoading } = useQuery<UserInfo>({
+  const { data } = useQuery<UserInfo>({
     queryKey: ['userPage', memberId, usersId],
-    queryFn: () => getUserInfo(memberId, memberId),
+    queryFn: () => getUserInfo(usersId, memberId),
+    onError(err) {
+      console.dir(err);
+    },
   });
+  // 구독 controller
+  const [isSubscribed, setIsSubscribed] = useState(data?.guestFollow);
 
   // 유저가 작성한 랜선집사 리스트 가져오기
-  const { data: feedData, isLoading: feedLoading } = useQuery<Feed[]>({
+  const { data: feedData } = useQuery<Feed[]>({
     queryKey: ['userFeed', usersId],
-    queryFn: () => getServerData(`${SERVER_URL}/${usersId}`),
+    queryFn: () => getServerData(`${SERVER_URL}${usersId}`),
   });
 
   // 팔로잉 회원 리스트 조회
-  const { data: followingData, isLoading: followingLoading } = useQuery<
-    Follow[]
-  >({
+  const { data: followingData } = useQuery<Follow[]>({
     queryKey: ['followList', usersId],
-    queryFn: () => getServerData(`${SERVER_URL}/list/${usersId}`),
+    queryFn: () =>
+      getServerData(`${SERVER_URL}members/following/list/${usersId}`),
   });
 
   // 로딩 보여주기
-  if (!(!isLoading && !feedLoading && !followingLoading)) {
+  /*   if (!(!isLoading && !feedLoading && !followingLoading)) {
     return <div>Loading</div>;
   }
-
+ */
   return (
     <>
       <Container>
         <UserBox>
-          <Profile isgreen="true" size="lg" url={data?.memberInfo.imageUrl} />
+          <Profile
+            isgreen="true"
+            size="lg"
+            url={
+              typeof data?.memberInfo === 'object'
+                ? data?.memberInfo.imageUrl
+                : ''
+            }
+          />
           <UserNameBox className="flex items-center gap-4">
             <UserName>안녕</UserName>
-            <button></button>
+            <Subscribe
+              guestFollow={isSubscribed}
+              usersId={usersId}
+              memberId={memberId}
+              setIsSubscribed={setIsSubscribed}
+            />
           </UserNameBox>
           <UserInfoBox>
             <div>
