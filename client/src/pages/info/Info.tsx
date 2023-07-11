@@ -55,7 +55,6 @@ type InfoProps = {
 //   createdAt: number[];
 //   modifiedAt: number[];
 // }
-
 export function Component() {
   const navigate = useNavigate();
   const location = useLocation();

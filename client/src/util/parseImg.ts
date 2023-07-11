@@ -56,6 +56,6 @@ export const deleteImg = ({
   order,
 }: DeleteImgProp) => {
   let copy = savedFile;
-  copy = copy.filter((file, idx) => idx !== order);
+  copy = copy.filter((_, idx) => idx !== order);
   setSavedFile(copy);
 };

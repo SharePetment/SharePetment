@@ -1,4 +1,6 @@
 import axios, { isAxiosError } from 'axios';
+import { Subscribe } from '../types/subscribe';
+import { SERVER_URL } from './url';
 export interface Comment {
   id: string;
   content: string;
@@ -67,6 +69,7 @@ export const editUserInfo = async (body: UserInfo) => {
 };
 
 /* -------------------------------- 펫 등록, 수정 -------------------------------- */
+// 로직 분리하기
 type PostPetProp = {
   formData: FormData;
   method: 'post' | 'patch';
@@ -104,6 +107,18 @@ export const postPet = async (body: PostPetProp) => {
   }
 };
 
+/* -------------------------------- 유저 프로필 변경-------------------------------- */
+export const patchUserProfile = async (url: string) => {
+  const result = await axios.patch(
+    url,
+    {},
+    {
+      withCredentials: true,
+    },
+  );
+  return result.data.imageURL;
+};
+
 /* -------------------------------- 산책게시물 생성 -------------------------------- */
 interface FillWalkPosProp {
   title: string;
@@ -122,25 +137,21 @@ export const fillWalkPost = async (payload: FillWalkPosProp) => {
     payload;
   const url = '';
 
-  try {
-    const result = await axios.post(`${url}/walkmates/${payload.memberId}`, {
-      title,
-      content,
-      mapURL,
-      chatURL,
-      location,
-      time,
-      open,
-      maximum,
-    });
-    return result.data;
-  } catch (error) {
-    if (isAxiosError(error)) {
-      const errMessage = error.message;
-      console.log(errMessage);
-      return errMessage;
-    } else {
-      return error;
-    }
-  }
+  const result = await axios.post(`${url}/walkmates/${payload.memberId}`, {
+    title,
+    content,
+    mapURL,
+    chatURL,
+    location,
+    time,
+    open,
+    maximum,
+  });
+  return result.data;
+};
+
+/* -------------------------------- 구독 갱신 -------------------------------- */
+export const postSubscribe = async (url: string) => {
+  const result = await axios.post<Subscribe>(`${SERVER_URL}${url}`);
+  return result.data;
 };
