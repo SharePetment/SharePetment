@@ -29,7 +29,14 @@ export function Component() {
           </CardContainer>
         </Link>
         <Link to={Path.WalkFeed}>
-          <CardContainer />
+          <WalkCard
+            time="07. 06 일요일 오후 6:30"
+            title="같이 산책해요!"
+            freinds={3}
+            location="서울특별시 동대문구 종로3가일까 4가일까"
+            chaturl="open.kakao.com/o/gH0XvThc"
+            isclosed="false"
+          />
         </Link>
       </GridContainer>
     </div>
