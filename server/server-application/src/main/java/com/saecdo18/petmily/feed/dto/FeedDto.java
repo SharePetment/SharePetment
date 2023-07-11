@@ -25,7 +25,7 @@ public class FeedDto {
         @NotBlank
         @ApiModelProperty(value = "피드 내용", example = "피드 내용", required = true)
         private String content;
-        @ApiModelProperty(value = "피드 이미지 파일", required = false)
+        @ApiModelProperty(value = "피드 이미지 파일", required = true)
         private List<MultipartFile> images;
 
     }
