@@ -1,13 +1,10 @@
 import { ErrorMessage } from '@hookform/error-message';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useReadLocalStorage } from 'usehooks-ts';
 import { fillUserInfo, editUserInfo } from '../../api/mutationfn';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { getUserInfo } from '../../api/queryfn';
 import { ReactComponent as Like } from '../../assets/button/like.svg';
 import { ReactComponent as Logo } from '../../assets/logo.svg';
 import Button from '../../common/button/Button';
@@ -90,7 +87,8 @@ export function Component() {
   });
 
   // 중복확인 체크
-  const handleCheckNickname = async (e: React.MouseEvent, nickname: string) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const handleCheckNickname = async (e: React.MouseEvent) => {
     e.preventDefault();
     const resultBeforeValidate = await trigger('nickname');
     if (!resultBeforeValidate) return;
@@ -155,7 +153,7 @@ export function Component() {
               name="nickname"
               render={({ message }) => <ErrorNotice>{message}</ErrorNotice>}
             />
-            <ConfirmButton onClick={e => handleCheckNickname(e, 'nickname')}>
+            <ConfirmButton onClick={e => handleCheckNickname(e)}>
               중복확인
             </ConfirmButton>
           </InputContainer>

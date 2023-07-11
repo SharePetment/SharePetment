@@ -10,7 +10,7 @@ enum Path {
   FeedPosting = '/feed-posting',
   FeedEditing = '/feed-posting/:feedId',
   WalkMate = '/walkmate',
-  WalkFeed = 'walkmate/:postId',
+  WalkFeed = '/walkmate/:postId',
   WalkPosting = '/walk-posting',
   WalkEditing = '/walk-posting/:postId',
   Loading = '/loading',

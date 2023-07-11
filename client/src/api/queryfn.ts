@@ -36,3 +36,10 @@ export const getServerData = async (url: string) => {
   const result = await axios.get(url);
   return result.data;
 };
+
+/* ------------------------------- 산책 리스트 가져오기 ------------------------------ */
+export const getWalkmateList = async () => {
+  const URL = 'http://43.202.86.53:8080';
+  const result = await axios.get(`${URL}/walkmates/walks`);
+  return result.data;
+};

@@ -1,30 +1,44 @@
+// import { useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
+// import { getWalkmateList } from '../../api/queryfn';
+import { ReactComponent as Plus } from '../../assets/button/plus.svg';
+import { GridContainer } from '../../common/grid/Grid.styled';
+import Select from '../../common/select/Select';
 import WalkCard from '../../components/card/walkCard/walkCard';
+import { CardContainer } from '../../components/card/walkCard/walkCard.styled';
 import Path from '../../routers/paths';
 
 export function Component() {
+  // 주소 값 받아오기
+  const [zip, setZip] = useState('');
+  console.log(zip);
+
+  // const { data: walkMateData } = useQuery({
+  //   queryKey: ['walkmateList'],
+  //   queryFn: () => getWalkmateList(),
+  // });
+
   return (
-    <div className=" flex flex-wrap gap-5">
-      <Link to={Path.WalkFeed}>
-        <WalkCard
-          time="07. 06 일요일 오후 6:30"
-          title="같이 산책해요!"
-          freinds={3}
-          location="서울특별시 동대문구 종로3가일까 4가일까"
-          chaturl="open.kakao.com/o/gH0XvThc"
-          isclosed="true"
-        />
-      </Link>
-      <Link to={Path.WalkFeed}>
-        <WalkCard
-          time="07. 06 일요일 오후 6:30"
-          title="같이 산책해요!"
-          freinds={3}
-          location="서울특별시 동대문구 종로3가일까 4가일까"
-          chaturl="open.kakao.com/o/gH0XvThc"
-          isclosed="false"
-        />
-      </Link>
+    <div className="mx-40 py-10 max-md:mx-20 ">
+      <Select size="md" direction="row" setZip={setZip} />
+      <GridContainer>
+        <Link to={Path.WalkPosting}>
+          <CardContainer className="items-center justify-center">
+            <Plus className=" w-8 h-8" />
+          </CardContainer>
+        </Link>
+        <Link to={Path.WalkFeed}>
+          <WalkCard
+            time="07. 06 일요일 오후 6:30"
+            title="같이 산책해요!"
+            freinds={3}
+            location="서울특별시 동대문구 종로3가일까 4가일까"
+            chaturl="open.kakao.com/o/gH0XvThc"
+            isclosed="false"
+          />
+        </Link>
+      </GridContainer>
     </div>
   );
 }
