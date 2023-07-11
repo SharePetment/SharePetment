@@ -22,11 +22,6 @@ export const ConfirmButton = tw.button`
   hover:text-deepgreen
 `;
 
-export const DuplicateNotice = tw.div`
-  text-[#FF7B7B]
-  text-sm
-`;
-
 export const ExtraInfoLogo = tw.div`
   ml-8 
   mt-3 

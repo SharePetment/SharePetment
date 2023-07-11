@@ -7,10 +7,8 @@ import { ReactComponent as Loading } from '../../assets/loading.svg';
 import { Container } from './Loading.styled';
 
 export function Component() {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [, setAccessToken] = useLocalStorage<string | null>('accessToken', '');
   const [, setRefreshToken] = useLocalStorage<string | null>(
     'refreshToken',
@@ -44,7 +42,14 @@ export function Component() {
         });
       }
     }
-  }, [setAccessToken, setRefreshToken, setMemberId, searchParams]);
+  }, [
+    setAccessToken,
+    setRefreshToken,
+    setMemberId,
+    searchParams,
+    navigate,
+    setAnimalParents,
+  ]);
 
   return (
     <Container>
