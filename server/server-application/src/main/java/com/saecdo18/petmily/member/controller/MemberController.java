@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.*;
@@ -27,14 +28,11 @@ import java.util.List;
 @RestController
 @CrossOrigin
 @RequestMapping("/members")
+@RequiredArgsConstructor
 public class MemberController {
     private final MemberMapper memberMapper;
     private final MemberService memberService;
 
-    public MemberController(MemberMapper memberMapper, MemberService memberService) {
-        this.memberMapper = memberMapper;
-        this.memberService = memberService;
-    }
     //    @PostMapping
 //    public ResponseEntity postMember(@Valid @RequestBody MemberDto.Post memberPostDto) {
 //        Member mappingMember = memberMapper.memberPostDtoToMember(memberPostDto);
@@ -90,21 +88,11 @@ public class MemberController {
     }
 
     @PostMapping("/nickname-check/{nickname}")
-    public ResponseEntity<MemberDto.NickCheckResponse> checkNickname(@ApiParam("중복 확인 할 닉네임")@PathVariable String nickname){
+    @PreAuthorize("permitAll()")
+    public ResponseEntity<MemberDto.NickCheckResponse> checkNickname(@ApiParam("중복 확인 할 닉네임") @PathVariable String nickname) {
 
         MemberDto.NickCheckResponse response = memberService.checkNickname(nickname);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-//localhost:8080/members/nickname-check
-
-//    @PatchMapping("/statusmessage/{member-id}")
-//    public ResponseEntity patchMemberStatusMessage(@PathVariable("member-id") long memberId,
-//                                                   @Valid @RequestBody MemberDto.PatchMessage memberPatchMessageDto){
-//        Member member = memberService.updateMemberStatusMessage(memberId, memberPatchMessageDto.getStatusMessage());
-//
-//        MemberDto.Response responseMember = memberMapper.memberToMemberResponseDto(member);
-//
-//        return new ResponseEntity<>(responseMember, HttpStatus.OK);
-//    }
 
 }

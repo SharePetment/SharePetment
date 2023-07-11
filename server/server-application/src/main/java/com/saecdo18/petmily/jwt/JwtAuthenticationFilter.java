@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 @Slf4j
@@ -29,13 +30,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final TokenProvider tokenProvider;
     private final MemberRepository memberRepository;
-    private static final List<String> NO_CHECK_URLS = Arrays.asList("/feeds/all", "https://kauth.kakao.com/oauth/authorize?client_id=07df97c2858e60b2e19f630c2c397b31&redirect_uri=http://localhost:8080/auth/kakao/callback&response_type=code");
+    private static final List<String> NO_CHECK_URLS = Arrays.asList("/feeds/all", "/members/nickname-check", "https://kauth.kakao.com/oauth/authorize?client_id=07df97c2858e60b2e19f630c2c397b31&redirect_uri=http://43.202.86.53:8080/auth/kakao/callback&response_type=code");
+
 
     private GrantedAuthoritiesMapper authoritiesMapper = new NullAuthoritiesMapper();
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         log.info("requestURL = {}",request.getRequestURI());
+        log.info("access Token : {}", tokenProvider.createAccessToken(1));
         if (NO_CHECK_URLS.stream().anyMatch(request.getRequestURI()::startsWith)) {
             filterChain.doFilter(request, response);
             return;
@@ -53,6 +56,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (refreshToken == null) {
             checkAccessTokenAndAuthentication(request, response, filterChain);
         }
+
+//        Optional<String> optional = tokenProvider.extractAccessToken(request);
+//        if (tokenProvider.isTokenValid(optional.get())) {
+//            filterChain.doFilter(request, response);
+//            return;
+//        }
 
     }
 
@@ -76,9 +85,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         log.info("checkAccessTokenAndAuthentication 진입");
         tokenProvider.extractAccessToken(request)
                 .filter(tokenProvider::isTokenValid)
-                .ifPresent(accessToken -> tokenProvider.extractMemberId(accessToken)
-                        .ifPresent(memberId -> memberRepository.findById(memberId)
-                                .ifPresent(this::saveAuthentication)));
+                .ifPresent(accessToken -> tokenProvider.extractMemberId(accessToken));
+//                        .ifPresent(memberId -> memberRepository.findById(memberId)));
+//                                .ifPresent(this::saveAuthentication)));
         filterChain.doFilter(request,response);
     }
 
