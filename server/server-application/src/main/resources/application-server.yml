@@ -4,7 +4,7 @@ springdoc:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://172.31.44.214:3307/testdb?createDatabaseIfNotExist=true
+    url: jdbc:mysql://mainprojectdb.cdb3cg1btqgy.ap-northeast-2.rds.amazonaws.com:3306/testdb?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
     username: ${DB_USER}
     password: ${DB_PASSWORD}
   jpa:
