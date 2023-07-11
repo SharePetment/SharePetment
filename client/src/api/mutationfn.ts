@@ -1,4 +1,6 @@
 import axios, { isAxiosError } from 'axios';
+import { Subscribe } from '../types/subscribe';
+import { SERVER_URL } from './url';
 export interface Comment {
   id: string;
   content: string;
@@ -106,7 +108,6 @@ export const postPet = async (body: PostPetProp) => {
 };
 
 /* -------------------------------- 유저 프로필 변경-------------------------------- */
-
 export const patchUserProfile = async (url: string) => {
   const result = await axios.patch(
     url,
@@ -146,5 +147,11 @@ export const fillWalkPost = async (payload: FillWalkPosProp) => {
     open,
     maximum,
   });
+  return result.data;
+};
+
+/* -------------------------------- 구독 갱신 -------------------------------- */
+export const postSubscribe = async (url: string) => {
+  const result = await axios.post<Subscribe>(`${SERVER_URL}${url}`);
   return result.data;
 };
