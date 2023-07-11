@@ -28,24 +28,24 @@ export const editComment = async (body: Comment) => {
 export interface UserInfo {
   nickname: string;
   address: string;
+  url: string;
+  accessToken: string | null;
 }
 
 export const fillUserInfo = async (body: UserInfo) => {
-  const { nickname, address } = body;
-  const url = '';
+  const { nickname, address, url, accessToken } = body;
 
-  try {
-    const result = await axios.post(url, { nickname, address });
-    return result.data;
-  } catch (error) {
-    if (isAxiosError(error)) {
-      const errMessage = error.message;
-      console.log(errMessage);
-      return errMessage;
-    } else {
-      return error;
-    }
-  }
+  const result = await axios.post(
+    url,
+    { nickname, address },
+    {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: accessToken,
+      },
+    },
+  );
+  return result.data;
 };
 
 export const editUserInfo = async (body: UserInfo) => {

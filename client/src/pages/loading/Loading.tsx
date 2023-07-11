@@ -7,21 +7,15 @@ import { ReactComponent as Loading } from '../../assets/loading.svg';
 import { Container } from './Loading.styled';
 
 export function Component() {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const [getAccessToken, setAccessToken] = useLocalStorage<string | null>(
-    'accessToken',
-    '',
-  );
-  const [getRefreshToken, setRefreshToken] = useLocalStorage<string | null>(
+  const [, setAccessToken] = useLocalStorage<string | null>('accessToken', '');
+  const [, setRefreshToken] = useLocalStorage<string | null>(
     'refreshToken',
     '',
   );
-  const [getMemberId, setMemberId] = useLocalStorage<string | null>(
-    'memberId',
-    '',
-  );
-  const [getAnimalParents, setAnimalParents] = useLocalStorage<string | null>(
+  const [, setMemberId] = useLocalStorage<string | null>('memberId', '');
+  const [, setAnimalParents] = useLocalStorage<string | null>(
     'animalParents',
     'false',
   );
@@ -48,7 +42,14 @@ export function Component() {
         });
       }
     }
-  }, [setAccessToken, setRefreshToken, setMemberId, searchParams]);
+  }, [
+    setAccessToken,
+    setRefreshToken,
+    setMemberId,
+    searchParams,
+    navigate,
+    setAnimalParents,
+  ]);
 
   return (
     <Container>
