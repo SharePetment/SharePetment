@@ -12,7 +12,7 @@ export default function Login() {
     <Container>
       <Logo width="400" className="max-sm:w-80" />
       <img src={LoginPets} width="500" />
-      <Link to="/">
+      <Link to="https://kauth.kakao.com/oauth/authorize?client_id=07df97c2858e60b2e19f630c2c397b31&redirect_uri=http://43.202.86.53:8080/auth/kakao/callback&response_type=code">
         <LoginBtn>
           <Kakao />
           <LoginText>Log in With KaKao</LoginText>

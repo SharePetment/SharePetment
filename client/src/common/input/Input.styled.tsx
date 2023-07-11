@@ -21,7 +21,7 @@ export const InputContainer = tw.div`
   w-[320px] max-sm:w-[220px]
   max-sm:flex
   max-sm:flex-col
-  max-sm:items-center
+  
 `;
 
 export const Label = tw.label`
