@@ -225,4 +225,8 @@ public class MemberService {
     }
 
 
+    public void deleteMember(long memberId) {
+        Member findMember = methodFindByMemberIdMember(memberId);
+        memberRepository.delete(findMember);
+    }
 }
