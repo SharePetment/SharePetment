@@ -39,7 +39,7 @@ export function Component() {
   // 내가 작성한 랜선집사 리스트 가져오기
   const { data: feedData, isLoading: feedLoading } = useQuery<Feed[]>({
     queryKey: ['myFeed', memberId],
-    queryFn: () => getServerData(`${SERVER_URL}/${memberId}`),
+    queryFn: () => getServerData(`${SERVER_URL}feeds/my-feed/${memberId}`),
   });
 
   // 팔로잉 회원 리스트 조회
@@ -47,7 +47,8 @@ export function Component() {
     Follow[]
   >({
     queryKey: ['followList', memberId],
-    queryFn: () => getServerData(`${SERVER_URL}/list/${memberId}`),
+    queryFn: () =>
+      getServerData(`${SERVER_URL}members/following/list/${memberId}`),
   });
   // 유저이미지
   const [userProfileImage, setUserProfileImage] = useState(

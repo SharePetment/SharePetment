@@ -1,4 +1,6 @@
 import axios, { isAxiosError } from 'axios';
+import { Subscribe } from '../types/subscribe';
+import { SERVER_URL } from './url';
 export interface Comment {
   id: string;
   content: string;
@@ -28,24 +30,24 @@ export const editComment = async (body: Comment) => {
 export interface UserInfo {
   nickname: string;
   address: string;
+  url: string;
+  accessToken: string | null;
 }
 
 export const fillUserInfo = async (body: UserInfo) => {
-  const { nickname, address } = body;
-  const url = '';
+  const { nickname, address, url, accessToken } = body;
 
-  try {
-    const result = await axios.post(url, { nickname, address });
-    return result.data;
-  } catch (error) {
-    if (isAxiosError(error)) {
-      const errMessage = error.message;
-      console.log(errMessage);
-      return errMessage;
-    } else {
-      return error;
-    }
-  }
+  const result = await axios.patch(
+    url,
+    { nickname, address },
+    {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: accessToken,
+      },
+    },
+  );
+  return result.data;
 };
 
 export const editUserInfo = async (body: UserInfo) => {
@@ -106,7 +108,6 @@ export const postPet = async (body: PostPetProp) => {
 };
 
 /* -------------------------------- 유저 프로필 변경-------------------------------- */
-
 export const patchUserProfile = async (url: string) => {
   const result = await axios.patch(
     url,
@@ -146,5 +147,11 @@ export const fillWalkPost = async (payload: FillWalkPosProp) => {
     open,
     maximum,
   });
+  return result.data;
+};
+
+/* -------------------------------- 구독 갱신 -------------------------------- */
+export const postSubscribe = async (url: string) => {
+  const result = await axios.post<Subscribe>(`${SERVER_URL}${url}`);
   return result.data;
 };

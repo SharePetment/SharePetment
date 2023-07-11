@@ -8,7 +8,7 @@ export interface UserInfo {
   address: string;
   followerCount: number;
   animalParents: boolean;
-  guestFollowStatus: boolean;
+  guestFollow: boolean;
   pets: Pets[];
   createdAt: number[];
   modifiedAt: number[];

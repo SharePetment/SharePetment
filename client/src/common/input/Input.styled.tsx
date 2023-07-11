@@ -1,5 +1,6 @@
 import { FieldError, FieldErrorsImpl, Merge } from 'react-hook-form';
 import tw from 'tailwind-styled-components';
+import { BooleanStr } from '../../types/propType';
 
 type ErrorMessage = {
   error?:
@@ -8,6 +9,7 @@ type ErrorMessage = {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     | Merge<FieldError, FieldErrorsImpl<any>>
     | undefined;
+  duplicated?: BooleanStr;
 };
 
 export const FormContainer = tw.div`
@@ -42,6 +44,7 @@ export const InputText = tw.input<ErrorMessage>`
 
   ${prop => prop.error === undefined && `border-lightgray`}
   ${prop => typeof prop.error === 'string' && `border-[#FF7B7B]`}
+  ${prop => prop.duplicated === 'true' && `border-[#38ae8f]`}
 `;
 
 export const ErrorNotice = tw.p`

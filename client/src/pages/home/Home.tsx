@@ -2,7 +2,7 @@ import { Mousewheel, Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/pagination';
-import FeedCard from '../../components/card/feedCard/FeedCard';
+import FeedCard from '../../components/card/feedcard/FeedCard';
 import SideNav from '../../components/card/sidenav/SideNav';
 import { Container } from './Home.styled';
 export function Component() {
