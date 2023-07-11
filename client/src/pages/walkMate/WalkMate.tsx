@@ -1,7 +1,7 @@
-import { useQuery } from '@tanstack/react-query';
+// import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { getWalkmateList } from '../../api/queryfn';
+// import { getWalkmateList } from '../../api/queryfn';
 import { ReactComponent as Plus } from '../../assets/button/plus.svg';
 import { GridContainer } from '../../common/grid/Grid.styled';
 import Select from '../../common/select/Select';
@@ -14,10 +14,10 @@ export function Component() {
   const [zip, setZip] = useState('');
   console.log(zip);
 
-  const { data: walkMateData } = useQuery({
-    queryKey: ['walkmateList'],
-    queryFn: () => getWalkmateList(),
-  });
+  // const { data: walkMateData } = useQuery({
+  //   queryKey: ['walkmateList'],
+  //   queryFn: () => getWalkmateList(),
+  // });
 
   return (
     <div className="mx-40 py-10 max-md:mx-20 ">
@@ -27,6 +27,9 @@ export function Component() {
           <CardContainer className="items-center justify-center">
             <Plus className=" w-8 h-8" />
           </CardContainer>
+        </Link>
+        <Link to={Path.WalkFeed}>
+          <CardContainer />
         </Link>
       </GridContainer>
     </div>

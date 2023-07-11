@@ -7,7 +7,7 @@ export const GridContainer = tw.div`
   justify-center
   grid-cols-4
   max-xl:grid-cols-3
-  max-[1026px]:grid-cols-2
+  max-[1027px]:grid-cols-2
   max-md:grid-cols-1
   justify-items-center
 `;
