@@ -1,10 +1,12 @@
 import { ErrorMessage } from '@hookform/error-message';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useReadLocalStorage } from 'usehooks-ts';
 import { fillUserInfo, editUserInfo } from '../../api/mutationfn';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { getUserInfo } from '../../api/queryfn';
 import { ReactComponent as Like } from '../../assets/button/like.svg';
 import { ReactComponent as Logo } from '../../assets/logo.svg';
@@ -31,33 +33,10 @@ type InfoProps = {
   address: string;
 };
 
-interface IPets {
-  petId: number;
-  profile: string;
-  name: string;
-  age: number;
-  sex: string;
-  species: string;
-  information: string;
-  memberId: number;
-  createdAt: string;
-  modifiedAt: string;
-}
-interface IUserInfo {
-  memberId: number;
-  kakaoName: string | number | readonly string[] | undefined;
-  email: string;
-  nickname: string;
-  address: string;
-  followerCount: number;
-  animalParents: boolean;
-  guestFollowStatus: boolean;
-  pets: IPets[];
-  createdAt: number[];
-  modifiedAt: number[];
-}
-
 export function Component() {
+  const location = useLocation();
+  const name = location.state.name;
+  const email = location.state.email;
   const {
     register,
     handleSubmit,
@@ -149,7 +128,7 @@ export function Component() {
           {/* 이름 */}
           <InputContainer>
             <Label htmlFor="name">이름</Label>
-            <InputText id="nickname" value="김댕댕" disabled />
+            <InputText id="nickname" value={name} disabled />
           </InputContainer>
 
           {/* 닉네임*/}
@@ -184,7 +163,7 @@ export function Component() {
           {/* 이메일 */}
           <InputContainer>
             <Label htmlFor="email">이메일</Label>
-            <InputText id="email" value="daengdaeng@gmail.com" disabled />
+            <InputText id="email" value={email} disabled />
           </InputContainer>
 
           {/* 주소 */}

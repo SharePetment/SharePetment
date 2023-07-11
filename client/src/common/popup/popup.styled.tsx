@@ -20,6 +20,7 @@ export const PopupBackGround = tw.div`
     items-center
     z-[9999]
     bg-zinc-900/75
+
 `;
 
 export const PopupBox = tw.div`

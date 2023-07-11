@@ -18,8 +18,8 @@ export const NavList = tw.ul`
   items-center
 `;
 
-export const NavItem = tw.li<{ currenttab: number; idx: number }>`
+export const NavItem = tw.li<{ active: boolean }>`
   font-bold
   cursor-pointer
-  ${prop => (prop.currenttab === prop.idx ? `text-deepgreen` : `text-deepgray`)}
+  ${prop => (prop.active ? `text-deepgreen` : `text-deepgray`)}
 `;
