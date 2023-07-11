@@ -1,6 +1,5 @@
 import { ErrorMessage } from '@hookform/error-message';
 import { useMutation } from '@tanstack/react-query';
-import { MutableRefObject, TextareaHTMLAttributes, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { fillWalkPost } from '../../api/mutationfn';

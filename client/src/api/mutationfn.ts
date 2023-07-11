@@ -136,25 +136,15 @@ export const fillWalkPost = async (payload: FillWalkPosProp) => {
     payload;
   const url = '';
 
-  try {
-    const result = await axios.post(`${url}/walkmates/${payload.memberId}`, {
-      title,
-      content,
-      mapURL,
-      chatURL,
-      location,
-      time,
-      open,
-      maximum,
-    });
-    return result.data;
-  } catch (error) {
-    if (isAxiosError(error)) {
-      const errMessage = error.message;
-      console.log(errMessage);
-      return errMessage;
-    } else {
-      return error;
-    }
-  }
+  const result = await axios.post(`${url}/walkmates/${payload.memberId}`, {
+    title,
+    content,
+    mapURL,
+    chatURL,
+    location,
+    time,
+    open,
+    maximum,
+  });
+  return result.data;
 };
