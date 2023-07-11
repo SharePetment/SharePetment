@@ -36,7 +36,7 @@ export default function Comment(props: CommentProp) {
     feedCommentsId,
     walkMatePostId,
   } = props;
-  const [userId] = useLocalStorage('userId', '');
+  const [userId] = useLocalStorage('memberId', '');
   const [isEdited, setIsEdited] = useState(false);
   const [text, setText] = useState(content);
 

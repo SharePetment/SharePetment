@@ -33,33 +33,6 @@ type InfoProps = {
   address: string;
 };
 
-interface IPets {
-  petId: number;
-  profile: string;
-  name: string;
-  age: number;
-  sex: string;
-  species: string;
-  information: string;
-  memberId: number;
-  createdAt: string;
-  modifiedAt: string;
-}
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-interface IUserInfo {
-  memberId: number;
-  kakaoName: string | number | readonly string[] | undefined;
-  email: string;
-  nickname: string;
-  address: string;
-  followerCount: number;
-  animalParents: boolean;
-  guestFollowStatus: boolean;
-  pets: IPets[];
-  createdAt: number[];
-  modifiedAt: number[];
-}
-
 export function Component() {
   const {
     register,

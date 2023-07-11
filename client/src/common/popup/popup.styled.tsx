@@ -19,8 +19,7 @@ export const PopupBackGround = tw.div`
     justify-center 
     items-center
     z-200
-    bg-zinc-900
-    opacity-80
+    bg-zinc-900/80
 `;
 
 export const PopupBox = tw.div`
