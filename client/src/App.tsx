@@ -12,9 +12,13 @@ function App() {
 
   return (
     <>
-      {!(matchHome || matchInfo || matchInfoEditing || matchFeedPosting || loadingFeed) && (
-        <Header isloginuser="true" />
-      )}
+      {!(
+        matchHome ||
+        matchInfo ||
+        matchInfoEditing ||
+        matchFeedPosting ||
+        loadingFeed
+      ) && <Header />}
       <Outlet />
       {!(
         matchHome ||
