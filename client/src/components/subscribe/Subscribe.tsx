@@ -1,6 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
 import { postSubscribe } from '../../api/mutationfn';
-import Button from '../../common/button/Button';
 import { SubScribeButton } from './subscribe.styled';
 
 interface Prop {
