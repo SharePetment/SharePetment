@@ -37,7 +37,7 @@ export interface UserInfo {
 export const fillUserInfo = async (body: UserInfo) => {
   const { nickname, address, url, accessToken } = body;
 
-  const result = await axios.post(
+  const result = await axios.patch(
     url,
     { nickname, address },
     {

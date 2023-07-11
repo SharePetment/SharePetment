@@ -7,6 +7,7 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useReadLocalStorage } from 'usehooks-ts';
 import { fillUserInfo, editUserInfo } from '../../api/mutationfn';
 // import { getUserInfo } from '../../api/queryfn';
+import { SERVER_URL } from '../../api/url';
 import { ReactComponent as Like } from '../../assets/button/like.svg';
 import { ReactComponent as Logo } from '../../assets/logo.svg';
 import Button from '../../common/button/Button';
@@ -76,10 +77,11 @@ export function Component() {
   const [zip, setZip] = useState('');
   /* ----------------------------- useLocalStorage ---------------------------- */
   const accessToken = useReadLocalStorage<string>('accessToken');
+  const memberId = useReadLocalStorage<string>('memberId');
 
   // TODO: submit 버튼을 눌렀을 때 회원가입이면 POST/members, 회원수정이면 PATCH/members
   const onSubmit = (data: InfoProps) => {
-    const url = 'http://43.202.86.53:8080/members';
+    const url = `${SERVER_URL}members/status/${memberId}`;
     data = {
       ...data,
       address: zip.trim(),
@@ -92,7 +94,7 @@ export function Component() {
     // setNoticeMessage('중복된 닉네임입니다.');
     // userId params가 존재하면 userInfoEditMutation
     if (userId) userInfoEditMutation.mutate(data);
-    // else userInfoFillMutation.mutate(data);
+    else userInfoFillMutation.mutate(data);
   };
 
   useEffect(() => {
@@ -104,8 +106,11 @@ export function Component() {
   // 추가정보 등록 POST
   const userInfoFillMutation = useMutation({
     mutationFn: fillUserInfo,
-    onSuccess: async () => {
-      console.log("I'm first!");
+    onSuccess: () => {
+      navigate('/home');
+    },
+    onError: () => {
+      navigate('/');
     },
   });
 
@@ -201,7 +206,7 @@ export function Component() {
           <Button
             size="lg"
             text={userId ? '회원정보 수정' : '회원가입'}
-            isgreen={`${isDuplicated}`}
+            isgreen="true"
           />
         </InfoForm>
       </FormContainer>
