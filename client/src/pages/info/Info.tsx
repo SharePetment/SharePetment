@@ -202,7 +202,7 @@ export function Component() {
           <Button
             size="lg"
             text={userId ? '회원정보 수정' : '회원가입'}
-            isgreen="true"
+            isgreen={`${isDuplicated}`}
           />
         </InfoForm>
       </FormContainer>
