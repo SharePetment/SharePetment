@@ -1,4 +1,4 @@
-interface MemberInfo {
+export interface MemberInfo {
   memberId: number;
   nickname: string;
   imageUrl: string;
@@ -9,6 +9,6 @@ export type CommentProp = {
   walkMatePostId?: number;
   memberInfo: MemberInfo;
   content: string;
-  createdAt: string[];
-  modifiedAt: string[];
+  createdAt: number[];
+  modifiedAt: number[];
 };
