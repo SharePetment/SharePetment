@@ -60,12 +60,15 @@ public class FeedController {
 
     @ApiOperation("피드 생성")
     @PostMapping
-    public ResponseEntity<FeedDto.Response> createFeed(@ApiParam("사용자 아이디") @RequestParam("memberId") long memberId,
+    public ResponseEntity<FeedDto.Response> createFeed(@ApiParam("사용자 아이디") @RequestParam("memberId") String memberId,
                                         @ApiParam("피드 내용") @RequestParam("content") String content,
                                         @ApiParam(value = "업로드 이미지 리스트") @RequestParam(value = "images", required = false)MultipartFile[] images) throws IOException {
+        long longMemberId = Long.valueOf(memberId);
+
+
         List<MultipartFile> imageList = new ArrayList<>();
         FeedDto.Post post = FeedDto.Post.builder()
-                .memberId(memberId)
+                .memberId(longMemberId)
                 .content(content)
                 .images(images == null ? imageList : List.of(images))
                 .build();
@@ -81,6 +84,8 @@ public class FeedController {
                                        @ApiParam("피드 수정 내용") @RequestParam("content") String content,
                                        @ApiParam(value = "피드 추가 이미지 리스트") @RequestParam(value = "addImage", required = false)  MultipartFile[] addImages,
                                        @ApiParam("삭제 이미지 원본 파일 이름 리스트") @RequestParam(value = "deleteImage", required = false) String[] deleteImages) throws IOException {
+
+
         List<MultipartFile> addImageList = new ArrayList<>();
         List<String> deleteImagesList = new ArrayList<>();
         FeedDto.Patch patch = FeedDto.Patch.builder()

@@ -26,25 +26,28 @@ public class PetController {
     private final PetMapper petMapper;
 
     @PostMapping
-    public ResponseEntity<PetDto.Response> postPet(@ApiParam("견주")@RequestParam("memberId") long memberId,
+    public ResponseEntity<PetDto.Response> postPet(@ApiParam("견주")@RequestParam("memberId") String memberId,
                                                    @ApiParam("반려동물 이미지")@RequestParam("images") MultipartFile images,
                                                    @ApiParam("반려동물 이름")@RequestParam("name") String name,
-                                                   @ApiParam("반려동물 나이")@RequestParam("age") int age,
+                                                   @ApiParam("반려동물 나이")@RequestParam("age") String age,
                                                    @ApiParam("반려동물 성별")@RequestParam("sex") String sex,
                                                    @ApiParam("반려동물 종")@RequestParam("species") String species,
                                                    @ApiParam("반려동물 정보")@RequestParam("information") String information
                                      ) throws IOException {
 
+        long longMemberId = Long.valueOf(memberId);
+        int intAge = Integer.valueOf(age);
+
         PetDto.Post petPostDto = PetDto.Post.builder()
                 .images(images)
                 .name(name)
-                .age(age)
+                .age(intAge)
                 .sex(sex)
                 .species(species)
                 .information(information)
                 .build();
 //        Pet mappingPet = petMapper.petPostDtoToPet(petPostDto);
-        PetDto.Response responsePet = petService.createPet(memberId, petPostDto);
+        PetDto.Response responsePet = petService.createPet(longMemberId, petPostDto);
 
 
         return new ResponseEntity<>(responsePet, HttpStatus.CREATED);
@@ -63,14 +66,16 @@ public class PetController {
                                                     @ApiParam("반려동물 식별자")@PathVariable("pet-id") long petId,
                                                     @ApiParam("반려동물 이미지")@RequestParam("images") MultipartFile images,
                                                     @ApiParam("반려동물 이름")@RequestParam("name") String name,
-                                                    @ApiParam("반려동물 나이")@RequestParam("age") int age,
+                                                    @ApiParam("반려동물 나이")@RequestParam("age") String age,
                                                     @ApiParam("반려동물 성별")@RequestParam("sex") String sex,
                                                     @ApiParam("반려동물 종")@RequestParam("species") String species,
                                                     @ApiParam("반려동물 정보")@RequestParam("information") String information) throws IOException {
+        int intAge = Integer.valueOf(age);
+
         PetDto.Patch petPatchDto = PetDto.Patch.builder()
                 .images(images)
                 .name(name)
-                .age(age)
+                .age(intAge)
                 .sex(sex)
                 .species(species)
                 .information(information)
