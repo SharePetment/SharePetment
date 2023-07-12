@@ -54,6 +54,7 @@ export const Textarea = tw.textarea`
   border
   border-lightgray
   relative
+  resize-none
 `;
 
 export const SubmitBtn = tw.button`
