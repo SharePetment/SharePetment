@@ -33,7 +33,7 @@ export function Component() {
   const accessToken = useReadLocalStorage<string>('accessToken');
 
   // 유저 정보 조회
-  const { data, isLoading, refetch } = useQuery<UserInfo>({
+  const { data, isLoading } = useQuery<UserInfo>({
     queryKey: ['myPage', memberId],
     queryFn: () =>
       getServerDataWithJwt(
@@ -83,9 +83,8 @@ export function Component() {
       },
     });
   };
-  console.log(data);
-  // 유저 이미지와 일치하는 펫 이미지가 있는지 index를 통해 탐색
 
+  // 유저 이미지와 일치하는 펫 이미지가 있는지 index를 통해 탐색
   useEffect(() => {
     let indexNumber;
     if (typeof data?.memberInfo === 'object') {
@@ -98,7 +97,7 @@ export function Component() {
 
   // 펫 check 여부 확인하기
   const [isPetCheck, setIsPetCheck] = useState(-1);
-  console.log(isPetCheck);
+
   // 팔로잉 리스트 보여주기
   const handleOpenFollowingList = () => {
     setIsListShowed(true);
