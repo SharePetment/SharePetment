@@ -1,10 +1,9 @@
 import { ErrorMessage } from '@hookform/error-message';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState, useEffect } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useReadLocalStorage } from 'usehooks-ts';
-import { UserInfo, patchPet, postPet } from '../../api/mutationfn';
-import { getServerDataWithJwt } from '../../api/queryfn';
+import { patchPet, postPet } from '../../api/mutationfn';
 import { SERVER_URL } from '../../api/url';
 import { ReactComponent as Man } from '../../assets/label/man.svg';
 import { ReactComponent as Woman } from '../../assets/label/woman.svg';
@@ -49,14 +48,7 @@ export default function PetInfo(prop: Prop) {
   const memberId = useReadLocalStorage<string>('memberId');
 
   // 유저 정보 refatch
-  const { refetch } = useQuery<UserInfo>({
-    queryKey: ['myPage', memberId],
-    queryFn: () =>
-      getServerDataWithJwt(
-        `${SERVER_URL}members/${memberId}/${memberId}`,
-        accessToken as string,
-      ),
-  });
+  const queryClient = useQueryClient();
 
   // 프로필에 사용
   const [image, setImage] = useState(profile);
@@ -81,7 +73,7 @@ export default function PetInfo(prop: Prop) {
   const petPostMutation = useMutation({
     mutationFn: postPet,
     onSuccess: () => {
-      refetch();
+      queryClient.invalidateQueries({ queryKey: ['myPage', memberId] });
       setIsOpened(false);
     },
     onError: error => {
@@ -93,7 +85,7 @@ export default function PetInfo(prop: Prop) {
   const petPatchMutation = useMutation({
     mutationFn: patchPet,
     onSuccess: () => {
-      refetch();
+      queryClient.invalidateQueries({ queryKey: ['myPage', memberId] });
       setIsOpened(false);
     },
     onError: error => {

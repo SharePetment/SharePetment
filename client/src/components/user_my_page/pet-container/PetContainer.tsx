@@ -1,8 +1,7 @@
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useReadLocalStorage } from 'usehooks-ts';
-import { UserInfo, deletePet, patchUserProfile } from '../../../api/mutationfn';
-import { getServerDataWithJwt } from '../../../api/queryfn';
+import { deletePet, patchUserProfile } from '../../../api/mutationfn';
 import { SERVER_URL } from '../../../api/url';
 import Popup from '../../../common/popup/Popup';
 import PetInfo from '../../pet/PetInfo';
@@ -25,7 +24,7 @@ interface Prop {
   isPetCheck: number | undefined;
   memberId: string;
   setIsPetCheck: React.Dispatch<React.SetStateAction<number>>;
-  setUserProfileImage: React.Dispatch<React.SetStateAction<string>>;
+
   index: number;
 }
 // petCheck 여부 확인하기
@@ -40,18 +39,10 @@ export default function PetContainer(prop: Prop) {
     setIsPetCheck,
     isPetCheck,
     memberId,
-    setUserProfileImage,
     index,
   } = prop;
   // 유저 정보 refatch
-  const { refetch } = useQuery<UserInfo>({
-    queryKey: ['myPage', memberId],
-    queryFn: () =>
-      getServerDataWithJwt(
-        `${SERVER_URL}members/${memberId}/${memberId}`,
-        accessToken as string,
-      ),
-  });
+  const queryClient = useQueryClient();
 
   // 펫 등록 수정 띄위기
   const [isPetOpened, setIsPetOpened] = useState(false);
@@ -64,7 +55,7 @@ export default function PetContainer(prop: Prop) {
     mutationFn: deletePet,
     onSuccess() {
       setIsDeletePopUp(false);
-      refetch();
+      queryClient.invalidateQueries({ queryKey: ['myPage', memberId] });
     },
   });
   const handleDeletePet = () => {
@@ -79,9 +70,8 @@ export default function PetContainer(prop: Prop) {
   // 유저 프로필 이미지 변경
   const mutationPatchUserProfile = useMutation({
     mutationFn: patchUserProfile,
-    onSuccess: data => {
-      setUserProfileImage(data);
-      refetch();
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['myPage', memberId] });
     },
   });
   // 유저 프로필 변경

@@ -14,7 +14,8 @@
   "lint-staged": {
     "*.{ts,tsx}": [
       "prettier --write",
-      "eslint --fix"
+      "eslint --fix",
+      "lint --fix"
     ]
   },
   "dependencies": {
