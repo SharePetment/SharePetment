@@ -72,7 +72,7 @@ public class WalkMateDto {
     }
 
     @Getter
-//    @Setter
+    @Setter
     @ApiModel(value = "산책게시글 응답 DTO")
     @Builder
     public static class Response {
