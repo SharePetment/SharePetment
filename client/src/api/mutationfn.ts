@@ -1,6 +1,6 @@
 import axios, { isAxiosError } from 'axios';
 import { Subscribe } from '../types/subscribe';
-import { SERVER_URL } from './url';
+
 export interface Comment {
   id: string;
   content: string;
@@ -146,7 +146,16 @@ export const fillWalkPost = async (payload: FillWalkPosProp) => {
 };
 
 /* -------------------------------- 구독 갱신 -------------------------------- */
-export const postSubscribe = async (url: string) => {
-  const result = await axios.post<Subscribe>(`${SERVER_URL}${url}`);
+interface SubscribeProp {
+  url: string;
+  accessToken: string;
+}
+export const postSubscribe = async (body: SubscribeProp) => {
+  const { url, accessToken } = body;
+  const result = await axios.post<Subscribe>(
+    url,
+    {},
+    { headers: { Authorization: accessToken } },
+  );
   return result.data;
 };

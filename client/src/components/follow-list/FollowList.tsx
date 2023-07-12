@@ -18,13 +18,8 @@ interface Prop {
 
 export default function FollowList({ setIsListShowed, follow }: Prop) {
   const navigate = useNavigate();
-  const handleUserPage = (followerId: number, followingId: number) => {
-    navigate(`/users/${followingId}`, {
-      state: {
-        followerId,
-        followingId,
-      },
-    });
+  const handleUserPage = (followerId: number) => {
+    navigate(`/users/${followerId}`);
   };
   const handleCloseList = () => {
     setIsListShowed(false);
@@ -45,14 +40,10 @@ export default function FollowList({ setIsListShowed, follow }: Prop) {
           {Array.isArray(follow) && follow.length > 0 && (
             <FollowBox>
               {follow?.map(
-                ({
-                  memberInfo: { nickname, imageURL },
-                  followerId,
-                  followingId,
-                }) => (
+                ({ memberInfo: { nickname, imageURL, memberId } }) => (
                   <FollowingBox
-                    onClick={() => handleUserPage(followerId, followingId)}
-                    key={followingId}>
+                    onClick={() => handleUserPage(memberId)}
+                    key={memberId}>
                     <Profile isgreen="false" size="sm" url={imageURL} />
                     <UserName> {nickname}</UserName>
                   </FollowingBox>

@@ -28,12 +28,18 @@ export const FollowBox = tw.div`
     overflow-y-auto
     flex
     flex-col
-    p-4
+    items-center
+
 `;
 
 export const FollowingBox = tw.div`
     flex
-    hover:bg-lightgreen
+    items-center
+    w-3/4
+    hover:text-deepgreen
+    font-semibold
+    p-4
+    cursor-pointer
 `;
 
 export const UserName = tw.span`

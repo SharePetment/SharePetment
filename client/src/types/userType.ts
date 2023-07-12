@@ -17,10 +17,7 @@ export interface UserInfo {
 // 팔로잉 회원 리스트 조회
 
 export type Follow = {
-  followerId: number;
-  followingId: number;
+  createdAt: string;
   memberInfo: MemberInfo;
-  follow: boolean;
-  createdAt: number;
-  modifiedAt: number;
+  modifiedAt: string;
 };

@@ -1,32 +1,42 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useReadLocalStorage } from 'usehooks-ts';
 import { postSubscribe } from '../../api/mutationfn';
+import { SERVER_URL } from '../../api/url';
 import { SubScribeButton } from './subscribe.styled';
 
 interface Prop {
   guestFollow: boolean | undefined;
-  usersId: string | number | undefined;
-  memberId: string | number | null;
-  setIsSubscribed: React.Dispatch<React.SetStateAction<boolean | undefined>>;
+  usersId: string | undefined;
+  memberId: string | null;
 }
 
-export default function Subscribe({
-  guestFollow,
-  usersId,
-  memberId,
-  setIsSubscribed,
-}: Prop) {
+export default function Subscribe({ guestFollow, usersId, memberId }: Prop) {
+  // query 갱신하기
+  const queryClient = useQueryClient();
+  console.log(memberId, usersId);
+  // 구독 갱신
+  const accessToken = useReadLocalStorage('accessToken');
   const subscribeMutation = useMutation({
     mutationFn: postSubscribe,
-    onSuccess(data) {
-      setIsSubscribed(data.follow);
+    onSuccess() {
+      queryClient.invalidateQueries({
+        queryKey: ['followList', memberId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['userPage', memberId, usersId],
+      });
     },
     onError(error) {
       console.log(error);
     },
   });
   const handleSubscribe = () => {
-    subscribeMutation.mutate(`${usersId}/${memberId}`);
+    subscribeMutation.mutate({
+      url: `${SERVER_URL}members/following/${usersId}/${memberId}`,
+      accessToken: accessToken as string,
+    });
   };
+
   return (
     <>
       {guestFollow ? (
