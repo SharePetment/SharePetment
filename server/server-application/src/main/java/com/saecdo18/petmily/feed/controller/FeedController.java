@@ -33,7 +33,7 @@ public class FeedController {
     }
 
     @ApiOperation("최신 피드 리스트 가져오기")
-    @PostMapping("/all/list/random/{member-id}")
+    @GetMapping("/all/list/random/{member-id}")
     public ResponseEntity<List<FeedDto.Response>> getFeedsRandom(@ApiParam("전에 받은 피드 아이디 리스트") @RequestBody FeedDto.PreviousListIds listIds,
                                             @ApiParam("사용자 아이디") @PathVariable("member-id") long memberId) {
         List<FeedDto.Response> responseList = feedService.getFeedsRecent(listIds, memberId);
