@@ -72,39 +72,45 @@ export const editUserInfo = async (body: UserInfo) => {
 // 로직 분리하기
 type PostPetProp = {
   formData: FormData;
-  method: 'post' | 'patch';
   url: string;
+  accessToken: string;
 };
 
 export const postPet = async (body: PostPetProp) => {
-  const { formData, method, url } = body;
+  const { formData, url, accessToken } = body;
+  const result = await axios.post(url, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+      Authorization: accessToken,
+    },
+  });
+  return result.data;
+};
 
-  try {
-    if (method === 'post') {
-      const result = await axios.post(url, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-      return result.data;
-    }
-    if (method === 'patch') {
-      const result = await axios.patch(url, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-      return result.data;
-    }
-  } catch (error) {
-    if (isAxiosError(error)) {
-      const errMessage = error.message;
-      console.log(errMessage);
-      return errMessage;
-    } else {
-      return error;
-    }
-  }
+export const patchPet = async (body: PostPetProp) => {
+  const { formData, url, accessToken } = body;
+  const result = await axios.patch(url, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+      Authorization: accessToken,
+    },
+  });
+  return result.data;
+};
+
+/* -------------------------------- 펫 삭제 -------------------------------- */
+interface DeletePetProp {
+  url: string;
+  token: string;
+}
+export const deletePet = async (body: DeletePetProp) => {
+  const { url, token } = body;
+  const result = await axios.delete(url, {
+    headers: {
+      Authorization: token,
+    },
+  });
+  return result;
 };
 
 /* -------------------------------- 유저 프로필 변경-------------------------------- */

@@ -6,15 +6,15 @@ import { Container, Info, Name, NameBox, TextBox } from './petInfoBox.styled';
 interface Prop {
   name: string;
   information: string;
-  uploadFileUrl: string;
+  uploadFileURL: string;
   sex: string;
 }
 
 export default function PetInfoBox(prop: Prop) {
-  const { name, information, uploadFileUrl, sex } = prop;
+  const { name, information, uploadFileURL, sex } = prop;
   return (
     <Container>
-      <Profile isgreen="false" size="sm" url={uploadFileUrl} />
+      <Profile isgreen="false" size="sm" url={uploadFileURL} />
       <TextBox>
         <NameBox>
           <Name>{name}</Name>

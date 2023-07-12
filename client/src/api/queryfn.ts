@@ -1,6 +1,6 @@
 // eslint-disable-next-line import/named
 import axios, { isAxiosError } from 'axios';
-import { ZIP_URL } from './url';
+import { SERVER_URL, ZIP_URL } from './url';
 
 // 쿼리함수를 관리합니다.
 
@@ -26,15 +26,20 @@ export const getServerData = async (url: string) => {
   return result.data;
 };
 
-// JWT accessToken 필요
-export const getServerDataWithJWT = async (
-  url: string,
-  token: string | null,
-) => {
+/* -------------------------------- 서버에서 데이터 가지고 오기 with jwt ------------------------------- */
+
+export const getServerDataWithJwt = async (url: string, token: string) => {
   const result = await axios.get(url, {
     headers: {
       Authorization: token,
     },
   });
+  return result.data;
+};
+
+/* ------------------------------- 산책 리스트 가져오기 ------------------------------ */
+export const getWalkmateList = async () => {
+  const URL = 'http://43.202.86.53:8080';
+  const result = await axios.get(`${URL}/walkmates/walks`);
   return result.data;
 };

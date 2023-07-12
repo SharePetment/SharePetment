@@ -1,7 +1,7 @@
 export type Image = {
   imageId: number;
   originalFilename: string;
-  uploadFileUrl: string;
+  uploadFileURL: string;
 };
 
 export type Pets = {
