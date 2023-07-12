@@ -64,7 +64,7 @@ public class PetController {
     @PatchMapping("/status/{member-id}/{pet-id}")
     public ResponseEntity<PetDto.Response> patchPet(@ApiParam("견주")@PathVariable("member-id") long memberId,
                                                     @ApiParam("반려동물 식별자")@PathVariable("pet-id") long petId,
-                                                    @ApiParam("반려동물 이미지")@RequestParam("images") MultipartFile images,
+                                                    @ApiParam("반려동물 이미지")@RequestParam(value = "images", required = false) MultipartFile images,
                                                     @ApiParam("반려동물 이름")@RequestParam("name") String name,
                                                     @ApiParam("반려동물 나이")@RequestParam("age") String age,
                                                     @ApiParam("반려동물 성별")@RequestParam("sex") String sex,

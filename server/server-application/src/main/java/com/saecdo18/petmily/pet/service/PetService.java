@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Transactional
 @Service
@@ -55,8 +56,8 @@ public class PetService {
         String uploadFileURL = BASE_IMAGE_URL;
 
         if (!petPostDto.getImages().isEmpty()) {
-            String originalFilename = petPostDto.getImages().getOriginalFilename();
-            uploadFileURL = s3UploadService.saveFile(petPostDto.getImages());
+            String originalFilename = petPostDto.getImages().getOriginalFilename()+ UUID.randomUUID();
+            uploadFileURL = s3UploadService.saveFile(petPostDto.getImages(), originalFilename);
             savePetImage(pet, originalFilename, uploadFileURL);
         }
         Pet savePet = petRepository.save(pet);
@@ -97,8 +98,8 @@ public class PetService {
             s3UploadService.deleteImage(findPet.getPetImage().getImage().getOriginalFilename());
             petImageRepository.delete(findPet.getPetImage());
 
-            String originalFilename = patchPet.getImages().getOriginalFilename();
-            String uploadFileURL = s3UploadService.saveFile(patchPet.getImages());
+            String originalFilename = patchPet.getImages().getOriginalFilename()+ UUID.randomUUID();
+            String uploadFileURL = s3UploadService.saveFile(patchPet.getImages(), originalFilename);
             savePetImage(findPet, originalFilename, uploadFileURL);
 
         }

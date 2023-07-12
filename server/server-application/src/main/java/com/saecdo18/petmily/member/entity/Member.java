@@ -57,6 +57,16 @@ public class Member extends BaseEntity {
         this.address = address;
     }
 
+    @Builder(builderMethodName = "testMemberSet")
+    public Member(long memberId,String name, String email, String nickname, String address){
+        this.email = email;
+        this.memberId=memberId;
+        this.nickname = nickname;
+        this.address = address;
+        this.animalParents=false;
+        this.role=Role.GUEST;
+    }
+
 
     public void updateRegisterMember(String name, String email){
         this.email = email;
