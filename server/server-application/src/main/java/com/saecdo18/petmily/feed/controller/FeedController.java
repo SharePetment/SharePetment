@@ -33,7 +33,7 @@ public class FeedController {
     }
 
     @ApiOperation("최신 피드 리스트 가져오기")
-    @GetMapping("/all/list/random/{member-id}")
+    @PostMapping("/all/list/random/{member-id}")
     public ResponseEntity<List<FeedDto.Response>> getFeedsRandom(@ApiParam("전에 받은 피드 아이디 리스트") @RequestBody FeedDto.PreviousListIds listIds,
                                             @ApiParam("사용자 아이디") @PathVariable("member-id") long memberId) {
         List<FeedDto.Response> responseList = feedService.getFeedsRecent(listIds, memberId);
@@ -64,7 +64,6 @@ public class FeedController {
                                         @ApiParam("피드 내용") @RequestParam("content") String content,
                                         @ApiParam(value = "업로드 이미지 리스트") @RequestParam(value = "images", required = false)MultipartFile[] images) throws IOException {
         long longMemberId = Long.parseLong(memberId);
-
 
         List<MultipartFile> imageList = new ArrayList<>();
         FeedDto.Post post = FeedDto.Post.builder()

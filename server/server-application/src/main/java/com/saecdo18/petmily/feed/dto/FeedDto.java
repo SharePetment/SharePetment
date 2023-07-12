@@ -7,10 +7,7 @@ import com.saecdo18.petmily.member.dto.MemberDto;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Builder;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotBlank;
@@ -50,6 +47,7 @@ public class FeedDto {
         private List<String> deleteImages;
     }
     @Setter
+    @Getter
     @Builder
     @ApiModel(value = "피드 응답용 DTO")
     public static class Response {
@@ -92,9 +90,10 @@ public class FeedDto {
         private boolean isLike;
     }
 
-    @Builder
     @Getter
+    @Setter
     @ApiModel(value = "이전 피드 아이디 리스트 DTO")
+    @NoArgsConstructor
     public static class PreviousListIds {
         @ApiModelProperty(value = "이전에 받은 피드 아이디 리스트", required = true)
         private List<Long> previousListIds;

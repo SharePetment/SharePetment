@@ -18,7 +18,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -30,11 +33,12 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
+@SpringBootTest(properties = {"spring.config.name=application-test", "spring.config.location=classpath:/"})
 @AutoConfigureMockMvc
 class FeedControllerTest {
 
@@ -48,6 +52,84 @@ class FeedControllerTest {
     private Gson gson;
 
     @Autowired TokenProvider tokenProvider;
+
+    @Test
+    @DisplayName("피드 가져오기 테스트")
+    void getFeed() throws Exception {
+        long feedId = 1L;
+        long memberId = 1L;
+
+        FeedDto.Response feedDto = getOneFeed(feedId);
+        String content = gson.toJson(feedDto);
+
+        System.out.println(content);
+
+        given(feedService.getFeed(feedId, memberId)).willReturn(feedDto);
+
+        ResultActions actions = mockMvc.perform(
+                get("/feeds/all/{feed-id}/{member-id}", feedId, memberId)
+                        .header("Authorization", tokenProvider.createAccessToken(memberId))
+        );
+
+        actions
+                .andExpect(status().isOk())
+                .andExpect(content().json(content))
+                .andExpect(jsonPath("$.feedId").value(feedId))
+                .andExpect(jsonPath("$.memberInfo.memberId").value(memberId));
+
+    }
+
+    @Test
+    @DisplayName("피드 최신순 가져오기 테스트")
+    void getFeedsRandom() throws Exception {
+        long memberId = 1L;
+        List<FeedDto.Response> responseList = getFeedList(2);
+        FeedDto.PreviousListIds previousListIds = getPreviousListIds();
+        String content = gson.toJson(responseList);
+        String previousList = gson.toJson(previousListIds);
+
+        given(feedService.getFeedsRecent(previousListIds, memberId)).willReturn(responseList);
+
+        ResultActions actions = mockMvc.perform(
+                post("/feeds/all/list/random/{member-id}", memberId)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", tokenProvider.createAccessToken(memberId))
+                        .content(previousList)
+        );
+
+        actions
+                .andExpect(status().isOk())
+                .andExpect(content().json(content))
+                .andExpect(jsonPath("$[0].feedId").value(1))
+                .andExpect(jsonPath("$[1].feedId").value(2))
+                .andExpect(jsonPath("$[0].memberInfo.memberId").value(1))
+                .andExpect(jsonPath("$[1].memberInfo.memberId").value(2));
+    }
+
+    @Test
+    void getFeedsByMember() {
+    }
+
+    @Test
+    void getFeedsByMemberFollow() {
+    }
+
+    @Test
+    void createFeed() {
+    }
+
+    @Test
+    void patchFeed() {
+    }
+
+    @Test
+    void deleteFeed() {
+    }
+
+    @Test
+    void likeFeed() {
+    }
 
     private MemberDto.Info getMemberInfo(long memberId) {
         return MemberDto.Info.builder()
@@ -117,78 +199,8 @@ class FeedControllerTest {
     private FeedDto.PreviousListIds getPreviousListIds() {
         List<Long> list = new ArrayList<>();
         list.add(1L);
-        return FeedDto.PreviousListIds.builder()
-                .previousListIds(list)
-                .build();
-    }
-
-    @Test
-    @DisplayName("피드 가져오기 테스트")
-    void getFeed() throws Exception {
-        long feedId = 1L;
-        long memberId = 1L;
-
-        FeedDto.Response feedDto = getOneFeed(feedId);
-        String content = gson.toJson(feedDto);
-
-        given(feedService.getFeed(feedId, memberId)).willReturn(feedDto);
-
-        ResultActions actions = mockMvc.perform(
-                get("/feeds/all/{feed-id}/{member-id}", feedId, memberId)
-                        .header("Authorization", tokenProvider.createAccessToken(memberId))
-        );
-
-        actions
-                .andExpect(status().isOk())
-                .andExpect(content().json(content))
-                .andExpect(jsonPath("$.feedId").value(feedId))
-                .andExpect(jsonPath("$.memberInfo.memberId").value(memberId));
-
-    }
-
-    @Test
-    @DisplayName("피드 최신순 가져오기 테스트")
-    void getFeedsRandom() throws Exception {
-        long memberId = 1L;
-        List<FeedDto.Response> responseList = getFeedList(2);
-        FeedDto.PreviousListIds previousListIds = getPreviousListIds();
-        String content = gson.toJson(responseList);
-        System.out.println(content);
-
-        given(feedService.getFeedsRecent(previousListIds, memberId)).willReturn(responseList);
-
-        ResultActions actions = mockMvc.perform(
-                get("/feeds/all/list/random/{member-id}", memberId)
-                        .header("Authorization", tokenProvider.createAccessToken(memberId))
-        );
-
-//        actions
-//                .andExpect(content().json(content))
-//                .andExpect(jsonPath("$[].feedId").value(1))
-
-    }
-
-    @Test
-    void getFeedsByMember() {
-    }
-
-    @Test
-    void getFeedsByMemberFollow() {
-    }
-
-    @Test
-    void createFeed() {
-    }
-
-    @Test
-    void patchFeed() {
-    }
-
-    @Test
-    void deleteFeed() {
-    }
-
-    @Test
-    void likeFeed() {
+        FeedDto.PreviousListIds idList = new FeedDto.PreviousListIds();
+        idList.setPreviousListIds(list);
+        return idList;
     }
 }
