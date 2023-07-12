@@ -54,7 +54,11 @@ public class MemberDto {
     @Getter
     @Setter
     @ApiModel(value = "사용자 정보 수정 DTO")
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class Patch{
+
+
         @ApiModelProperty(value = "닉네임", example = "초코아빠", required = true)
         private String nickname;
         @ApiModelProperty(value = "주소지", example = "서울시 강서구 마곡동", required = true)

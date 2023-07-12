@@ -59,8 +59,8 @@ public class FeedServiceImpl implements FeedService {
 
         if (!post.getImages().isEmpty()) {
             for (MultipartFile multipartFile : post.getImages()) {
-                String originalFilename = multipartFile.getOriginalFilename();
-                String uploadFileURL = s3UploadService.saveFile(multipartFile);
+                String originalFilename = multipartFile.getOriginalFilename()+ UUID.randomUUID();
+                String uploadFileURL = s3UploadService.saveFile(multipartFile, originalFilename);
                 saveImage(createFeed, originalFilename, uploadFileURL);
             }
         }
@@ -179,8 +179,8 @@ public class FeedServiceImpl implements FeedService {
 
         if (!patch.getAddImages().isEmpty()) {
             for (MultipartFile multipartFile : patch.getAddImages()) {
-                String originalFilename = multipartFile.getOriginalFilename();
-                String uploadFileURL = s3UploadService.saveFile(multipartFile);
+                String originalFilename = multipartFile.getOriginalFilename()+ UUID.randomUUID();
+                String uploadFileURL = s3UploadService.saveFile(multipartFile,originalFilename);
                 saveImage(findFeed, originalFilename, uploadFileURL);
             }
         }
