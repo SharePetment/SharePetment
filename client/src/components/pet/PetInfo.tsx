@@ -1,9 +1,10 @@
 import { ErrorMessage } from '@hookform/error-message';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { useState, useEffect } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useReadLocalStorage } from 'usehooks-ts';
-import { patchPet, postPet } from '../../api/mutationfn';
+import { UserInfo, patchPet, postPet } from '../../api/mutationfn';
+import { getServerDataWithJwt } from '../../api/queryfn';
 import { SERVER_URL } from '../../api/url';
 import { ReactComponent as Man } from '../../assets/label/man.svg';
 import { ReactComponent as Woman } from '../../assets/label/woman.svg';
@@ -47,6 +48,16 @@ export default function PetInfo(prop: Prop) {
   const accessToken = useReadLocalStorage<string>('accessToken');
   const memberId = useReadLocalStorage<string>('memberId');
 
+  // 유저 정보 refatch
+  const { refetch } = useQuery<UserInfo>({
+    queryKey: ['myPage', memberId],
+    queryFn: () =>
+      getServerDataWithJwt(
+        `${SERVER_URL}members/${memberId}/${memberId}`,
+        accessToken as string,
+      ),
+  });
+
   // 프로필에 사용
   const [image, setImage] = useState(profile);
   const [file, setFile] = useState<File | null>(null);
@@ -69,8 +80,8 @@ export default function PetInfo(prop: Prop) {
   // mutation 작성
   const petPostMutation = useMutation({
     mutationFn: postPet,
-    onSuccess: data => {
-      console.log(data);
+    onSuccess: () => {
+      refetch();
       setIsOpened(false);
     },
     onError: error => {
@@ -81,8 +92,8 @@ export default function PetInfo(prop: Prop) {
 
   const petPatchMutation = useMutation({
     mutationFn: patchPet,
-    onSuccess: data => {
-      console.log(data);
+    onSuccess: () => {
+      refetch();
       setIsOpened(false);
     },
     onError: error => {
@@ -92,16 +103,17 @@ export default function PetInfo(prop: Prop) {
   });
 
   // submit Handler 작성
-  const handlePetPost = (data: Inputs) => {
+  const handlePetPost = async (data: Inputs) => {
     const { name, age, information, radio } = data;
     const formData = new FormData();
     formData.append('memberId', memberId as string);
-    formData.append('images', file as File);
     formData.append('name', name);
     formData.append('age', `${age}`);
     formData.append('information', information);
     formData.append('sex', radio);
     formData.append('species', '동물');
+    formData.append('images', file as File);
+
     if (method === 'post') {
       const data = {
         formData,
@@ -113,7 +125,7 @@ export default function PetInfo(prop: Prop) {
     if (method === 'patch') {
       const data = {
         formData,
-        url: `${SERVER_URL}status/${memberId}/${petId}`,
+        url: `${SERVER_URL}pets/status/${memberId}/${petId}`,
         accessToken: accessToken as string,
       };
       petPatchMutation.mutate(data);

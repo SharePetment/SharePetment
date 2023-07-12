@@ -114,12 +114,19 @@ export const deletePet = async (body: DeletePetProp) => {
 };
 
 /* -------------------------------- 유저 프로필 변경-------------------------------- */
-export const patchUserProfile = async (url: string) => {
+interface PatchUserProfileProp {
+  url: string;
+  accessToken: string;
+}
+export const patchUserProfile = async (body: PatchUserProfileProp) => {
+  const { url, accessToken } = body;
   const result = await axios.patch(
     url,
     {},
     {
-      withCredentials: true,
+      headers: {
+        Authorization: accessToken,
+      },
     },
   );
   return result.data.imageURL;

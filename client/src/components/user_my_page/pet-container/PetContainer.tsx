@@ -1,7 +1,8 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useReadLocalStorage } from 'usehooks-ts';
-import { deletePet, patchUserProfile } from '../../../api/mutationfn';
+import { UserInfo, deletePet, patchUserProfile } from '../../../api/mutationfn';
+import { getServerDataWithJwt } from '../../../api/queryfn';
 import { SERVER_URL } from '../../../api/url';
 import Popup from '../../../common/popup/Popup';
 import PetInfo from '../../pet/PetInfo';
@@ -42,6 +43,15 @@ export default function PetContainer(prop: Prop) {
     setUserProfileImage,
     index,
   } = prop;
+  // 유저 정보 refatch
+  const { refetch } = useQuery<UserInfo>({
+    queryKey: ['myPage', memberId],
+    queryFn: () =>
+      getServerDataWithJwt(
+        `${SERVER_URL}members/${memberId}/${memberId}`,
+        accessToken as string,
+      ),
+  });
 
   // 펫 등록 수정 띄위기
   const [isPetOpened, setIsPetOpened] = useState(false);
@@ -54,6 +64,7 @@ export default function PetContainer(prop: Prop) {
     mutationFn: deletePet,
     onSuccess() {
       setIsDeletePopUp(false);
+      refetch();
     },
   });
   const handleDeletePet = () => {
@@ -70,19 +81,24 @@ export default function PetContainer(prop: Prop) {
     mutationFn: patchUserProfile,
     onSuccess: data => {
       setUserProfileImage(data);
+      refetch();
     },
   });
   // 유저 프로필 변경
   const handleChangeUserProfile = (petId: number, index: number) => {
     // 추후 작성
     setIsPetCheck(index);
-    mutationPatchUserProfile.mutate(`members/${memberId}/${petId}`);
+    mutationPatchUserProfile.mutate({
+      url: `${SERVER_URL}members/image/${memberId}/${petId}`,
+      accessToken: accessToken as string,
+    });
   };
 
   // 펫 정보 수정
-  const handlePetEdit = () => {
+  const handlePetEditPopUp = () => {
     setIsPetOpened(true);
   };
+
   return (
     <>
       <Container>
@@ -101,7 +117,7 @@ export default function PetContainer(prop: Prop) {
           sex={sex}
         />
         <DeletePet onClick={handleOpenDeletePopup} />
-        <SettingPet onClick={handlePetEdit} />
+        <SettingPet onClick={handlePetEditPopUp} />
       </Container>
       {isPetOpened && (
         <PetInfo
