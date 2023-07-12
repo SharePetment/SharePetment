@@ -71,6 +71,8 @@ public class MemberDto {
         private MemberDto.Info memberInfo;
         @ApiModelProperty(value = "카카오 이름", example = "김본명", required = true)
         private String name;
+        @ApiModelProperty(value = "카카오 이메일", example = "gjjdiivu@naver.com", required = true)
+        private String email;
         @ApiModelProperty(value = "주소지", example = "서울시 강서구 마곡동", required = true)
         private String address;
         @ApiModelProperty(value = "팔로워 수", example = "7", required = true)
