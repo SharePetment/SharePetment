@@ -44,6 +44,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 	implementation 'com.auth0:java-jwt:4.2.2'
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+	implementation 'com.google.code.gson:gson:2.10.1'
+
 }
 
 tasks.named('test') {

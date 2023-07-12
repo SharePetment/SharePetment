@@ -47,7 +47,7 @@ public class FeedDto {
     }
 
     @Data
-//    @Builder
+    @Builder
     @ApiModel(value = "피드 응답용 DTO")
     public static class Response {
         @ApiModelProperty(value = "피드 아이디", example = "1", required = true)

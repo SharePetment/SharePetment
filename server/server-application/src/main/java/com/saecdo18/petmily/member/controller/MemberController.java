@@ -50,15 +50,15 @@ public class MemberController {
     @GetMapping("/{host-member-id}/{guest-member-id}")
     @Operation(summary = "Get Member", description = "회원 조회")
     public ResponseEntity<MemberDto.Response> getMember(@ApiParam("조회될 사용자 식별자") @PathVariable("host-member-id") long hostMemberId,
-                                                        @ApiParam("조회할 사용자 식별자")@PathVariable("guest-member-id") long guestMemberId) {
+                                                        @ApiParam("조회할 사용자 식별자") @PathVariable("guest-member-id") long guestMemberId) {
         MemberDto.Response responseMember = memberService.getMember(hostMemberId, guestMemberId);
         return new ResponseEntity(responseMember, HttpStatus.OK);
     }
 
     @PatchMapping("/status/{member-id}")
     @ApiOperation(value = "requestbody :  {\"nickname\":\"나만의 닉네임\", \"address\":\"서울시 강서구 마곡동\"}")
-    public ResponseEntity<MemberDto.Response> patchMember(@ApiParam("수정할 사용자 식별자")@PathVariable("member-id") long memberId,
-                                                          @ApiParam("수정 사항")@RequestBody MemberDto.Patch memberPatchDto) {
+    public ResponseEntity<MemberDto.Response> patchMember(@ApiParam("수정할 사용자 식별자") @PathVariable("member-id") long memberId,
+                                                          @ApiParam("수정 사항") @RequestBody MemberDto.Patch memberPatchDto) {
         MemberDto.Response responseMember = memberService.updateMemberStatus(memberId,
                 memberPatchDto.getNickname(),
                 memberPatchDto.getAddress());
@@ -66,8 +66,8 @@ public class MemberController {
     }
 
     @PostMapping("/following/{follower-id}/{following-id}")
-    public ResponseEntity<FollowMemberDto.Response> followingMember(@ApiParam("팔로우 당할 사용자")@PathVariable("follower-id") long followerId,
-                                                                    @ApiParam("팔로우 할 사용자")@PathVariable("following-id") long followingId) {
+    public ResponseEntity<FollowMemberDto.Response> followingMember(@ApiParam("팔로우 당할 사용자") @PathVariable("follower-id") long followerId,
+                                                                    @ApiParam("팔로우 할 사용자") @PathVariable("following-id") long followingId) {
         FollowMemberDto.Response response = memberService.followMember(followerId, followingId);
 
         return new ResponseEntity(response, HttpStatus.OK);
@@ -75,14 +75,14 @@ public class MemberController {
 
     @GetMapping("/following/list/{following-id}")
     @Operation(summary = "Get FollowingList", description = "팔로우회원 조회")
-    public ResponseEntity<List<FollowMemberDto.Response>> followingList(@ApiParam("팔로우 한 사용자")@PathVariable("following-id") long followingId) {
+    public ResponseEntity<List<FollowMemberDto.Response>> followingList(@ApiParam("팔로우 한 사용자") @PathVariable("following-id") long followingId) {
         List<FollowMemberDto.Response> responses = memberService.followList(followingId);
         return new ResponseEntity<>(responses, HttpStatus.OK);
     }
 
     @PatchMapping("/image/{member-id}/{pet-id}")
-    public ResponseEntity<MemberDto.Info> changeImage(@ApiParam("이미지 변경할 사용자")@PathVariable("member-id") long memberId,
-                                                      @ApiParam("변경할 이미지의 반려동물")@PathVariable("pet-id") long petId) {
+    public ResponseEntity<MemberDto.Info> changeImage(@ApiParam("이미지 변경할 사용자") @PathVariable("member-id") long memberId,
+                                                      @ApiParam("변경할 이미지의 반려동물") @PathVariable("pet-id") long petId) {
         MemberDto.Info response = memberService.changeImage(memberId, petId);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -95,4 +95,10 @@ public class MemberController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @DeleteMapping("/{member-id}")
+    @ApiOperation(value = "멤버 삭제 메서드!!! 함부로 삭제하지 마시구 사용자 조회를 통해 자신의 아이디를 우선 조회하세요!")
+    public ResponseEntity<?> deleteMember(@ApiParam("삭제할 멤버 아이디") @PathVariable("member-id") long memberId) {
+        memberService.deleteMember(memberId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }
