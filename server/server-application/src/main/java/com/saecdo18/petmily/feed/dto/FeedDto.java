@@ -82,11 +82,13 @@ public class FeedDto {
     }
 
     @Builder
+    @Getter
     @ApiModel(value = "피드 좋아요 DTO")
     public static class Like {
         @ApiModelProperty(value = "좋아요 수", example = "113", required = true)
         private int likeCount;
         @ApiModelProperty(value = "사용자가 좋아요 여부", example = "true", required = true)
+        @JsonProperty(value = "isLike")
         private boolean isLike;
     }
 

@@ -122,7 +122,6 @@ public class MemberService {
 
             findFollower.updateFollowerCount(followMember.isFollow()); //member followerCount update
 
-
         }
         else{
             followMember = optionalFollowMember.get();
@@ -130,7 +129,6 @@ public class MemberService {
             followMember.updateFollow(!follow);
 
             findFollower.updateFollowerCount(followMember.isFollow());
-
         }
         FollowMemberDto.Response response = followMemberMapper.followMemberToFollowMemberResponseDto(followMember);
         response.setMemberInfo(memberInfo);

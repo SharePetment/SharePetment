@@ -3,6 +3,7 @@ package com.saecdo18.petmily.feed.service;
 import com.saecdo18.petmily.awsConfig.S3UploadService;
 import com.saecdo18.petmily.feed.dto.FeedCommentDto;
 import com.saecdo18.petmily.feed.dto.FeedDto;
+import com.saecdo18.petmily.feed.dto.FeedDtoList;
 import com.saecdo18.petmily.feed.entity.Feed;
 import com.saecdo18.petmily.feed.entity.FeedComments;
 import com.saecdo18.petmily.feed.entity.FeedImage;
@@ -78,7 +79,7 @@ public class FeedServiceImpl implements FeedService {
     }
 
     @Override
-    public List<FeedDto.Response> getFeedsRecent(FeedDto.PreviousListIds listIds, long memberId) {
+    public FeedDtoList getFeedsRecent(FeedDto.PreviousListIds listIds, long memberId) {
         int newDataCount = 10;
         PageRequest pageRequest = PageRequest.of(0, newDataCount, Sort.by(Sort.Direction.DESC, "createdAt"));
 
@@ -113,7 +114,7 @@ public class FeedServiceImpl implements FeedService {
     }
 
     @Override
-    public List<FeedDto.Response> getFeedsByMember(int page, int size, long memberId) {
+    public FeedDtoList getFeedsByMember(int page, int size, long memberId) {
         Member findMember = methodFindByMemberId(memberId);
         PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
 
@@ -124,7 +125,7 @@ public class FeedServiceImpl implements FeedService {
     }
 
     @Override
-    public List<FeedDto.Response> getFeedsByMemberFollow(long memberId, FeedDto.PreviousListIds listIds) {
+    public FeedDtoList getFeedsByMemberFollow(long memberId, FeedDto.PreviousListIds listIds) {
         List<FollowMember> followMemberList = followMemberRepository.findByFollowingIdAndFollowTrue(memberId)
                 .orElseThrow(() -> new RuntimeException("팔로우한 멤버가 없습니다."));
 
@@ -330,13 +331,16 @@ public class FeedServiceImpl implements FeedService {
         return response;
     }
 
-    private List<FeedDto.Response> changeFeedListToFeedResponseDto(List<Feed> feedList) {
+    private FeedDtoList changeFeedListToFeedResponseDto(List<Feed> feedList) {
         List<FeedDto.Response> responseList = new ArrayList<>();
         for (Feed feed : feedList) {
             FeedDto.Response response = changeFeedToFeedDtoResponse(feed, 0);
             responseList.add(response);
         }
 
-        return responseList;
+
+        return FeedDtoList.builder()
+                .responseList(responseList)
+                .build();
     }
 }
