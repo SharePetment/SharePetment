@@ -44,11 +44,7 @@ export function Component() {
     <div className="mx-40 py-10 max-md:mx-20 ">
       <SelectContainer className="justify-end">
         <Select size="md" direction="row" setZip={setZip} />
-        <SearchButton
-          onClick={handleClickSearchAddress}
-          className=" flex-shrink-0 w-20 text-defaultbg">
-          검색
-        </SearchButton>
+        <SearchButton onClick={handleClickSearchAddress}>검색</SearchButton>
       </SelectContainer>
       <GridContainer>
         <Link to={Path.WalkPosting}>
