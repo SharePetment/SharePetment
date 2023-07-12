@@ -4,6 +4,7 @@ import com.saecdo18.petmily.member.dto.MemberDto;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -16,6 +17,7 @@ import java.time.LocalDateTime;
 public class FeedCommentDto {
 
     @Data
+    @Builder
     @ApiModel(value = "피드 댓글 응답 DTO")
     public static class Response {
         @ApiModelProperty(value = "댓글 아이디", example = "1", required = true)

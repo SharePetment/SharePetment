@@ -23,18 +23,16 @@ public class FollowMember extends BaseEntity {
     private Member followerMember;
 
     private long followingId;
-    private boolean follow;
+
 
     @Builder
-    public FollowMember(Member followerMember, long followingId, boolean follow){
+    public FollowMember(Member followerMember, long followingId){
         this.followerMember=followerMember;
         this.followingId=followingId;
-        this.follow=follow;
+
     }
 
-    public void updateFollow(boolean follow){
-        this.follow=follow;
-    }
+    
 
     //    @JsonIgnore
 //    @ManyToOne(fetch = FetchType.LAZY)

@@ -1,6 +1,7 @@
 package com.saecdo18.petmily.feed.service;
 
 import com.saecdo18.petmily.feed.dto.FeedDto;
+import com.saecdo18.petmily.feed.dto.FeedDtoList;
 import com.saecdo18.petmily.feed.entity.Feed;
 
 import java.io.IOException;
@@ -13,11 +14,11 @@ public interface FeedService {
 
     public FeedDto.Response getFeed(long feedId, long memberId);
 
-    public List<FeedDto.Response> getFeedsRecent(FeedDto.PreviousListIds listIds, long memberId);
+    public FeedDtoList getFeedsRecent(FeedDto.PreviousListIds listIds, long memberId);
 
-    public List<FeedDto.Response> getFeedsByMember(int page, int size, long memberId);
+    public FeedDtoList getFeedsByMember(int page, int size, long memberId);
 
-    public List<FeedDto.Response> getFeedsByMemberFollow(long memberId, FeedDto.PreviousListIds listIds);
+    public FeedDtoList getFeedsByMemberFollow(long memberId, FeedDto.PreviousListIds listIds);
 
     public FeedDto.Response patchFeed(FeedDto.Patch patch) throws IOException;
 
