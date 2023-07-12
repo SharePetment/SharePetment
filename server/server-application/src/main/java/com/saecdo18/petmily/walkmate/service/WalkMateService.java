@@ -244,17 +244,24 @@ public class WalkMateService {
         return matchWalks;
     }
 
-    public List<WalkMate> recentPage(int page, int size, String location, boolean openFilter){
+    public List<WalkMateDto.Response> recentPage(int page, int size, String location, boolean openFilter){
 
 
         PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
-        List<WalkMate> response = walkMateRepository.findByLocation(pageRequest, location).getContent();
+        List<WalkMate> walks = walkMateRepository.findByLocation(pageRequest, location).getContent();
 
         if(openFilter){
-            onlyOpenWalk(response);
+            onlyOpenWalk(walks);
         }
 
-        return response;
+        List<WalkMateDto.Response> responseList = new ArrayList<>();
+        for(WalkMate walk : walks){
+            WalkMateDto.Response response = walkMateMapper.walkMateToWalkMateResponseDto(walk);
+            MemberDto.Info info = getMemberInfoByWalk(walk);
+            response.setMemberInfo(info);
+            responseList.add(response);
+        }
+        return responseList;
 
     }
 

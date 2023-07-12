@@ -79,12 +79,12 @@ public class WalkMateController {
 
     @GetMapping("/walks")
     @ApiOperation("산책 게시글 조회")
-    public ResponseEntity<List<WalkMate>> getWalks(@ApiParam("모집 여부") @RequestParam("openFilter") boolean open,
+    public ResponseEntity<List<WalkMateDto.Response>> getWalks(@ApiParam("모집 여부") @RequestParam("openFilter") boolean open,
                                                    @ApiParam("지역")@RequestParam("location") String location,
                                                    @ApiParam("page") @RequestParam("page") int page,
                                                    @ApiParam("size") @RequestParam("size") int size){
 
-        List<WalkMate> response = walkMateService.recentPage(page, size, location, open);
+        List<WalkMateDto.Response> response = walkMateService.recentPage(page, size, location, open);
 
         return new ResponseEntity(response, HttpStatus.OK);
     }
