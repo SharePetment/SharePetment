@@ -72,9 +72,9 @@ public class WalkMateDto {
     }
 
     @Getter
-    @Setter
+//    @Setter
     @ApiModel(value = "산책게시글 응답 DTO")
-//    @Builder
+    @Builder
     public static class Response {
 
         @ApiModelProperty(value = "게시글 식별자", example = "1", required = true)

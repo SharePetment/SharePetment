@@ -49,20 +49,20 @@ public interface WalkMateMapper {
         if (walkMate == null) {
             return null;
         } else {
-            WalkMateDto.Response response = new WalkMateDto.Response();
-            response.setWalkMatePostId(walkMate.getWalkMatePostId());
-            response.setTitle(walkMate.getTitle());
-            response.setContent(walkMate.getContent());
-            response.setMapURL(walkMate.getMapURL());
-            response.setChatURL(walkMate.getChatURL());
-            response.setLocation(walkMate.getLocation());
-            response.setTime(walkMate.getTime());
-            response.setOpen(walkMate.getOpen());
-            response.setMaximum(walkMate.getMaximum());
-            response.setLikeCount(walkMate.getLikeCount());
-            response.setCreatedAt(walkMate.getCreatedAt());
-            response.setModifiedAt(walkMate.getModifiedAt());
-//            response.setComments(walkMate.getComments());
+            WalkMateDto.Response response = WalkMateDto.Response.builder()
+                    .walkMatePostId(walkMate.getWalkMatePostId())
+                    .title(walkMate.getTitle())
+                    .content(walkMate.getContent())
+                    .mapURL(walkMate.getMapURL())
+                    .chatURL(walkMate.getChatURL())
+                    .location(walkMate.getLocation())
+                    .time(walkMate.getTime())
+                    .open(walkMate.getOpen())
+                    .maximum(walkMate.getMaximum())
+                    .likeCount(walkMate.getLikeCount())
+                    .createdAt(walkMate.getCreatedAt())
+                    .modifiedAt(walkMate.getModifiedAt())
+                    .build();
             return response;
         }
     }
