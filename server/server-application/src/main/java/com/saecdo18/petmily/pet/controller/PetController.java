@@ -35,8 +35,8 @@ public class PetController {
                                                    @ApiParam("반려동물 정보")@RequestParam("information") String information
                                      ) throws IOException {
 
-        long longMemberId = Long.valueOf(memberId);
-        int intAge = Integer.valueOf(age);
+        long longMemberId = Long.parseLong(memberId);
+        int intAge = Integer.parseInt(age);
 
         PetDto.Post petPostDto = PetDto.Post.builder()
                 .images(images)
@@ -70,7 +70,7 @@ public class PetController {
                                                     @ApiParam("반려동물 성별")@RequestParam("sex") String sex,
                                                     @ApiParam("반려동물 종")@RequestParam("species") String species,
                                                     @ApiParam("반려동물 정보")@RequestParam("information") String information) throws IOException {
-        int intAge = Integer.valueOf(age);
+        int intAge = Integer.parseInt(age);
 
         PetDto.Patch petPatchDto = PetDto.Patch.builder()
                 .images(images)

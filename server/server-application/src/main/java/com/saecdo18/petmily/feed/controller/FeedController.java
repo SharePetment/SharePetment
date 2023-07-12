@@ -63,7 +63,7 @@ public class FeedController {
     public ResponseEntity<FeedDto.Response> createFeed(@ApiParam("사용자 아이디") @RequestParam("memberId") String memberId,
                                         @ApiParam("피드 내용") @RequestParam("content") String content,
                                         @ApiParam(value = "업로드 이미지 리스트") @RequestParam(value = "images", required = false)MultipartFile[] images) throws IOException {
-        long longMemberId = Long.valueOf(memberId);
+        long longMemberId = Long.parseLong(memberId);
 
 
         List<MultipartFile> imageList = new ArrayList<>();
