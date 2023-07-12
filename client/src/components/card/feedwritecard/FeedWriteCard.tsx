@@ -1,12 +1,17 @@
-import { useState, useCallback } from 'react';
+import { useMutation } from '@tanstack/react-query';
+import { useState, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Navigation } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import { useReadLocalStorage } from 'usehooks-ts';
+import { feedPosting } from '../../../api/mutationfn';
+import { SERVER_URL } from '../../../api/url';
 import { ReactComponent as Close } from '../../../assets/button/close.svg';
 import { ReactComponent as Plus } from '../../../assets/button/plus.svg';
 import { ReactComponent as Write } from '../../../assets/button/write.svg';
 import Popup from '../../../common/popup/Popup';
 import { parseImg, deleteImg } from '../../../util/parseImg';
+import LoadingComponent from '../../loading/LoadingComponent';
 import {
   Container,
   Wrap,
@@ -22,23 +27,51 @@ import 'swiper/css/navigation';
 import '../../../common/carousel/carousel.css';
 
 export default function FeedWriteCard() {
+  const navigate = useNavigate();
+  const textRef = useRef<HTMLTextAreaElement>(null);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [savedFile, setSavedFile] = useState<string[]>([]);
-  const navigate = useNavigate();
+  const [prevFile, setPrevFile] = useState<File[]>([]);
+  /* ----------------------------- useLocalStorage ---------------------------- */
+  const accessToken = useReadLocalStorage<string>('accessToken');
+  const memberId = useReadLocalStorage<string>('memberId');
 
-  // const imgFile = new FormData();
+  const { mutate, isLoading } = useMutation({
+    mutationFn: feedPosting,
+    onSuccess: () => {
+      navigate('/my-page');
+    },
+  });
+
+  const handleSubmit = () => {
+    const formData = new FormData();
+    formData.append('memberId', memberId as string);
+    formData.append('content', textRef.current?.value as string);
+    prevFile.forEach(file => formData.append('images', file));
+    const data = {
+      url: `${SERVER_URL}feeds`,
+      accessToken,
+      formData,
+    };
+    mutate(data);
+  };
 
   const handleUpload = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      parseImg({ e, setIsOpen, setSavedFile, savedFile });
+      parseImg({ e, setIsOpen, setSavedFile, savedFile, setPrevFile });
     },
     [savedFile],
   );
 
   const handleSemiClose = useCallback(
-    (order: number) => deleteImg({ order, savedFile, setSavedFile }),
+    (order: number) =>
+      deleteImg({ order, savedFile, setSavedFile, setPrevFile, prevFile }),
     [savedFile],
   );
+
+  if (isLoading) {
+    return <LoadingComponent />;
+  }
 
   return (
     <>
@@ -107,8 +140,12 @@ export default function FeedWriteCard() {
             )}
           </Swiper>
 
-          <Textarea placeholder="글을 입력해주세요." maxLength={200} />
-          <SubmitBtn type="submit">
+          <Textarea
+            placeholder="글을 입력해주세요."
+            maxLength={200}
+            ref={textRef}
+          />
+          <SubmitBtn type="button" onClick={handleSubmit}>
             <Write />
           </SubmitBtn>
         </Container>

@@ -1,4 +1,4 @@
-import { MemberInfo } from './commentType';
+import { CommentProp, MemberInfo } from './commentType';
 
 // 산책 게시물 리스트
 export interface WalkFeedList {
@@ -20,4 +20,5 @@ export interface WalkFeedList {
 // 산책 게시물 디테일
 export interface WalkFeed extends WalkFeedList {
   memberInfo: MemberInfo;
+  comments: CommentProp[];
 }

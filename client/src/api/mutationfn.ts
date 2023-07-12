@@ -6,24 +6,63 @@ export interface Comment {
   content: string;
   url: string;
   tag: string;
+  accessToken: string | null;
 }
 
 /* ------------------------------ 피드, 산책 댓글 수정 ------------------------------ */
 export const editComment = async (body: Comment) => {
-  const { id, content, url, tag } = body;
+  const { id, content, url, tag, accessToken } = body;
 
-  const data =
-    tag === 'feed' ? { feedId: id, content } : { walkId: id, content };
-  try {
-    const result = await axios.patch(url, data);
-    return result.data;
-  } catch (error) {
-    if (isAxiosError(error)) {
-      const errMessage = error.message;
-      console.log(errMessage);
-      return errMessage;
-    }
-  }
+  const data = tag === 'feed' ? { feedId: id, content } : { content };
+
+  const result = await axios.patch(url, data, {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: accessToken,
+    },
+  });
+  return result.data;
+};
+
+/* -------------------------------- 산책 댓글 생성 -------------------------------- */
+export interface AddComment {
+  content: string;
+  url: string;
+  accessToken: string | null;
+}
+export const addComment = async (body: AddComment) => {
+  const { content, url, accessToken } = body;
+
+  const result = await axios.post(
+    url,
+    { content },
+    {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: accessToken,
+      },
+    },
+  );
+
+  return result.data;
+};
+
+/* -------------------------------- 산책 댓글 삭제 -------------------------------- */
+export interface DeleteComment {
+  url: string;
+  accessToken: string | null;
+}
+export const deleteComment = async (body: DeleteComment) => {
+  const { url, accessToken } = body;
+
+  const result = await axios.delete(url, {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: accessToken,
+    },
+  });
+
+  return result.data;
 };
 
 /* -------------------------------- 회원 정보 추가 / 수정 -------------------------------- */
@@ -112,6 +151,23 @@ export const patchUserProfile = async (body: PatchUserProfileProp) => {
     },
   );
   return result.data.imageURL;
+};
+
+/* -------------------------------- 피드게시물 생성 -------------------------------- */
+interface FeedPostingProp {
+  url: string;
+  accessToken: string | null;
+  formData: FormData;
+}
+export const feedPosting = async (body: FeedPostingProp) => {
+  const { url, accessToken, formData } = body;
+  const result = await axios.post(url, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+      Authorization: accessToken,
+    },
+  });
+  return result.data;
 };
 
 /* -------------------------------- 산책게시물 생성 -------------------------------- */

@@ -60,8 +60,10 @@ export const Form = tw.form`
 
 export const Input = tw.input`
     py-1
-    px-4
-    w-[230px]
+    pl-4
+    pr-10
+    w-[400px]
+    max-sm:w-[300px]
     rounded-2xl
 
     border-lightgray
@@ -71,6 +73,6 @@ export const Input = tw.input`
 
 export const WriteBtn = tw.button`
     absolute
-    top-[7px]
+    top-[4px]
     right-[9px]
 `;
