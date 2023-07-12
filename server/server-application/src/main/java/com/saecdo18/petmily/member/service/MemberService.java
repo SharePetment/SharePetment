@@ -25,8 +25,10 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 @Transactional
 @Service
@@ -77,8 +79,7 @@ public class MemberService {
             guestfollowing=false;
         }
         else {
-            FollowMember followMember = findFollowStatus.get();
-            guestfollowing = followMember.isFollow();
+            guestfollowing = true;
 
         }
 
@@ -116,19 +117,19 @@ public class MemberService {
             followMember =FollowMember.builder()
                     .followerMember(findFollower)
                     .followingId(followingId)
-                    .follow(true)
                     .build();
             followMemberRepository.save(followMember);
 
-            findFollower.updateFollowerCount(followMember.isFollow()); //member followerCount update
+            findFollower.updateFollowerCount(true); //member followerCount update
+
 
         }
         else{
             followMember = optionalFollowMember.get();
-            boolean follow = followMember.isFollow();
-            followMember.updateFollow(!follow);
+            followMemberRepository.delete(followMember);
 
-            findFollower.updateFollowerCount(followMember.isFollow());
+            findFollower.updateFollowerCount(false);
+
         }
         FollowMemberDto.Response response = followMemberMapper.followMemberToFollowMemberResponseDto(followMember);
         response.setMemberInfo(memberInfo);
@@ -136,7 +137,8 @@ public class MemberService {
     }
 
     public List<FollowMemberDto.Response> followList(long followingId){
-        List<FollowMember> followMemberList = followMemberRepository.findByFollowingId(followingId);
+
+        List<FollowMember> followMemberList = followMemberRepository.findByFollowingId(followingId).get();
 
         List<FollowMemberDto.Response> responses = new ArrayList<>();
         for(FollowMember followMember:followMemberList){

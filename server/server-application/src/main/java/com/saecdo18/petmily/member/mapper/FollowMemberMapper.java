@@ -10,8 +10,6 @@ import java.util.List;
 public interface FollowMemberMapper {
     default FollowMemberDto.Response followMemberToFollowMemberResponseDto(FollowMember followMember){
         FollowMemberDto.Response response = FollowMemberDto.Response.builder()
-                .followingId(followMember.getFollowingId())
-                .follow(followMember.isFollow())
                 .createdAt(followMember.getCreatedAt())
                 .modifiedAt(followMember.getModifiedAt())
                 .build();
