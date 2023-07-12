@@ -5,10 +5,11 @@ export interface MemberInfo {
 }
 
 export type CommentProp = {
-  feedCommentsId?: number;
-  walkMatePostId?: number;
-  memberInfo: MemberInfo;
   content: string;
   createdAt: number[];
   modifiedAt: number[];
+  memberInfo: MemberInfo;
+  walkMateCommentId?: number;
+  feedCommentsId?: number;
+  walkMatePostId?: string;
 };
