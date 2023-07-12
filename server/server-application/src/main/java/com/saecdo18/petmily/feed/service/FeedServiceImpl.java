@@ -125,7 +125,7 @@ public class FeedServiceImpl implements FeedService {
 
     @Override
     public List<FeedDto.Response> getFeedsByMemberFollow(long memberId, FeedDto.PreviousListIds listIds) {
-        List<FollowMember> followMemberList = followMemberRepository.findByFollowingIdAndFollowTrue(memberId)
+        List<FollowMember> followMemberList = followMemberRepository.findByFollowingId(memberId)
                 .orElseThrow(() -> new RuntimeException("팔로우한 멤버가 없습니다."));
 
         Set<Feed> feedSet = new HashSet<>();
