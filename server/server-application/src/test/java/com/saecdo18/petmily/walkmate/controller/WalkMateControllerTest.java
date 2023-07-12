@@ -62,7 +62,7 @@ class WalkMateControllerTest {
 
 
     @Test
-    void postWalk() throws Exception{
+    void postWalk() throws Exception {
 
         WalkMateDto.Post post = new WalkMateDto.Post("제목 등록", "내용 등록");
         WalkMateDto.Response response = new WalkMateDto.Response(post.getTitle(), post.getContent());
@@ -70,7 +70,6 @@ class WalkMateControllerTest {
         given(walkMateService.createWalk(Mockito.any(WalkMate.class), Mockito.anyLong())).willReturn(response);
 
         String content = gson.toJson(post);
-        System.out.println("@@@@@@@@@@@@@" + content + "@@@@@@@@@@@@@");
 
         ResultActions getActions =
                 mockMvc.perform(
@@ -88,7 +87,7 @@ class WalkMateControllerTest {
     }
 
     @Test
-    void updateWalk() throws Exception{
+    void updateWalk() throws Exception {
 
         WalkMateDto.Patch patch = new WalkMateDto.Patch("제목 수정", "내용 수정");
         WalkMateDto.Response response = new WalkMateDto.Response("원래 제목", "원래 내용");
@@ -98,7 +97,6 @@ class WalkMateControllerTest {
 
 
         String content = gson.toJson(patch);
-        System.out.println("@@@@@@@@@@@@@" + content + "@@@@@@@@@@@@@");
 
         ResultActions getActions =
                 mockMvc.perform(
@@ -117,7 +115,7 @@ class WalkMateControllerTest {
     }
 
     @Test
-    void getWalkByWalkId() throws Exception{
+    void getWalkByWalkId() throws Exception {
 
         WalkMateDto.Response response = new WalkMateDto.Response("제목1", "내용1");
 
@@ -139,7 +137,7 @@ class WalkMateControllerTest {
     }
 
     @Test
-    void getWalksByMemberId() throws Exception{
+    void getWalksByMemberId() throws Exception {
 
         WalkMateDto.Response response1 = new WalkMateDto.Response("제목1", "내용1");
         WalkMateDto.Response response2 = new WalkMateDto.Response("제목2", "내용2");
@@ -170,7 +168,7 @@ class WalkMateControllerTest {
     }
 
     @Test
-    void getWalks() throws Exception{
+    void getWalks() throws Exception {
 
         WalkMateDto.Response response1 = new WalkMateDto.Response("제목1", "내용1", "서울시 강서구 마곡동");
         WalkMateDto.Response response2 = new WalkMateDto.Response("제목2", "내용2", "서울시 강서구 마곡동");
@@ -206,7 +204,7 @@ class WalkMateControllerTest {
     }
 
     @Test
-    void getCommentedWalk() throws Exception{
+    void getCommentedWalk() throws Exception {
 
         WalkMateDto.Response response1 = new WalkMateDto.Response("제목1", "내용1");
         WalkMateDto.Response response2 = new WalkMateDto.Response("제목2", "내용2");
@@ -257,7 +255,7 @@ class WalkMateControllerTest {
     }
 
     @Test
-    void deleteWalk() throws Exception{
+    void deleteWalk() throws Exception {
 
         long walkId = 1L;
         long memberId = 1L;
@@ -276,6 +274,57 @@ class WalkMateControllerTest {
                 .andExpect(status().isNoContent());
     }
 
+    @Test
+    void likeWalk() throws Exception {
 
+        long walkId = 1L;
+        long memberId = 1L;
 
+        WalkMateDto.Like like = WalkMateDto.Like.builder()
+                .likeCount(1)
+                .isLike(true)
+                .build();
+
+        given(walkMateService.likeByMember(walkId, memberId)).willReturn(like);
+
+        ResultActions getActions =
+                mockMvc.perform(
+                        patch("/walkmates/like/{walk-id}/{member-id}", walkId, memberId)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .header("Authorization", tokenProvider.createAccessToken(1L))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(String.valueOf(like))
+                );
+
+        getActions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.like").value(true))
+                .andExpect(jsonPath("$.likeCount").value(1));
+    }
+
+    @Test
+    void changeOpenStatus() throws Exception {
+
+        WalkMateDto.Open response = new WalkMateDto.Open(1L, true);
+
+        given(walkMateService.changeOpenStatus(Mockito.anyBoolean(), Mockito.anyLong(), Mockito.anyLong()))
+                .willReturn(response);
+
+        String content = gson.toJson(response);
+
+        ResultActions getActions =
+                mockMvc.perform(
+                        patch("/walkmates/openstatus/{status}/{walk-id}/{member-id}", true, 1L, 1L)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .header("Authorization", tokenProvider.createAccessToken(1L))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(String.valueOf(content))
+
+                );
+
+        getActions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.open").value(response.getOpen()))
+                .andExpect(jsonPath("$.walkMatePostId").value(response.getWalkMatePostId()));
+    }
 }

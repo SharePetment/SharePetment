@@ -144,6 +144,10 @@ public class WalkMateDto {
         private boolean isLike;
     }
 
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
     @Data
     @Builder
     @ApiModel(value = "산책게시글 모집 여부 DTO")
