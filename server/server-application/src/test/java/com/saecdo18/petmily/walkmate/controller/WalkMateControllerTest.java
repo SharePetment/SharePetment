@@ -57,8 +57,6 @@ class WalkMateControllerTest {
     private WalkMateCommentMapper commentMapper;
     @Autowired
     private Gson gson;
-    @Autowired
-    private ObjectMapper objectMapper;
 
 
     @Test

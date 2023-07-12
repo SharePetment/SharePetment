@@ -42,6 +42,11 @@ public class WalkMateComment extends BaseEntity {
         this.member = member;
     }
 
+    public WalkMateComment(String content, Member member) {
+        this.content = content;
+        this.member = member;
+    }
+
     public void setContent(String content){
         this.content = content;
     }
