@@ -64,6 +64,7 @@ export function Component() {
   const userInfoFillMutation = useMutation({
     mutationFn: fillUserInfo,
     onSuccess: () => {
+      if (userId) return navigate('/my-page');
       navigate('/home');
     },
     onError: () => {

@@ -26,16 +26,6 @@ export const editComment = async (body: Comment) => {
   }
 };
 
-/* -------------------------------- 회원 정보 가져오기 -------------------------------- */
-export const getUserInfo = async (url: string, accessToken: string | null) => {
-  const result = await axios(url, {
-    headers: {
-      Authorization: accessToken,
-    },
-  });
-  return result.data;
-};
-
 /* -------------------------------- 회원 정보 추가 / 수정 -------------------------------- */
 export interface UserInfo {
   nickname: string;
@@ -59,23 +49,6 @@ export const fillUserInfo = async (body: UserInfo) => {
   );
   return result.data;
 };
-
-// export const editUserInfo = async (body: UserInfo) => {
-//   const { nickname, address } = body;
-//   const url = '';
-
-//   const result = await axios.patch(
-//     url,
-//     { nickname, address },
-//     {
-//       headers: {
-//         'Content-Type': 'application/json',
-//         // Authorization: accessToken,
-//       },
-//     },
-//   );
-//   return result.data;
-// };
 
 /* -------------------------------- 펫 등록, 수정 -------------------------------- */
 // 로직 분리하기
