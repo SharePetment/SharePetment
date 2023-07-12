@@ -5,10 +5,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.saecdo18.petmily.jwt.TokenProvider;
 import com.saecdo18.petmily.member.dto.MemberDto;
+import com.saecdo18.petmily.member.entity.Member;
 import com.saecdo18.petmily.member.service.MemberService;
+import com.saecdo18.petmily.walkmate.dto.WalkMateCommentDto;
 import com.saecdo18.petmily.walkmate.dto.WalkMateDto;
 import com.saecdo18.petmily.walkmate.entity.WalkMate;
+import com.saecdo18.petmily.walkmate.entity.WalkMateComment;
+import com.saecdo18.petmily.walkmate.mapper.WalkMateCommentMapper;
 import com.saecdo18.petmily.walkmate.mapper.WalkMateMapper;
+import com.saecdo18.petmily.walkmate.service.WalkMateCommentService;
 import com.saecdo18.petmily.walkmate.service.WalkMateService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,6 +34,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -41,10 +47,14 @@ class WalkMateControllerTest {
     private MockMvc mockMvc;
     @MockBean
     private WalkMateService walkMateService;
+    @MockBean
+    private WalkMateCommentService walkMateCommentService;
     @Autowired
     private TokenProvider tokenProvider;
     @Autowired
-    private WalkMateMapper mapper;
+    private WalkMateMapper walkMateMapper;
+    @Autowired
+    private WalkMateCommentMapper commentMapper;
     @Autowired
     private Gson gson;
     @Autowired
@@ -159,6 +169,112 @@ class WalkMateControllerTest {
                 .andExpect(jsonPath("$[1].content").value(response.get(1).getContent()));
     }
 
+    @Test
+    void getWalks() throws Exception{
+
+        WalkMateDto.Response response1 = new WalkMateDto.Response("제목1", "내용1", "서울시 강서구 마곡동");
+        WalkMateDto.Response response2 = new WalkMateDto.Response("제목2", "내용2", "서울시 강서구 마곡동");
+        WalkMateDto.Response response3 = new WalkMateDto.Response("제목3", "내용3", "서울시 양천구 목동");
+
+
+        List<WalkMateDto.Response> response = new ArrayList<>();
+        response.add(response1);
+        response.add(response2);
+        response.add(response3);
+
+        given(walkMateService.recentPage(Mockito.anyInt(), Mockito.anyInt(), Mockito.anyString(), Mockito.anyBoolean())).willReturn(response);
+
+        ResultActions getActions =
+                mockMvc.perform(
+                        get("/walkmates/walks")
+                                .param("openFilter", "true")
+                                .param("page", "0")
+                                .param("size", "10")
+                                .param("location", "서울시 강서구 마곡동")
+                                .accept(MediaType.APPLICATION_JSON)
+                                .header("Authorization", tokenProvider.createAccessToken(1L))
+                );
+
+        getActions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].title").value("제목1"))
+                .andExpect(jsonPath("$[0].content").value("내용1"))
+                .andExpect(jsonPath("$[0].location").value("서울시 강서구 마곡동"))
+                .andExpect(jsonPath("$[1].title").value("제목2"))
+                .andExpect(jsonPath("$[1].content").value("내용2"))
+                .andExpect(jsonPath("$[0].location").value("서울시 강서구 마곡동"));
+    }
+
+    @Test
+    void getCommentedWalk() throws Exception{
+
+        WalkMateDto.Response response1 = new WalkMateDto.Response("제목1", "내용1");
+        WalkMateDto.Response response2 = new WalkMateDto.Response("제목2", "내용2");
+        WalkMateDto.Response response3 = new WalkMateDto.Response("제목3", "내용3");
+
+        Member member = new Member();
+        MemberDto.Info info = MemberDto.Info.builder()
+                .memberId(1L)
+                .build();
+
+        WalkMate walkMate = WalkMate.builder()
+                .title("제목 1")
+                .content("내용 1")
+                .member(member)
+                .build();
+
+        WalkMateComment comment = WalkMateComment.builder()
+                .member(member) //1L
+                .walkMate(walkMate)
+                .build();
+        WalkMateCommentDto.Response commentResponse = commentMapper.commentToCommentResponseDto(comment);
+        commentResponse.setMemberInfo(info);
+
+        List<WalkMateCommentDto.Response> responseList = new ArrayList<>();
+        responseList.add(commentResponse);
+
+        response2.setComments(responseList);
+
+        List<WalkMateDto.Response> response = new ArrayList<>();
+        response.add(response1);
+        response.add(response2);
+        response.add(response3);
+
+        given(walkMateService.findCommentedWalks(1L)).willReturn(response);
+
+        ResultActions getActions =
+                mockMvc.perform(
+                        get("/walkmates/have/comments/{member-id}", 1L)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .header("Authorization", tokenProvider.createAccessToken(1L))
+                );
+
+        getActions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[1].title").value("제목2"))
+                .andExpect(jsonPath("$[1].content").value("내용2"))
+                .andExpect(jsonPath("$[1].comments[0].memberInfo.memberId").value("1"));
+    }
+
+    @Test
+    void deleteWalk() throws Exception{
+
+        long walkId = 1L;
+        long memberId = 1L;
+
+        doNothing().when(walkMateService).deleteWalk(walkId, memberId);
+
+        ResultActions getActions =
+                mockMvc.perform(
+                        delete("/walkmates/{walk-id}/{memberId}", walkId, memberId)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .header("Authorization", tokenProvider.createAccessToken(1L))
+                                .contentType(MediaType.APPLICATION_JSON)
+                );
+
+        getActions
+                .andExpect(status().isNoContent());
+    }
 
 
 

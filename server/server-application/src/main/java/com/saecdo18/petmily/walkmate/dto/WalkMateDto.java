@@ -14,7 +14,9 @@ public class WalkMateDto {
 
     @Getter
     @Setter
-//    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
     @ApiModel(value = "산책게시글 생성 DTO")
     public static class Post{
 
@@ -40,13 +42,20 @@ public class WalkMateDto {
         @ApiModelProperty(value = "좋아요 수", example = "3", required = true)
         private Integer likeCount;
 
+        public Post(String title, String content) {
+            this.title=title;
+            this.content=content;
+        }
+
 //        private List<WalkMateComment> comments;
     }
 
     @Getter
     @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
     @ApiModel(value = "산책게시글 수정 DTO")
-//    @Builder
     public static class Patch{
 
         //        private Long walkMatePostId;
@@ -68,13 +77,20 @@ public class WalkMateDto {
         private Boolean open;
         @ApiModelProperty(value = "모집 인원", example = "3", required = true)
         private Integer maximum;
+
+        public Patch(String title, String content) {
+            this.title=title;
+            this.content=content;
+        }
 //        private Integer likeCount;
     }
 
     @Getter
     @Setter
-    @ApiModel(value = "산책게시글 응답 DTO")
+    @NoArgsConstructor
+    @AllArgsConstructor
     @Builder
+    @ApiModel(value = "산책게시글 응답 DTO")
     public static class Response {
 
         @ApiModelProperty(value = "게시글 식별자", example = "1", required = true)
@@ -105,6 +121,17 @@ public class WalkMateDto {
         private LocalDateTime modifiedAt;
         @ApiModelProperty(value = "댓글", example = "comments:...", required = true)
         private List<WalkMateCommentDto.Response> comments;
+
+        public Response(String title, String content) {
+            this.title=title;
+            this.content=content;
+        }
+
+        public Response(String title, String content, String location) {
+            this.title=title;
+            this.content=content;
+            this.location=location;
+        }
     }
 
     @Data
