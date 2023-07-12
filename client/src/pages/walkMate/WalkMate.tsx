@@ -10,6 +10,7 @@ import { GridContainer } from '../../common/grid/Grid.styled';
 import Select from '../../common/select/Select';
 import WalkCard from '../../components/card/walkCard/walkCard';
 import { CardContainer } from '../../components/card/walkCard/walkCard.styled';
+import LoadingComponent from '../../components/loading/LoadingComponent';
 import Path from '../../routers/paths';
 import { WalkFeedList } from '../../types/walkType';
 import { SearchButton, SelectContainer } from './WalkMate.styled';
@@ -21,24 +22,35 @@ export function Component() {
   const accessToken = useReadLocalStorage<string | null>('accessToken');
 
   /* ---------------------------- useInfiniteQuery ---------------------------- */
-  const { data, refetch, isFetching, isError, hasNextPage, fetchNextPage } =
-    useInfiniteQuery<WalkFeedList>({
-      queryKey: ['walkmateList'],
-      queryFn: ({ pageParam = 0 }) =>
-        getServerDataWithJwt(
-          `${SERVER_URL}walkmates/walks?openFilter=false&location=${zip}&page=${pageParam}&size=10`,
-          accessToken,
-        ),
-      getNextPageParam: (lastPage, allPages) => {
-        console.log(lastPage, allPages);
-        // const nextPage = allPages.length + 1;
-        // return lastPage.currentPage < lastPage.totalPage ? nextPage : undefined;
-      },
-    });
+  const {
+    data,
+    isLoading,
+    refetch,
+    isFetching,
+    isError,
+    hasNextPage,
+    fetchNextPage,
+  } = useInfiniteQuery<WalkFeedList>({
+    queryKey: ['walkmateList'],
+    queryFn: ({ pageParam = 0 }) =>
+      getServerDataWithJwt(
+        `${SERVER_URL}walkmates/walks?openFilter=false&location=${zip}&page=${pageParam}&size=10`,
+        accessToken as string,
+      ),
+    getNextPageParam: (lastPage, allPages) => {
+      console.log(lastPage, allPages);
+      // const nextPage = allPages.length + 1;
+      // return lastPage.currentPage < lastPage.totalPage ? nextPage : undefined;
+    },
+  });
 
   const handleClickSearchAddress = () => {
     refetch();
   };
+
+  if (isLoading) {
+    return <LoadingComponent />;
+  }
 
   return (
     <div className="mx-40 py-10 max-md:mx-20 ">
