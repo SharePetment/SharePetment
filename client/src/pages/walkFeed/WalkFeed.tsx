@@ -13,6 +13,7 @@ import { ReactComponent as Dog } from '../../assets/dog.svg';
 import { ReactComponent as Chatlink } from '../../assets/link.svg';
 import { ReactComponent as Pin } from '../../assets/pin.svg';
 import Comment from '../../common/comment/Comment';
+import LoadingComponent from '../../components/loading/LoadingComponent';
 import { WalkFeed } from '../../types/walkType';
 import {
   CommentButton,
@@ -48,7 +49,7 @@ export function Component() {
 
   const queryClient = useQueryClient();
 
-  const { data } = useQuery<WalkFeed>({
+  const { data, isLoading } = useQuery<WalkFeed>({
     queryKey: ['walkFeed', postId],
     queryFn: () =>
       getServerDataWithJwt(
@@ -56,6 +57,10 @@ export function Component() {
         accessToken as string,
       ),
   });
+
+  if (isLoading) {
+    return <LoadingComponent />;
+  }
 
   return (
     <div className="w-[450px] max-sm:w-[320px] mx-auto mt-7">
