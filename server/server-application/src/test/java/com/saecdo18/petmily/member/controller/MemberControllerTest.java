@@ -1,5 +1,6 @@
 package com.saecdo18.petmily.member.controller;
 
+import com.saecdo18.petmily.jwt.TokenProvider;
 import com.saecdo18.petmily.member.dto.MemberDto;
 import com.saecdo18.petmily.member.service.MemberService;
 import org.junit.jupiter.api.Test;
@@ -24,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-@SpringBootTest
+@SpringBootTest(properties = {"spring.config.name=application-test", "spring.config.location=classpath:/"})
 @AutoConfigureMockMvc
 class MemberControllerTest {
     @Autowired
@@ -32,6 +33,9 @@ class MemberControllerTest {
 
     @MockBean
     private MemberService memberService;
+
+    @Autowired
+    private TokenProvider tokenProvider;
 
 
     @Test
@@ -48,17 +52,38 @@ class MemberControllerTest {
 
         ResultActions getActions =
                 mockMvc.perform(
-                        get("/member/{host-member-id}/{guest-member-id}",1L,1L)
+                        get("/members/1/1")
+                                .header("Authorization", tokenProvider.createAccessToken(6))
                                 .accept(MediaType.APPLICATION_JSON)
                 );
 
         getActions
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.name").value(respone.getName()));
+                .andExpect(jsonPath("$.name").value(respone.getName()));
     }
 
     @Test
-    void patchMember() {
+    void patchMember() throws Exception {
+        MemberDto.Response respone = MemberDto.Response.builder()
+                .name("김본명")
+                .address("서울시 강서구 마곡동")
+                .followerCount(0)
+                .feedCount(0)
+                .animalParents(false)
+                .guestFollow(false)
+                .build();
+        given(memberService.getMember(Mockito.anyLong(), Mockito.anyLong())).willReturn(respone);
+
+        ResultActions getActions =
+                mockMvc.perform(
+                        get("/members/1/1")
+                                .header("Authorization", tokenProvider.createAccessToken(6))
+                                .accept(MediaType.APPLICATION_JSON)
+                );
+
+        getActions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value(respone.getName()));
     }
 
     @Test
