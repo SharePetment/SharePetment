@@ -15,6 +15,7 @@ export default {
         lightgreen: '#CCE7C2',
         white: '#FFFFFF',
         popup: '#a1a1aa',
+        yellow: '#EAE784',
       },
     },
     keyframes: {
