@@ -1,7 +1,7 @@
 export interface MemberInfo {
   memberId: number;
   nickname: string;
-  imageUrl: string;
+  imageURL: string;
 }
 
 export type CommentProp = {

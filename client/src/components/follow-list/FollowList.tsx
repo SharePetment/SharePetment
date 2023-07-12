@@ -42,18 +42,18 @@ export default function FollowList({ setIsListShowed, follow }: Prop) {
           }}>
           <Title>팔로잉</Title>
 
-          {Array.isArray(follow) && (
+          {Array.isArray(follow) && follow.length > 0 && (
             <FollowBox>
               {follow?.map(
                 ({
-                  memberInfo: { nickname, imageUrl },
+                  memberInfo: { nickname, imageURL },
                   followerId,
                   followingId,
                 }) => (
                   <FollowingBox
                     onClick={() => handleUserPage(followerId, followingId)}
                     key={followingId}>
-                    <Profile isgreen="false" size="sm" url={imageUrl} />
+                    <Profile isgreen="false" size="sm" url={imageURL} />
                     <UserName> {nickname}</UserName>
                   </FollowingBox>
                 ),
@@ -61,7 +61,8 @@ export default function FollowList({ setIsListShowed, follow }: Prop) {
             </FollowBox>
           )}
 
-          {!Array.isArray(follow) && (
+          {(!Array.isArray(follow) ||
+            (Array.isArray(follow) && follow.length === 0)) && (
             <Button
               isgreen="true"
               text="구독을 먼저 해주세요!"

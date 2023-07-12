@@ -2,7 +2,9 @@ import { ErrorMessage } from '@hookform/error-message';
 import { useMutation } from '@tanstack/react-query';
 import { useState, useEffect } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { postPet } from '../../api/mutationfn';
+import { useReadLocalStorage } from 'usehooks-ts';
+import { patchPet, postPet } from '../../api/mutationfn';
+import { SERVER_URL } from '../../api/url';
 import { ReactComponent as Man } from '../../assets/label/man.svg';
 import { ReactComponent as Woman } from '../../assets/label/woman.svg';
 import Button from '../../common/button/Button';
@@ -26,7 +28,6 @@ type Prop = {
   name?: string;
   age?: number;
   sex?: string;
-  memberId?: string;
   information?: string;
 };
 
@@ -39,17 +40,12 @@ type Inputs = {
 
 export default function PetInfo(prop: Prop) {
   // 사용하는 것만 추리기
-  const {
-    petId,
-    profile,
-    name,
-    age,
-    sex,
-    information,
-    memberId,
-    method,
-    setIsOpened,
-  } = prop;
+  const { petId, profile, name, age, sex, information, method, setIsOpened } =
+    prop;
+
+  // token
+  const accessToken = useReadLocalStorage<string>('accessToken');
+  const memberId = useReadLocalStorage<string>('memberId');
 
   // 프로필에 사용
   const [image, setImage] = useState(profile);
@@ -71,11 +67,23 @@ export default function PetInfo(prop: Prop) {
   const [isError, setIsError] = useState(false);
 
   // mutation 작성
-  const mutation = useMutation({
+  const petPostMutation = useMutation({
     mutationFn: postPet,
     onSuccess: data => {
       console.log(data);
-      setIsOpened(true);
+      setIsOpened(false);
+    },
+    onError: error => {
+      console.log(error);
+      setIsError(true);
+    },
+  });
+
+  const petPatchMutation = useMutation({
+    mutationFn: patchPet,
+    onSuccess: data => {
+      console.log(data);
+      setIsOpened(false);
     },
     onError: error => {
       console.log(error);
@@ -88,18 +96,27 @@ export default function PetInfo(prop: Prop) {
     const { name, age, information, radio } = data;
     const formData = new FormData();
     formData.append('memberId', memberId as string);
-    formData.append('image', file as File);
+    formData.append('images', file as File);
     formData.append('name', name);
     formData.append('age', `${age}`);
     formData.append('information', information);
     formData.append('sex', radio);
+    formData.append('species', '동물');
     if (method === 'post') {
-      const data = { formData, method, url: '/pets' };
-      mutation.mutate(data);
+      const data = {
+        formData,
+        url: `${SERVER_URL}pets`,
+        accessToken: accessToken as string,
+      };
+      petPostMutation.mutate(data);
     }
     if (method === 'patch') {
-      const data = { formData, method, url: `/status/${memberId}/${petId}` };
-      mutation.mutate(data);
+      const data = {
+        formData,
+        url: `${SERVER_URL}status/${memberId}/${petId}`,
+        accessToken: accessToken as string,
+      };
+      petPatchMutation.mutate(data);
     }
   };
 

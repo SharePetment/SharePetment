@@ -1,10 +1,7 @@
 import { useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useLocalStorage } from 'usehooks-ts';
-import LoadingDog from '../../assets/illustration/loading-dog.png';
-import { ReactComponent as LoadingText } from '../../assets/loading-text.svg';
-import { ReactComponent as Loading } from '../../assets/loading.svg';
-import { Container } from './Loading.styled';
+import LoadingComponent from '../../components/loading/LoadingComponent';
 
 export function Component() {
   const [searchParams] = useSearchParams();
@@ -51,15 +48,7 @@ export function Component() {
     setAnimalParents,
   ]);
 
-  return (
-    <Container>
-      <div className="relative pt-10">
-        <Loading className="absolute bottom-44 right-24 " />
-        <img src={LoadingDog} width={250} />
-      </div>
-      <LoadingText width={200} height={50} />
-    </Container>
-  );
+  return <LoadingComponent />;
 }
 
 Component.displayName = 'Loading';

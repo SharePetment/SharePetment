@@ -2,7 +2,6 @@ import { ChangeEvent, useState, useRef } from 'react';
 import Cropper, { ReactCropperElement } from 'react-cropper';
 import Button from '../../../common/button/Button';
 import Profile from '../../../common/profile/Profile';
-import { dataUrlToFile } from '../../../util/dataUrltoFile';
 import {
   ButtonBox,
   CropDiv,
@@ -48,12 +47,17 @@ export default function PetProfile({
   // cropper 함수
   const cropperRef = useRef<ReactCropperElement>(null);
   // cropper 채택
-  const getCropData = () => {
+  const getCropData = async () => {
     const cropper = cropperRef.current?.cropper;
     if (cropper) {
       const image = cropper.getCroppedCanvas().toDataURL();
       setImage(image);
-      const cropfile = dataUrlToFile(image, 'output.png');
+      // string을 file 형태로 변환
+      const cropfile = await fetch(cropper.getCroppedCanvas().toDataURL())
+        .then(res => res.blob())
+        .then(blob => {
+          return new File([blob], 'newAvatar.png', { type: 'image/png' });
+        });
       setFile(cropfile);
     }
     setIsViewImageCropper(false);
