@@ -1,8 +1,9 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState, useEffect } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { useLocalStorage } from 'usehooks-ts';
-import { editComment } from '../../api/mutationfn';
+import { useReadLocalStorage } from 'usehooks-ts';
+import { deleteComment, editComment } from '../../api/mutationfn';
+import { SERVER_URL } from '../../api/url';
 import { ReactComponent as Write } from '../../assets/button/write.svg';
 import { CommentProp } from '../../types/commentType';
 import changeTime from '../../util/changeTiem';
@@ -30,48 +31,71 @@ type Inputs = {
 
 export default function Comment(props: CommentProp) {
   const {
-    memberInfo: { memberId, imageUrl, nickname },
+    memberInfo: { memberId, imageURL, nickname },
     createdAt,
     content,
     feedCommentsId,
+    walkMateCommentId,
     walkMatePostId,
   } = props;
-  const [userId] = useLocalStorage('memberId', '');
+
+  const userId = useReadLocalStorage('memberId');
+  const accessToken = useReadLocalStorage<string | null>('accessToken');
+
   const [isEdited, setIsEdited] = useState(false);
+  const [isDeleted, setIsDeleted] = useState(false);
   const [text, setText] = useState(content);
 
-  // mutation
+  const { register, handleSubmit, setFocus } = useForm<Inputs>();
 
   // useHookForm 댓글 수정
   const handleEditText = (data: Inputs) => {
     const newComment = data.comment;
     const postData = {
-      id: feedCommentsId ? `${feedCommentsId}` : `${walkMatePostId}`,
+      id: feedCommentsId ? `${feedCommentsId}` : `${walkMateCommentId}`,
       content: newComment,
       url: feedCommentsId
-        ? `/feeds/comments/${feedCommentsId}/${memberId}`
-        : `/walkmates/comments/${walkMatePostId}/${memberId}`,
+        ? `${SERVER_URL}feeds/comments/${feedCommentsId}/${memberId}`
+        : `${SERVER_URL}walkmates/comments/${walkMateCommentId}/${memberId}`,
       tag: feedCommentsId ? 'feed' : 'walk',
+      accessToken,
     };
     mutation.mutate(postData);
   };
 
-  const { register, handleSubmit, setFocus } = useForm<Inputs>();
+  // 산책 댓글 삭제
+  const handleDeleteComment = (walkMateCommentId: number | undefined) => {
+    const data = {
+      url: `${SERVER_URL}walkmates/comments/${walkMateCommentId}/${memberId}`,
+      accessToken,
+    };
+    deleteCommentMutaion.mutate(data);
+  };
 
   const onSubmit: SubmitHandler<Inputs> = data => handleEditText(data);
+
   useEffect(() => {
     setFocus('comment');
   }, [setFocus, isEdited]);
 
+  const queryClient = useQueryClient();
   // mutation
   const mutation = useMutation({
     mutationFn: editComment,
-    onSuccess(data) {
-      setText(data.content);
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['walkFeed', walkMatePostId] });
+      setIsEdited(false);
+    },
+    onError: error => console.log(error),
+  });
+
+  const deleteCommentMutaion = useMutation({
+    mutationFn: deleteComment,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['walkFeed', walkMatePostId] });
     },
   });
-  // popUP
-  const [isDeleted, setIsDeleted] = useState(false);
+
   return (
     <>
       <Container>
@@ -79,27 +103,26 @@ export default function Comment(props: CommentProp) {
           {/* 유저 정보 기입 */}
           <HeaderBox>
             <UserBox>
-              <Profile size="sm" url={imageUrl} isgreen={'false'} />
+              <Profile size="sm" url={imageURL} isgreen={'false'} />
               <UserName>{nickname}</UserName>
               <DateText>{changeTime(createdAt)}</DateText>
             </UserBox>
-            {userId === `${memberId}` ||
-              (true && (
-                <BtnBox>
-                  <EditBtn
-                    onClick={() => {
-                      setIsEdited(prev => !prev);
-                    }}>
-                    수정
-                  </EditBtn>
-                  <DeleteBtn
-                    onClick={() => {
-                      setIsDeleted(true);
-                    }}>
-                    삭제
-                  </DeleteBtn>
-                </BtnBox>
-              ))}
+            {userId === `${memberId}` && (
+              <BtnBox>
+                <EditBtn
+                  onClick={() => {
+                    setIsEdited(prev => !prev);
+                  }}>
+                  수정
+                </EditBtn>
+                <DeleteBtn
+                  onClick={() => {
+                    setIsDeleted(true);
+                  }}>
+                  삭제
+                </DeleteBtn>
+              </BtnBox>
+            )}
           </HeaderBox>
           {/* 댓글 작성 */}
           <ContentBox>
@@ -146,6 +169,7 @@ export default function Comment(props: CommentProp) {
             () => {
               //delete 메서드 진행
               setIsDeleted(false);
+              handleDeleteComment(walkMateCommentId);
             },
             () => {
               //delete 메서드 진행
