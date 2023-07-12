@@ -46,14 +46,14 @@ export default function FollowList({ setIsListShowed, follow }: Prop) {
             <FollowBox>
               {follow?.map(
                 ({
-                  memberInfo: { nickname, imageUrl },
+                  memberInfo: { nickname, imageURL },
                   followerId,
                   followingId,
                 }) => (
                   <FollowingBox
                     onClick={() => handleUserPage(followerId, followingId)}
                     key={followingId}>
-                    <Profile isgreen="false" size="sm" url={imageUrl} />
+                    <Profile isgreen="false" size="sm" url={imageURL} />
                     <UserName> {nickname}</UserName>
                   </FollowingBox>
                 ),

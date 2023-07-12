@@ -68,7 +68,7 @@ export function Component() {
             size="lg"
             url={
               typeof data?.memberInfo === 'object'
-                ? data?.memberInfo.imageUrl
+                ? data?.memberInfo.imageURL
                 : ''
             }
           />
