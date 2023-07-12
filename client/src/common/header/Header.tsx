@@ -13,6 +13,14 @@ export default function Header() {
   const animalParents = localStorage.getItem('animalParents');
   const navigate = useNavigate();
 
+  const handleClick = () => {
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('memberId');
+    localStorage.removeItem('animalParents');
+    localStorage.removeItem('refreshToken');
+    navigate('/');
+  };
+
   return (
     <HeaderContainer>
       <div>
@@ -68,7 +76,7 @@ export default function Header() {
               size="sm"
               text="로그아웃"
               isgreen="true"
-              handler={() => navigate('/')}
+              handler={handleClick}
             />
           </li>
         </NavList>

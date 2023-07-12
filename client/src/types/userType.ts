@@ -4,7 +4,7 @@ import { Pets } from './petType';
 export interface UserInfo {
   memberInfo: MemberInfo;
   name: string | number | readonly string[] | undefined;
-  email: string;
+  email?: string;
   address: string;
   followerCount: number;
   animalParents: boolean;
