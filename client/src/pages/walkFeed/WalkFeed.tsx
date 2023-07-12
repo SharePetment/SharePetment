@@ -3,7 +3,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { Link, useParams } from 'react-router-dom';
 import { useReadLocalStorage } from 'usehooks-ts';
 import { addComment } from '../../api/mutationfn';
-import { getServerDataWithJWT } from '../../api/queryfn';
+import { getServerDataWithJwt } from '../../api/queryfn';
 import { SERVER_URL } from '../../api/url';
 import { ReactComponent as CommentIcon } from '../../assets/button/comment.svg';
 import { ReactComponent as Delete } from '../../assets/button/delete.svg';
@@ -51,7 +51,7 @@ export function Component() {
   const { data } = useQuery<WalkFeed>({
     queryKey: ['walkFeed', postId],
     queryFn: () =>
-      getServerDataWithJWT(
+      getServerDataWithJwt(
         `${SERVER_URL}walkmates/bywalk/${postId}`,
         accessToken as string,
       ),

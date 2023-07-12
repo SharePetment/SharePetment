@@ -3,7 +3,7 @@ import { useState } from 'react';
 // import { useInView } from 'react-intersection-observer';
 import { Link } from 'react-router-dom';
 import { useReadLocalStorage } from 'usehooks-ts';
-import { getServerDataWithJWT } from '../../api/queryfn';
+import { getServerDataWithJwt } from '../../api/queryfn';
 import { SERVER_URL } from '../../api/url';
 import { ReactComponent as Plus } from '../../assets/button/plus.svg';
 import { GridContainer } from '../../common/grid/Grid.styled';
@@ -25,7 +25,7 @@ export function Component() {
     useInfiniteQuery<WalkFeedList>({
       queryKey: ['walkmateList'],
       queryFn: ({ pageParam = 0 }) =>
-        getServerDataWithJWT(
+        getServerDataWithJwt(
           `${SERVER_URL}walkmates/walks?openFilter=false&location=${zip}&page=${pageParam}&size=10`,
           accessToken,
         ),
