@@ -114,6 +114,23 @@ export const patchUserProfile = async (body: PatchUserProfileProp) => {
   return result.data.imageURL;
 };
 
+/* -------------------------------- 피드게시물 생성 -------------------------------- */
+interface FeedPostingProp {
+  url: string;
+  accessToken: string | null;
+  formData: FormData;
+}
+export const feedPosting = async (body: FeedPostingProp) => {
+  const { url, accessToken, formData } = body;
+  const result = await axios.post(url, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+      Authorization: accessToken,
+    },
+  });
+  return result.data;
+};
+
 /* -------------------------------- 산책게시물 생성 -------------------------------- */
 interface FillWalkPosProp {
   title: string;
