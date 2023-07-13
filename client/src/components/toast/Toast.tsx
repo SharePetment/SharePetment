@@ -3,7 +3,7 @@ import { Container, Text } from './Toast.styled';
 
 export default function Toast() {
   return (
-    <Container>
+    <Container className="animate-smoothAppear">
       <Star />
       <Text>링크가 복사되었습니다.</Text>
     </Container>

@@ -15,6 +15,7 @@ interface Prop {
   likes: number;
   like: BooleanStr;
   guesthandler: () => void;
+  toasthandler: React.Dispatch<React.SetStateAction<boolean>>;
   url: string;
 }
 
@@ -24,8 +25,9 @@ export default function SideNav({
   likes,
   like,
   guesthandler,
-}: // url,
-Prop) {
+  toasthandler,
+  url,
+}: Prop) {
   const accessToken = useReadLocalStorage<string | null>('accessToken');
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -51,6 +53,12 @@ Prop) {
   const handleClickComment = () => {
     if (!accessToken) return guesthandler();
     navigate(`/home/${feedid}`);
+  };
+
+  const handleClickShare = async () => {
+    await navigator.clipboard.writeText(url);
+    toasthandler(true);
+    setTimeout(() => toasthandler(false), 1500);
   };
 
   return (
@@ -79,7 +87,7 @@ Prop) {
           <Comment className="cursor-pointer ml-2" stroke="black" />
         </Wrap>
 
-        <Wrap>
+        <Wrap onClick={handleClickShare}>
           <Share className="cursor-pointer ml-2" />
         </Wrap>
       </Container>
