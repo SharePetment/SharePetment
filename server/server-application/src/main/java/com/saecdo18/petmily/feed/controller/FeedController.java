@@ -29,7 +29,7 @@ public class FeedController {
     private final AuthenticationGetMemberId authenticationGetMemberId;
 
     @ApiOperation("피드 가져오기")
-    @GetMapping("/all/{feed-id}")
+    @GetMapping("/{feed-id}")
     public ResponseEntity<FeedDto.Response> getFeed(@ApiParam("피드 아이디") @PathVariable("feed-id") long feedId) {
         long memberId = authenticationGetMemberId.getMemberId();
         FeedDto.Response response = feedService.getFeed(feedId, memberId);
@@ -38,7 +38,7 @@ public class FeedController {
     }
 
     @ApiOperation("최신 피드 리스트 가져오기")
-    @PostMapping("/all/list/random")
+    @PostMapping("/list/random")
     public ResponseEntity<FeedDtoList> getFeedsRandom(@ApiParam("전에 받은 피드 아이디 리스트") @RequestBody FeedDto.PreviousListIds listIds) {
         long memberId = authenticationGetMemberId.getMemberId();
         FeedDtoList responseList = feedService.getFeedsRecent(listIds, memberId);
