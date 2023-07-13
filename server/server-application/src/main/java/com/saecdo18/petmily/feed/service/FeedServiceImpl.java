@@ -65,11 +65,11 @@ public class FeedServiceImpl implements FeedService {
                 saveImage(createFeed, originalFilename, uploadFileURL);
             }
         }
-        Feed saveFeed = feedRepository.save(createFeed);
+        Feed saveFeed = feedRepository.saveAndFlush(createFeed);
 
         findMember.upCountFeed(); // 피드 생성시 해당 멤버 feedCount 증가
 
-        return getFeed(saveFeed.getFeedId(), findMember.getMemberId());
+        return changeFeedToFeedDtoResponse(saveFeed, findMember.getMemberId());
     }
 
     @Override
