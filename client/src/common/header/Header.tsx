@@ -1,4 +1,5 @@
 import { useMatch, Link, useNavigate } from 'react-router-dom';
+import { useReadLocalStorage } from 'usehooks-ts';
 import { ReactComponent as Logo } from '../../assets/logo.svg';
 import Path from '../../routers/paths';
 import Button from '../button/Button';
@@ -9,8 +10,8 @@ export default function Header() {
   const matchHome = useMatch('/home');
   const matchWalkmate = useMatch('/walkmate');
   const matchPost = useMatch('/feed-posting');
-  const memberId = localStorage.getItem('memberId');
-  const animalParents = localStorage.getItem('animalParents');
+  const memberId = useReadLocalStorage('memberId');
+  const animalParents = useReadLocalStorage('animalParents');
   const navigate = useNavigate();
 
   const handleClick = () => {
@@ -35,7 +36,7 @@ export default function Header() {
               <Link to={Path.Home}>홈</Link>
             </NavItem>
           )}
-          {memberId !== null && animalParents === 'false' ? (
+          {memberId !== null && animalParents === 'false' && (
             <>
               <NavItem active={matchHome !== null}>
                 <Link to={Path.Home}>홈</Link>
@@ -44,7 +45,8 @@ export default function Header() {
                 <Link to={Path.FeedPosting}>포스트</Link>
               </NavItem>
             </>
-          ) : (
+          )}
+          {memberId !== null && animalParents === 'true' && (
             <>
               <NavItem active={matchHome !== null}>
                 <Link to={Path.Home}>홈</Link>
