@@ -11,7 +11,7 @@ export interface WalkFeedList {
   location: string;
   time: string;
   open: boolean;
-  maximum: string;
+  maximum: number;
   likeCount: number;
   createdAt: number[];
   modifiedAt: number[];
