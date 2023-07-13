@@ -3,6 +3,7 @@ package com.saecdo18.petmily.walkmate.service;
 import com.saecdo18.petmily.member.dto.MemberDto;
 import com.saecdo18.petmily.member.entity.Member;
 import com.saecdo18.petmily.member.repository.MemberRepository;
+import com.saecdo18.petmily.util.AuthenticationGetMemberId;
 import com.saecdo18.petmily.walkmate.dto.WalkMateCommentDto;
 import com.saecdo18.petmily.walkmate.dto.WalkMateDto;
 import com.saecdo18.petmily.walkmate.entity.WalkMate;
@@ -28,19 +29,23 @@ public class WalkMateService {
     private final MemberRepository memberRepository;
     private final WalkMateCommentService walkMateCommentService;
     private final WalkMateMapper walkMateMapper;
+    private final AuthenticationGetMemberId authenticationGetMemberId;
+
 
     public WalkMateService(WalkMateRepository walkMateRepository,
                            WalkMateCommentRepository walkMateCommentRepository,
                            WalkLikeRepository walkLikeRepository,
                            MemberRepository memberRepository,
                            WalkMateCommentService walkMateCommentService,
-                           WalkMateMapper walkMateMapper) {
+                           WalkMateMapper walkMateMapper,
+                           AuthenticationGetMemberId authenticationGetMemberId) {
         this.walkMateRepository = walkMateRepository;
         this.walkMateCommentRepository = walkMateCommentRepository;
         this.walkLikeRepository = walkLikeRepository;
         this.memberRepository = memberRepository;
         this.walkMateCommentService = walkMateCommentService;
         this.walkMateMapper = walkMateMapper;
+        this.authenticationGetMemberId = authenticationGetMemberId;
     }
 
     public WalkMateDto.Response createWalk(WalkMate walkMate, long memberId) {
@@ -62,7 +67,7 @@ public class WalkMateService {
         WalkMate walk = methodFindByWalkId(walkMateId);
 
         WalkMateDto.Response response = walkMateMapper.walkMateToWalkMateResponseDto(walk);
-        List<WalkMateComment> allComments = walkMateCommentService.findCommentsByWalkId(walkMateId);
+        List<WalkMateCommentDto.Response> allComments = walkMateCommentService.findCommentsByWalkId(walkMateId);
         List<WalkMateCommentDto.Response> comments = allComments.stream()
                 .map(comment -> walkMateCommentService.findComment(comment.getWalkMateCommentId()))
                 .collect(Collectors.toList());
@@ -76,11 +81,6 @@ public class WalkMateService {
     }
 
     public List<WalkMateDto.Response> findWalksByMemberId(int page, int size, long memberId, boolean open){
-
-//        List<WalkMate> allWalks = findWalks();
-//        List<WalkMate> myWalks = allWalks.stream()
-//                .filter(walk -> walk.getMember().getMemberId().equals(memberId))
-//                .collect(Collectors.toList());
 
         List<WalkMate> myWalks = recentPageMember(memberId, page, size, open);
         List<WalkMateDto.Response> responseList = new ArrayList<>();
@@ -109,25 +109,16 @@ public class WalkMateService {
         return response;
     }
 
-//    public List<WalkMate> recentPage(int page, int size, String location, boolean openFilter){
-//
-//
-//        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
-//        List<WalkMate> response = walkMateRepository.findByLocation(pageRequest, location).getContent();
-//
-//        if(openFilter){
-//            onlyOpenWalk(response);
-//        }
-//
-//        return response;
-//
-//    }
 
     public List<WalkMateDto.Response> findCommentedWalks(long memberId){
 
         //1. 해당 memberId의 모든 comment 가져오기
-        List<WalkMateComment> myCommentsList = walkMateCommentService.findCommentsByMemberId(memberId);
-        List<WalkMate> myWalkMateList = myCommentsList.stream()
+        List<WalkMateComment> allComments = walkMateCommentRepository.findAll();
+        List<WalkMateComment> findComments = allComments.stream()
+                .filter(comment -> comment.getMember().getMemberId()==memberId)
+                .collect(Collectors.toList());
+
+        List<WalkMate> myWalkMateList = findComments.stream()
                 .map(comment -> comment.getWalkMate())
                 .collect(Collectors.toList());
 
@@ -244,17 +235,24 @@ public class WalkMateService {
         return matchWalks;
     }
 
-    public List<WalkMate> recentPage(int page, int size, String location, boolean openFilter){
+    public List<WalkMateDto.Response> recentPage(int page, int size, String location, boolean openFilter){
 
 
         PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
-        List<WalkMate> response = walkMateRepository.findByLocation(pageRequest, location).getContent();
+        List<WalkMate> walks = walkMateRepository.findByLocation(pageRequest, location).getContent();
 
         if(openFilter){
-            onlyOpenWalk(response);
+            onlyOpenWalk(walks);
         }
 
-        return response;
+        List<WalkMateDto.Response> responseList = new ArrayList<>();
+        for(WalkMate walk : walks){
+            WalkMateDto.Response response = walkMateMapper.walkMateToWalkMateResponseDto(walk);
+            MemberDto.Info info = getMemberInfoByWalk(walk);
+            response.setMemberInfo(info);
+            responseList.add(response);
+        }
+        return responseList;
 
     }
 

@@ -1,5 +1,6 @@
 package com.saecdo18.petmily.walkmate.controller;
 
+import com.saecdo18.petmily.util.AuthenticationGetMemberId;
 import com.saecdo18.petmily.walkmate.dto.WalkMateCommentDto;
 import com.saecdo18.petmily.walkmate.entity.WalkMateComment;
 import com.saecdo18.petmily.walkmate.mapper.WalkMateCommentMapper;
@@ -21,18 +22,21 @@ public class WalkMateCommentController {
 
     private final WalkMateCommentService walkMateCommentService;
     private final WalkMateCommentMapper mapper;
+    private final AuthenticationGetMemberId authenticationGetMemberId;
 
-    public WalkMateCommentController(WalkMateCommentService walkMateCommentService, WalkMateCommentMapper mapper) {
+
+    public WalkMateCommentController(WalkMateCommentService walkMateCommentService, WalkMateCommentMapper mapper, AuthenticationGetMemberId authenticationGetMemberId) {
         this.walkMateCommentService = walkMateCommentService;
         this.mapper = mapper;
+        this.authenticationGetMemberId = authenticationGetMemberId;
     }
 
-    @PostMapping("/{walk-id}/{member-id}")
+    @PostMapping("/{walk-id}")
     @ApiOperation("산책 게시글 댓글 등록")
     private ResponseEntity<WalkMateCommentDto.Response> postComment(@ApiParam("게시글 ID") @PathVariable("walk-id") long walkId,
-                                                                    @ApiParam("회원 ID") @PathVariable("member-id") long memberId,
                                                                     @ApiParam("댓글 등록 Dto") @RequestBody WalkMateCommentDto.Post commentPostDto){
 
+        long memberId = authenticationGetMemberId.getMemberId();
         WalkMateCommentDto.Response response = walkMateCommentService.createComments(commentPostDto, walkId, memberId);
 
         return new ResponseEntity(response, HttpStatus.CREATED);
@@ -42,24 +46,17 @@ public class WalkMateCommentController {
     @ApiOperation("산책 게시글 댓글 조회(산책 게시글 ID)")
     private ResponseEntity<List<WalkMateCommentDto.Response>> getCommentsByWalk(@ApiParam("게시글 ID") @PathVariable("walk-id") long walkId){
 
-        List<WalkMateComment> comments = walkMateCommentService.findCommentsByWalkId(walkId);
-        List<WalkMateCommentDto.Response> response =
-                comments.stream()
-                        .map(comment -> walkMateCommentService.findComment(comment.getWalkMateCommentId()))
-                        .collect(Collectors.toList());
+        List<WalkMateCommentDto.Response> response = walkMateCommentService.findCommentsByWalkId(walkId);
 
         return new ResponseEntity(response, HttpStatus.OK);
     }
 
-    @GetMapping("/bymember/{member-id}")
+    @GetMapping("/bymember")
     @ApiOperation("산책 게시글 댓글 조회(회원 ID)")
-    private ResponseEntity<List<WalkMateCommentDto.Response>> getCommentsByMember(@ApiParam("회원 ID") @PathVariable("member-id") long memberId) {
+    private ResponseEntity<List<WalkMateCommentDto.Response>> getCommentsByMember() {
 
-        List<WalkMateComment> comments = walkMateCommentService.findCommentsByMemberId(memberId);
-        List<WalkMateCommentDto.Response> response =
-                comments.stream()
-                        .map(comment -> walkMateCommentService.findComment(comment.getWalkMateCommentId()))
-                        .collect(Collectors.toList());
+        long memberId = authenticationGetMemberId.getMemberId();
+        List<WalkMateCommentDto.Response> response = walkMateCommentService.findCommentsByMemberId(memberId);
 
         return new ResponseEntity(response, HttpStatus.OK);
     }
@@ -68,31 +65,27 @@ public class WalkMateCommentController {
     @ApiOperation("산책 게시글 댓글 조회")
     private ResponseEntity<List<WalkMateCommentDto.Response>> getAllComments(){
 
-        List<WalkMateComment> comments = walkMateCommentService.findAllComments();
-        List<WalkMateCommentDto.Response> response =
-                comments.stream()
-                        .map(comment -> walkMateCommentService.findComment(comment.getWalkMateCommentId()))
-                        .collect(Collectors.toList());
+        List<WalkMateCommentDto.Response> response = walkMateCommentService.findAllComments();
 
         return new ResponseEntity(response, HttpStatus.OK);
     }
 
-    @PatchMapping("/{comment-id}/{member-id}")
+    @PatchMapping("/{comment-id}")
     @ApiOperation("산책 게시글 댓글 수정")
     private ResponseEntity<WalkMateCommentDto.Response> patchComment(@ApiParam("댓글 ID") @PathVariable("comment-id") long commentId,
-                                                                     @ApiParam("회원 ID") @PathVariable("member-id") long memberId,
                                                                      @ApiParam("댓글 수정 Dto") @RequestBody WalkMateCommentDto.Patch commentPatchDto) {
 
+        long memberId = authenticationGetMemberId.getMemberId();
         WalkMateCommentDto.Response response = walkMateCommentService.updateComment(commentPatchDto, commentId, memberId);
 
         return new ResponseEntity(response, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{comment-id}/{member-id}")
+    @DeleteMapping("/{comment-id}")
     @ApiOperation("산책 게시글 댓글 삭제")
-    private ResponseEntity deleteComment(@ApiParam("댓글 ID") @PathVariable("comment-id") long commentId,
-                                         @ApiParam("회원 ID") @PathVariable("member-id") long memberId){
+    private ResponseEntity deleteComment(@ApiParam("댓글 ID") @PathVariable("comment-id") long commentId){
 
+        long memberId = authenticationGetMemberId.getMemberId();
         walkMateCommentService.deleteComment(commentId, memberId);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }

@@ -36,7 +36,6 @@ public class KakaoService {
     private final MemberRepository memberRepository;
     private final TokenProvider tokenProvider;
 
-//    @Value("spring.")
     public String getAccessToken(String code) throws JsonProcessingException {
         WebClient client = WebClient.create("https://kauth.kakao.com/oauth/token");
         MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();

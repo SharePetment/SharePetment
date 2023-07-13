@@ -80,7 +80,7 @@ public class FeedController {
     }
 
     @ApiOperation("피드 수정")
-    @PatchMapping("/{feed-id}/")
+    @PatchMapping("/{feed-id}")
     public ResponseEntity<FeedDto.Response> patchFeed(@ApiParam("피드 아이디") @PathVariable("feed-id") long feedId,
                                        @ApiParam("피드 수정 내용") @RequestParam("content") String content,
                                        @ApiParam(value = "피드 추가 이미지 리스트") @RequestParam(value = "addImage", required = false)  MultipartFile[] addImages,

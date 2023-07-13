@@ -31,21 +31,6 @@ public class WalkMateCommentService {
         this.walkMateCommentMapper = walkMateCommentMapper;
     }
 
-//    public WalkMateComment createComments(WalkMateComment comment, long walkId, long memberId){
-//
-//        WalkMate walk = walkMateRepository.findById(walkId).orElseThrow();
-//        Member member = memberRepository.findById(memberId).orElseThrow();
-//
-//        WalkMateComment saveComment = WalkMateComment.builder()
-//                .walkMate(walk)
-//                .member(member)
-//                .content(comment.getContent())
-//                .likes(0)
-//                .build();
-//
-//        return walkMateCommentRepository.save(saveComment);
-//    }
-
     public WalkMateCommentDto.Response createComments(WalkMateCommentDto.Post commentPostDto, long walkId, long memberId){
 
         WalkMate walk = methodFindByWalkId(walkId);
@@ -93,29 +78,44 @@ public class WalkMateCommentService {
         return response;
     }
 
-    public List<WalkMateComment> findAllComments(){
+    public List<WalkMateCommentDto.Response> findAllComments(){
 
-        return walkMateCommentRepository.findAll();
+        List<WalkMateComment> allComments = walkMateCommentRepository.findAll();
+        List<WalkMateCommentDto.Response> response = getResponseListFromCommentList(allComments);
+
+        return response;
     }
 
-    public List<WalkMateComment> findCommentsByWalkId(long walkId){
+    public List<WalkMateCommentDto.Response> findCommentsByWalkId(long walkId){
 
         List<WalkMateComment> allComments = walkMateCommentRepository.findAll();
         List<WalkMateComment> findComments = allComments.stream()
                 .filter(comment -> comment.getWalkMate().getWalkMatePostId()==walkId)
                 .collect(Collectors.toList());
 
-        return findComments;
+        List<WalkMateCommentDto.Response> response = getResponseListFromCommentList(findComments);
+
+        return response;
     }
 
-    public List<WalkMateComment> findCommentsByMemberId(long memberId){
+    private List<WalkMateCommentDto.Response> getResponseListFromCommentList(List<WalkMateComment> findComments) {
+        List<WalkMateCommentDto.Response> response =
+                findComments.stream()
+                        .map(comment -> findComment(comment.getWalkMateCommentId()))
+                        .collect(Collectors.toList());
+        return response;
+    }
+
+    public List<WalkMateCommentDto.Response> findCommentsByMemberId(long memberId){
 
         List<WalkMateComment> allComments = walkMateCommentRepository.findAll();
         List<WalkMateComment> findComments = allComments.stream()
                 .filter(comment -> comment.getMember().getMemberId()==memberId)
                 .collect(Collectors.toList());
 
-        return findComments;
+        List<WalkMateCommentDto.Response> response = getResponseListFromCommentList(findComments);
+
+        return response;
     }
 
     public WalkMateCommentDto.Response updateComment(WalkMateCommentDto.Patch commentPatchDto, long commentId, long memberId){
