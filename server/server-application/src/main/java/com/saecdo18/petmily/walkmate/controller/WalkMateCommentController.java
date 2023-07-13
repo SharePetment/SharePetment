@@ -42,11 +42,7 @@ public class WalkMateCommentController {
     @ApiOperation("산책 게시글 댓글 조회(산책 게시글 ID)")
     private ResponseEntity<List<WalkMateCommentDto.Response>> getCommentsByWalk(@ApiParam("게시글 ID") @PathVariable("walk-id") long walkId){
 
-        List<WalkMateComment> comments = walkMateCommentService.findCommentsByWalkId(walkId);
-        List<WalkMateCommentDto.Response> response =
-                comments.stream()
-                        .map(comment -> walkMateCommentService.findComment(comment.getWalkMateCommentId()))
-                        .collect(Collectors.toList());
+        List<WalkMateCommentDto.Response> response = walkMateCommentService.findCommentsByWalkId(walkId);
 
         return new ResponseEntity(response, HttpStatus.OK);
     }
@@ -55,11 +51,7 @@ public class WalkMateCommentController {
     @ApiOperation("산책 게시글 댓글 조회(회원 ID)")
     private ResponseEntity<List<WalkMateCommentDto.Response>> getCommentsByMember(@ApiParam("회원 ID") @PathVariable("member-id") long memberId) {
 
-        List<WalkMateComment> comments = walkMateCommentService.findCommentsByMemberId(memberId);
-        List<WalkMateCommentDto.Response> response =
-                comments.stream()
-                        .map(comment -> walkMateCommentService.findComment(comment.getWalkMateCommentId()))
-                        .collect(Collectors.toList());
+        List<WalkMateCommentDto.Response> response = walkMateCommentService.findCommentsByMemberId(memberId);
 
         return new ResponseEntity(response, HttpStatus.OK);
     }
@@ -68,11 +60,7 @@ public class WalkMateCommentController {
     @ApiOperation("산책 게시글 댓글 조회")
     private ResponseEntity<List<WalkMateCommentDto.Response>> getAllComments(){
 
-        List<WalkMateComment> comments = walkMateCommentService.findAllComments();
-        List<WalkMateCommentDto.Response> response =
-                comments.stream()
-                        .map(comment -> walkMateCommentService.findComment(comment.getWalkMateCommentId()))
-                        .collect(Collectors.toList());
+        List<WalkMateCommentDto.Response> response = walkMateCommentService.findAllComments();
 
         return new ResponseEntity(response, HttpStatus.OK);
     }

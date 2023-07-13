@@ -54,5 +54,9 @@ public class WalkMateCommentDto {
         private LocalDateTime createdAt;
         @ApiModelProperty(value = "수정 시간", example = "20231010", required = true)
         private LocalDateTime modifiedAt;
+
+        public Response(String content){
+            this.content=content;
+        }
     }
 }

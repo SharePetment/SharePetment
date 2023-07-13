@@ -62,7 +62,7 @@ public class WalkMateService {
         WalkMate walk = methodFindByWalkId(walkMateId);
 
         WalkMateDto.Response response = walkMateMapper.walkMateToWalkMateResponseDto(walk);
-        List<WalkMateComment> allComments = walkMateCommentService.findCommentsByWalkId(walkMateId);
+        List<WalkMateCommentDto.Response> allComments = walkMateCommentService.findCommentsByWalkId(walkMateId);
         List<WalkMateCommentDto.Response> comments = allComments.stream()
                 .map(comment -> walkMateCommentService.findComment(comment.getWalkMateCommentId()))
                 .collect(Collectors.toList());
@@ -126,8 +126,12 @@ public class WalkMateService {
     public List<WalkMateDto.Response> findCommentedWalks(long memberId){
 
         //1. 해당 memberId의 모든 comment 가져오기
-        List<WalkMateComment> myCommentsList = walkMateCommentService.findCommentsByMemberId(memberId);
-        List<WalkMate> myWalkMateList = myCommentsList.stream()
+        List<WalkMateComment> allComments = walkMateCommentRepository.findAll();
+        List<WalkMateComment> findComments = allComments.stream()
+                .filter(comment -> comment.getMember().getMemberId()==memberId)
+                .collect(Collectors.toList());
+
+        List<WalkMate> myWalkMateList = findComments.stream()
                 .map(comment -> comment.getWalkMate())
                 .collect(Collectors.toList());
 

@@ -17,6 +17,7 @@ import com.saecdo18.petmily.walkmate.service.WalkMateCommentService;
 import com.saecdo18.petmily.walkmate.service.WalkMateService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,11 +92,26 @@ class WalkMateCommentControllerTest {
     void getCommentsByWalk() throws Exception{
 
         long walkId = 1L;
+        Member member = new Member();
+        WalkMate walkMate = WalkMate.builder()
+                .title("산책1")
+                .build();
 
         List<WalkMateCommentDto.Response> responseList = new ArrayList<>();
 
-        WalkMateComment comment1 = new WalkMateComment("내용1", Mockito.any(Member.class));
-        WalkMateComment comment2 = new WalkMateComment("내용2", Mockito.any(Member.class));
+        WalkMateComment comment1 = WalkMateComment.builder()
+                .content("내용1")
+                .likes(0)
+                .walkMate(walkMate)
+                .member(member)
+                .build();
+
+        WalkMateComment comment2 = WalkMateComment.builder()
+                .content("내용2")
+                .likes(0)
+                .walkMate(walkMate)
+                .member(member)
+                .build();
 
         WalkMateCommentDto.Response response1 = commentMapper.commentToCommentResponseDto(comment1);
         WalkMateCommentDto.Response response2 = commentMapper.commentToCommentResponseDto(comment2);
@@ -103,16 +119,94 @@ class WalkMateCommentControllerTest {
         responseList.add(response1);
         responseList.add(response2);
 
-//        given(walkMateCommentService.findCommentsByWalkId(Mockito.anyLong())).willReturn(responseList);
+        given(walkMateCommentService.findCommentsByWalkId(Mockito.anyLong())).willReturn(responseList);
+
+        ResultActions getActions=
+                mockMvc.perform(
+                        get("/walkmates/comments/bywalk/{walk-id}", walkId)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .header("Authorization", tokenProvider.createAccessToken(1L))
+                );
+
+        getActions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].content").value(response1.getContent()))
+                .andExpect(jsonPath("$[1].content").value(response2.getContent()));
 
     }
-//
-//    @Test
-//    void getCommentsByMember()
-//
-//    @Test
-//    void patchComment()
-//
+    @Test
+    void getCommentsByMember() throws Exception{
+
+        long memberId = 1L;
+        Member member = new Member();
+        WalkMate walkMate = WalkMate.builder()
+                .title("산책1")
+                .build();
+
+        List<WalkMateCommentDto.Response> responseList = new ArrayList<>();
+
+        WalkMateComment comment1 = WalkMateComment.builder()
+                .content("내용1")
+                .likes(0)
+                .walkMate(walkMate)
+                .member(member)
+                .build();
+
+        WalkMateComment comment2 = WalkMateComment.builder()
+                .content("내용2")
+                .likes(0)
+                .walkMate(walkMate)
+                .member(member)
+                .build();
+
+        WalkMateCommentDto.Response response1 = commentMapper.commentToCommentResponseDto(comment1);
+        WalkMateCommentDto.Response response2 = commentMapper.commentToCommentResponseDto(comment2);
+
+        responseList.add(response1);
+        responseList.add(response2);
+
+        given(walkMateCommentService.findCommentsByMemberId(Mockito.anyLong())).willReturn(responseList);
+
+        ResultActions getActions=
+                mockMvc.perform(
+                        get("/walkmates/comments/bymember/{member-id}", memberId)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .header("Authorization", tokenProvider.createAccessToken(1L))
+                );
+
+        getActions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].content").value(response1.getContent()))
+                .andExpect(jsonPath("$[1].content").value(response2.getContent()));
+
+
+    }
+
+    @Test
+    void patchComment() throws Exception{
+
+        WalkMateCommentDto.Patch patch = new WalkMateCommentDto.Patch("내용 수정");
+        WalkMateCommentDto.Response response = new WalkMateCommentDto.Response("바뀔 내용");
+
+        given(walkMateCommentService.updateComment(Mockito.any(WalkMateCommentDto.Patch.class), Mockito.anyLong(), Mockito.anyLong())).willReturn(response);
+
+        String content = gson.toJson(patch);
+
+        ResultActions getActions =
+                mockMvc.perform(
+                        patch("/walkmates/comments/{comment-id}/{member-id}", 1L, 1L)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .header("Authorization", tokenProvider.createAccessToken(1L))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(String.valueOf(content))
+                );
+
+        getActions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content").value(response.getContent()));
+
+    }
+
     @Test
     void deleteComment() throws Exception{
 
