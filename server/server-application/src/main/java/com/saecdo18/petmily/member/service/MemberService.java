@@ -43,11 +43,7 @@ public class MemberService {
     private final PetMapper petMapper;
     private final PetImageRepository petImageRepository;
 
-    public Member createMember(Member member){
-        Member findMember = methodVerifyNoneMember(member); //email를 통해 등록되지 않은 멤버이면 진행
-        memberRepository.save(findMember);
-        return findMember;
-    }
+
 
     public MemberDto.Response getMember(long hostMemberId, long guestMemberId){
         Member hostMember = methodFindByMemberIdMember(hostMemberId);
@@ -65,7 +61,7 @@ public class MemberService {
             petDto.setMemberId(pet.getMember().getMemberId());
             PetImage petImage = petImageRepository.findByPet(pet);
             Image image = petImage.getImage();
-            ImageDto imageDto = petMapper.imageToImageDto(image);
+            ImageDto imageDto = petMapper.imageToImageDto(image);///////
             petDto.setImages(imageDto);
 
 

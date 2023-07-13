@@ -60,7 +60,7 @@ class MemberControllerTest {
 
         ResultActions getActions =
                 mockMvc.perform(
-                        get("/members/1/1")
+                        get("/members/1")
                                 .header("Authorization", tokenProvider.createAccessToken(1))
                                 .accept(MediaType.APPLICATION_JSON)
                 );
@@ -93,7 +93,7 @@ class MemberControllerTest {
 
         ResultActions getActions =
                 mockMvc.perform(
-                        patch("/members/status/1")
+                        patch("/members/status")
                                 .header("Authorization", tokenProvider.createAccessToken(1))
                                 .accept(MediaType.APPLICATION_JSON)
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -123,7 +123,7 @@ class MemberControllerTest {
 
         ResultActions getActions =
                 mockMvc.perform(
-                        post("/members/following/1/2")
+                        post("/members/following/1")
                                 .header("Authorization", tokenProvider.createAccessToken(1))
                                 .accept(MediaType.APPLICATION_JSON)
 
@@ -155,7 +155,7 @@ class MemberControllerTest {
 
         ResultActions getActions =
                 mockMvc.perform(
-                        get("/members/following/list/2")
+                        get("/members/following/list")
                                 .header("Authorization", tokenProvider.createAccessToken(1))
                                 .accept(MediaType.APPLICATION_JSON)
 
@@ -181,7 +181,7 @@ class MemberControllerTest {
 
         ResultActions getActions =
                 mockMvc.perform(
-                        patch("/members/image/1/1")
+                        patch("/members/image/1")
                                 .header("Authorization", tokenProvider.createAccessToken(1))
                                 .accept(MediaType.APPLICATION_JSON)
 
