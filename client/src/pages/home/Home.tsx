@@ -13,31 +13,34 @@ import FollowingCat from '../../assets/illustration/followingcat.png';
 import Popup from '../../common/popup/Popup';
 import FeedCard from '../../components/card/feedcard/FeedCard';
 import SideNav from '../../components/card/sidenav/SideNav';
+import LoadingComponent from '../../components/loading/LoadingComponent';
 import { Feed } from '../../types/feedTypes';
 import { Container, FollowContainer, Img, Text, Button } from './Home.styled';
 
 export function Component() {
   const memberId = useReadLocalStorage<string>('memberId');
   const accessToken = useReadLocalStorage<string>('accessToken');
-  const [isClicked, setIsClicked] = useState(false);
+  const [isClicked, setIsClicked] = useState<boolean>(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState<boolean>(false);
   const [isGuestOpen, setIsGuestOpen] = useState<boolean>(false);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
+  console.log(accessToken);
+
   const guestFeedQuery = useQuery({
     queryKey: ['guestFeed'],
-    queryFn: () =>
-      getGuestFeedList(`${SERVER_URL}feeds/all/list/random`, memberId),
-    enabled: !!(memberId === null || isClicked),
+    queryFn: () => getGuestFeedList(`${SERVER_URL}feeds/all/list/random`),
+    enabled: !!(accessToken === null || isClicked),
   });
 
   const hostFeedQuery = useQuery({
     queryKey: ['hostFeed'],
-    queryFn: () =>
-      getHostFeedList(`${SERVER_URL}feeds/list/${memberId}`, accessToken),
-    enabled: !!memberId,
+    queryFn: () => getHostFeedList(`${SERVER_URL}feeds/list`, accessToken),
+    enabled: !!accessToken,
   });
+
+  console.log(guestFeedQuery.data);
 
   const deleteFeedMutation = useMutation({
     mutationFn: deleteFeed,
@@ -47,12 +50,18 @@ export function Component() {
   const handlePopUp = useCallback(() => {
     const feedId = localStorage.getItem('feedId');
     deleteFeedMutation.mutate({
-      url: `${SERVER_URL}feeds/${feedId}/${memberId}`,
+      url: `${SERVER_URL}feeds/${feedId}`,
       accessToken,
     });
     localStorage.removeItem('feedId');
     setIsDeleteOpen(false);
-  }, [accessToken, deleteFeedMutation, memberId]);
+  }, [accessToken, deleteFeedMutation]);
+
+  if (guestFeedQuery.isLoading && hostFeedQuery.isLoading) {
+    return <LoadingComponent />;
+  } else if (guestFeedQuery.isLoading && !hostFeedQuery.isSuccess) {
+    return <LoadingComponent />;
+  }
 
   if (
     memberId &&
@@ -64,7 +73,7 @@ export function Component() {
       <FollowContainer>
         <Img src={FollowingCat} />
         <Text>
-          아직 구독하는 사람이 없어요.
+          아직 올라온 피드가 없어요.
           <br />
           랜덤으로 피드를 추천받으세요!
         </Text>
@@ -114,6 +123,7 @@ export function Component() {
                     like={img.isLike ? 'true' : 'false'}
                     deletehandler={() => setIsDeleteOpen(true)}
                     guesthandler={() => setIsGuestOpen(true)}
+                    url={img.shareURL}
                   />
                 </div>
               </SwiperSlide>
@@ -178,8 +188,9 @@ export function Component() {
                         }`}
                         likes={img.likes}
                         like={img.isLike ? 'true' : 'false'}
-                        deletehandler={() => setIsDeleteOpen(true)}
                         guesthandler={() => setIsGuestOpen(true)}
+                        deletehandler={() => setIsDeleteOpen(true)}
+                        url={img.shareURL}
                       />
                     </div>
                   </SwiperSlide>
