@@ -1,4 +1,5 @@
 import tw from 'tailwind-styled-components';
+import { BooleanStr } from '../../types/propType';
 
 export const HeaderContainer = tw.div`
   w-full
@@ -18,8 +19,8 @@ export const NavList = tw.ul`
   items-center
 `;
 
-export const NavItem = tw.li<{ active: boolean }>`
+export const NavItem = tw.li<{ active: BooleanStr }>`
   font-bold
   cursor-pointer
-  ${prop => (prop.active ? `text-deepgreen` : `text-deepgray`)}
+  ${prop => (prop.active === 'true' ? `text-deepgray` : `text-deepgreen`)}
 `;

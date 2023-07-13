@@ -25,7 +25,6 @@ export function Component() {
       setAnimalParents(searchParams.get('animalParents'));
 
       const present = searchParams.get('present');
-      console.log(present);
       if (present === 'true') setTimeout(() => navigate('/home'), 1000);
       else {
         const incodeName: string | null = searchParams.get('name');

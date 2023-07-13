@@ -10,6 +10,11 @@ export interface Comment {
   accessToken: string | null;
 }
 
+interface MutationProp {
+  url: string;
+  accessToken: string | null;
+}
+
 /* ------------------------------ 피드, 산책 댓글 수정 ------------------------------ */
 export const editComment = async (body: Comment) => {
   const { id, content, url, tag, accessToken } = body;
@@ -136,11 +141,11 @@ export const deletePet = async (body: DeletePetProp) => {
 };
 
 /* -------------------------------- 유저 프로필 변경-------------------------------- */
-interface PatchUserProfileProp {
-  url: string;
-  accessToken: string;
-}
-export const patchUserProfile = async (body: PatchUserProfileProp) => {
+// interface PatchUserProfileProp {
+//   url: string;
+//   accessToken: string;
+// }
+export const patchUserProfile = async (body: MutationProp) => {
   const { url, accessToken } = body;
   const result = await axios.patch(
     url,
@@ -169,6 +174,38 @@ export const feedPosting = async (body: FeedPostingProp) => {
     },
   });
   return result.data;
+};
+
+/* -------------------------------- 피드게시물 삭제 -------------------------------- */
+interface DeleteFeedProp {
+  url: string;
+  accessToken: string | null;
+}
+
+export const deleteFeed = async (body: DeleteFeedProp) => {
+  const { url, accessToken } = body;
+  const result = await axios.delete(url, {
+    headers: {
+      Authorization: accessToken,
+    },
+  });
+  return result;
+};
+
+/* -------------------------------- 피드게시물 좋아요  -------------------------------- */
+
+export const patchFeedLike = async (body: MutationProp) => {
+  const { url, accessToken } = body;
+  const result = await axios.patch(
+    url,
+    {},
+    {
+      headers: {
+        Authorization: accessToken,
+      },
+    },
+  );
+  return result;
 };
 
 /* -------------------------------- 산책게시물 생성 -------------------------------- */

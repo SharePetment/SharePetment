@@ -1,133 +1,207 @@
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useState, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Mousewheel, Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/pagination';
+import { useReadLocalStorage } from 'usehooks-ts';
+import { deleteFeed } from '../../api/mutationfn';
+import { getGuestFeedList, getHostFeedList } from '../../api/queryfn';
+import { SERVER_URL } from '../../api/url';
+import FollowingCat from '../../assets/illustration/followingcat.png';
+import Popup from '../../common/popup/Popup';
 import FeedCard from '../../components/card/feedcard/FeedCard';
 import SideNav from '../../components/card/sidenav/SideNav';
-import { Container } from './Home.styled';
+import LoadingComponent from '../../components/loading/LoadingComponent';
+import { Feed } from '../../types/feedTypes';
+import { Container, FollowContainer, Img, Text, Button } from './Home.styled';
+
 export function Component() {
-  return (
-    <Container>
-      <Swiper
-        direction={'vertical'}
-        slidesPerView={window.innerWidth < 400 ? 1 : 1.1}
-        mousewheel={true}
-        modules={[Mousewheel, Pagination]}
-        className="w-full h-full flex flex-col items-center justify-center">
-        <SwiperSlide className="w-96 max-sm:w-full max-sm:h-full">
-          <div className="flex justify-center items-center gap-5 max-sm:flex-col">
-            <FeedCard
-              memberid={1}
-              username="hello_wolrd"
-              context="위하여서, 두기 같은 그림자는 그들은 그리하였는가? 같지 얼음과 긴지라 능히 황금시대다. 사라지지 가지에 우리의 석가는 곧 꽃 설산에서 이것이다. 반짝이는 찾아다녀도, 우리는 인간의 봄바람이다. 황금시대를 그것을 가장 위하여 대한 사는가 구하지 청춘은 힘있다."
-              userimg="https://img.freepik.com/free-photo/adorable-kitty-looking-like-it-want-to-hunt_23-2149167099.jpg"
-              images={[
-                {
-                  imageId: 9,
-                  originalFilename: '201701731-김준영.png',
-                  uploadFileURL:
-                    'https://www.kgnews.co.kr/data/photos/20220832/art_16599350966819_1053f2.jpg',
-                },
-                {
-                  imageId: 10,
-                  originalFilename: '201701731-김준영.png',
-                  uploadFileURL:
-                    'https://www.kgnews.co.kr/data/photos/20220832/art_16599350966819_1053f2.jpg',
-                },
-                {
-                  imageId: 11,
-                  originalFilename: '201701731-김준영.png',
-                  uploadFileURL:
-                    'https://www.kgnews.co.kr/data/photos/20220832/art_16599350966819_1053f2.jpg',
-                },
-              ]}
+  const memberId = useReadLocalStorage<string>('memberId');
+  const accessToken = useReadLocalStorage<string>('accessToken');
+  const [isClicked, setIsClicked] = useState<boolean>(false);
+  const [isDeleteOpen, setIsDeleteOpen] = useState<boolean>(false);
+  const [isGuestOpen, setIsGuestOpen] = useState<boolean>(false);
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
+  console.log(accessToken);
+
+  const guestFeedQuery = useQuery({
+    queryKey: ['guestFeed'],
+    queryFn: () => getGuestFeedList(`${SERVER_URL}feeds/all/list/random`),
+    enabled: !!(accessToken === null || isClicked),
+  });
+
+  const hostFeedQuery = useQuery({
+    queryKey: ['hostFeed'],
+    queryFn: () => getHostFeedList(`${SERVER_URL}feeds/list`, accessToken),
+    enabled: !!accessToken,
+  });
+
+  console.log(guestFeedQuery.data);
+
+  const deleteFeedMutation = useMutation({
+    mutationFn: deleteFeed,
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['guestFeed'] }),
+  });
+
+  const handlePopUp = useCallback(() => {
+    const feedId = localStorage.getItem('feedId');
+    deleteFeedMutation.mutate({
+      url: `${SERVER_URL}feeds/${feedId}`,
+      accessToken,
+    });
+    localStorage.removeItem('feedId');
+    setIsDeleteOpen(false);
+  }, [accessToken, deleteFeedMutation]);
+
+  if (guestFeedQuery.isLoading && hostFeedQuery.isLoading) {
+    return <LoadingComponent />;
+  } else if (guestFeedQuery.isLoading && !hostFeedQuery.isSuccess) {
+    return <LoadingComponent />;
+  }
+
+  if (
+    memberId &&
+    hostFeedQuery.isSuccess &&
+    hostFeedQuery.data.responseList.length === 0 &&
+    !isClicked
+  ) {
+    return (
+      <FollowContainer>
+        <Img src={FollowingCat} />
+        <Text>
+          아직 올라온 피드가 없어요.
+          <br />
+          랜덤으로 피드를 추천받으세요!
+        </Text>
+        <Button onClick={() => setIsClicked(true)}>추천받기</Button>
+      </FollowContainer>
+    );
+  } else if (memberId && hostFeedQuery.isSuccess && !isClicked) {
+    return (
+      <>
+        {isDeleteOpen && (
+          <Popup
+            title="피드를 삭제할까요?"
+            isgreen={['true']}
+            btnsize={['md']}
+            buttontext={['삭제할래요']}
+            countbtn={1}
+            handler={[handlePopUp]}
+            popupcontrol={() => {
+              setIsDeleteOpen(false);
+              localStorage.removeItem('feedId');
+            }}
+          />
+        )}
+        <Container>
+          <Swiper
+            direction={'vertical'}
+            slidesPerView={window.innerWidth < 400 ? 1 : 1.1}
+            mousewheel={true}
+            modules={[Mousewheel, Pagination]}
+            className="w-full h-full flex flex-col items-center justify-center">
+            {hostFeedQuery.data.responseList.map((img: Feed) => (
+              <SwiperSlide className="w-96 max-sm:w-full max-sm:h-full">
+                <div className="flex justify-center items-center gap-5 max-sm:flex-col">
+                  <FeedCard
+                    memberid={img.memberInfo.memberId}
+                    username={img.memberInfo.nickname}
+                    context={img.content}
+                    userimg={img.memberInfo.imageURL}
+                    images={img.images}
+                    guesthandler={() => setIsGuestOpen(true)}
+                  />
+                  <SideNav
+                    feedid={img.feedId}
+                    direction={window.innerWidth < 640 ? 'row' : 'col'}
+                    inperson={`${memberId === String(img.memberInfo.memberId)}`}
+                    likes={img.likes}
+                    like={img.isLike ? 'true' : 'false'}
+                    deletehandler={() => setIsDeleteOpen(true)}
+                    guesthandler={() => setIsGuestOpen(true)}
+                    url={img.shareURL}
+                  />
+                </div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </Container>
+      </>
+    );
+  } else {
+    return (
+      (guestFeedQuery.isSuccess || (guestFeedQuery.isSuccess && isClicked)) && (
+        <>
+          {isDeleteOpen && (
+            <Popup
+              title="피드를 삭제할까요?"
+              isgreen={['true']}
+              btnsize={['md']}
+              buttontext={['삭제할래요']}
+              countbtn={1}
+              handler={[handlePopUp]}
+              popupcontrol={() => {
+                setIsDeleteOpen(false);
+                localStorage.removeItem('feedId');
+              }}
             />
-            <SideNav
-              feedid={9}
-              direction={window.innerWidth < 640 ? 'row' : 'col'}
-              inperson="true"
-              likes={200}
-              like="true"
+          )}
+          {isGuestOpen && (
+            <Popup
+              title="로그인을 해주세요."
+              isgreen={['true']}
+              btnsize={['md']}
+              buttontext={['로그인하러가기']}
+              countbtn={1}
+              handler={[() => navigate('/')]}
+              popupcontrol={() => setIsGuestOpen(false)}
             />
-          </div>
-        </SwiperSlide>
-        <SwiperSlide className="w-96">
-          <div className="flex justify-center items-center gap-5 max-sm:flex-col">
-            <FeedCard
-              memberid={1}
-              username="hello_wolrd"
-              context="위하여서, 두기 같은 그림자는 그들은 그리하였는가? 같지 얼음과 긴지라 능히 황금시대다. 사라지지 가지에 우리의 석가는 곧 꽃 설산에서 이것이다. 반짝이는 찾아다녀도, 우리는 인간의 봄바람이다. 황금시대를 그것을 가장 위하여 대한 사는가 구하지 청춘은 힘있다."
-              userimg="https://img.freepik.com/free-photo/adorable-kitty-looking-like-it-want-to-hunt_23-2149167099.jpg"
-              images={[
-                {
-                  imageId: 9,
-                  originalFilename: '201701731-김준영.png',
-                  uploadFileURL:
-                    'https://www.kgnews.co.kr/data/photos/20220832/art_16599350966819_1053f2.jpg',
-                },
-                {
-                  imageId: 10,
-                  originalFilename: '201701731-김준영.png',
-                  uploadFileURL:
-                    'https://www.kgnews.co.kr/data/photos/20220832/art_16599350966819_1053f2.jpg',
-                },
-                {
-                  imageId: 11,
-                  originalFilename: '201701731-김준영.png',
-                  uploadFileURL:
-                    'https://www.kgnews.co.kr/data/photos/20220832/art_16599350966819_1053f2.jpg',
-                },
-              ]}
-            />
-            <SideNav
-              feedid={9}
-              direction={window.innerWidth < 640 ? 'row' : 'col'}
-              inperson="true"
-              likes={10}
-              like="true"
-            />
-          </div>
-        </SwiperSlide>
-        <SwiperSlide className="w-96">
-          <div className="flex justify-center items-center gap-5 max-sm:flex-col">
-            <FeedCard
-              memberid={1}
-              username="hello_wolrd"
-              context="위하여서, 두기 같은 그림자는 그들은 그리하였는가? 같지 얼음과 긴지라 능히 황금시대다. 사라지지 가지에 우리의 석가는 곧 꽃 설산에서 이것이다. 반짝이는 찾아다녀도, 우리는 인간의 봄바람이다. 황금시대를 그것을 가장 위하여 대한 사는가 구하지 청춘은 힘있다."
-              userimg="https://img.freepik.com/free-photo/adorable-kitty-looking-like-it-want-to-hunt_23-2149167099.jpg"
-              images={[
-                {
-                  imageId: 9,
-                  originalFilename: '201701731-김준영.png',
-                  uploadFileURL:
-                    'https://www.kgnews.co.kr/data/photos/20220832/art_16599350966819_1053f2.jpg',
-                },
-                {
-                  imageId: 10,
-                  originalFilename: '201701731-김준영.png',
-                  uploadFileURL:
-                    'https://www.kgnews.co.kr/data/photos/20220832/art_16599350966819_1053f2.jpg',
-                },
-                {
-                  imageId: 11,
-                  originalFilename: '201701731-김준영.png',
-                  uploadFileURL:
-                    'https://www.kgnews.co.kr/data/photos/20220832/art_16599350966819_1053f2.jpg',
-                },
-              ]}
-            />
-            <SideNav
-              feedid={9}
-              direction={window.innerWidth < 640 ? 'row' : 'col'}
-              inperson="true"
-              likes={300}
-              like="false"
-            />
-          </div>
-        </SwiperSlide>
-      </Swiper>
-    </Container>
-  );
+          )}
+          <Container>
+            <Swiper
+              direction={'vertical'}
+              slidesPerView={window.innerWidth < 400 ? 1 : 1.1}
+              mousewheel={true}
+              modules={[Mousewheel, Pagination]}
+              className="w-full h-full flex flex-col items-center justify-center">
+              {guestFeedQuery.data.responseList.map(
+                (img: Feed, idx: number) => (
+                  <SwiperSlide className="w-96" key={idx}>
+                    <div className="flex justify-center items-center gap-5 max-sm:flex-col">
+                      <FeedCard
+                        memberid={img.memberInfo.memberId}
+                        username={img.memberInfo.nickname}
+                        context={img.content}
+                        userimg={img.memberInfo.imageURL}
+                        images={img.images}
+                        guesthandler={() => setIsGuestOpen(true)}
+                      />
+                      <SideNav
+                        feedid={img.feedId}
+                        direction={window.innerWidth < 640 ? 'row' : 'col'}
+                        inperson={`${
+                          memberId === String(img.memberInfo.memberId)
+                        }`}
+                        likes={img.likes}
+                        like={img.isLike ? 'true' : 'false'}
+                        guesthandler={() => setIsGuestOpen(true)}
+                        deletehandler={() => setIsDeleteOpen(true)}
+                        url={img.shareURL}
+                      />
+                    </div>
+                  </SwiperSlide>
+                ),
+              )}
+            </Swiper>
+          </Container>
+        </>
+      )
+    );
+  }
 }
 
 Component.displayName = 'Home';

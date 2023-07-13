@@ -1,8 +1,8 @@
 import tw from 'tailwind-styled-components';
 
-export const CardContainer = tw.div`
-  w-60
-  h-72
+export const CardContainer = tw.div<{ size: string }>`
+  ${prop => prop.size === 'sm' && `w-56 gap-3`}
+  ${prop => prop.size === 'lg' && `w-60 h-72 gap-4`}
   rounded-[28px]
   border-2
   px-4
@@ -10,10 +10,11 @@ export const CardContainer = tw.div`
   border-lightgray
   flex
   flex-col
-  gap-5
   relative
 
-  transition duration-300 ease-in-out
+  transition 
+  duration-300 
+  ease-in-out
 
   hover:shadow-lg
   dark:hover:shadow-black/30"
@@ -53,9 +54,9 @@ export const WriterProfile = tw.div`
   mt-5
 `;
 
-export const Backdrop = tw.div`
-  w-60
-  h-72
+export const Backdrop = tw.div<{ size: string }>`
+  ${prop => prop.size === 'sm' && `w-[224px] h-[262px]`}
+  ${prop => prop.size === 'lg' && `w-60 h-72`}
   rounded-[28px]
   bg-defaulttext
   opacity-70
@@ -64,13 +65,13 @@ export const Backdrop = tw.div`
   -left-0.5
 `;
 
-export const CompoleteText = tw.div`
-  ml-3 
-  font-bold 
+export const CompleteText = tw.div`
+  ml-3
+  font-bold
   shrink-0
 `;
 
-export const CompoleteNotice = tw.div`
+export const CompleteNotice = tw.div`
   text-3xl
   text-white
   absolute

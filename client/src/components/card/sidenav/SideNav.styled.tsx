@@ -7,7 +7,6 @@ interface ContainerProp {
 export const Container = tw.div<ContainerProp>`
   w-16
   flex
-  gap-6
   ${props => `flex-${props.direction}`}
   ${props => props.direction === 'row' && 'w-72'}
   ${props => props.direction === 'col' && 'gap-3'}
@@ -15,14 +14,13 @@ export const Container = tw.div<ContainerProp>`
 `;
 
 export const Wrap = tw.div`
-  w-[42px]
-  h-[42px]
   flex-col
   justify-center
   items-center
+  text-center
+  mb-2
 `;
 
 export const Text = tw.span`
   text-xs
-  ml-1
 `;

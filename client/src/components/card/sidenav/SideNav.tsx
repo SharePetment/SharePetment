@@ -1,4 +1,8 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
+import { useReadLocalStorage } from 'usehooks-ts';
+import { patchFeedLike } from '../../../api/mutationfn';
+import { SERVER_URL } from '../../../api/url';
 import { ReactComponent as Comment } from '../../../assets/button/comment.svg';
 import { ReactComponent as Delete } from '../../../assets/button/delete.svg';
 import { ReactComponent as Edit } from '../../../assets/button/edit.svg';
@@ -13,6 +17,9 @@ interface Prop {
   inperson: BooleanStr;
   likes: number;
   like: BooleanStr;
+  guesthandler: () => void;
+  deletehandler: () => void;
+  url: string;
 }
 
 export default function SideNav({
@@ -21,40 +28,84 @@ export default function SideNav({
   inperson,
   likes,
   like,
-}: Prop) {
+  guesthandler,
+  deletehandler,
+}: // url,
+Prop) {
+  const accessToken = useReadLocalStorage<string | null>('accessToken');
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
+  const likeMutation = useMutation({
+    mutationFn: patchFeedLike,
+    onSuccess: data => {
+      console.log(data);
+      queryClient.invalidateQueries({ queryKey: ['guestFeed'] });
+    },
+  });
+
+  const handleClickLike = () => {
+    console.log(feedid);
+    if (!accessToken) return guesthandler();
+    const data = {
+      url: `${SERVER_URL}feeds/like/${feedid}`,
+      accessToken,
+    };
+    likeMutation.mutate(data);
+  };
+
+  const handleClickComment = () => {
+    if (!accessToken) return guesthandler();
+    navigate(`/home/${feedid}`);
+  };
 
   return (
-    <Container direction={direction}>
-      <Wrap>
-        {like === 'true' && (
-          <Like className="cursor-pointer ml-1" stroke="black" fill="#69B783" />
+    <>
+      <Container direction={direction}>
+        <Wrap className="pl-2">
+          {like === 'true' ? (
+            <Like
+              className="cursor-pointer"
+              stroke="black"
+              fill="#69B783"
+              onClick={handleClickLike}
+            />
+          ) : (
+            <Like
+              className="cursor-pointer "
+              stroke="black"
+              onClick={handleClickLike}
+            />
+          )}
+
+          <Text>{likes}</Text>
+        </Wrap>
+
+        <Wrap onClick={handleClickComment}>
+          <Comment className="cursor-pointer ml-2" stroke="black" />
+        </Wrap>
+
+        <Wrap>
+          <Share className="cursor-pointer ml-2" />
+        </Wrap>
+
+        {inperson === 'true' && (
+          <>
+            <Wrap onClick={() => navigate(`/feed-posting/${feedid}`)}>
+              <Edit className="cursor-pointer ml-2" />
+            </Wrap>
+            <Wrap>
+              <Delete
+                className="cursor-pointer ml-2"
+                onClick={() => {
+                  deletehandler();
+                  localStorage.setItem('feedId', String(feedid));
+                }}
+              />
+            </Wrap>
+          </>
         )}
-        {like === 'false' && (
-          <Like className="cursor-pointer ml-1" stroke="black" />
-        )}
-
-        <Text>{likes}</Text>
-      </Wrap>
-
-      <Wrap onClick={() => navigate(`/home/${feedid}`)}>
-        <Comment className="cursor-pointer ml-2" />
-      </Wrap>
-
-      <Wrap>
-        <Share className="cursor-pointer ml-2" />
-      </Wrap>
-
-      {inperson === 'true' && (
-        <>
-          <Wrap onClick={() => navigate(`/feed-posting/${feedid}`)}>
-            <Edit className="cursor-pointer ml-2" />
-          </Wrap>
-          <Wrap>
-            <Delete className="cursor-pointer ml-2" />
-          </Wrap>
-        </>
-      )}
-    </Container>
+      </Container>
+    </>
   );
 }
