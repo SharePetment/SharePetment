@@ -250,7 +250,7 @@ public class FeedServiceImpl implements FeedService {
             feedLike.updateIsLike();
             findFeed.likeCount(feedLike.isLike());
         }
-        FeedLike savedFeedLike = feedLikeRepository.save(feedLike);
+        FeedLike savedFeedLike = feedLikeRepository.saveAndFlush(feedLike);
         Feed savedFeed = feedRepository.saveAndFlush(findFeed);
 
         return FeedDto.Like.builder()
