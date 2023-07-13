@@ -1,5 +1,6 @@
-import axios, { isAxiosError } from 'axios';
+import axios from 'axios';
 import { Subscribe } from '../types/subscribe';
+import { SERVER_URL } from './url';
 
 export interface Comment {
   id: string;
@@ -180,24 +181,31 @@ interface FillWalkPosProp {
   time: string;
   open: boolean;
   maximum: number;
-  memberId: number;
+  accessToken: string;
 }
 
-export const fillWalkPost = async (payload: FillWalkPosProp) => {
+export const postWalkFeed = async (payload: FillWalkPosProp) => {
   const { title, content, mapURL, chatURL, location, time, open, maximum } =
     payload;
-  const url = '';
 
-  const result = await axios.post(`${url}/walkmates/${payload.memberId}`, {
-    title,
-    content,
-    mapURL,
-    chatURL,
-    location,
-    time,
-    open,
-    maximum,
-  });
+  const result = await axios.post(
+    `${SERVER_URL}walkmates`,
+    {
+      title,
+      content,
+      mapURL,
+      chatURL,
+      location,
+      time,
+      open,
+      maximum,
+    },
+    {
+      headers: {
+        Authorization: payload.accessToken,
+      },
+    },
+  );
   return result.data;
 };
 

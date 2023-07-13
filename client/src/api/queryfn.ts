@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/named
 import axios, { isAxiosError } from 'axios';
 import { ZIP_URL } from './url';
 

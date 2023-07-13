@@ -65,9 +65,6 @@ export function Component() {
         `${SERVER_URL}members/following/list/${memberId}`,
         accessToken as string,
       ),
-    onSuccess(data) {
-      console.log(data);
-    },
   });
   // 유저이미지
   const [userProfileImage, setUserProfileImage] = useState('');

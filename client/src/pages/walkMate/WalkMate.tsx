@@ -23,13 +23,13 @@ export function Component() {
 
   /* ---------------------------- useInfiniteQuery ---------------------------- */
   const {
-    data,
+    //data,
     isLoading,
     refetch,
-    isFetching,
-    isError,
-    hasNextPage,
-    fetchNextPage,
+    //isFetching,
+    //isError,
+    //hasNextPage,
+    // fetchNextPage,
   } = useInfiniteQuery<WalkFeedList>({
     queryKey: ['walkmateList'],
     queryFn: ({ pageParam = 0 }) =>
