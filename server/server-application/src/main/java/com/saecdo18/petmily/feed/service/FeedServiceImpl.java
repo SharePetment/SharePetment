@@ -22,6 +22,7 @@ import com.saecdo18.petmily.member.entity.Member;
 import com.saecdo18.petmily.member.repository.FollowMemberRepository;
 import com.saecdo18.petmily.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -36,6 +37,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
+@Slf4j
 @RequiredArgsConstructor
 public class FeedServiceImpl implements FeedService {
 
@@ -309,7 +311,9 @@ public class FeedServiceImpl implements FeedService {
 
     private boolean feedLikesByMember(Feed feed, Member member) {
         Optional<FeedLike> feedLike = feedLikeRepository.findByMemberAndFeed(member, feed);
-        return feedLike.get().isLike();
+        log.info("feedId : {}, Member name : {}", feed.getFeedId(), member.getName());
+        log.info("feedLike : {}", feedLike.map(FeedLike::isLike).orElse(false));
+        return feedLike.map(FeedLike::isLike).orElse(false);
     }
 
     private FeedDto.Response changeFeedToFeedDtoResponse(Feed feed, long memberId) {
