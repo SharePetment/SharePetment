@@ -17,8 +17,9 @@ interface Prop {
   inperson: BooleanStr;
   likes: number;
   like: BooleanStr;
-  deletehandler: () => void;
   guesthandler: () => void;
+  deletehandler: () => void;
+  url: string;
 }
 
 export default function SideNav({
@@ -27,11 +28,11 @@ export default function SideNav({
   inperson,
   likes,
   like,
-  deletehandler,
   guesthandler,
-}: Prop) {
+  deletehandler,
+}: // url,
+Prop) {
   const accessToken = useReadLocalStorage<string | null>('accessToken');
-  const memberId = useReadLocalStorage<string | null>('memberId');
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
@@ -47,7 +48,7 @@ export default function SideNav({
     console.log(feedid);
     if (!accessToken) return guesthandler();
     const data = {
-      url: `${SERVER_URL}feeds/like/${feedid}/${memberId}`,
+      url: `${SERVER_URL}feeds/like/${feedid}`,
       accessToken,
     };
     likeMutation.mutate(data);

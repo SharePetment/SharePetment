@@ -37,7 +37,7 @@ export function Component() {
     queryKey: ['myPage', memberId],
     queryFn: () =>
       getServerDataWithJwt(
-        `${SERVER_URL}members/${memberId}/${memberId}`,
+        `${SERVER_URL}members/${memberId}`,
         accessToken as string,
       ),
     onSuccess(data) {
@@ -49,10 +49,7 @@ export function Component() {
   const { data: feedData, isLoading: feedLoading } = useQuery<Feed[]>({
     queryKey: ['myFeed', memberId],
     queryFn: () =>
-      getServerDataWithJwt(
-        `${SERVER_URL}feeds/my-feed/${memberId}`,
-        accessToken as string,
-      ),
+      getServerDataWithJwt(`${SERVER_URL}feeds/my-feed`, accessToken as string),
   });
 
   // 팔로잉 회원 리스트 조회
@@ -62,7 +59,7 @@ export function Component() {
     queryKey: ['followList', memberId],
     queryFn: () =>
       getServerDataWithJwt(
-        `${SERVER_URL}members/following/list/${memberId}`,
+        `${SERVER_URL}members/following/list`,
         accessToken as string,
       ),
     onSuccess(data) {
