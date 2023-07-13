@@ -3,6 +3,7 @@ package com.saecdo18.petmily.feed.service;
 import com.saecdo18.petmily.awsConfig.S3UploadService;
 import com.saecdo18.petmily.feed.dto.FeedCommentDto;
 import com.saecdo18.petmily.feed.dto.FeedDto;
+import com.saecdo18.petmily.feed.dto.FeedDtoList;
 import com.saecdo18.petmily.feed.entity.Feed;
 import com.saecdo18.petmily.feed.entity.FeedImage;
 import com.saecdo18.petmily.feed.entity.FeedLike;
@@ -26,6 +27,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.mock.web.MockMultipartFile;
@@ -279,24 +281,9 @@ class FeedServiceImplTest {
     @Test
     @DisplayName("피드 최신순 가져오기 성공 - 사용자 아이디 0")
     void getFeedsRecent() {
-//        long memberId = 0L;
-//        long totalCount = 15;
-//        int page = 0;
-//        List<Long> previousIds = List.of(1L, 2L);
-//        FeedDto.PreviousListIds listIds = new FeedDto.PreviousListIds();
-//        listIds.setPreviousListIds(previousIds);
-//        List<Feed> pageDataList = new ArrayList<>();
-//
-//        for (int i = 15; i >= 1; i--) {
-//            Feed feed = new Feed();
-//            ReflectionTestUtils.setField(feed, "feedId", i);
-//            pageDataList.add(feed);
-//        }
-//        List<Feed> feedList = new ArrayList<>();
-//
-//        given(feedRepository.count()).willReturn(totalCount);
-//        given(feedRepository.findAll(Mockito.any(PageRequest.class))).willReturn(new Page<Feed>() {
-//        });
+        long memberId = 0L;
+        long totalCount = 15;
+
     }
 
     @Test
