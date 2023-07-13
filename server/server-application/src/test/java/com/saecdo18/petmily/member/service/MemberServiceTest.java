@@ -175,11 +175,10 @@ class MemberServiceTest {
     @Test
     void updateMemberStatusSuccess() {
 
-        long hostMemberId = 1L;
-        long guestMemberId = 2L;
+        long memberId = 1L;
 
-        Member hostMember = new Member();
-        ReflectionTestUtils.setField(hostMember, "memberId", hostMemberId);
+        Member member = new Member();
+        ReflectionTestUtils.setField(hostMember, "memberId", memberId);
 
         Pet pet = new Pet();
         ReflectionTestUtils.setField(pet, "petId", 1L);
@@ -205,9 +204,7 @@ class MemberServiceTest {
                 .uploadFileURL("http://image.jpg")
                 .build();
 
-        FollowMember followMember = new FollowMember();
-        ReflectionTestUtils.setField(followMember, "followerMember", hostMember);
-        ReflectionTestUtils.setField(followMember, "followingId", guestMemberId);
+
 
         MemberDto.Response memberResponse = MemberDto.Response.builder()
                 .build();
