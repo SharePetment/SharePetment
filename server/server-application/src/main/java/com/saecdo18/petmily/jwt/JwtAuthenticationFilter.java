@@ -30,8 +30,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final TokenProvider tokenProvider;
     private final MemberRepository memberRepository;
-//    private static final List<String> NO_CHECK_URLS = Arrays.asList("/feeds/all", "/members/nickname-check", "https://kauth.kakao.com/oauth/authorize?client_id=07df97c2858e60b2e19f630c2c397b31&redirect_uri=http://43.202.86.53:8080/auth/kakao/callback&response_type=code");
-    private static final List<String> NO_CHECK_URLS = Arrays.asList("/feeds/all", "/members/nickname-check", "https://kauth.kakao.com/oauth/authorize?client_id=07df97c2858e60b2e19f630c2c397b31&redirect_uri=http://localhost:8080/auth/kakao/callback&response_type=code");
+    private static final List<String> NO_CHECK_URLS = Arrays.asList("/feeds/like","/feeds/all", "/members/nickname-check", "https://kauth.kakao.com/oauth/authorize?client_id=07df97c2858e60b2e19f630c2c397b31&redirect_uri=http://43.202.86.53:8080/auth/kakao/callback&response_type=code");
+//    private static final List<String> NO_CHECK_URLS = Arrays.asList("/feeds/all", "/members/nickname-check", "https://kauth.kakao.com/oauth/authorize?client_id=07df97c2858e60b2e19f630c2c397b31&redirect_uri=http://localhost:8080/auth/kakao/callback&response_type=code");
 
     private GrantedAuthoritiesMapper authoritiesMapper = new NullAuthoritiesMapper();
 
