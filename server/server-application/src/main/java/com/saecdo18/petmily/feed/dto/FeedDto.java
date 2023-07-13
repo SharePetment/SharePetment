@@ -73,7 +73,8 @@ public class FeedDto {
         @ApiModelProperty(value = "댓글 리스트", required = true)
         private List<FeedCommentDto.Response> feedComments;
 
-        @ApiModelProperty(value = "공유 URL", example = "http://43.202.86.53:8080/feeds/all/{피드아이디}/0", required = true)
+        @ApiModelProperty(value = "공유 URL", example = "http://43.202.86.53:8080/feeds/all/{피드아이디}/0",
+                required = true)
         private String shareURL;
 
         private LocalDateTime createdAt;

@@ -22,6 +22,7 @@ import com.saecdo18.petmily.member.entity.Member;
 import com.saecdo18.petmily.member.repository.FollowMemberRepository;
 import com.saecdo18.petmily.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -36,6 +37,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
+@Slf4j
 @RequiredArgsConstructor
 public class FeedServiceImpl implements FeedService {
 
@@ -65,11 +67,11 @@ public class FeedServiceImpl implements FeedService {
                 saveImage(createFeed, originalFilename, uploadFileURL);
             }
         }
-        Feed saveFeed = feedRepository.save(createFeed);
+        Feed saveFeed = feedRepository.saveAndFlush(createFeed);
 
         findMember.upCountFeed(); // 피드 생성시 해당 멤버 feedCount 증가
 
-        return getFeed(saveFeed.getFeedId(), findMember.getMemberId());
+        return changeFeedToFeedDtoResponse(saveFeed, findMember.getMemberId());
     }
 
     @Override
@@ -110,7 +112,7 @@ public class FeedServiceImpl implements FeedService {
             pageRequest = PageRequest.of(0, newDataCount, Sort.by(Sort.Direction.DESC, "createdAt"));
         }
 
-        return changeFeedListToFeedResponseDto(feedList);
+        return changeFeedListToFeedResponseDto(feedList, memberId);
     }
 
     @Override
@@ -121,7 +123,7 @@ public class FeedServiceImpl implements FeedService {
         Page<Feed> feedPage = feedRepository.findAllByMemberOrderByCreatedAtDesc(findMember, pageRequest);
         List<Feed> feedList = feedPage.getContent();
 
-        return changeFeedListToFeedResponseDto(feedList);
+        return changeFeedListToFeedResponseDto(feedList, memberId);
     }
 
     @Override
@@ -158,7 +160,7 @@ public class FeedServiceImpl implements FeedService {
 
         Collections.shuffle(feedList);
 
-        return changeFeedListToFeedResponseDto(feedList);
+        return changeFeedListToFeedResponseDto(feedList, memberId);
     }
 
     private List<Feed> filterFeedsByPreviousListIds(List<Feed> feedList, FeedDto.PreviousListIds listIds) {
@@ -250,8 +252,8 @@ public class FeedServiceImpl implements FeedService {
             feedLike.updateIsLike();
             findFeed.likeCount(feedLike.isLike());
         }
-        FeedLike savedFeedLike = feedLikeRepository.save(feedLike);
-        Feed savedFeed = feedRepository.save(findFeed);
+        FeedLike savedFeedLike = feedLikeRepository.saveAndFlush(feedLike);
+        Feed savedFeed = feedRepository.saveAndFlush(findFeed);
 
         return FeedDto.Like.builder()
                 .likeCount(savedFeed.getLikes())
@@ -309,6 +311,8 @@ public class FeedServiceImpl implements FeedService {
 
     private boolean feedLikesByMember(Feed feed, Member member) {
         Optional<FeedLike> feedLike = feedLikeRepository.findByMemberAndFeed(member, feed);
+        log.info("feedId : {}, Member name : {}", feed.getFeedId(), member.getName());
+        log.info("feedLike : {}", feedLike.map(FeedLike::isLike).orElse(false));
         return feedLike.map(FeedLike::isLike).orElse(false);
     }
 
@@ -331,10 +335,10 @@ public class FeedServiceImpl implements FeedService {
         return response;
     }
 
-    private FeedDtoList changeFeedListToFeedResponseDto(List<Feed> feedList) {
+    private FeedDtoList changeFeedListToFeedResponseDto(List<Feed> feedList, long memberId) {
         List<FeedDto.Response> responseList = new ArrayList<>();
         for (Feed feed : feedList) {
-            FeedDto.Response response = changeFeedToFeedDtoResponse(feed, 0);
+            FeedDto.Response response = changeFeedToFeedDtoResponse(feed, memberId);
             responseList.add(response);
         }
 
