@@ -37,6 +37,33 @@ export const getServerDataWithJwt = async (url: string, token: string) => {
   return result.data;
 };
 
+/* -------------------------------- 게스트 피드리스트 가져오기 ------------------------------- */
+export const getGuestFeedList = async (url: string) => {
+  const result = await axios.post(url, {
+    previousListIds: [0],
+  });
+  return result.data;
+};
+
+/* -------------------------------- 기존 유저 피드리스트 가져오기 ------------------------------- */
+export const getHostFeedList = async (
+  url: string,
+  accessToken: string | null,
+) => {
+  const result = await axios.post(
+    url,
+    {
+      previousListIds: [0],
+    },
+    {
+      headers: {
+        Authorization: accessToken,
+      },
+    },
+  );
+  return result.data;
+};
+
 /* ------------------------------- 산책 리스트 가져오기 ------------------------------ */
 export const getWalkmateList = async () => {
   const URL = 'http://43.202.86.53:8080';
