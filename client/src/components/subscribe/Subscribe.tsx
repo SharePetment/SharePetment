@@ -13,7 +13,7 @@ interface Prop {
 export default function Subscribe({ guestFollow, usersId, memberId }: Prop) {
   // query 갱신하기
   const queryClient = useQueryClient();
-  console.log(memberId, usersId);
+
   // 구독 갱신
   const accessToken = useReadLocalStorage('accessToken');
   const subscribeMutation = useMutation({
