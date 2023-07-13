@@ -12,12 +12,14 @@ import FollowingCat from '../../assets/illustration/followingcat.png';
 import Popup from '../../common/popup/Popup';
 import FeedCard from '../../components/card/feedcard/FeedCard';
 import SideNav from '../../components/card/sidenav/SideNav';
+import Toast from '../../components/toast/Toast';
 import { Feed } from '../../types/feedTypes';
 import { Container, FollowContainer, Img, Text, Button } from './Home.styled';
 
 export function Component() {
   const accessToken = useReadLocalStorage<string>('accessToken');
   const [isClicked, setIsClicked] = useState<boolean>(false);
+  const [isToastOpen, setIsToastOpen] = useState<boolean>(false);
   const [isGuestOpen, setIsGuestOpen] = useState<boolean>(false);
   const navigate = useNavigate();
 
@@ -60,6 +62,11 @@ export function Component() {
   } else if (hostFeedQuery.isSuccess && !isClicked) {
     return (
       <>
+        {isToastOpen && (
+          <div className="fixed right-8 bottom-8">
+            <Toast />
+          </div>
+        )}
         <Container>
           <Swiper
             direction={'vertical'}
@@ -86,6 +93,7 @@ export function Component() {
                     likes={img.likes}
                     like={img.isLike ? 'true' : 'false'}
                     guesthandler={() => setIsGuestOpen(true)}
+                    toasthandler={setIsToastOpen}
                     url={img.shareURL}
                   />
                 </div>
@@ -98,6 +106,11 @@ export function Component() {
   } else if (hostRandomFeedQuery.isSuccess) {
     return (
       <>
+        {isToastOpen && (
+          <div className="fixed right-8 bottom-8">
+            <Toast />
+          </div>
+        )}
         <Container>
           <Swiper
             direction={'vertical'}
@@ -125,6 +138,7 @@ export function Component() {
                       likes={img.likes}
                       like={img.isLike ? 'true' : 'false'}
                       guesthandler={() => setIsGuestOpen(true)}
+                      toasthandler={setIsToastOpen}
                       url={img.shareURL}
                     />
                   </div>
@@ -140,6 +154,11 @@ export function Component() {
       guestFeedQuery.isSuccess &&
       !accessToken && (
         <>
+          {isToastOpen && (
+            <div className="fixed right-8 bottom-8">
+              <Toast />
+            </div>
+          )}
           {isGuestOpen && (
             <Popup
               title="로그인을 해주세요."
@@ -176,6 +195,7 @@ export function Component() {
                         likes={img.likes}
                         like={img.isLike ? 'true' : 'false'}
                         guesthandler={() => setIsGuestOpen(true)}
+                        toasthandler={setIsToastOpen}
                         url={img.shareURL}
                       />
                     </div>
