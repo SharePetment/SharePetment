@@ -2,6 +2,7 @@ package com.saecdo18.petmily.member.entity;
 
 
 import com.saecdo18.petmily.feed.entity.BaseEntity;
+import com.saecdo18.petmily.feed.entity.Feed;
 import com.saecdo18.petmily.pet.entity.Pet;
 import lombok.Builder;
 import lombok.Getter;
@@ -49,6 +50,8 @@ public class Member extends BaseEntity {
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private List<Pet> pets;
 
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
+    private List<Feed> feeds;
 
     @Builder(builderMethodName = "emailNicknameAddress")
     public Member(String email, String nickname, String address){
