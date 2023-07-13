@@ -21,8 +21,8 @@ public class WalkMateDto {
     public static class Post{
 
         //        private Long walkMatePostId;
-        @ApiModelProperty(value = "사용자 식별자", example = "1", required = true)
-        private Long memberId;
+//        @ApiModelProperty(value = "사용자 식별자", example = "1", required = true)
+//        private Long memberId;
         @ApiModelProperty(value = "제목", example = "제목1", required = true)
         private String title;
         @ApiModelProperty(value = "내용", example = "내용1", required = true)
@@ -59,8 +59,8 @@ public class WalkMateDto {
     public static class Patch{
 
         //        private Long walkMatePostId;
-        @ApiModelProperty(value = "사용자 식별자", example = "1", required = true)
-        private Long memberId;
+//        @ApiModelProperty(value = "사용자 식별자", example = "1", required = true)
+//        private Long memberId;
         @ApiModelProperty(value = "제목", example = "제목1", required = true)
         private String title;
         @ApiModelProperty(value = "내용", example = "내용1", required = true)

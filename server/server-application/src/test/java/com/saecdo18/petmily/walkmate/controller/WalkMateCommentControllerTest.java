@@ -76,7 +76,7 @@ class WalkMateCommentControllerTest {
 
         ResultActions getActions =
                 mockMvc.perform(
-                        post("/walkmates/comments/{walk-id}/{member-id}", walkId, memberId)
+                        post("/walkmates/comments/{walk-id}", walkId)
                                 .accept(MediaType.APPLICATION_JSON)
                                 .header("Authorization", tokenProvider.createAccessToken(memberId))
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -169,7 +169,7 @@ class WalkMateCommentControllerTest {
 
         ResultActions getActions=
                 mockMvc.perform(
-                        get("/walkmates/comments/bymember/{member-id}", memberId)
+                        get("/walkmates/comments/bymember")
                                 .accept(MediaType.APPLICATION_JSON)
                                 .header("Authorization", tokenProvider.createAccessToken(1L))
                 );
@@ -194,7 +194,7 @@ class WalkMateCommentControllerTest {
 
         ResultActions getActions =
                 mockMvc.perform(
-                        patch("/walkmates/comments/{comment-id}/{member-id}", 1L, 1L)
+                        patch("/walkmates/comments/{comment-id}", 1L)
                                 .accept(MediaType.APPLICATION_JSON)
                                 .header("Authorization", tokenProvider.createAccessToken(1L))
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -217,7 +217,7 @@ class WalkMateCommentControllerTest {
 
         ResultActions getActions =
                 mockMvc.perform(
-                        delete("/walkmates/comments/{comment-id}/{member-id}", commentId, memberId)
+                        delete("/walkmates/comments/{comment-id}", commentId)
                                 .accept(MediaType.APPLICATION_JSON)
                                 .header("Authorization", tokenProvider.createAccessToken(1L))
                                 .contentType(MediaType.APPLICATION_JSON)

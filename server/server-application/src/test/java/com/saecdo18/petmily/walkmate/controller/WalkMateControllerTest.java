@@ -71,7 +71,7 @@ class WalkMateControllerTest {
 
         ResultActions getActions =
                 mockMvc.perform(
-                        post("/walkmates/{member-id}", 1L)
+                        post("/walkmates")
                                 .accept(MediaType.APPLICATION_JSON)
                                 .header("Authorization", tokenProvider.createAccessToken(1L))
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -98,7 +98,7 @@ class WalkMateControllerTest {
 
         ResultActions getActions =
                 mockMvc.perform(
-                        patch("/walkmates/{walk-id}/{member-id}", 1L, 1L)
+                        patch("/walkmates/{walk-id}", 1L)
                                 .accept(MediaType.APPLICATION_JSON)
                                 .header("Authorization", tokenProvider.createAccessToken(1L))
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -148,7 +148,7 @@ class WalkMateControllerTest {
 
         ResultActions getActions =
                 mockMvc.perform(
-                        get("/walkmates/bymember/{member-id}", 1L)
+                        get("/walkmates/bymember")
                                 .param("openFilter", "true")
                                 .param("page", "0")
                                 .param("size", "10")
@@ -240,7 +240,7 @@ class WalkMateControllerTest {
 
         ResultActions getActions =
                 mockMvc.perform(
-                        get("/walkmates/have/comments/{member-id}", 1L)
+                        get("/walkmates/have/comments")
                                 .accept(MediaType.APPLICATION_JSON)
                                 .header("Authorization", tokenProvider.createAccessToken(1L))
                 );
@@ -248,8 +248,7 @@ class WalkMateControllerTest {
         getActions
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[1].title").value("제목2"))
-                .andExpect(jsonPath("$[1].content").value("내용2"))
-                .andExpect(jsonPath("$[1].comments[0].memberInfo.memberId").value("1"));
+                .andExpect(jsonPath("$[1].content").value("내용2"));
     }
 
     @Test
@@ -262,7 +261,7 @@ class WalkMateControllerTest {
 
         ResultActions getActions =
                 mockMvc.perform(
-                        delete("/walkmates/{walk-id}/{memberId}", walkId, memberId)
+                        delete("/walkmates/{walk-id}", walkId)
                                 .accept(MediaType.APPLICATION_JSON)
                                 .header("Authorization", tokenProvider.createAccessToken(1L))
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -287,7 +286,7 @@ class WalkMateControllerTest {
 
         ResultActions getActions =
                 mockMvc.perform(
-                        patch("/walkmates/like/{walk-id}/{member-id}", walkId, memberId)
+                        patch("/walkmates/like/{walk-id}", walkId)
                                 .accept(MediaType.APPLICATION_JSON)
                                 .header("Authorization", tokenProvider.createAccessToken(1L))
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -312,7 +311,7 @@ class WalkMateControllerTest {
 
         ResultActions getActions =
                 mockMvc.perform(
-                        patch("/walkmates/openstatus/{status}/{walk-id}/{member-id}", true, 1L, 1L)
+                        patch("/walkmates/openstatus/{status}/{walk-id}", true, 1L)
                                 .accept(MediaType.APPLICATION_JSON)
                                 .header("Authorization", tokenProvider.createAccessToken(1L))
                                 .contentType(MediaType.APPLICATION_JSON)
