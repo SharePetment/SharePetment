@@ -204,6 +204,27 @@ class FeedServiceImplTest {
     }
 
     @Test
-    void likeByMember() {
+    @DisplayName("피드 좋아요 성공")
+    void likeByMemberSuccess() {
+        long memberId = 1L;
+        long feedId = 1L;
+        Feed feed = new Feed();
+        Member member = new Member();
+        ReflectionTestUtils.setField(feed, "feedId", feedId);
+        ReflectionTestUtils.setField(member, "memberId", memberId);
+
+    }
+
+    @Test
+    @DisplayName("피드 좋아요 실패 - 피드를 찾을 수 없음.")
+    void likeByMemberFailsWhenFeedNotFound() {
+        long memberId = 1L;
+        long feedId = 1L;
+        Feed feed = new Feed();
+        Member member = new Member();
+        ReflectionTestUtils.setField(feed, "feedId", feedId);
+        ReflectionTestUtils.setField(member, "memberId", memberId);
+
+
     }
 }

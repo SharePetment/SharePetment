@@ -211,6 +211,7 @@ public class FeedServiceImpl implements FeedService {
                 s3UploadService.deleteImage(feedImage.getImage().getOriginalFilename());
             }
             feedRepository.delete(findFeed);
+            feedRepository.flush();
         }else
             throw new IllegalArgumentException("삭제할 권한이 없습니다.");
     }
