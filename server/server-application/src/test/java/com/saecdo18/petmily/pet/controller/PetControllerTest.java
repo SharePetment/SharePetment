@@ -76,7 +76,7 @@ class PetControllerTest {
         ResultActions getActions =
                 mockMvc.perform(multipart("/pets")
                                 .file(image)
-                                .param("memberId","1")
+
                                 .param("name","메시")
                                 .param("age","5")
                                 .param("sex","수컷")
@@ -162,7 +162,7 @@ class PetControllerTest {
         });
 
         ResultActions getActions =
-                mockMvc.perform(patch("/pets/status/1/1")
+                mockMvc.perform(patch("/pets/status/1")
                                 .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
                         .content(image.getBytes())
                         .param("name","메시")
@@ -197,7 +197,7 @@ class PetControllerTest {
     @Test
     void deletePet() throws Exception {
 
-        mockMvc.perform(delete("/pets/1/1").header("Authorization", tokenProvider.createAccessToken(1)))
+        mockMvc.perform(delete("/pets/1").header("Authorization", tokenProvider.createAccessToken(1)))
 
                 .andExpect(status().isNoContent());
     }

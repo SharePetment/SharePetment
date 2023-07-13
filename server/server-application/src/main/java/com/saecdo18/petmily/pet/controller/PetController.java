@@ -4,6 +4,7 @@ import com.saecdo18.petmily.pet.mapper.PetMapper;
 import com.saecdo18.petmily.pet.dto.PetDto;
 import com.saecdo18.petmily.pet.entity.Pet;
 import com.saecdo18.petmily.pet.service.PetService;
+import com.saecdo18.petmily.util.AuthenticationGetMemberId;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,17 +26,18 @@ public class PetController {
     private final PetService petService;
     private final PetMapper petMapper;
 
+    private final AuthenticationGetMemberId authenticationGetMemberId;
+
     @PostMapping
-    public ResponseEntity<PetDto.Response> postPet(@ApiParam("견주")@RequestParam("memberId") String memberId,
-                                                   @ApiParam("반려동물 이미지")@RequestParam("images") MultipartFile images,
+    public ResponseEntity<PetDto.Response> postPet(@ApiParam("반려동물 이미지")@RequestParam("images") MultipartFile images,
                                                    @ApiParam("반려동물 이름")@RequestParam("name") String name,
                                                    @ApiParam("반려동물 나이")@RequestParam("age") String age,
                                                    @ApiParam("반려동물 성별")@RequestParam("sex") String sex,
                                                    @ApiParam("반려동물 종")@RequestParam("species") String species,
                                                    @ApiParam("반려동물 정보")@RequestParam("information") String information
                                      ) throws IOException {
+        long memberId = authenticationGetMemberId.getMemberId();
 
-        long longMemberId = Long.parseLong(memberId);
         int intAge = Integer.parseInt(age);
 
         PetDto.Post petPostDto = PetDto.Post.builder()
@@ -47,7 +49,7 @@ public class PetController {
                 .information(information)
                 .build();
 //        Pet mappingPet = petMapper.petPostDtoToPet(petPostDto);
-        PetDto.Response responsePet = petService.createPet(longMemberId, petPostDto);
+        PetDto.Response responsePet = petService.createPet(memberId, petPostDto);
 
 
         return new ResponseEntity<>(responsePet, HttpStatus.CREATED);
@@ -61,15 +63,16 @@ public class PetController {
     }
 
 
-    @PatchMapping("/status/{member-id}/{pet-id}")
-    public ResponseEntity<PetDto.Response> patchPet(@ApiParam("견주")@PathVariable("member-id") long memberId,
-                                                    @ApiParam("반려동물 식별자")@PathVariable("pet-id") long petId,
+    @PatchMapping("/status/{pet-id}")
+    public ResponseEntity<PetDto.Response> patchPet(@ApiParam("반려동물 식별자")@PathVariable("pet-id") long petId,
                                                     @ApiParam("반려동물 이미지")@RequestParam(value = "images", required = false) MultipartFile images,
                                                     @ApiParam("반려동물 이름")@RequestParam("name") String name,
                                                     @ApiParam("반려동물 나이")@RequestParam("age") String age,
                                                     @ApiParam("반려동물 성별")@RequestParam("sex") String sex,
                                                     @ApiParam("반려동물 종")@RequestParam("species") String species,
                                                     @ApiParam("반려동물 정보")@RequestParam("information") String information) throws IOException {
+        long memberId = authenticationGetMemberId.getMemberId();
+
         int intAge = Integer.parseInt(age);
 
         PetDto.Patch petPatchDto = PetDto.Patch.builder()
@@ -85,9 +88,10 @@ public class PetController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{member-id}/{pet-id}")
-    public ResponseEntity<?> deletePet(@ApiParam("견주")@PathVariable("member-id") long memberId,
-                                       @ApiParam("반려동물")@PathVariable("pet-id") long petId) {
+    @DeleteMapping("/{pet-id}")
+    public ResponseEntity<?> deletePet(@ApiParam("반려동물")@PathVariable("pet-id") long petId) {
+        long memberId = authenticationGetMemberId.getMemberId();
+
         petService.deletePet(memberId, petId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
