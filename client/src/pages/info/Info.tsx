@@ -58,7 +58,6 @@ export function Component() {
   const [zip, setZip] = useState('');
   /* ----------------------------- useLocalStorage ---------------------------- */
   const accessToken = useReadLocalStorage<string>('accessToken');
-  const memberId = useReadLocalStorage<string>('memberId');
 
   // 회원가입 등록 Mutation
   const userInfoFillMutation = useMutation({
@@ -104,7 +103,7 @@ export function Component() {
       if (!userId)
         return setError('nickname', { message: ERROR_MESSAGE.DUPLICATE });
     }
-    const url = `${SERVER_URL}members/status/${memberId}`;
+    const url = `${SERVER_URL}members/status`;
     data = {
       ...data,
       address: zip.trim(),
