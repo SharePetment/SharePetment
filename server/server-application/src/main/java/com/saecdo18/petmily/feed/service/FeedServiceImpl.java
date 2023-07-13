@@ -110,7 +110,7 @@ public class FeedServiceImpl implements FeedService {
             pageRequest = PageRequest.of(0, newDataCount, Sort.by(Sort.Direction.DESC, "createdAt"));
         }
 
-        return changeFeedListToFeedResponseDto(feedList);
+        return changeFeedListToFeedResponseDto(feedList, memberId);
     }
 
     @Override
@@ -121,7 +121,7 @@ public class FeedServiceImpl implements FeedService {
         Page<Feed> feedPage = feedRepository.findAllByMemberOrderByCreatedAtDesc(findMember, pageRequest);
         List<Feed> feedList = feedPage.getContent();
 
-        return changeFeedListToFeedResponseDto(feedList);
+        return changeFeedListToFeedResponseDto(feedList, memberId);
     }
 
     @Override
@@ -158,7 +158,7 @@ public class FeedServiceImpl implements FeedService {
 
         Collections.shuffle(feedList);
 
-        return changeFeedListToFeedResponseDto(feedList);
+        return changeFeedListToFeedResponseDto(feedList, memberId);
     }
 
     private List<Feed> filterFeedsByPreviousListIds(List<Feed> feedList, FeedDto.PreviousListIds listIds) {
@@ -331,10 +331,10 @@ public class FeedServiceImpl implements FeedService {
         return response;
     }
 
-    private FeedDtoList changeFeedListToFeedResponseDto(List<Feed> feedList) {
+    private FeedDtoList changeFeedListToFeedResponseDto(List<Feed> feedList, long memberId) {
         List<FeedDto.Response> responseList = new ArrayList<>();
         for (Feed feed : feedList) {
-            FeedDto.Response response = changeFeedToFeedDtoResponse(feed, 0);
+            FeedDto.Response response = changeFeedToFeedDtoResponse(feed, memberId);
             responseList.add(response);
         }
 
