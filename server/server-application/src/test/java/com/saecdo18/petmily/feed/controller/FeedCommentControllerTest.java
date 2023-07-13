@@ -49,12 +49,11 @@ class FeedCommentControllerTest {
         FeedCommentDto.Response response = getFeedCommentDto(memberId);
         FeedCommentDto.Post post = FeedCommentDto.Post.builder()
                 .feedId(feedId)
-                .memberId(memberId)
                 .content("content")
                 .build();
         String content = gson.toJson(post);
         String responseContent = gson.toJson(response);
-        given(feedCommentService.createComment(any())).willReturn(response);
+        given(feedCommentService.createComment(any(), Mockito.anyLong())).willReturn(response);
 
         mockMvc.perform(
                     post("/feeds/comments")
@@ -85,7 +84,7 @@ class FeedCommentControllerTest {
         given(feedCommentService.updateComment(any(), Mockito.anyLong(), Mockito.anyLong())).willReturn(response);
 
         mockMvc.perform(
-                patch("/feeds/comments/{comment-id}/{member-id}", commentId, feedId)
+                patch("/feeds/comments/{comment-id}", commentId)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .header("Authorization", tokenProvider.createAccessToken(memberId))
@@ -103,7 +102,7 @@ class FeedCommentControllerTest {
         doNothing().when(feedCommentService).deleteComment(commentId, memberId);
 
         mockMvc.perform(
-                delete("/feeds/comments/{comment-id}/{member-id}", commentId, memberId)
+                delete("/feeds/comments/{comment-id}", commentId)
                         .header("Authorization", tokenProvider.createAccessToken(memberId))
         ).andExpect(status().isNoContent());
     }

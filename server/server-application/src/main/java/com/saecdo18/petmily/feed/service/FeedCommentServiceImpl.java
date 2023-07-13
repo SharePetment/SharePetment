@@ -21,9 +21,9 @@ public class FeedCommentServiceImpl implements FeedCommentService{
     private final MemberRepository memberRepository;
     private final FeedMapper feedMapper;
     @Override
-    public FeedCommentDto.Response createComment(FeedCommentDto.Post post) {
+    public FeedCommentDto.Response createComment(FeedCommentDto.Post post, long memberId) {
         Feed findFeed = methodFindByFeedId(post.getFeedId());
-        Member findMember = methodFindByMemberId(post.getMemberId());
+        Member findMember = methodFindByMemberId(memberId);
         FeedComments feedComments = FeedComments.builder()
                 .content(post.getContent())
                 .feed(findFeed)

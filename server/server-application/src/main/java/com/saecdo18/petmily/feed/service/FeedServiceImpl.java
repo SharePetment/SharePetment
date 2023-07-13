@@ -53,8 +53,8 @@ public class FeedServiceImpl implements FeedService {
     private final static String BASE_URI = "http://43.202.86.53:8080/feeds/all/";
 
     @Override
-    public FeedDto.Response createFeed(FeedDto.Post post) throws IOException {
-        Member findMember = methodFindByMemberId(post.getMemberId());
+    public FeedDto.Response createFeed(FeedDto.Post post, long memberId) throws IOException {
+        Member findMember = methodFindByMemberId(memberId);
         Feed createFeed = Feed.builder()
                 .content(post.getContent())
                 .member(findMember)
@@ -174,10 +174,10 @@ public class FeedServiceImpl implements FeedService {
     }
 
     @Override
-    public FeedDto.Response patchFeed(FeedDto.Patch patch) throws IOException {
+    public FeedDto.Response patchFeed(FeedDto.Patch patch, long memberId) throws IOException {
         Feed findFeed = methodFindByFeedId(patch.getFeedId());
         findFeed.updateContent(patch.getContent());
-        if(!patch.getMemberId().equals(findFeed.getMember().getMemberId()))
+        if(memberId !=findFeed.getMember().getMemberId())
             throw new IllegalArgumentException("수정할 권한이 없습니다.");
 
         if (!patch.getAddImages().isEmpty()) {
@@ -199,7 +199,7 @@ public class FeedServiceImpl implements FeedService {
             }
         }
 
-        return changeFeedToFeedDtoResponse(findFeed, patch.getMemberId());
+        return changeFeedToFeedDtoResponse(findFeed, memberId);
     }
 
     @Override
@@ -252,8 +252,8 @@ public class FeedServiceImpl implements FeedService {
             feedLike.updateIsLike();
             findFeed.likeCount(feedLike.isLike());
         }
-        FeedLike savedFeedLike = feedLikeRepository.saveAndFlush(feedLike);
-        Feed savedFeed = feedRepository.saveAndFlush(findFeed);
+        FeedLike savedFeedLike = feedLikeRepository.save(feedLike);
+        Feed savedFeed = feedRepository.save(findFeed);
 
         return FeedDto.Like.builder()
                 .likeCount(savedFeed.getLikes())
@@ -311,8 +311,6 @@ public class FeedServiceImpl implements FeedService {
 
     private boolean feedLikesByMember(Feed feed, Member member) {
         Optional<FeedLike> feedLike = feedLikeRepository.findByMemberAndFeed(member, feed);
-        log.info("feedId : {}, Member name : {}", feed.getFeedId(), member.getName());
-        log.info("feedLike : {}", feedLike.map(FeedLike::isLike).orElse(false));
         return feedLike.map(FeedLike::isLike).orElse(false);
     }
 

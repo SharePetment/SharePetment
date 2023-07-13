@@ -21,9 +21,6 @@ public class FeedDto {
     @ApiModel(value = "피드 생성용 DTO")
     public static class Post {
         @NotBlank
-        @ApiModelProperty(value = "사용자 아이디", example = "1", required = true)
-        private Long memberId;
-        @NotBlank
         @ApiModelProperty(value = "피드 내용", example = "피드 내용", required = true)
         private String content;
         @ApiModelProperty(value = "피드 이미지 파일", required = true)
@@ -37,8 +34,6 @@ public class FeedDto {
     public static class Patch{
         @ApiModelProperty(value = "피드 아이디", example = "1", required = true)
         private Long feedId;
-        @ApiModelProperty(value = "사용자 아이디", example = "1", required = true)
-        private Long memberId;
         @ApiModelProperty(value = "피드 수정 내용", example = "수정 내용", required = true)
         private String content;
         @ApiModelProperty(value = "추가 이미지 파일", required = false)
