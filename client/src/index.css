@@ -11,6 +11,14 @@
   font-style: normal;
 }
 
-body{
+body {
   background-color: #fafafa;
+}
+
+.block {
+  display: block;
+}
+
+.hidden {
+  display: none;
 }

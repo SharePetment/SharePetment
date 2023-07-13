@@ -5,7 +5,7 @@ export const Divider = tw.div`
   w-full
   h-1
   border-b-[0.5px]
-  border-indigo-lightgray
+  border-lightgray
   mb-4
 `;
 
