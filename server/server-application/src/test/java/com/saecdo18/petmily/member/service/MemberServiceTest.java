@@ -120,8 +120,60 @@ class MemberServiceTest {
     }
 
     @Test
-    void getMember() {
+    @DisplayName("회원 조회 실패 : 찾는 멤버가 없어서 생기는 예외")
+    void getMemberNoneHostMember() {
 
+
+        long hostMemberId = 1L;
+        long guestMemberId = 2L;
+
+        Member hostMember = new Member();
+        ReflectionTestUtils.setField(hostMember, "memberId", hostMemberId);
+
+        Pet pet = new Pet();
+        ReflectionTestUtils.setField(pet, "petId", 1L);
+        ReflectionTestUtils.setField(pet, "name", "메시");
+        ReflectionTestUtils.setField(pet, "member", hostMember);
+
+        List<Pet> petList = List.of(pet);
+
+        PetDto.Response petResponse = PetDto.Response.builder()
+                .petId(1l)
+                .name("메시")
+                .build();
+
+        Image image = Image.builder().originalFilename("image.jpg").uploadFileURL("http://image.jpg").build();
+
+        PetImage petImage = new PetImage();
+        ReflectionTestUtils.setField(petImage, "pet", pet);
+        ReflectionTestUtils.setField(petImage, "image", image);
+
+        ImageDto imageDto = ImageDto.builder()
+                .imageId(1L)
+                .originalFilename("image.jpg")
+                .uploadFileURL("http://image.jpg")
+                .build();
+
+        FollowMember followMember = new FollowMember();
+        ReflectionTestUtils.setField(followMember, "followerMember", hostMember);
+        ReflectionTestUtils.setField(followMember, "followingId", guestMemberId);
+
+        MemberDto.Response memberResponse = MemberDto.Response.builder()
+                .build();
+
+        MemberDto.Info memberInfo = MemberDto.Info.builder()
+                .memberId(1L)
+                .build();
+
+
+        given(memberRepository.findById(Mockito.anyLong())).willReturn(Optional.empty());
+        RuntimeException exception = assertThrows(RuntimeException.class , () -> memberService.getMember(hostMemberId, guestMemberId));
+
+        assertEquals(exception.getMessage(), "수정할 멤버가 없습니다");
+    }
+
+    @Test
+    void updateMemberStatusSuccess() {
 
         long hostMemberId = 1L;
         long guestMemberId = 2L;
@@ -180,10 +232,7 @@ class MemberServiceTest {
 
         verify(memberRepository, times(2)).findById(hostMemberId);
         verify(petRepository, times(1)).findByMember(hostMember);
-    }
 
-    @Test
-    void updateMemberStatus() {
     }
 
     @Test

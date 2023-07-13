@@ -93,10 +93,10 @@ public class MemberController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{member-id}")
     @ApiOperation(value = "멤버 삭제 메서드!!! 함부로 삭제하지 마시구 사용자 조회를 통해 자신의 아이디를 우선 조회하세요!")
-    public ResponseEntity<?> deleteMember() {
-        long memberId = authenticationGetMemberId.getMemberId();
+    public ResponseEntity<?> deleteMember(@ApiParam @PathVariable long memberId) {
+//        long memberId = authenticationGetMemberId.getMemberId();
 
         memberService.deleteMember(memberId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
