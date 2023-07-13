@@ -1,6 +1,5 @@
-// eslint-disable-next-line import/named
 import axios, { isAxiosError } from 'axios';
-import { SERVER_URL, ZIP_URL } from './url';
+import { ZIP_URL } from './url';
 
 // 쿼리함수를 관리합니다.
 
