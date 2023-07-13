@@ -62,6 +62,9 @@ export function Component() {
     return <LoadingComponent />;
   }
 
+  const reversedData = data ? [...data.comments].reverse() : [];
+  console.log(reversedData);
+
   return (
     <div className="w-[450px] max-sm:w-[320px] mx-auto mt-7">
       {data?.memberInfo?.memberId === memberId && (
@@ -124,7 +127,7 @@ export function Component() {
         </form>
         {/* 댓글 렌더링 */}
         <ul>
-          {data?.comments.map(comment => {
+          {reversedData.map(comment => {
             return (
               <Comment
                 key={comment.walkMateCommentId}
