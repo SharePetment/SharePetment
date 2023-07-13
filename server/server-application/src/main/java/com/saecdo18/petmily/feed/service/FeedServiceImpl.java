@@ -204,14 +204,14 @@ public class FeedServiceImpl implements FeedService {
     public void deleteFeed(long feedId, long memberId) {
         Feed findFeed = methodFindByFeedId(feedId);
         if (findFeed.getMember().getMemberId() == memberId) {
-
-            Member findMember = memberRepository.findById(memberId).get();
+            Member findMember = methodFindByMemberId(memberId);
             findMember.downCountFeed();      // 피드 삭제시 멤버의 피드카운트 삭감
 
             for (FeedImage feedImage : findFeed.getFeedImageList()) {
                 s3UploadService.deleteImage(feedImage.getImage().getOriginalFilename());
             }
             feedRepository.delete(findFeed);
+            feedRepository.flush();
         }else
             throw new IllegalArgumentException("삭제할 권한이 없습니다.");
     }
