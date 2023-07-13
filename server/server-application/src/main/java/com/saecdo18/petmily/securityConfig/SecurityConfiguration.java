@@ -47,7 +47,7 @@ public class SecurityConfiguration {
                         "/oauth/**","/feeds/all/**","/auth/**",
                         "/login/**","/swagger-ui/**","/swagger-ui.html/**",
                         "/swagger-resources/**","/v2/api-docs","/v3/api-docs",
-                        "/members/nickname-check/**", "/feeds/like/**").permitAll()
+                        "/members/nickname-check/**").permitAll()
                 .anyRequest().authenticated();
 //            .and()
 //
