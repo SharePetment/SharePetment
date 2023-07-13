@@ -176,9 +176,9 @@ public class FeedServiceImpl implements FeedService {
     @Override
     public FeedDto.Response patchFeed(FeedDto.Patch patch, long memberId) throws IOException {
         Feed findFeed = methodFindByFeedId(patch.getFeedId());
-        findFeed.updateContent(patch.getContent());
         if(memberId !=findFeed.getMember().getMemberId())
             throw new IllegalArgumentException("수정할 권한이 없습니다.");
+        findFeed.updateContent(patch.getContent());
 
         if (!patch.getAddImages().isEmpty()) {
             for (MultipartFile multipartFile : patch.getAddImages()) {
@@ -191,7 +191,6 @@ public class FeedServiceImpl implements FeedService {
             for (String originalFilename : patch.getDeleteImages()) {
                 for (FeedImage feedImage : findFeed.getFeedImageList()) {
                     if (originalFilename.equals(feedImage.getImage().getOriginalFilename())) {
-                        System.out.println(originalFilename+"!!!!!!!!!!!!!!"+feedImage.getImage().getOriginalFilename());
                         s3UploadService.deleteImage(feedImage.getImage().getOriginalFilename());
                         feedImageRepository.delete(feedImage);
                     }
