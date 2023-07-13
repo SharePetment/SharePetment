@@ -110,7 +110,7 @@ public class FeedController {
     @ApiOperation("피드 좋아요 누르기")
     @PatchMapping("/like/{feed-id}/{member-id}")
     public ResponseEntity<FeedDto.Like> likeFeed(@ApiParam("피드 아이디") @PathVariable("feed-id") long feedId,
-                                      @ApiParam("사용자 아이디") @PathVariable("member-id") long memberId) {
+                                                @ApiParam("사용자 아이디") @PathVariable("member-id") long memberId) {
         FeedDto.Like response = feedService.likeByMember(feedId, memberId);
         return ResponseEntity.ok(response);
     }
