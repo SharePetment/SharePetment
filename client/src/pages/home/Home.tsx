@@ -104,6 +104,7 @@ export function Component() {
                     context={img.content}
                     userimg={img.memberInfo.imageURL}
                     images={img.images}
+                    guesthandler={() => setIsGuestOpen(true)}
                   />
                   <SideNav
                     feedid={img.feedId}
@@ -167,6 +168,7 @@ export function Component() {
                         context={img.content}
                         userimg={img.memberInfo.imageURL}
                         images={img.images}
+                        guesthandler={() => setIsGuestOpen(true)}
                       />
                       <SideNav
                         feedid={img.feedId}
