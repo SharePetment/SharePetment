@@ -4,6 +4,7 @@ package com.saecdo18.petmily.securityConfig;
 import com.saecdo18.petmily.jwt.JwtAuthenticationFilter;
 //import com.saecdo18.petmily.oauth.CustomOAuth2UserService;
 import com.saecdo18.petmily.oauth.OAuth2SuccessHandler;
+import com.saecdo18.petmily.util.AuthenticationGetMemberId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,7 +22,6 @@ import org.springframework.web.filter.CorsFilter;
 @RequiredArgsConstructor
 public class SecurityConfiguration {
 
-//    private final CustomOAuth2UserService customOAuth2UserService;
     private final OAuth2SuccessHandler oAuth2SuccessHandler;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
@@ -31,16 +31,16 @@ public class SecurityConfiguration {
         http
                 .csrf().disable()
                 .cors()
-            .and()
+                .and()
 
                 .headers()
                 .frameOptions().disable()
-            .and()
+                .and()
 
                 .formLogin().disable()
                 .httpBasic().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            .and()
+                .and()
 
                 .authorizeHttpRequests()
                 .antMatchers("/","/api/v2/**","/swagger/**",
@@ -76,5 +76,6 @@ public class SecurityConfiguration {
 
         return source;
     }
+
 
 }
