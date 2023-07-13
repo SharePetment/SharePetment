@@ -10,6 +10,7 @@ import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 @Data
+@NoArgsConstructor
 public class PetDto {
 
 //    @AllArgsConstructor

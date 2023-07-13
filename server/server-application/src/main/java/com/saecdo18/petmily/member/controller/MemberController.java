@@ -6,6 +6,7 @@ import com.saecdo18.petmily.member.dto.MemberDto;
 import com.saecdo18.petmily.member.entity.FollowMember;
 import com.saecdo18.petmily.member.entity.Member;
 import com.saecdo18.petmily.member.mapper.MemberMapper;
+import com.saecdo18.petmily.member.repository.MemberRepository;
 import com.saecdo18.petmily.member.service.MemberService;
 import io.swagger.annotations.*;
 import io.swagger.v3.oas.annotations.Operation;
@@ -16,6 +17,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +35,7 @@ import java.util.List;
 public class MemberController {
     private final MemberMapper memberMapper;
     private final MemberService memberService;
+    private final MemberRepository memberRepository;
 
     //    @PostMapping
 //    public ResponseEntity postMember(@Valid @RequestBody MemberDto.Post memberPostDto) {
@@ -51,6 +55,7 @@ public class MemberController {
     @Operation(summary = "Get Member", description = "회원 조회")
     public ResponseEntity<MemberDto.Response> getMember(@ApiParam("조회될 사용자 식별자") @PathVariable("host-member-id") long hostMemberId,
                                                         @ApiParam("조회할 사용자 식별자") @PathVariable("guest-member-id") long guestMemberId) {
+
         MemberDto.Response responseMember = memberService.getMember(hostMemberId, guestMemberId);
         return new ResponseEntity(responseMember, HttpStatus.OK);
     }
