@@ -309,7 +309,7 @@ public class FeedServiceImpl implements FeedService {
 
     private boolean feedLikesByMember(Feed feed, Member member) {
         Optional<FeedLike> feedLike = feedLikeRepository.findByMemberAndFeed(member, feed);
-        return feedLike.map(FeedLike::isLike).orElse(false);
+        return feedLike.get().isLike();
     }
 
     private FeedDto.Response changeFeedToFeedDtoResponse(Feed feed, long memberId) {
