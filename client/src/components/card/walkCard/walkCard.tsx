@@ -6,34 +6,36 @@ import { BooleanStr } from '../../../types/propType';
 import {
   Backdrop,
   CardContainer,
-  CompoleteNotice,
+  CompleteNotice,
   WalkDate,
   Title,
   WalkMateList,
   WalkMateItem,
   LocationTitle,
   WriterProfile,
-  CompoleteText,
+  CompleteText,
 } from './walkCard.styled';
 
 type walkCardProps = {
   time: string;
   title: string;
-  freinds: number;
+  friends: number;
   location: string;
-  chaturl: string;
+  chaturl?: string;
   isclosed: BooleanStr;
+  size: 'lg' | 'sm';
 };
 
 export default function WalkCard({
   time,
   title,
-  freinds,
+  friends,
   location,
   isclosed,
+  size,
 }: walkCardProps) {
   return (
-    <CardContainer>
+    <CardContainer size={size}>
       <WalkDate>
         <div className="text-xs">산책날짜</div>
         <div>{time}</div>
@@ -42,7 +44,7 @@ export default function WalkCard({
       <WalkMateList>
         <WalkMateItem>
           <Dog className="shrink-0" />
-          <span>{freinds}마리</span>
+          <span>{friends}마리</span>
         </WalkMateItem>
         <WalkMateItem>
           <Pin className="shrink-0" />
@@ -56,11 +58,11 @@ export default function WalkCard({
       </WriterProfile>
       {isclosed === 'false' && (
         <>
-          <Backdrop>
-            <CompoleteNotice className="flex items-center">
+          <Backdrop size={size}>
+            <CompleteNotice className="flex items-center">
               <Paw className="shrink-0" />
-              <CompoleteText>모집 완료</CompoleteText>
-            </CompoleteNotice>
+              <CompleteText>모집 완료</CompleteText>
+            </CompleteNotice>
           </Backdrop>
         </>
       )}
