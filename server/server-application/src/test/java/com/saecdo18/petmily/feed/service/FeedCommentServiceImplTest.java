@@ -34,7 +34,6 @@ class FeedCommentServiceImplTest {
     private MemberRepository memberRepository;
     @Mock
     private FeedMapper feedMapper;
-
     @InjectMocks
     private FeedCommentServiceImpl feedCommentService;
 
