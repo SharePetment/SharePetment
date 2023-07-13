@@ -37,10 +37,14 @@ export default function SideNav({
 
   const likeMutation = useMutation({
     mutationFn: patchFeedLike,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['guestFeed'] }),
+    onSuccess: data => {
+      console.log(data);
+      queryClient.invalidateQueries({ queryKey: ['guestFeed'] });
+    },
   });
 
   const handleClickLike = () => {
+    console.log(feedid);
     if (!accessToken) return guesthandler();
     const data = {
       url: `${SERVER_URL}feeds/like/${feedid}/${memberId}`,
@@ -59,7 +63,12 @@ export default function SideNav({
       <Container direction={direction}>
         <Wrap className="pl-2">
           {like === 'true' ? (
-            <Like className="cursor-pointer" stroke="black" fill="#69B783" />
+            <Like
+              className="cursor-pointer"
+              stroke="black"
+              fill="#69B783"
+              onClick={handleClickLike}
+            />
           ) : (
             <Like
               className="cursor-pointer "
@@ -72,7 +81,7 @@ export default function SideNav({
         </Wrap>
 
         <Wrap onClick={handleClickComment}>
-          <Comment className="cursor-pointer ml-2" />
+          <Comment className="cursor-pointer ml-2" stroke="black" />
         </Wrap>
 
         <Wrap>

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Navigation } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import { useReadLocalStorage } from 'usehooks-ts';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
@@ -29,6 +30,7 @@ interface Prop {
   context: string;
   userimg: string;
   images: ImagesStructure[];
+  guesthandler: () => void;
 }
 
 export default function FeedCard({
@@ -37,9 +39,16 @@ export default function FeedCard({
   context,
   userimg,
   images,
+  guesthandler,
 }: Prop) {
   const navigate = useNavigate();
   const [isMore, setIsMore] = useState(false);
+  const accessToken = useReadLocalStorage('accessToken');
+
+  const handlerClick = () => {
+    if (!accessToken) return guesthandler();
+    navigate(`/users/${memberid}`);
+  };
 
   return (
     <Container>
@@ -56,7 +65,7 @@ export default function FeedCard({
             key={image.imageId}>
             <Feed onClick={() => setIsMore(false)} src={image.uploadFileURL} />
             <ContentContainer>
-              <Wrap onClick={() => navigate(`/users/${memberid}`)}>
+              <Wrap onClick={handlerClick} className="cursor-pointer">
                 <Profile size="sm" isgreen="false" url={userimg} />
                 <UserName>{username}</UserName>
               </Wrap>

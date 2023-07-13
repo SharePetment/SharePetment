@@ -44,7 +44,7 @@ export default function Comment(props: CommentProp) {
 
   const [isEdited, setIsEdited] = useState(false);
   const [isDeleted, setIsDeleted] = useState(false);
-  const [text, setText] = useState(content);
+  const [text] = useState(content);
 
   const { register, handleSubmit, setFocus } = useForm<Inputs>();
 
