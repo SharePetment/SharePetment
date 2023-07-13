@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface FeedService {
 
-    public FeedDto.Response createFeed(FeedDto.Post post) throws IOException;
+    public FeedDto.Response createFeed(FeedDto.Post post, long memberId) throws IOException;
 
     public FeedDto.Response getFeed(long feedId, long memberId);
 
@@ -20,7 +20,7 @@ public interface FeedService {
 
     public FeedDtoList getFeedsByMemberFollow(long memberId, FeedDto.PreviousListIds listIds);
 
-    public FeedDto.Response patchFeed(FeedDto.Patch patch) throws IOException;
+    public FeedDto.Response patchFeed(FeedDto.Patch patch, long memberId) throws IOException;
 
     public void deleteFeed(long feedId, long memberId);
 

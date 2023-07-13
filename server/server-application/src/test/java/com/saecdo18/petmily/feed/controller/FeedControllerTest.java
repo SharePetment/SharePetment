@@ -63,7 +63,7 @@ class FeedControllerTest {
         given(feedService.getFeed(Mockito.anyLong(), Mockito.anyLong())).willReturn(feedDto);
 
         ResultActions actions = mockMvc.perform(
-                get("/feeds/all/{feed-id}/{member-id}", feedId, memberId)
+                get("/feeds/all/{feed-id}", feedId)
                         .header("Authorization", tokenProvider.createAccessToken(memberId))
         );
 
@@ -86,7 +86,7 @@ class FeedControllerTest {
         given(feedService.getFeedsRecent(any(), Mockito.anyLong())).willReturn(feedDtoList);
 
         ResultActions actions = mockMvc.perform(
-                post("/feeds/all/list/random/{member-id}", memberId)
+                post("/feeds/all/list/random")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .header("Authorization", tokenProvider.createAccessToken(memberId))
@@ -118,7 +118,7 @@ class FeedControllerTest {
         given(feedService.getFeedsByMember(Mockito.anyInt(), Mockito.anyInt(), Mockito.anyLong())).willReturn(feedDtoList);
 
         mockMvc.perform(
-                get("/feeds/my-feed/{member-id}", memberId)
+                get("/feeds/my-feed")
                         .params(params)
                         .header("Authorization", tokenProvider.createAccessToken(memberId))
         ).andExpect(status().isOk())
@@ -141,7 +141,7 @@ class FeedControllerTest {
         given(feedService.getFeedsByMemberFollow(Mockito.anyLong(), any())).willReturn(feedDtoList);
 
         mockMvc.perform(
-                        post("/feeds/list/{member-id}", memberId)
+                        post("/feeds/list")
                                 .accept(MediaType.APPLICATION_JSON)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .header("Authorization", tokenProvider.createAccessToken(memberId))
@@ -168,7 +168,7 @@ class FeedControllerTest {
         String content = gson.toJson(response);
         FeedDto.Response feedDtoResponse = getOneFeed(feedId);
 
-        given(feedService.createFeed(any())).willReturn(feedDtoResponse);
+        given(feedService.createFeed(any(), Mockito.anyLong())).willReturn(feedDtoResponse);
 
         mockMvc.perform(
                 multipart("/feeds")
@@ -188,9 +188,9 @@ class FeedControllerTest {
         List<MultipartFile> imageList = List.of(new MockMultipartFile("image", "gitimage.png", "image/png",
                 new FileInputStream(getClass().getResource("/gitimage.png").getFile())));
         String[] deleteImages = new String[]{"image1.jpg", "image2.jpg"};
+
         FeedDto.Patch patch = FeedDto.Patch.builder()
                 .feedId(feedId)
-                .memberId(memberId)
                 .content("content")
                 .addImages(imageList)
                 .deleteImages(List.of(deleteImages))
@@ -199,10 +199,10 @@ class FeedControllerTest {
         FeedDto.Response response = getOneFeed(1L);
         String content = gson.toJson(response);
 
-        given(feedService.patchFeed(any(FeedDto.Patch.class))).willReturn(response);
+        given(feedService.patchFeed(any(FeedDto.Patch.class), Mockito.anyLong())).willReturn(response);
 
         mockMvc.perform(
-                    patch("/feeds/{feed-id}/{member-id}", feedId, memberId)
+                    patch("/feeds/{feed-id}", feedId)
                             .content(imageList.get(0).getBytes())
                             .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
                             .header("Authorization", tokenProvider.createAccessToken(memberId))
@@ -222,7 +222,7 @@ class FeedControllerTest {
         doNothing().when(feedService).deleteFeed(feedId, memberId);
 
         mockMvc.perform(
-                delete("/feeds/{feed-id}/{member-id}", feedId, memberId)
+                delete("/feeds/{feed-id}", feedId)
                         .header("Authorization", tokenProvider.createAccessToken(memberId))
         ).andExpect(status().isNoContent());
     }
@@ -240,7 +240,7 @@ class FeedControllerTest {
         given(feedService.likeByMember(Mockito.anyLong(), Mockito.anyLong())).willReturn(feedLikeDto);
 
         mockMvc.perform(
-                patch("/feeds/like/{feed-id}/{member-id}", feedId, memberId)
+                patch("/feeds/like/{feed-id}", feedId)
                         .accept(MediaType.APPLICATION_JSON)
                         .header("Authorization", tokenProvider.createAccessToken(memberId))
 

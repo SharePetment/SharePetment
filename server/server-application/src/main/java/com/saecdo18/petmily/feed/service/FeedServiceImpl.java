@@ -22,6 +22,7 @@ import com.saecdo18.petmily.member.entity.Member;
 import com.saecdo18.petmily.member.repository.FollowMemberRepository;
 import com.saecdo18.petmily.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -36,6 +37,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
+@Slf4j
 @RequiredArgsConstructor
 public class FeedServiceImpl implements FeedService {
 
@@ -51,8 +53,8 @@ public class FeedServiceImpl implements FeedService {
     private final static String BASE_URI = "http://43.202.86.53:8080/feeds/all/";
 
     @Override
-    public FeedDto.Response createFeed(FeedDto.Post post) throws IOException {
-        Member findMember = methodFindByMemberId(post.getMemberId());
+    public FeedDto.Response createFeed(FeedDto.Post post, long memberId) throws IOException {
+        Member findMember = methodFindByMemberId(memberId);
         Feed createFeed = Feed.builder()
                 .content(post.getContent())
                 .member(findMember)
@@ -65,11 +67,11 @@ public class FeedServiceImpl implements FeedService {
                 saveImage(createFeed, originalFilename, uploadFileURL);
             }
         }
-        Feed saveFeed = feedRepository.save(createFeed);
+        Feed saveFeed = feedRepository.saveAndFlush(createFeed);
 
         findMember.upCountFeed(); // 피드 생성시 해당 멤버 feedCount 증가
 
-        return getFeed(saveFeed.getFeedId(), findMember.getMemberId());
+        return changeFeedToFeedDtoResponse(saveFeed, findMember.getMemberId());
     }
 
     @Override
@@ -110,7 +112,7 @@ public class FeedServiceImpl implements FeedService {
             pageRequest = PageRequest.of(0, newDataCount, Sort.by(Sort.Direction.DESC, "createdAt"));
         }
 
-        return changeFeedListToFeedResponseDto(feedList);
+        return changeFeedListToFeedResponseDto(feedList, memberId);
     }
 
     @Override
@@ -121,7 +123,7 @@ public class FeedServiceImpl implements FeedService {
         Page<Feed> feedPage = feedRepository.findAllByMemberOrderByCreatedAtDesc(findMember, pageRequest);
         List<Feed> feedList = feedPage.getContent();
 
-        return changeFeedListToFeedResponseDto(feedList);
+        return changeFeedListToFeedResponseDto(feedList, memberId);
     }
 
     @Override
@@ -158,7 +160,7 @@ public class FeedServiceImpl implements FeedService {
 
         Collections.shuffle(feedList);
 
-        return changeFeedListToFeedResponseDto(feedList);
+        return changeFeedListToFeedResponseDto(feedList, memberId);
     }
 
     private List<Feed> filterFeedsByPreviousListIds(List<Feed> feedList, FeedDto.PreviousListIds listIds) {
@@ -172,10 +174,10 @@ public class FeedServiceImpl implements FeedService {
     }
 
     @Override
-    public FeedDto.Response patchFeed(FeedDto.Patch patch) throws IOException {
+    public FeedDto.Response patchFeed(FeedDto.Patch patch, long memberId) throws IOException {
         Feed findFeed = methodFindByFeedId(patch.getFeedId());
         findFeed.updateContent(patch.getContent());
-        if(!patch.getMemberId().equals(findFeed.getMember().getMemberId()))
+        if(memberId !=findFeed.getMember().getMemberId())
             throw new IllegalArgumentException("수정할 권한이 없습니다.");
 
         if (!patch.getAddImages().isEmpty()) {
@@ -197,7 +199,7 @@ public class FeedServiceImpl implements FeedService {
             }
         }
 
-        return changeFeedToFeedDtoResponse(findFeed, patch.getMemberId());
+        return changeFeedToFeedDtoResponse(findFeed, memberId);
     }
 
     @Override
@@ -331,10 +333,10 @@ public class FeedServiceImpl implements FeedService {
         return response;
     }
 
-    private FeedDtoList changeFeedListToFeedResponseDto(List<Feed> feedList) {
+    private FeedDtoList changeFeedListToFeedResponseDto(List<Feed> feedList, long memberId) {
         List<FeedDto.Response> responseList = new ArrayList<>();
         for (Feed feed : feedList) {
-            FeedDto.Response response = changeFeedToFeedDtoResponse(feed, 0);
+            FeedDto.Response response = changeFeedToFeedDtoResponse(feed, memberId);
             responseList.add(response);
         }
 

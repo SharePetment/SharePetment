@@ -36,9 +36,6 @@ public class FeedCommentDto {
     @AllArgsConstructor
     public static class Post {
         @NotNull
-        @ApiModelProperty(value = "사용자 아이디", example = "1", required = true)
-        private Long memberId;
-        @NotNull
         @ApiModelProperty(value = "피드 아이디", example = "1", required = true)
         private Long feedId;
         @NotNull

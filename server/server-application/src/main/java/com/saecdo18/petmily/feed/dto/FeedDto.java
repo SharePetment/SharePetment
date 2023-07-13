@@ -21,9 +21,6 @@ public class FeedDto {
     @ApiModel(value = "피드 생성용 DTO")
     public static class Post {
         @NotBlank
-        @ApiModelProperty(value = "사용자 아이디", example = "1", required = true)
-        private Long memberId;
-        @NotBlank
         @ApiModelProperty(value = "피드 내용", example = "피드 내용", required = true)
         private String content;
         @ApiModelProperty(value = "피드 이미지 파일", required = true)
@@ -37,8 +34,6 @@ public class FeedDto {
     public static class Patch{
         @ApiModelProperty(value = "피드 아이디", example = "1", required = true)
         private Long feedId;
-        @ApiModelProperty(value = "사용자 아이디", example = "1", required = true)
-        private Long memberId;
         @ApiModelProperty(value = "피드 수정 내용", example = "수정 내용", required = true)
         private String content;
         @ApiModelProperty(value = "추가 이미지 파일", required = false)
@@ -73,7 +68,8 @@ public class FeedDto {
         @ApiModelProperty(value = "댓글 리스트", required = true)
         private List<FeedCommentDto.Response> feedComments;
 
-        @ApiModelProperty(value = "공유 URL", example = "http://43.202.86.53:8080/feeds/all/{피드아이디}/0", required = true)
+        @ApiModelProperty(value = "공유 URL", example = "http://43.202.86.53:8080/feeds/all/{피드아이디}/0",
+                required = true)
         private String shareURL;
 
         private LocalDateTime createdAt;

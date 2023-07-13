@@ -30,15 +30,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final TokenProvider tokenProvider;
     private final MemberRepository memberRepository;
-    private static final List<String> NO_CHECK_URLS = Arrays.asList("/feeds/all", "/members/nickname-check", "https://kauth.kakao.com/oauth/authorize?client_id=07df97c2858e60b2e19f630c2c397b31&redirect_uri=http://43.202.86.53:8080/auth/kakao/callback&response_type=code");
-//    private static final List<String> NO_CHECK_URLS = Arrays.asList("/feeds/all", "/members/nickname-check", "https://kauth.kakao.com/oauth/authorize?client_id=07df97c2858e60b2e19f630c2c397b31&redirect_uri=http://localhost:8080/auth/kakao/callback&response_type=code");
+//    private static final List<String> NO_CHECK_URLS = Arrays.asList("/feeds/all", "/members/nickname-check", "https://kauth.kakao.com/oauth/authorize?client_id=07df97c2858e60b2e19f630c2c397b31&redirect_uri=http://43.202.86.53:8080/auth/kakao/callback&response_type=code");
+    private static final List<String> NO_CHECK_URLS = Arrays.asList("/members/nickname-check", "https://kauth.kakao.com/oauth/authorize?client_id=07df97c2858e60b2e19f630c2c397b31&redirect_uri=http://localhost:8080/auth/kakao/callback&response_type=code");
 
     private GrantedAuthoritiesMapper authoritiesMapper = new NullAuthoritiesMapper();
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         log.info("requestURL = {}",request.getRequestURI());
-        log.info("access Token : {}", tokenProvider.createAccessToken(1));
+//        log.info("access Token : {}", tokenProvider.createAccessToken(1));
         if (NO_CHECK_URLS.stream().anyMatch(request.getRequestURI()::startsWith)) {
             filterChain.doFilter(request, response);
             return;
@@ -57,11 +57,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             checkAccessTokenAndAuthentication(request, response, filterChain);
         }
 
-//        Optional<String> optional = tokenProvider.extractAccessToken(request);
-//        if (tokenProvider.isTokenValid(optional.get())) {
-//            filterChain.doFilter(request, response);
-//            return;
-//        }
 
     }
 
@@ -83,11 +78,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private void checkAccessTokenAndAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         log.info("checkAccessTokenAndAuthentication 진입");
-        tokenProvider.extractAccessToken(request)
-                .filter(tokenProvider::isTokenValid)
-                .ifPresent(accessToken -> tokenProvider.extractMemberId(accessToken)
-                        .ifPresent(memberId -> memberRepository.findById(memberId)
-                                .ifPresent(this::saveAuthentication)));
+        String accessToken = tokenProvider.extractAccessToken(request).orElse(null);
+        if (tokenProvider.isTokenValid(accessToken)) {
+            Long memberId = tokenProvider.extractMemberId(accessToken).get();
+            Member member = memberRepository.findById(memberId).get();
+            saveAuthentication(member);
+        }
         filterChain.doFilter(request,response);
     }
 
@@ -97,7 +93,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 .password("null")
                 .roles(member.getRole().name())
                 .build();
-
         Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, authoritiesMapper.mapAuthorities(userDetails.getAuthorities()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
