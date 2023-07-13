@@ -73,7 +73,7 @@ public class FeedCommentServiceImpl implements FeedCommentService{
 
     private Feed methodFindByFeedId(long feedId) {
         return feedRepository.findById(feedId).orElseThrow(
-                () -> new RuntimeException("피드를 찾을 수 없습니다")
+                () -> new RuntimeException("피드를 찾을 수 없습니다.")
         );
     }
 
