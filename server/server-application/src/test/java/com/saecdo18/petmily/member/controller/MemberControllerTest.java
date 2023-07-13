@@ -61,7 +61,7 @@ class MemberControllerTest {
         ResultActions getActions =
                 mockMvc.perform(
                         get("/members/1/1")
-                                .header("Authorization", tokenProvider.createAccessToken(6))
+                                .header("Authorization", tokenProvider.createAccessToken(1))
                                 .accept(MediaType.APPLICATION_JSON)
                 );
 
@@ -94,7 +94,7 @@ class MemberControllerTest {
         ResultActions getActions =
                 mockMvc.perform(
                         patch("/members/status/1")
-                                .header("Authorization", tokenProvider.createAccessToken(6))
+                                .header("Authorization", tokenProvider.createAccessToken(1))
                                 .accept(MediaType.APPLICATION_JSON)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(patchContent)
@@ -118,15 +118,13 @@ class MemberControllerTest {
 
         FollowMemberDto.Response responseFollow = FollowMemberDto.Response.builder()
                 .memberInfo(memberInfo)
-                .followingId(2)
-                .follow(true)
                 .build();
         given(memberService.followMember(Mockito.anyLong(),Mockito.anyLong())).willReturn(responseFollow);
 
         ResultActions getActions =
                 mockMvc.perform(
                         post("/members/following/1/2")
-                                .header("Authorization", tokenProvider.createAccessToken(6))
+                                .header("Authorization", tokenProvider.createAccessToken(1))
                                 .accept(MediaType.APPLICATION_JSON)
 
                 );
@@ -148,8 +146,6 @@ class MemberControllerTest {
 
         FollowMemberDto.Response responseFollow = FollowMemberDto.Response.builder()
                 .memberInfo(memberInfo)
-                .followingId(2)
-                .follow(true)
                 .build();
 
         List<FollowMemberDto.Response> responses = new ArrayList<>();
@@ -160,7 +156,7 @@ class MemberControllerTest {
         ResultActions getActions =
                 mockMvc.perform(
                         get("/members/following/list/2")
-                                .header("Authorization", tokenProvider.createAccessToken(6))
+                                .header("Authorization", tokenProvider.createAccessToken(1))
                                 .accept(MediaType.APPLICATION_JSON)
 
                 );
@@ -186,7 +182,7 @@ class MemberControllerTest {
         ResultActions getActions =
                 mockMvc.perform(
                         patch("/members/image/1/1")
-                                .header("Authorization", tokenProvider.createAccessToken(6))
+                                .header("Authorization", tokenProvider.createAccessToken(1))
                                 .accept(MediaType.APPLICATION_JSON)
 
                 );

@@ -93,8 +93,8 @@ public class Member extends BaseEntity {
         this.role=Role.GUEST;
     }
 
-    public void updateFollowerCount(boolean follow) {
-        if (follow) {
+    public void updateFollowerCount(boolean plus) {
+        if (plus) {
             followerCount++;
         } else {
             followerCount--;
