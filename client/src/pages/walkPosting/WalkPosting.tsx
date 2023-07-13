@@ -33,6 +33,7 @@ export function Component() {
     },
   });
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSumbit = (data: any) => {
     data = { ...data, mapURL: '', open: false, memberId: 1 };
     console.log(data);

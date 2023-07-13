@@ -66,7 +66,7 @@ export default function FeedWriteCard() {
   const handleSemiClose = useCallback(
     (order: number) =>
       deleteImg({ order, savedFile, setSavedFile, setPrevFile, prevFile }),
-    [savedFile],
+    [savedFile, prevFile],
   );
 
   if (isLoading) {

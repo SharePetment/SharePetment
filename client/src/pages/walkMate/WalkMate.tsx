@@ -8,7 +8,7 @@ import { SERVER_URL } from '../../api/url';
 import { ReactComponent as Plus } from '../../assets/button/plus.svg';
 import { GridContainer } from '../../common/grid/Grid.styled';
 import Select from '../../common/select/Select';
-import WalkCard from '../../components/card/walkCard/walkCard';
+// import WalkCard from '../../components/card/walkCard/walkCard';
 import { CardContainer } from '../../components/card/walkCard/walkCard.styled';
 import LoadingComponent from '../../components/loading/LoadingComponent';
 import Path from '../../routers/paths';
@@ -23,13 +23,13 @@ export function Component() {
 
   /* ---------------------------- useInfiniteQuery ---------------------------- */
   const {
-    data,
+    // data,
     isLoading,
     refetch,
-    isFetching,
-    isError,
-    hasNextPage,
-    fetchNextPage,
+    // isFetching,
+    // isError,
+    // hasNextPage,
+    // fetchNextPage,
   } = useInfiniteQuery<WalkFeedList>({
     queryKey: ['walkmateList'],
     queryFn: ({ pageParam = 0 }) =>
@@ -60,19 +60,9 @@ export function Component() {
       </SelectContainer>
       <GridContainer>
         <Link to={Path.WalkPosting}>
-          <CardContainer className="items-center justify-center">
+          <CardContainer size="lg" className="items-center justify-center">
             <Plus className=" w-8 h-8" />
           </CardContainer>
-        </Link>
-        <Link to={Path.WalkFeed}>
-          <WalkCard
-            time="07. 06 일요일 오후 6:30"
-            title="같이 산책해요!"
-            freinds={3}
-            location="서울특별시 동대문구 종로3가일까 4가일까"
-            chaturl="open.kakao.com/o/gH0XvThc"
-            isclosed="false"
-          />
         </Link>
       </GridContainer>
     </div>
