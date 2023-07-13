@@ -61,7 +61,7 @@ class MemberControllerTest {
         ResultActions getActions =
                 mockMvc.perform(
                         get("/members/1/1")
-                                .header("Authorization", tokenProvider.createAccessToken(6))
+                                .header("Authorization", tokenProvider.createAccessToken(1))
                                 .accept(MediaType.APPLICATION_JSON)
                 );
 
@@ -94,7 +94,7 @@ class MemberControllerTest {
         ResultActions getActions =
                 mockMvc.perform(
                         patch("/members/status/1")
-                                .header("Authorization", tokenProvider.createAccessToken(6))
+                                .header("Authorization", tokenProvider.createAccessToken(1))
                                 .accept(MediaType.APPLICATION_JSON)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(patchContent)
@@ -111,65 +111,61 @@ class MemberControllerTest {
     @Test
     void followingMember() throws Exception {
 
-//        MemberDto.Info memberInfo = MemberDto.Info.builder()
-//                .nickname("닉네임")
-//                .memberId(1l)
-//                .build();
-//
-//        FollowMemberDto.Response responseFollow = FollowMemberDto.Response.builder()
-//                .memberInfo(memberInfo)
-//                .followingId(2)
-//                .follow(true)
-//                .build();
-//        given(memberService.followMember(Mockito.anyLong(),Mockito.anyLong())).willReturn(responseFollow);
-//
-//        ResultActions getActions =
-//                mockMvc.perform(
-//                        post("/members/following/1/2")
-//                                .header("Authorization", tokenProvider.createAccessToken(6))
-//                                .accept(MediaType.APPLICATION_JSON)
-//
-//                );
-//
-//        getActions
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$.memberInfo.nickname").value(responseFollow.getMemberInfo().getNickname()))
-//
-//
-//        ;
+        MemberDto.Info memberInfo = MemberDto.Info.builder()
+                .nickname("닉네임")
+                .memberId(1l)
+                .build();
+
+        FollowMemberDto.Response responseFollow = FollowMemberDto.Response.builder()
+                .memberInfo(memberInfo)
+                .build();
+        given(memberService.followMember(Mockito.anyLong(),Mockito.anyLong())).willReturn(responseFollow);
+
+        ResultActions getActions =
+                mockMvc.perform(
+                        post("/members/following/1/2")
+                                .header("Authorization", tokenProvider.createAccessToken(1))
+                                .accept(MediaType.APPLICATION_JSON)
+
+                );
+
+        getActions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.memberInfo.nickname").value(responseFollow.getMemberInfo().getNickname()))
+
+
+        ;
     }
 
     @Test
     void followingList() throws Exception {
-//        MemberDto.Info memberInfo = MemberDto.Info.builder()
-//                .nickname("닉네임")
-//                .memberId(1l)
-//                .build();
-//
-//        FollowMemberDto.Response responseFollow = FollowMemberDto.Response.builder()
-//                .memberInfo(memberInfo)
-//                .followingId(2)
-//                .follow(true)
-//                .build();
-//
-//        List<FollowMemberDto.Response> responses = new ArrayList<>();
-//        responses.add(responseFollow);
-//
-//        given(memberService.followList(Mockito.anyLong())).willReturn(responses);
-//
-//        ResultActions getActions =
-//                mockMvc.perform(
-//                        get("/members/following/list/2")
-//                                .header("Authorization", tokenProvider.createAccessToken(6))
-//                                .accept(MediaType.APPLICATION_JSON)
-//
-//                );
-//
-//        getActions
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$[0].memberInfo.nickname").value(responses.get(0).getMemberInfo().getNickname()))
-//
-//        ;
+        MemberDto.Info memberInfo = MemberDto.Info.builder()
+                .nickname("닉네임")
+                .memberId(1l)
+                .build();
+
+        FollowMemberDto.Response responseFollow = FollowMemberDto.Response.builder()
+                .memberInfo(memberInfo)
+                .build();
+
+        List<FollowMemberDto.Response> responses = new ArrayList<>();
+        responses.add(responseFollow);
+
+        given(memberService.followList(Mockito.anyLong())).willReturn(responses);
+
+        ResultActions getActions =
+                mockMvc.perform(
+                        get("/members/following/list/2")
+                                .header("Authorization", tokenProvider.createAccessToken(1))
+                                .accept(MediaType.APPLICATION_JSON)
+
+                );
+
+        getActions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].memberInfo.nickname").value(responses.get(0).getMemberInfo().getNickname()))
+
+        ;
     }
 
     @Test
@@ -186,7 +182,7 @@ class MemberControllerTest {
         ResultActions getActions =
                 mockMvc.perform(
                         patch("/members/image/1/1")
-                                .header("Authorization", tokenProvider.createAccessToken(6))
+                                .header("Authorization", tokenProvider.createAccessToken(1))
                                 .accept(MediaType.APPLICATION_JSON)
 
                 );
