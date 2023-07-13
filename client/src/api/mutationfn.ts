@@ -1,4 +1,4 @@
-import axios, { isAxiosError } from 'axios';
+import axios from 'axios';
 import { Subscribe } from '../types/subscribe';
 
 export interface Comment {

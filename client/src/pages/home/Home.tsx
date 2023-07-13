@@ -27,11 +27,10 @@ export function Component() {
 
   const guestFeedQuery = useQuery({
     queryKey: ['guestFeed'],
-    queryFn: () => getGuestFeedList(`${SERVER_URL}feeds/all/list/random/0`),
+    queryFn: () =>
+      getGuestFeedList(`${SERVER_URL}feeds/all/list/random`, memberId),
     enabled: !!(memberId === null || isClicked),
   });
-
-  console.log(guestFeedQuery.data);
 
   const hostFeedQuery = useQuery({
     queryKey: ['hostFeed'],
