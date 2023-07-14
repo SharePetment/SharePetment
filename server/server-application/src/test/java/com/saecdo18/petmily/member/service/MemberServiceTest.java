@@ -347,7 +347,42 @@ class MemberServiceTest {
         // when
         memberService.followList(followingId);
 
+    }
 
+    @Test
+    @DisplayName("팔로잉 리스트 가져오기 실패 : 찾는 멤버가 없어서 생기는 예외")
+    void followListNoneMember() {
+
+        long memberId = 1L;
+
+        long followingId = 2L;
+
+        Member member = new Member();
+        ReflectionTestUtils.setField(member, "memberId", memberId);
+
+        MemberDto.Response memberResponse = MemberDto.Response.builder()
+                .build();
+
+        MemberDto.Info memberInfo = MemberDto.Info.builder()
+                .memberId(1L)
+                .build();
+
+        FollowMember followMember = new FollowMember();
+        ReflectionTestUtils.setField(followMember, "followerMember", member);
+        ReflectionTestUtils.setField(followMember, "followingId", followingId);
+
+        List<FollowMember> followMemberList = List.of(followMember);
+
+        FollowMemberDto.Response followMemberResponse = FollowMemberDto.Response.builder()
+                .memberInfo(memberInfo)
+                .build();
+
+
+        given(followMemberRepository.findByFollowingId(Mockito.anyLong())).willReturn(Optional.of(followMemberList));
+        given(memberRepository.findById(Mockito.anyLong())).willReturn(Optional.empty());
+        RuntimeException exception = assertThrows(RuntimeException.class , () -> memberService.followList(followingId));
+
+        assertEquals(exception.getMessage(), "사용자를 찾을 수 없습니다");
     }
 
     @Test

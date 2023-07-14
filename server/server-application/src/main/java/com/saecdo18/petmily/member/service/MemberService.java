@@ -210,7 +210,7 @@ public class MemberService {
 
     private MemberDto.Info memberIdToMemberInfoDto(long memberId) {
         Member findMember = memberRepository.findById(memberId).orElseThrow(
-                () -> new RuntimeException("사용자를 찾을 수 없습니다.")
+                () -> new RuntimeException("사용자를 찾을 수 없습니다")
         );
 
         return MemberDto.Info.builder()
