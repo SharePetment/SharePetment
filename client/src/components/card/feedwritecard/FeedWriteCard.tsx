@@ -34,7 +34,6 @@ export default function FeedWriteCard() {
   const [prevFile, setPrevFile] = useState<File[]>([]);
   /* ----------------------------- useLocalStorage ---------------------------- */
   const accessToken = useReadLocalStorage<string>('accessToken');
-  const memberId = useReadLocalStorage<string>('memberId');
 
   const { mutate, isLoading } = useMutation({
     mutationFn: feedPosting,
@@ -45,11 +44,10 @@ export default function FeedWriteCard() {
 
   const handleSubmit = () => {
     const formData = new FormData();
-    formData.append('memberId', memberId as string);
     formData.append('content', textRef.current?.value as string);
     prevFile.forEach(file => formData.append('images', file));
     const data = {
-      url: `${SERVER_URL}feeds`,
+      url: `${SERVER_URL}/feeds`,
       accessToken,
       formData,
     };

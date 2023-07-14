@@ -14,10 +14,12 @@ import {
 interface Prop {
   setIsListShowed: React.Dispatch<React.SetStateAction<boolean>>;
   follow: Follow[] | undefined;
+  path?: string;
 }
 
-export default function FollowList({ setIsListShowed, follow }: Prop) {
+export default function FollowList({ setIsListShowed, follow, path }: Prop) {
   const navigate = useNavigate();
+  console.log(path);
   const handleUserPage = (followerId: number) => {
     navigate(`/users/${followerId}`);
   };
@@ -53,10 +55,21 @@ export default function FollowList({ setIsListShowed, follow }: Prop) {
           )}
 
           {(!Array.isArray(follow) ||
-            (Array.isArray(follow) && follow.length === 0)) && (
+            (Array.isArray(follow) &&
+              follow.length === 0 &&
+              path === undefined)) && (
             <Button
               isgreen="true"
               text="구독을 먼저 해주세요!"
+              size="lg"
+              handler={handleCloseList}
+            />
+          )}
+          {(!Array.isArray(follow) ||
+            (Array.isArray(follow) && follow.length === 0 && !!path)) && (
+            <Button
+              isgreen="true"
+              text={'아직 구독한 유저가 없습니다. 😥'}
               size="lg"
               handler={handleCloseList}
             />

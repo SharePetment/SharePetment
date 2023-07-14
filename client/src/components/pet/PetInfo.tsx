@@ -45,7 +45,6 @@ export default function PetInfo(prop: Prop) {
 
   // token
   const accessToken = useReadLocalStorage<string>('accessToken');
-  const memberId = useReadLocalStorage<string>('memberId');
 
   // 유저 정보 refatch
   const queryClient = useQueryClient();
@@ -73,7 +72,7 @@ export default function PetInfo(prop: Prop) {
   const petPostMutation = useMutation({
     mutationFn: postPet,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['myPage', memberId] });
+      queryClient.invalidateQueries({ queryKey: ['myPage'] });
       setIsOpened(false);
     },
     onError: error => {
@@ -85,7 +84,7 @@ export default function PetInfo(prop: Prop) {
   const petPatchMutation = useMutation({
     mutationFn: patchPet,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['myPage', memberId] });
+      queryClient.invalidateQueries({ queryKey: ['myPage'] });
       setIsOpened(false);
     },
     onError: error => {
@@ -98,7 +97,6 @@ export default function PetInfo(prop: Prop) {
   const handlePetPost = async (data: Inputs) => {
     const { name, age, information, radio } = data;
     const formData = new FormData();
-    formData.append('memberId', memberId as string);
     formData.append('name', name);
     formData.append('age', `${age}`);
     formData.append('information', information);
@@ -114,7 +112,7 @@ export default function PetInfo(prop: Prop) {
     if (method === 'post') {
       const data = {
         formData,
-        url: `${SERVER_URL}pets`,
+        url: `${SERVER_URL}/pets`,
         accessToken: accessToken as string,
       };
       petPostMutation.mutate(data);
@@ -122,7 +120,7 @@ export default function PetInfo(prop: Prop) {
     if (method === 'patch') {
       const data = {
         formData,
-        url: `${SERVER_URL}pets/status/${memberId}/${petId}`,
+        url: `${SERVER_URL}/pets/status/${petId}`,
         accessToken: accessToken as string,
       };
       petPatchMutation.mutate(data);

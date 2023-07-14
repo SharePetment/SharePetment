@@ -10,7 +10,7 @@ import { getGuestFeedList, getHostFeedList } from '../../api/queryfn';
 import { SERVER_URL } from '../../api/url';
 import FollowingCat from '../../assets/illustration/followingcat.png';
 import Popup from '../../common/popup/Popup';
-import FeedCard from '../../components/card/feedcard/FeedCard';
+import FeedCard from '../../components/card/feedCard/FeedCard';
 import SideNav from '../../components/card/sidenav/SideNav';
 import Toast from '../../components/toast/Toast';
 import { Feed } from '../../types/feedTypes';
@@ -25,20 +25,20 @@ export function Component() {
 
   const guestFeedQuery = useQuery({
     queryKey: ['guestFeed'],
-    queryFn: () => getGuestFeedList(`${SERVER_URL}feeds/all/list/random`),
+    queryFn: () => getGuestFeedList(`${SERVER_URL}/feeds/all/list/random`),
     enabled: !!(accessToken === null),
   });
 
   const hostRandomFeedQuery = useQuery({
     queryKey: ['hostRandomFeed'],
     queryFn: () =>
-      getHostFeedList(`${SERVER_URL}feeds/list/random`, accessToken),
+      getHostFeedList(`${SERVER_URL}/feeds/list/random`, accessToken),
     enabled: !!(accessToken && isClicked),
   });
 
   const hostFeedQuery = useQuery({
     queryKey: ['hostFeed'],
-    queryFn: () => getHostFeedList(`${SERVER_URL}feeds/list`, accessToken),
+    queryFn: () => getHostFeedList(`${SERVER_URL}/feeds/list`, accessToken),
     enabled: !!accessToken,
   });
 

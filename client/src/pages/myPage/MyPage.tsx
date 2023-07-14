@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
 import { useReadLocalStorage } from 'usehooks-ts';
@@ -17,6 +17,7 @@ import NoticeNoData from '../../components/notice/NoticeNoData';
 import NoticeOnlyOwner from '../../components/notice/NoticeOnlyOwner';
 import PlusBtn from '../../components/plus-button/PlusBtn';
 import PetContainer from '../../components/user_my_page/pet-container/PetContainer';
+import { MemberIdContext } from '../../store/Context';
 import { CommentProp } from '../../types/commentType';
 import { Feed } from '../../types/feedTypes';
 import { Follow, UserInfo } from '../../types/userType';
@@ -43,17 +44,15 @@ export function Component() {
   const [isListShowed, setIsListShowed] = useState(false);
 
   // 마이 info 데이터 불러오기
-  const memberId = useReadLocalStorage<string>('memberId');
+  const memberId = useContext(MemberIdContext);
+
   const accessToken = useReadLocalStorage<string>('accessToken');
 
   // 유저 정보 조회
   const { data, isLoading } = useQuery<UserInfo>({
-    queryKey: ['myPage', memberId],
+    queryKey: ['myPage'],
     queryFn: () =>
-      getServerDataWithJwt(
-        `${SERVER_URL}members/${memberId}`,
-        accessToken as string,
-      ),
+      getServerDataWithJwt(`${SERVER_URL}/members`, accessToken as string),
     onSuccess(data) {
       setUserProfileImage(data.memberInfo.imageURL);
     },
@@ -63,21 +62,22 @@ export function Component() {
   const { data: feedData, isLoading: feedLoading } = useQuery<{
     responseList: Feed[];
   }>({
-    queryKey: ['myFeed', memberId],
+    queryKey: ['myFeed'],
     queryFn: () =>
-      getServerDataWithJwt(`${SERVER_URL}feeds/my-feed`, accessToken as string),
+      getServerDataWithJwt(
+        `${SERVER_URL}/feeds/my-feed`,
+        accessToken as string,
+      ),
   });
-
-  console.log(feedData);
 
   // 팔로잉 회원 리스트 조회
   const { data: followingData, isLoading: followingLoading } = useQuery<
     Follow[]
   >({
-    queryKey: ['followList', memberId],
+    queryKey: ['followList'],
     queryFn: () =>
       getServerDataWithJwt(
-        `${SERVER_URL}members/following/list`,
+        `${SERVER_URL}/members/following/list`,
         accessToken as string,
       ),
   });
@@ -126,19 +126,19 @@ export function Component() {
     isLoading: walkFeedLoading,
     isError: walkFeedError,
   } = useQuery<WalkFeed[]>({
-    queryKey: ['walkFeedList', memberId],
+    queryKey: ['walkFeedList'],
     queryFn: () =>
       getServerDataWithJwt(
-        `${SERVER_URL}walkmates/bymember?openFilter=false&page=0&size=10`,
+        `${SERVER_URL}/walkmates/my-walks?openFilter=false&page=0&size=10`,
         accessToken as string,
       ),
   });
 
   const { data: commentListData } = useQuery<CommentProp[]>({
-    queryKey: ['commentList', memberId],
+    queryKey: ['commentList'],
     queryFn: () =>
       getServerDataWithJwt(
-        `${SERVER_URL}walkmates/comments/bymember`,
+        `${SERVER_URL}/walkmates/comments/bymember`,
         accessToken as string,
       ),
   });
@@ -182,7 +182,7 @@ export function Component() {
                 </div>
               </UserInfoBox>
             </UserBox>
-            <PetBox className="hidden">
+            <PetBox>
               {Array.isArray(data?.pets) && (
                 <>
                   {data?.pets.map(

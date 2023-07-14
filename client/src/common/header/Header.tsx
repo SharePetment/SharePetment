@@ -14,24 +14,19 @@ export default function Header() {
   const matchWalkmate = useMatch('/walkmate');
   const matchPost = useMatch('/feed-posting');
   const matchMypage = useMatch('/my-page');
-  const memberId = useReadLocalStorage<string | null>('memberId');
   const accessToken = useReadLocalStorage<string | null>('accessToken');
   const animalParents = useReadLocalStorage<string | null>('animalParents');
   const navigate = useNavigate();
 
   const { data, isSuccess } = useQuery({
-    queryKey: ['myPage', memberId],
+    queryKey: ['myPage'],
     queryFn: () =>
-      getServerDataWithJwt(
-        `${SERVER_URL}members/${memberId}`,
-        accessToken as string,
-      ),
+      getServerDataWithJwt(`${SERVER_URL}/members`, accessToken as string),
     enabled: !!accessToken,
   });
 
   const handleClick = () => {
     localStorage.removeItem('accessToken');
-    localStorage.removeItem('memberId');
     localStorage.removeItem('animalParents');
     localStorage.removeItem('refreshToken');
     navigate('/');

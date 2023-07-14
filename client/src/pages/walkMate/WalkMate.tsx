@@ -34,7 +34,7 @@ export function Component() {
     queryKey: ['walkmateList'],
     queryFn: ({ pageParam = 0 }) =>
       getServerDataWithJwt(
-        `${SERVER_URL}walkmates/walks?openFilter=false&location=${zip}&page=${pageParam}&size=10`,
+        `${SERVER_URL}/walkmates/walks?openFilter=false&location=${zip}&page=${pageParam}&size=10`,
         accessToken as string,
       ),
     getNextPageParam: (lastPage, allPages) => {
