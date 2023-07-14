@@ -1,5 +1,6 @@
 package com.saecdo18.petmily.pet.controller;
 
+import com.saecdo18.petmily.pet.dto.PetServiceDto;
 import com.saecdo18.petmily.pet.mapper.PetMapper;
 import com.saecdo18.petmily.pet.dto.PetDto;
 import com.saecdo18.petmily.pet.entity.Pet;
@@ -42,7 +43,7 @@ public class PetController {
 
         int intAge = Integer.parseInt(age);
 
-        PetDto.Post petPostDto = PetDto.Post.builder()
+        PetServiceDto.Post petPostDto = PetServiceDto.Post.builder()
                 .images(images)
                 .name(name)
                 .age(intAge)
@@ -79,7 +80,7 @@ public class PetController {
 
         int intAge = Integer.parseInt(age);
 
-        PetDto.Patch petPatchDto = PetDto.Patch.builder()
+        PetServiceDto.Patch petPatchDto = PetServiceDto.Patch.builder()
                 .images(images)
                 .name(name)
                 .age(intAge)

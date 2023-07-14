@@ -11,6 +11,7 @@ import com.saecdo18.petmily.member.entity.Member;
 import com.saecdo18.petmily.member.repository.MemberRepository;
 import com.saecdo18.petmily.member.service.MemberService;
 import com.saecdo18.petmily.pet.dto.PetDto;
+import com.saecdo18.petmily.pet.dto.PetServiceDto;
 import com.saecdo18.petmily.pet.entity.Pet;
 import com.saecdo18.petmily.pet.entity.PetImage;
 import com.saecdo18.petmily.pet.mapper.PetMapper;
@@ -73,7 +74,7 @@ class PetServiceTest {
         Member member = new Member();
         ReflectionTestUtils.setField(member, "memberId", memberId);
 
-        PetDto.Post petPostDto = PetDto.Post.builder()
+        PetServiceDto.Post petPostDto = PetServiceDto.Post.builder()
                 .images(images)
                 .name("메시")
                 .build();
@@ -134,7 +135,7 @@ class PetServiceTest {
         Member member = new Member();
         ReflectionTestUtils.setField(member, "memberId", memberId);
 
-        PetDto.Post petPostDto = PetDto.Post.builder()
+        PetServiceDto.Post petPostDto = PetServiceDto.Post.builder()
                 .images(images)
                 .name("메시")
                 .build();
@@ -273,7 +274,7 @@ class PetServiceTest {
         Member member = new Member();
         ReflectionTestUtils.setField(member, "memberId", memberId);
 
-        PetDto.Patch petPatchDto = PetDto.Patch.builder()
+        PetServiceDto.Patch petPatchDto = PetServiceDto.Patch.builder()
                 .images(images)
                 .name("메시")
                 .build();
@@ -338,7 +339,7 @@ class PetServiceTest {
         Member member = new Member();
         ReflectionTestUtils.setField(member, "memberId", memberId);
 
-        PetDto.Patch petPatchDto = PetDto.Patch.builder()
+        PetServiceDto.Patch petPatchDto = PetServiceDto.Patch.builder()
                 .images(images)
                 .name("메시")
                 .build();
@@ -395,7 +396,7 @@ class PetServiceTest {
         Member member = new Member();
         ReflectionTestUtils.setField(member, "memberId", memberId);
 
-        PetDto.Post petPostDto = PetDto.Post.builder()
+        PetServiceDto.Post petPostDto = PetServiceDto.Post.builder()
                 .images(images)
                 .name("메시")
                 .build();
@@ -443,7 +444,7 @@ class PetServiceTest {
         Member member = new Member();
         ReflectionTestUtils.setField(member, "memberId", memberId);
 
-        PetDto.Post petPostDto = PetDto.Post.builder()
+        PetServiceDto.Post petPostDto = PetServiceDto.Post.builder()
                 .images(images)
                 .name("메시")
                 .build();
