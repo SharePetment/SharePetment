@@ -5,7 +5,7 @@ import { useReadLocalStorage } from 'usehooks-ts';
 import { deleteComment, editComment } from '../../api/mutationfn';
 import { SERVER_URL } from '../../api/url';
 import { ReactComponent as Write } from '../../assets/button/write.svg';
-import { MemberIdContext } from '../../store/Context';
+import { MemberIdContext, State } from '../../store/Context';
 import { CommentProp } from '../../types/commentType';
 import changeTime from '../../util/changeTiem';
 import Popup from '../popup/Popup';
@@ -40,9 +40,7 @@ export default function Comment(props: CommentProp) {
     walkMatePostId,
   } = props;
 
-  // const userId = useReadLocalStorage('memberId');
-  const userId = useContext(MemberIdContext);
-
+  const { memberId: userId } = useContext(MemberIdContext) as State;
   const accessToken = useReadLocalStorage<string | null>('accessToken');
 
   const [isEdited, setIsEdited] = useState(false);

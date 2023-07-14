@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useNavigate } from 'react-router-dom';
+import { useMatch, useNavigate } from 'react-router-dom';
 import { useReadLocalStorage } from 'usehooks-ts';
 import { patchFeedLike } from '../../../api/mutationfn';
 import { SERVER_URL } from '../../../api/url';
@@ -31,18 +31,18 @@ export default function SideNav({
   const accessToken = useReadLocalStorage<string | null>('accessToken');
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const feedPopUp = useMatch('/home/:feedId');
 
   const likeMutation = useMutation({
     mutationFn: patchFeedLike,
-    onSuccess: data => {
-      console.log(data);
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['hostRandomFeed'] });
       queryClient.invalidateQueries({ queryKey: ['feedPopUp'] });
+      queryClient.invalidateQueries({ queryKey: ['hostFeed'] });
     },
   });
 
   const handleClickLike = () => {
-    console.log(feedid);
     if (!accessToken) {
       if (guesthandler) return guesthandler();
     }
@@ -90,13 +90,32 @@ export default function SideNav({
           <Text>{likes}</Text>
         </Wrap>
 
-        <Wrap onClick={handleClickComment}>
-          <Comment className="cursor-pointer ml-2" stroke="black" />
-        </Wrap>
+        {!feedPopUp && (
+          <Wrap onClick={handleClickComment}>
+            <Comment className="cursor-pointer ml-2" stroke="black" />
+          </Wrap>
+        )}
 
         <Wrap onClick={handleClickShare}>
           <Share className="cursor-pointer ml-2" />
         </Wrap>
+
+        {/* {inperson === 'true' && (
+          <>
+            <Wrap onClick={() => navigate(`/feed-posting/${feedid}`)}>
+              <Edit className="cursor-pointer ml-2" />
+            </Wrap>
+            <Wrap>
+              <Delete
+                className="cursor-pointer ml-2"
+                onClick={() => {
+                  deletehandler();
+                  localStorage.setItem('feedId', String(feedid));
+                }}
+              />
+            </Wrap>
+          </>
+        )} */}
       </Container>
     </>
   );

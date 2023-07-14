@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Mousewheel, Navigation, Pagination } from 'swiper/modules';
@@ -33,6 +33,7 @@ export function Component() {
   const [isGuestOpen, setIsGuestOpen] = useState<boolean>(false);
 
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const guestFeedQuery = useQuery({
     queryKey: ['guestFeed'],
@@ -45,12 +46,18 @@ export function Component() {
     queryFn: () =>
       getHostFeedList(`${SERVER_URL}/feeds/list/random`, accessToken),
     enabled: !!(accessToken && isClicked),
+    onSuccess() {
+      queryClient.invalidateQueries({ queryKey: ['contextApi'] });
+    },
   });
 
   const hostFeedQuery = useQuery({
     queryKey: ['hostFeed'],
     queryFn: () => getHostFeedList(`${SERVER_URL}/feeds/list`, accessToken),
     enabled: !!accessToken,
+    onSuccess() {
+      queryClient.invalidateQueries({ queryKey: ['contextApi'] });
+    },
   });
 
   if (

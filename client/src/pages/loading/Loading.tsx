@@ -1,7 +1,8 @@
-import { useEffect } from 'react';
+import { useEffect, useContext } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useLocalStorage } from 'usehooks-ts';
 import LoadingComponent from '../../components/loading/LoadingComponent';
+import { ContextDispatch, MemberIdDispatchContext } from '../../store/Context';
 
 export function Component() {
   const [searchParams] = useSearchParams();
@@ -11,16 +12,23 @@ export function Component() {
     'refreshToken',
     '',
   );
-  const [, setAnimalParents] = useLocalStorage<string | null>(
-    'animalParents',
-    'false',
-  );
+
+  console.log(searchParams.get('accessToken'));
+  // local에 accessToken이 있는지 확인하기
+  const dispatch = useContext(MemberIdDispatchContext);
 
   useEffect(() => {
     if (searchParams.size > 0) {
       setAccessToken(searchParams.get('accessToken'));
       setRefreshToken(searchParams.get('refreshToken'));
-      setAnimalParents(searchParams.get('animalParents'));
+      const memberId = searchParams.get('memberId');
+
+      (dispatch as ContextDispatch)({
+        memberId: memberId as string,
+        animalParents:
+          searchParams.get('animalParents') === 'true' ? true : false,
+        type: 'NOT_TOKEN',
+      });
 
       const present = searchParams.get('present');
       if (present === 'true') setTimeout(() => navigate('/home'), 1000);
@@ -36,13 +44,7 @@ export function Component() {
         });
       }
     }
-  }, [
-    setAccessToken,
-    setRefreshToken,
-    searchParams,
-    navigate,
-    setAnimalParents,
-  ]);
+  }, [setAccessToken, setRefreshToken, searchParams, navigate, dispatch]);
 
   return <LoadingComponent />;
 }

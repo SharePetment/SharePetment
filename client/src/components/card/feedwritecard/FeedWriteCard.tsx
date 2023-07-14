@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Navigation } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -35,6 +35,16 @@ export default function FeedWriteCard() {
 
   /* ----------------------------- useLocalStorage ---------------------------- */
   const accessToken = useReadLocalStorage<string>('accessToken');
+
+  useEffect(() => {
+    const getBackPage = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        navigate(-1);
+      }
+    };
+    window.addEventListener('keydown', getBackPage);
+    return () => window.removeEventListener('keydown', getBackPage);
+  }, [navigate]);
 
   const { mutate, isLoading } = useMutation({
     mutationFn: feedPosting,
@@ -89,9 +99,7 @@ export default function FeedWriteCard() {
       <div
         className="w-screen h-screen bg-zinc-900/75  absolute flex items-center justify-center"
         onClick={e => {
-          if (e.target === e.currentTarget) {
-            navigate(-1);
-          }
+          if (e.target === e.currentTarget) navigate(-1);
         }}>
         <Container>
           <Close
