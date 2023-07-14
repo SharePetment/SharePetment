@@ -40,6 +40,7 @@ export default function Comment(props: CommentProp) {
     walkMatePostId,
   } = props;
 
+
   const { memberId: userId } = useContext(MemberIdContext) as State;
   const accessToken = useReadLocalStorage<string | null>('accessToken');
 

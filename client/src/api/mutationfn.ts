@@ -208,6 +208,29 @@ export const patchFeedLike = async (body: MutationProp) => {
   return result;
 };
 
+/* -------------------------------- 피드게시물 댓글 작성  -------------------------------- */
+
+interface PostFeedCommentProp {
+  url: string;
+  token: string;
+  content: string;
+  feedId: number;
+}
+
+export const postFeedComment = async (body: PostFeedCommentProp) => {
+  const { url, token, content, feedId } = body;
+  const result = await axios.post(
+    url,
+    { content, feedId },
+    {
+      headers: {
+        Authorization: token,
+      },
+    },
+  );
+  return result;
+};
+
 /* -------------------------------- 산책게시물 생성 -------------------------------- */
 interface FillWalkPosProp {
   title: string;

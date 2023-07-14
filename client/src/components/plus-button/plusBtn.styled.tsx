@@ -5,7 +5,7 @@ export const ButtonContainer = tw.button`
     bg-[#ffffff]
     p-1
     rounded-xl
-    mb-3
+    
 `;
 export const PlusIcon = tw(Plus)`
     fill-deepgreen

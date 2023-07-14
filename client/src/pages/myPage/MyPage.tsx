@@ -8,6 +8,7 @@ import { SERVER_URL } from '../../api/url';
 import { ReactComponent as Setting } from '../../assets/button/setting.svg';
 import { ReactComponent as CommentListIcon } from '../../assets/comment-list.svg';
 import { ReactComponent as FeedIcon } from '../../assets/feed.svg';
+import Cat404 from '../../assets/illustration/404cat.png';
 import { ReactComponent as WalkFeedIcon } from '../../assets/walk-feed.svg';
 import Profile from '../../common/profile/Profile';
 import WalkCard from '../../components/card/walkCard/walkCard';
@@ -15,6 +16,7 @@ import FollowList from '../../components/follow-list/FollowList';
 import LoadingComponent from '../../components/loading/LoadingComponent';
 import NoticeNoData from '../../components/notice/NoticeNoData';
 import NoticeOnlyOwner from '../../components/notice/NoticeOnlyOwner';
+import NoticeServerError from '../../components/notice/NoticeServerError';
 import PlusBtn from '../../components/plus-button/PlusBtn';
 import PetContainer from '../../components/user_my_page/pet-container/PetContainer';
 import { MemberIdContext } from '../../store/Context';
@@ -23,6 +25,7 @@ import { Feed } from '../../types/feedTypes';
 import { Follow, UserInfo } from '../../types/userType';
 import { WalkFeed } from '../../types/walkType';
 import changeTime from '../../util/changeTiem';
+import { ErrorText } from '../notFound/NotFound.style';
 import { CommentList } from '../walkMate/WalkMate.styled';
 import {
   Container,
@@ -40,15 +43,24 @@ import {
 } from './myPage.styled';
 
 export function Component() {
+  // navigate
+  const navigate = useNavigate();
+
   // userList 보여주기
   const [isListShowed, setIsListShowed] = useState<boolean>(false);
+  // 유저이미지 state
+  const [userProfileImage, setUserProfileImage] = useState('');
+  // 펫 check 여부
+  const [isPetCheck, setIsPetCheck] = useState(-1);
+  // active 탭 state
+  const [currentTab, setCurrentTab] = useState(0);
 
   // 마이 info 데이터 불러오기
   const state = useContext(MemberIdContext);
 
   const accessToken = useReadLocalStorage<string>('accessToken');
 
-  // 유저 정보 조회
+  // 자신의 유저 정보 조회
   const { data, isLoading } = useQuery<UserInfo>({
     queryKey: ['myPage'],
     queryFn: () =>
@@ -56,18 +68,6 @@ export function Component() {
     onSuccess(data) {
       setUserProfileImage(data.memberInfo.imageURL);
     },
-  });
-
-  // 내가 작성한 랜선집사 리스트 가져오기
-  const { data: feedData, isLoading: feedLoading } = useQuery<{
-    responseList: Feed[];
-  }>({
-    queryKey: ['myFeed'],
-    queryFn: () =>
-      getServerDataWithJwt(
-        `${SERVER_URL}/feeds/my-feed`,
-        accessToken as string,
-      ),
   });
 
   // 팔로잉 회원 리스트 조회
@@ -81,11 +81,42 @@ export function Component() {
         accessToken as string,
       ),
   });
-  // 유저이미지
-  const [userProfileImage, setUserProfileImage] = useState('');
 
-  // navigate
-  const navigate = useNavigate();
+  // 자신이 작성한 피드리스트 조회
+  const { data: feedData, isLoading: feedLoading } = useQuery<{
+    responseList: Feed[];
+  }>({
+    queryKey: ['myFeed'],
+    queryFn: () =>
+      getServerDataWithJwt(
+        `${SERVER_URL}/feeds/my-feed`,
+        accessToken as string,
+      ),
+  });
+
+  // 자신이 작성한 산책 게시물 조회
+  const {
+    data: walkFeedData,
+    isLoading: walkFeedLoading,
+    isError: walkFeedError,
+  } = useQuery<WalkFeed[]>({
+    queryKey: ['walkFeedList'],
+    queryFn: () =>
+      getServerDataWithJwt(
+        `${SERVER_URL}/walkmates/my-walks?openFilter=false&page=0&size=10`,
+        accessToken as string,
+      ),
+  });
+
+  // 자신이 작성한 댓글 리스트 조회
+  const { data: commentListData } = useQuery<CommentProp[]>({
+    queryKey: ['commentList'],
+    queryFn: () =>
+      getServerDataWithJwt(
+        `${SERVER_URL}/walkmates/comments/bymember`,
+        accessToken as string,
+      ),
+  });
 
   // 유저 정보 수정 페이지로 이동
   const handleUserEdit = () => {
@@ -110,38 +141,10 @@ export function Component() {
     }
   }, [data]);
 
-  // 펫 check 여부 확인하기
-  const [isPetCheck, setIsPetCheck] = useState(-1);
-
   // 팔로잉 리스트 보여주기
   const handleOpenFollowingList = () => {
     setIsListShowed(true);
   };
-
-  /* -------------------------------- Tab 컴포넌트 구현 -------------------------------- */
-  const [currentTab, setCurrentTab] = useState(0);
-
-  const {
-    data: walkFeedData,
-    isLoading: walkFeedLoading,
-    isError: walkFeedError,
-  } = useQuery<WalkFeed[]>({
-    queryKey: ['walkFeedList'],
-    queryFn: () =>
-      getServerDataWithJwt(
-        `${SERVER_URL}/walkmates/my-walks?openFilter=false&page=0&size=10`,
-        accessToken as string,
-      ),
-  });
-
-  const { data: commentListData } = useQuery<CommentProp[]>({
-    queryKey: ['commentList'],
-    queryFn: () =>
-      getServerDataWithJwt(
-        `${SERVER_URL}/walkmates/comments/bymember`,
-        accessToken as string,
-      ),
-  });
 
   return (
     <>
@@ -253,11 +256,9 @@ export function Component() {
                     {!feedData?.responseList.length ? (
                       <>
                         {walkFeedError ? (
-                          <div>
-                            데이터를 불러오는 과정에서 에러가 발생했습니다.
-                          </div>
+                          <NoticeServerError />
                         ) : (
-                          <NoticeNoData />
+                          <NoticeNoData url="feed-posting" />
                         )}
                       </>
                     ) : (
@@ -265,7 +266,7 @@ export function Component() {
                         {feedData?.responseList?.map(item => (
                           <Link to={`/home/${item.feedId}`} key={item.feedId}>
                             <img
-                              className="w-full h-[180px] rounded-[28px] object-cover"
+                              className="w-full h-[180px] rounded-[28px] object-cover border-2 hover:drop-shadow-lg"
                               src={item.images[0].uploadFileURL}
                             />
                           </Link>
@@ -280,7 +281,7 @@ export function Component() {
                   ) : (
                     <div>
                       {!walkFeedData?.length ? (
-                        <NoticeNoData />
+                        <NoticeNoData url="walk-posting" />
                       ) : (
                         <GridContainerWalk>
                           {walkFeedData?.map(item => {
@@ -314,7 +315,12 @@ export function Component() {
                   ) : (
                     <div>
                       {!commentListData?.length ? (
-                        <NoticeNoData />
+                        <div className="flex flex-col items-center justify-center">
+                          <ErrorText>
+                            아직 댓글을 단 산책 게시물이 없어요.
+                          </ErrorText>
+                          <img src={Cat404} className=" w-80" />
+                        </div>
                       ) : (
                         commentListData?.map(item => (
                           <Link

@@ -16,7 +16,7 @@ export default function Header() {
   const matchPost = useMatch('/feed-posting');
   const matchMypage = useMatch('/my-page');
   const accessToken = useReadLocalStorage<string | null>('accessToken');
-  console.log(accessToken);
+
   const navigate = useNavigate();
   // context api 반려동물 등록 여부
   const { animalParents } = useContext(MemberIdContext) as State;
