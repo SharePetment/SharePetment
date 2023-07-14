@@ -439,6 +439,57 @@ class MemberServiceTest {
     }
 
     @Test
+    @DisplayName("회원의 이미지 변경 실패(자신의 반려동물 중 선택하면 반려동물의 프로필로 회원의 이미지가 바뀜) : 찾는 멤버가 없어서 생기는 예외")
+    void changeImageNoneMember() {
+
+        long memberId = 1L;
+        long petId = 1L;
+        long followingId = 2L;
+
+        Member member = new Member();
+        ReflectionTestUtils.setField(member, "memberId", memberId);
+
+        Image image = new Image();
+        ReflectionTestUtils.setField(image, "imageId", 1L);
+        ReflectionTestUtils.setField(image, "originalFilename", "xmrqufgkstkwls.png");
+        ReflectionTestUtils.setField(image, "uploadFileURL", "http://adfjeiiv.dkjfibj");
+
+        PetImage petImage = new PetImage();
+        ReflectionTestUtils.setField(petImage, "PetImageId", 1l);
+        ReflectionTestUtils.setField(petImage, "image", image);
+
+        Pet pet = new Pet();
+        ReflectionTestUtils.setField(pet, "petId", 1L);
+        ReflectionTestUtils.setField(pet, "name", "메시");
+        ReflectionTestUtils.setField(pet, "member", member);
+        ReflectionTestUtils.setField(pet, "petImage", petImage);
+
+        MemberDto.Response memberResponse = MemberDto.Response.builder()
+                .build();
+
+        MemberDto.Info memberInfo = MemberDto.Info.builder()
+                .memberId(1L)
+                .build();
+
+
+        FollowMember followMember = new FollowMember();
+        ReflectionTestUtils.setField(followMember, "followerMember", member);
+        ReflectionTestUtils.setField(followMember, "followingId", followingId);
+
+        List<FollowMember> followMemberList = List.of(followMember);
+
+        FollowMemberDto.Response followMemberResponse = FollowMemberDto.Response.builder()
+                .memberInfo(memberInfo)
+                .build();
+
+        given(memberRepository.findById(Mockito.anyLong())).willReturn(Optional.empty());
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> memberService.changeImage(memberId, petId));
+
+        assertEquals(exception.getMessage(), "수정할 멤버가 없습니다");
+
+    }
+
+    @Test
     void checkNickname() {
     }
 }
