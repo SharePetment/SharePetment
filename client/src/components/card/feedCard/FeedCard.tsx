@@ -30,7 +30,7 @@ interface Prop {
   context: string;
   userimg: string;
   images: ImagesStructure[];
-  guesthandler: () => void;
+  guesthandler?: () => void;
 }
 
 export default function FeedCard({
@@ -46,7 +46,10 @@ export default function FeedCard({
   const accessToken = useReadLocalStorage('accessToken');
 
   const handlerClick = () => {
-    if (!accessToken) return guesthandler();
+    if (!accessToken)
+      if (guesthandler) {
+        return guesthandler();
+      }
     navigate(`/users/${memberid}`);
   };
 

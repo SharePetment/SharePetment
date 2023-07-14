@@ -11,7 +11,6 @@ export function Component() {
     'refreshToken',
     '',
   );
-  const [, setMemberId] = useLocalStorage<string | null>('memberId', '');
   const [, setAnimalParents] = useLocalStorage<string | null>(
     'animalParents',
     'false',
@@ -21,7 +20,6 @@ export function Component() {
     if (searchParams.size > 0) {
       setAccessToken(searchParams.get('accessToken'));
       setRefreshToken(searchParams.get('refreshToken'));
-      setMemberId(searchParams.get('memberId'));
       setAnimalParents(searchParams.get('animalParents'));
 
       const present = searchParams.get('present');
@@ -41,7 +39,6 @@ export function Component() {
   }, [
     setAccessToken,
     setRefreshToken,
-    setMemberId,
     searchParams,
     navigate,
     setAnimalParents,

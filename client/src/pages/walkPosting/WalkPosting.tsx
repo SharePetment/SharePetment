@@ -50,12 +50,11 @@ export function Component() {
     },
   });
 
-
   const onSumbit = (data: Inputs) => {
     const body = {
       ...data,
       mapURL: `${coordinates.La} ${coordinates.Ma} ${detailAddress}`,
-      open: false,
+      open: true,
       accessToken: accessToken as string,
     };
 

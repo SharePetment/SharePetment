@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
 import { useReadLocalStorage } from 'usehooks-ts';
@@ -17,6 +17,7 @@ import NoticeNoData from '../../components/notice/NoticeNoData';
 import NoticeOnlyOwner from '../../components/notice/NoticeOnlyOwner';
 import PlusBtn from '../../components/plus-button/PlusBtn';
 import PetContainer from '../../components/user_my_page/pet-container/PetContainer';
+import { MemberIdContext } from '../../store/Context';
 import { CommentProp } from '../../types/commentType';
 import { Feed } from '../../types/feedTypes';
 import { Follow, UserInfo } from '../../types/userType';
@@ -43,7 +44,7 @@ export function Component() {
   const navigate = useNavigate();
 
   // userList 보여주기
-  const [isListShowed, setIsListShowed] = useState(false);
+  const [isListShowed, setIsListShowed] = useState<boolean>(false);
   // 유저이미지 state
   const [userProfileImage, setUserProfileImage] = useState('');
   // 펫 check 여부
@@ -52,12 +53,13 @@ export function Component() {
   const [currentTab, setCurrentTab] = useState(0);
 
   // 마이 info 데이터 불러오기
-  const memberId = useReadLocalStorage<string>('memberId');
+  const memberId = useContext(MemberIdContext);
+
   const accessToken = useReadLocalStorage<string>('accessToken');
 
   // 자신의 유저 정보 조회
   const { data, isLoading } = useQuery<UserInfo>({
-    queryKey: ['myPage', memberId],
+    queryKey: ['myPage'],
     queryFn: () =>
       getServerDataWithJwt(`${SERVER_URL}/members`, accessToken as string),
     onSuccess(data) {
@@ -65,11 +67,11 @@ export function Component() {
     },
   });
 
-  // 구독 리스트 조회(자신이 구독한 사람의 리스트)
+  // 팔로잉 회원 리스트 조회
   const { data: followingData, isLoading: followingLoading } = useQuery<
     Follow[]
   >({
-    queryKey: ['followList', memberId],
+    queryKey: ['followList'],
     queryFn: () =>
       getServerDataWithJwt(
         `${SERVER_URL}/members/following/list`,
@@ -81,7 +83,7 @@ export function Component() {
   const { data: feedData, isLoading: feedLoading } = useQuery<{
     responseList: Feed[];
   }>({
-    queryKey: ['myFeed', memberId],
+    queryKey: ['myFeed'],
     queryFn: () =>
       getServerDataWithJwt(
         `${SERVER_URL}/feeds/my-feed`,
@@ -95,7 +97,7 @@ export function Component() {
     isLoading: walkFeedLoading,
     isError: walkFeedError,
   } = useQuery<WalkFeed[]>({
-    queryKey: ['walkFeedList', memberId],
+    queryKey: ['walkFeedList'],
     queryFn: () =>
       getServerDataWithJwt(
         `${SERVER_URL}/walkmates/my-walks?openFilter=false&page=0&size=10`,
@@ -105,7 +107,7 @@ export function Component() {
 
   // 자신이 작성한 댓글 리스트 조회
   const { data: commentListData } = useQuery<CommentProp[]>({
-    queryKey: ['commentList', memberId],
+    queryKey: ['commentList'],
     queryFn: () =>
       getServerDataWithJwt(
         `${SERVER_URL}/walkmates/comments/bymember`,
@@ -230,9 +232,7 @@ export function Component() {
                 <TabMenuList
                   onClick={() => setCurrentTab(1)}
                   className={
-                    currentTab === 1
-                      ? `border-t-2 border-t-[green] 	`
-                      : undefined
+                    currentTab === 1 ? `border-t-2 border-t-[green]` : undefined
                   }>
                   <WalkFeedIcon
                     className={currentTab === 1 ? `fill-deepgreen ` : undefined}
@@ -241,9 +241,7 @@ export function Component() {
                 <TabMenuList
                   onClick={() => setCurrentTab(2)}
                   className={
-                    currentTab === 2
-                      ? `border-t-2 border-t-[green] 	`
-                      : undefined
+                    currentTab === 2 ? `border-t-2 border-t-[green]` : undefined
                   }>
                   <CommentListIcon
                     className={currentTab === 2 ? `fill-deepgreen ` : undefined}

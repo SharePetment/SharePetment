@@ -45,7 +45,6 @@ export default function PetInfo(prop: Prop) {
 
   // token
   const accessToken = useReadLocalStorage<string>('accessToken');
-  const memberId = useReadLocalStorage<string>('memberId');
 
   // 유저 정보 refatch
   const queryClient = useQueryClient();
@@ -73,7 +72,7 @@ export default function PetInfo(prop: Prop) {
   const petPostMutation = useMutation({
     mutationFn: postPet,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['myPage', memberId] });
+      queryClient.invalidateQueries({ queryKey: ['myPage'] });
       setIsOpened(false);
     },
     onError: error => {
@@ -85,7 +84,7 @@ export default function PetInfo(prop: Prop) {
   const petPatchMutation = useMutation({
     mutationFn: patchPet,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['myPage', memberId] });
+      queryClient.invalidateQueries({ queryKey: ['myPage'] });
       setIsOpened(false);
     },
     onError: error => {
@@ -98,7 +97,6 @@ export default function PetInfo(prop: Prop) {
   const handlePetPost = async (data: Inputs) => {
     const { name, age, information, radio } = data;
     const formData = new FormData();
-    formData.append('memberId', memberId as string);
     formData.append('name', name);
     formData.append('age', `${age}`);
     formData.append('information', information);

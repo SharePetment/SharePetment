@@ -34,7 +34,6 @@ export default function FeedWriteCard() {
   const [prevFile, setPrevFile] = useState<File[]>([]);
   /* ----------------------------- useLocalStorage ---------------------------- */
   const accessToken = useReadLocalStorage<string>('accessToken');
-  const memberId = useReadLocalStorage<string>('memberId');
 
   const { mutate, isLoading } = useMutation({
     mutationFn: feedPosting,
@@ -45,11 +44,10 @@ export default function FeedWriteCard() {
 
   const handleSubmit = () => {
     const formData = new FormData();
-    formData.append('memberId', memberId as string);
     formData.append('content', textRef.current?.value as string);
     prevFile.forEach(file => formData.append('images', file));
     const data = {
-      url: `${SERVER_URL}feeds`,
+      url: `${SERVER_URL}/feeds`,
       accessToken,
       formData,
     };
@@ -87,7 +85,13 @@ export default function FeedWriteCard() {
         />
       )}
 
-      <div className="w-screen h-screen bg-zinc-900/70  absolute flex items-center justify-center">
+      <div
+        className="w-screen h-screen bg-zinc-900/75  absolute flex items-center justify-center"
+        onClick={e => {
+          if (e.target === e.currentTarget) {
+            navigate(-1);
+          }
+        }}>
         <Container>
           <Close
             className="absolute right-6 top-6 cursor-pointer"

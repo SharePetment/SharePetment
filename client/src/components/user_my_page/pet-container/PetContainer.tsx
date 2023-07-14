@@ -38,7 +38,6 @@ export default function PetContainer(prop: Prop) {
     uploadFileURL,
     setIsPetCheck,
     isPetCheck,
-    memberId,
     index,
   } = prop;
 
@@ -57,13 +56,13 @@ export default function PetContainer(prop: Prop) {
     mutationFn: deletePet,
     onSuccess() {
       setIsDeletePopUp(false);
-      queryClient.invalidateQueries({ queryKey: ['myPage', memberId] });
+      queryClient.invalidateQueries({ queryKey: ['myPage'] });
     },
   });
 
   const handleDeletePet = () => {
     deletePetMutation.mutate({
-      url: `${SERVER_URL}pets/${memberId}/${petId}`,
+      url: `${SERVER_URL}/pets/${petId}`,
       token: accessToken as string,
     });
   };
@@ -76,7 +75,7 @@ export default function PetContainer(prop: Prop) {
   const mutationPatchUserProfile = useMutation({
     mutationFn: patchUserProfile,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['myPage', memberId] });
+      queryClient.invalidateQueries({ queryKey: ['myPage'] });
     },
   });
 
@@ -85,7 +84,7 @@ export default function PetContainer(prop: Prop) {
     // 추후 작성
     setIsPetCheck(index);
     mutationPatchUserProfile.mutate({
-      url: `${SERVER_URL}members/image/${memberId}/${petId}`,
+      url: `${SERVER_URL}/members/image/${petId}`,
       accessToken: accessToken as string,
     });
   };

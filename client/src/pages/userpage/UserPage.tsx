@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { useParams, Navigate } from 'react-router-dom';
 import { useReadLocalStorage } from 'usehooks-ts';
 import { getServerDataWithJwt } from '../../api/queryfn';
@@ -9,6 +9,7 @@ import FollowList from '../../components/follow-list/FollowList';
 import LoadingComponent from '../../components/loading/LoadingComponent';
 import Subscribe from '../../components/subscribe/Subscribe';
 import PetInfoBox from '../../components/user_my_page/petinfo-box/PetInfoBox';
+import { MemberIdContext } from '../../store/Context';
 import { Feed } from '../../types/feedTypes';
 import { Follow, UserInfo } from '../../types/userType';
 import {
@@ -23,7 +24,7 @@ import {
 
 export function Component() {
   const { usersId } = useParams();
-  const memberId = useReadLocalStorage<string>('memberId');
+  const memberId = useContext(MemberIdContext);
   const accessToken = useReadLocalStorage<string>('accessToken');
 
   // userList 보여주기 & 팔로일 리스트 보여주기
@@ -34,10 +35,10 @@ export function Component() {
 
   // 유저 데이터 가지고 오기ㅣ
   const { data, isLoading } = useQuery<UserInfo>({
-    queryKey: ['userPage', memberId, usersId],
+    queryKey: ['userPage', usersId],
     queryFn: () =>
       getServerDataWithJwt(
-        `${SERVER_URL}members/${usersId}/${memberId}`,
+        `${SERVER_URL}/members/${usersId}`,
         accessToken as string,
       ),
     onSuccess(data) {
@@ -55,7 +56,7 @@ export function Component() {
     queryKey: ['userFeed', usersId],
     queryFn: () =>
       getServerDataWithJwt(
-        `${SERVER_URL}feeds/my-feed/${usersId}`,
+        `${SERVER_URL}/feeds/other-feed/${usersId}`,
         accessToken as string,
       ),
   });
@@ -67,7 +68,7 @@ export function Component() {
     queryKey: ['followList', usersId],
     queryFn: () =>
       getServerDataWithJwt(
-        `${SERVER_URL}members/following/list/${usersId}`,
+        `${SERVER_URL}/members/following/list/${usersId}`,
         accessToken as string,
       ),
   });
@@ -96,11 +97,7 @@ export function Component() {
               />
               <UserNameBox className="flex items-center gap-4">
                 <UserName>{data?.memberInfo.nickname}</UserName>
-                <Subscribe
-                  guestFollow={isSubscribed}
-                  usersId={usersId}
-                  memberId={memberId}
-                />
+                <Subscribe guestFollow={isSubscribed} usersId={usersId} />
               </UserNameBox>
               <UserInfoBox>
                 <div>
@@ -144,6 +141,7 @@ export function Component() {
             <FollowList
               setIsListShowed={setIsListShowed}
               follow={followingData}
+              path={'user'}
             />
           )}
         </>

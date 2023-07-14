@@ -37,17 +37,13 @@ export default function Map({
   // 마커를 담는 배열
   let markers: any[] = [];
 
-  const memberId = useReadLocalStorage('memberId');
   const accessToken = useReadLocalStorage('accessToken');
 
   // 쿼리를 통해 주소 값을 받아옵니다.
   const { isLoading } = useQuery<UserInfo>({
-    queryKey: ['myPage', memberId],
+    queryKey: ['myPage'],
     queryFn: () =>
-      getServerDataWithJwt(
-        `${SERVER_URL}members/${memberId}/${memberId}`,
-        accessToken as string,
-      ),
+      getServerDataWithJwt(`${SERVER_URL}/members`, accessToken as string),
     onSuccess(data) {
       setMainAddress(data.address);
     },
