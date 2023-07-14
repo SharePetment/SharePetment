@@ -23,7 +23,6 @@ export function Component() {
   const [isToastOpen, setIsToastOpen] = useState<boolean>(false);
   const [isGuestOpen, setIsGuestOpen] = useState<boolean>(false);
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
 
   const guestFeedQuery = useQuery({
     queryKey: ['guestFeed'],
