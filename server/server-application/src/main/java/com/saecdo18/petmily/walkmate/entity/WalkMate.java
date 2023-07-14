@@ -91,6 +91,10 @@ public class WalkMate extends BaseEntity {
         this.maximum = maximum;
     }
 
+    public void setOpen(Boolean open){
+        this.open=open;
+    }
+
 
 
     public void setMember(Member member) {

@@ -201,9 +201,12 @@ public class WalkMateService {
             throw new IllegalArgumentException("수정할 권한이 없습니다.");
         }
 
+        walk.setOpen(status);
+        walkMateRepository.save(walk);
+
         WalkMateDto.Open response = WalkMateDto.Open.builder()
                 .walkMatePostId(walkId)
-                .open(status)
+                .open(walk.getOpen())
                 .build();
 
         return response;
