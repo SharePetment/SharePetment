@@ -27,6 +27,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -311,14 +312,228 @@ class MemberServiceTest {
     }
 
     @Test
-    void followList() {
+    @DisplayName("팔로잉 리스트 가져오기 성공")
+    void followListSuccess() {
+
+        long memberId = 1L;
+
+        long followingId = 2L;
+
+        Member member = new Member();
+        ReflectionTestUtils.setField(member, "memberId", memberId);
+
+        MemberDto.Response memberResponse = MemberDto.Response.builder()
+                .build();
+
+        MemberDto.Info memberInfo = MemberDto.Info.builder()
+                .memberId(1L)
+                .build();
+
+        FollowMember followMember = new FollowMember();
+        ReflectionTestUtils.setField(followMember, "followerMember", member);
+        ReflectionTestUtils.setField(followMember, "followingId", followingId);
+
+        List<FollowMember> followMemberList = List.of(followMember);
+
+        FollowMemberDto.Response followMemberResponse = FollowMemberDto.Response.builder()
+                .memberInfo(memberInfo)
+                .build();
+
+
+        given(followMemberRepository.findByFollowingId(Mockito.anyLong())).willReturn(Optional.of(followMemberList));
+        given(memberRepository.findById(Mockito.anyLong())).willReturn(Optional.of(member));
+        given(followMemberMapper.followMemberToFollowMemberResponseDto(Mockito.any(FollowMember.class))).willReturn(followMemberResponse);
+
+        // when
+        memberService.followList(followingId);
+
     }
 
     @Test
-    void changeImage() {
+    @DisplayName("팔로잉 리스트 가져오기 실패 : 찾는 멤버가 없어서 생기는 예외")
+    void followListNoneMember() {
+
+        long memberId = 1L;
+
+        long followingId = 2L;
+
+        Member member = new Member();
+        ReflectionTestUtils.setField(member, "memberId", memberId);
+
+        MemberDto.Response memberResponse = MemberDto.Response.builder()
+                .build();
+
+        MemberDto.Info memberInfo = MemberDto.Info.builder()
+                .memberId(1L)
+                .build();
+
+        FollowMember followMember = new FollowMember();
+        ReflectionTestUtils.setField(followMember, "followerMember", member);
+        ReflectionTestUtils.setField(followMember, "followingId", followingId);
+
+        List<FollowMember> followMemberList = List.of(followMember);
+
+        FollowMemberDto.Response followMemberResponse = FollowMemberDto.Response.builder()
+                .memberInfo(memberInfo)
+                .build();
+
+
+        given(followMemberRepository.findByFollowingId(Mockito.anyLong())).willReturn(Optional.of(followMemberList));
+        given(memberRepository.findById(Mockito.anyLong())).willReturn(Optional.empty());
+        RuntimeException exception = assertThrows(RuntimeException.class , () -> memberService.followList(followingId));
+
+        assertEquals(exception.getMessage(), "사용자를 찾을 수 없습니다");
     }
 
     @Test
-    void checkNickname() {
+    @DisplayName("회원의 이미지 변경 성공(자신의 반려동물 중 선택하면 반려동물의 프로필로 회원의 이미지가 바뀜)")
+    void changeImageSuccess() {
+
+        long memberId = 1L;
+        long petId = 1L;
+        long followingId = 2L;
+
+        Member member = new Member();
+        ReflectionTestUtils.setField(member, "memberId", memberId);
+
+        Image image = new Image();
+        ReflectionTestUtils.setField(image, "imageId", 1L);
+        ReflectionTestUtils.setField(image, "originalFilename", "xmrqufgkstkwls.png");
+        ReflectionTestUtils.setField(image, "uploadFileURL", "http://adfjeiiv.dkjfibj");
+
+        PetImage petImage = new PetImage();
+        ReflectionTestUtils.setField(petImage, "PetImageId", 1l);
+        ReflectionTestUtils.setField(petImage, "image", image);
+
+        Pet pet = new Pet();
+        ReflectionTestUtils.setField(pet, "petId", 1L);
+        ReflectionTestUtils.setField(pet, "name", "메시");
+        ReflectionTestUtils.setField(pet, "member", member);
+        ReflectionTestUtils.setField(pet, "petImage", petImage);
+
+        MemberDto.Response memberResponse = MemberDto.Response.builder()
+                .build();
+
+        MemberDto.Info memberInfo = MemberDto.Info.builder()
+                .memberId(1L)
+                .build();
+
+
+        FollowMember followMember = new FollowMember();
+        ReflectionTestUtils.setField(followMember, "followerMember", member);
+        ReflectionTestUtils.setField(followMember, "followingId", followingId);
+
+        List<FollowMember> followMemberList = List.of(followMember);
+
+        FollowMemberDto.Response followMemberResponse = FollowMemberDto.Response.builder()
+                .memberInfo(memberInfo)
+                .build();
+
+        given(memberRepository.findById(Mockito.anyLong())).willReturn(Optional.of(member));
+        given(petRepository.findById(Mockito.anyLong())).willReturn(Optional.of(pet));
+        when(memberRepository.save(Mockito.any(Member.class))).thenReturn(member);
+
+
+        // when
+        memberService.changeImage(memberId, petId);
+    }
+
+    @Test
+    @DisplayName("회원의 이미지 변경 실패(자신의 반려동물 중 선택하면 반려동물의 프로필로 회원의 이미지가 바뀜) : 찾는 멤버가 없어서 생기는 예외")
+    void changeImageNoneMember() {
+
+        long memberId = 1L;
+        long petId = 1L;
+        long followingId = 2L;
+
+        Member member = new Member();
+        ReflectionTestUtils.setField(member, "memberId", memberId);
+
+        Image image = new Image();
+        ReflectionTestUtils.setField(image, "imageId", 1L);
+        ReflectionTestUtils.setField(image, "originalFilename", "xmrqufgkstkwls.png");
+        ReflectionTestUtils.setField(image, "uploadFileURL", "http://adfjeiiv.dkjfibj");
+
+        PetImage petImage = new PetImage();
+        ReflectionTestUtils.setField(petImage, "PetImageId", 1l);
+        ReflectionTestUtils.setField(petImage, "image", image);
+
+        Pet pet = new Pet();
+        ReflectionTestUtils.setField(pet, "petId", 1L);
+        ReflectionTestUtils.setField(pet, "name", "메시");
+        ReflectionTestUtils.setField(pet, "member", member);
+        ReflectionTestUtils.setField(pet, "petImage", petImage);
+
+        MemberDto.Response memberResponse = MemberDto.Response.builder()
+                .build();
+
+        MemberDto.Info memberInfo = MemberDto.Info.builder()
+                .memberId(1L)
+                .build();
+
+
+        FollowMember followMember = new FollowMember();
+        ReflectionTestUtils.setField(followMember, "followerMember", member);
+        ReflectionTestUtils.setField(followMember, "followingId", followingId);
+
+        List<FollowMember> followMemberList = List.of(followMember);
+
+        FollowMemberDto.Response followMemberResponse = FollowMemberDto.Response.builder()
+                .memberInfo(memberInfo)
+                .build();
+
+        given(memberRepository.findById(Mockito.anyLong())).willReturn(Optional.empty());
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> memberService.changeImage(memberId, petId));
+
+        assertEquals(exception.getMessage(), "수정할 멤버가 없습니다");
+
+    }
+
+    @Test
+    @DisplayName("닉네임이 중복되지 않아 사용이 가능한 경우")
+    void checkNicknameCanUse() {
+        long memberId = 1L;
+        String nickname= "testnick";
+
+        Member member = new Member();
+        ReflectionTestUtils.setField(member, "memberId", memberId);
+
+
+        MemberDto.Response memberResponse = MemberDto.Response.builder()
+                .build();
+
+        MemberDto.Info memberInfo = MemberDto.Info.builder()
+                .memberId(1L)
+                .build();
+
+
+        given(memberRepository.findByNickname(Mockito.anyString())).willReturn(Optional.of(member));
+
+
+
+        // when
+        memberService.checkNickname(nickname);
+    }
+
+    @Test
+    @DisplayName("닉네임이 중복되어 사용이 불가능한 경우")
+    void checkNicknameCantUse() {
+        long memberId = 1L;
+        String nickname= "testnick";
+
+        Member member = new Member();
+        ReflectionTestUtils.setField(member, "memberId", memberId);
+
+        MemberDto.Response memberResponse = MemberDto.Response.builder()
+                .build();
+
+        MemberDto.Info memberInfo = MemberDto.Info.builder()
+                .memberId(1L)
+                .build();
+
+        given(memberRepository.findByNickname(Mockito.anyString())).willReturn(Optional.empty());
+
+        // when
+        memberService.checkNickname(nickname);
     }
 }

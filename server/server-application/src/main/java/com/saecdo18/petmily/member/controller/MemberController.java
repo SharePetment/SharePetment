@@ -78,9 +78,17 @@ public class MemberController {
     }
 
     @GetMapping("/following/list")
-    @Operation(summary = "팔로잉 한 회원 조회", description = "팔로우회원 조회")
+    @Operation(summary = "자신이 팔로잉 한 회원 조회", description = "자신의 마이페이지에서 팔로잉리스트 보기 위함")
     public ResponseEntity<List<FollowMemberDto.Response>> followingList() {
         long followingId = authenticationGetMemberId.getMemberId();
+
+        List<FollowMemberDto.Response> responses = memberService.followList(followingId);
+        return new ResponseEntity<>(responses, HttpStatus.OK);
+    }
+
+    @GetMapping("/following/list/{following-id}")
+    @Operation(summary = "타인이 팔로잉 한 회원 조회", description = "타인의 마이페이지에서 팔로잉리스트 보기 위함")
+    public ResponseEntity<List<FollowMemberDto.Response>> followingList(@ApiParam("조회될 사용자 식별자") @PathVariable("following-id") long followingId) {
 
         List<FollowMemberDto.Response> responses = memberService.followList(followingId);
         return new ResponseEntity<>(responses, HttpStatus.OK);
