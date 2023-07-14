@@ -55,8 +55,8 @@ export default function Comment(props: CommentProp) {
       id: feedCommentsId ? `${feedCommentsId}` : `${walkMateCommentId}`,
       content: newComment,
       url: feedCommentsId
-        ? `${SERVER_URL}feeds/comments/${feedCommentsId}`
-        : `${SERVER_URL}walkmates/comments/${walkMateCommentId}`,
+        ? `${SERVER_URL}/feeds/comments/${feedCommentsId}/${memberId}`
+        : `${SERVER_URL}/walkmates/comments/${walkMateCommentId}/${memberId}`,
       tag: feedCommentsId ? 'feed' : 'walk',
       accessToken,
     };
@@ -66,7 +66,7 @@ export default function Comment(props: CommentProp) {
   // 산책 댓글 삭제
   const handleDeleteComment = (walkMateCommentId: number | undefined) => {
     const data = {
-      url: `${SERVER_URL}walkmates/comments/${walkMateCommentId}`,
+      url: `${SERVER_URL}/walkmates/comments/${walkMateCommentId}/${memberId}`,
       accessToken,
     };
     deleteCommentMutaion.mutate(data);

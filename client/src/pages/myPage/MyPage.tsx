@@ -41,7 +41,7 @@ import {
 
 export function Component() {
   // userList 보여주기
-  const [isListShowed, setIsListShowed] = useState(false);
+  const [isListShowed, setIsListShowed] = useState<boolean>(false);
 
   // 마이 info 데이터 불러오기
   const memberId = useContext(MemberIdContext);
@@ -232,9 +232,7 @@ export function Component() {
                 <TabMenuList
                   onClick={() => setCurrentTab(1)}
                   className={
-                    currentTab === 1
-                      ? `border-t-2 border-t-[green] 	`
-                      : undefined
+                    currentTab === 1 ? `border-t-2 border-t-[green]` : undefined
                   }>
                   <WalkFeedIcon
                     className={currentTab === 1 ? `fill-deepgreen ` : undefined}
@@ -243,9 +241,7 @@ export function Component() {
                 <TabMenuList
                   onClick={() => setCurrentTab(2)}
                   className={
-                    currentTab === 2
-                      ? `border-t-2 border-t-[green] 	`
-                      : undefined
+                    currentTab === 2 ? `border-t-2 border-t-[green]` : undefined
                   }>
                   <CommentListIcon
                     className={currentTab === 2 ? `fill-deepgreen ` : undefined}

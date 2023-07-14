@@ -85,7 +85,13 @@ export default function FeedWriteCard() {
         />
       )}
 
-      <div className="w-screen h-screen bg-zinc-900/70  absolute flex items-center justify-center">
+      <div
+        className="w-screen h-screen bg-zinc-900/75  absolute flex items-center justify-center"
+        onClick={e => {
+          if (e.target === e.currentTarget) {
+            navigate(-1);
+          }
+        }}>
         <Container>
           <Close
             className="absolute right-6 top-6 cursor-pointer"

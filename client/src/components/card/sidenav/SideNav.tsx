@@ -14,8 +14,8 @@ interface Prop {
   direction: 'row' | 'col';
   likes: number;
   like: BooleanStr;
-  guesthandler: () => void;
-  toasthandler: React.Dispatch<React.SetStateAction<boolean>>;
+  guesthandler?: () => void;
+  toasthandler?: React.Dispatch<React.SetStateAction<boolean>>;
   url: string;
 }
 
@@ -37,28 +37,35 @@ export default function SideNav({
     onSuccess: data => {
       console.log(data);
       queryClient.invalidateQueries({ queryKey: ['hostRandomFeed'] });
+      queryClient.invalidateQueries({ queryKey: ['feedPopUp'] });
     },
   });
 
   const handleClickLike = () => {
     console.log(feedid);
-    if (!accessToken) return guesthandler();
+    if (!accessToken) {
+      if (guesthandler) return guesthandler();
+    }
     const data = {
-      url: `${SERVER_URL}feeds/like/${feedid}`,
+      url: `${SERVER_URL}/feeds/like/${feedid}`,
       accessToken,
     };
     likeMutation.mutate(data);
   };
 
   const handleClickComment = () => {
-    if (!accessToken) return guesthandler();
+    if (!accessToken) {
+      if (guesthandler) return guesthandler();
+    }
     navigate(`/home/${feedid}`);
   };
 
   const handleClickShare = async () => {
     await navigator.clipboard.writeText(url);
-    toasthandler(true);
-    setTimeout(() => toasthandler(false), 1500);
+    if (toasthandler) {
+      toasthandler(true);
+      setTimeout(() => toasthandler(false), 1500);
+    }
   };
 
   return (
