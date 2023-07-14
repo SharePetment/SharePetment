@@ -25,20 +25,20 @@ export function Component() {
 
   const guestFeedQuery = useQuery({
     queryKey: ['guestFeed'],
-    queryFn: () => getGuestFeedList(`${SERVER_URL}feeds/all/list/random`),
+    queryFn: () => getGuestFeedList(`${SERVER_URL}/feeds/all/list/random`),
     enabled: !!(accessToken === null),
   });
 
   const hostRandomFeedQuery = useQuery({
     queryKey: ['hostRandomFeed'],
     queryFn: () =>
-      getHostFeedList(`${SERVER_URL}feeds/list/random`, accessToken),
+      getHostFeedList(`${SERVER_URL}/feeds/list/random`, accessToken),
     enabled: !!(accessToken && isClicked),
   });
 
   const hostFeedQuery = useQuery({
     queryKey: ['hostFeed'],
-    queryFn: () => getHostFeedList(`${SERVER_URL}feeds/list`, accessToken),
+    queryFn: () => getHostFeedList(`${SERVER_URL}/feeds/list`, accessToken),
     enabled: !!accessToken,
   });
 

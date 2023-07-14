@@ -41,6 +41,7 @@ export default function PetContainer(prop: Prop) {
     memberId,
     index,
   } = prop;
+
   // 유저 정보 refatch
   const queryClient = useQueryClient();
 
@@ -50,6 +51,7 @@ export default function PetContainer(prop: Prop) {
   // 펫 삭제 확인 팝업 작성
   const [isDeletePopUp, setIsDeletePopUp] = useState(false);
   const accessToken = useReadLocalStorage('accessToken');
+
   // 펫 삭제 로직 작성
   const deletePetMutation = useMutation({
     mutationFn: deletePet,
@@ -58,15 +60,18 @@ export default function PetContainer(prop: Prop) {
       queryClient.invalidateQueries({ queryKey: ['myPage', memberId] });
     },
   });
+
   const handleDeletePet = () => {
     deletePetMutation.mutate({
       url: `${SERVER_URL}pets/${memberId}/${petId}`,
       token: accessToken as string,
     });
   };
+
   const handleOpenDeletePopup = () => {
     setIsDeletePopUp(true);
   };
+
   // 유저 프로필 이미지 변경
   const mutationPatchUserProfile = useMutation({
     mutationFn: patchUserProfile,
@@ -74,6 +79,7 @@ export default function PetContainer(prop: Prop) {
       queryClient.invalidateQueries({ queryKey: ['myPage', memberId] });
     },
   });
+
   // 유저 프로필 변경
   const handleChangeUserProfile = (petId: number, index: number) => {
     // 추후 작성

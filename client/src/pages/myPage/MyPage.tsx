@@ -39,53 +39,79 @@ import {
 } from './myPage.styled';
 
 export function Component() {
+  // navigate
+  const navigate = useNavigate();
+
   // userList 보여주기
   const [isListShowed, setIsListShowed] = useState(false);
+  // 유저이미지 state
+  const [userProfileImage, setUserProfileImage] = useState('');
+  // 펫 check 여부
+  const [isPetCheck, setIsPetCheck] = useState(-1);
+  // active 탭 state
+  const [currentTab, setCurrentTab] = useState(0);
 
   // 마이 info 데이터 불러오기
   const memberId = useReadLocalStorage<string>('memberId');
   const accessToken = useReadLocalStorage<string>('accessToken');
 
-  // 유저 정보 조회
+  // 자신의 유저 정보 조회
   const { data, isLoading } = useQuery<UserInfo>({
     queryKey: ['myPage', memberId],
     queryFn: () =>
-      getServerDataWithJwt(
-        `${SERVER_URL}members/${memberId}`,
-        accessToken as string,
-      ),
+      getServerDataWithJwt(`${SERVER_URL}/members`, accessToken as string),
     onSuccess(data) {
       setUserProfileImage(data.memberInfo.imageURL);
     },
   });
 
-  // 내가 작성한 랜선집사 리스트 가져오기
-  const { data: feedData, isLoading: feedLoading } = useQuery<{
-    responseList: Feed[];
-  }>({
-    queryKey: ['myFeed', memberId],
-    queryFn: () =>
-      getServerDataWithJwt(`${SERVER_URL}feeds/my-feed`, accessToken as string),
-  });
-
-  console.log(feedData);
-
-  // 팔로잉 회원 리스트 조회
+  // 구독 리스트 조회(자신이 구독한 사람의 리스트)
   const { data: followingData, isLoading: followingLoading } = useQuery<
     Follow[]
   >({
     queryKey: ['followList', memberId],
     queryFn: () =>
       getServerDataWithJwt(
-        `${SERVER_URL}members/following/list`,
+        `${SERVER_URL}/members/following/list`,
         accessToken as string,
       ),
   });
-  // 유저이미지
-  const [userProfileImage, setUserProfileImage] = useState('');
 
-  // navigate
-  const navigate = useNavigate();
+  // 자신이 작성한 피드리스트 조회
+  const { data: feedData, isLoading: feedLoading } = useQuery<{
+    responseList: Feed[];
+  }>({
+    queryKey: ['myFeed', memberId],
+    queryFn: () =>
+      getServerDataWithJwt(
+        `${SERVER_URL}/feeds/my-feed`,
+        accessToken as string,
+      ),
+  });
+
+  // 자신이 작성한 산책 게시물 조회
+  const {
+    data: walkFeedData,
+    isLoading: walkFeedLoading,
+    isError: walkFeedError,
+  } = useQuery<WalkFeed[]>({
+    queryKey: ['walkFeedList', memberId],
+    queryFn: () =>
+      getServerDataWithJwt(
+        `${SERVER_URL}/walkmates/my-walks?openFilter=false&page=0&size=10`,
+        accessToken as string,
+      ),
+  });
+
+  // 자신이 작성한 댓글 리스트 조회
+  const { data: commentListData } = useQuery<CommentProp[]>({
+    queryKey: ['commentList', memberId],
+    queryFn: () =>
+      getServerDataWithJwt(
+        `${SERVER_URL}/walkmates/comments/bymember`,
+        accessToken as string,
+      ),
+  });
 
   // 유저 정보 수정 페이지로 이동
   const handleUserEdit = () => {
@@ -110,38 +136,10 @@ export function Component() {
     }
   }, [data]);
 
-  // 펫 check 여부 확인하기
-  const [isPetCheck, setIsPetCheck] = useState(-1);
-
   // 팔로잉 리스트 보여주기
   const handleOpenFollowingList = () => {
     setIsListShowed(true);
   };
-
-  /* -------------------------------- Tab 컴포넌트 구현 -------------------------------- */
-  const [currentTab, setCurrentTab] = useState(0);
-
-  const {
-    data: walkFeedData,
-    isLoading: walkFeedLoading,
-    isError: walkFeedError,
-  } = useQuery<WalkFeed[]>({
-    queryKey: ['walkFeedList', memberId],
-    queryFn: () =>
-      getServerDataWithJwt(
-        `${SERVER_URL}walkmates/bymember?openFilter=false&page=0&size=10`,
-        accessToken as string,
-      ),
-  });
-
-  const { data: commentListData } = useQuery<CommentProp[]>({
-    queryKey: ['commentList', memberId],
-    queryFn: () =>
-      getServerDataWithJwt(
-        `${SERVER_URL}walkmates/comments/bymember`,
-        accessToken as string,
-      ),
-  });
 
   return (
     <>
@@ -182,7 +180,7 @@ export function Component() {
                 </div>
               </UserInfoBox>
             </UserBox>
-            <PetBox className="hidden">
+            <PetBox>
               {Array.isArray(data?.pets) && (
                 <>
                   {data?.pets.map(
