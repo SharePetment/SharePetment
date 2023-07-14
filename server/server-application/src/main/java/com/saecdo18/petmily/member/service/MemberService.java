@@ -145,7 +145,7 @@ public class MemberService {
             responses.add(response);
         }
 
-//        List<FollowMemberDto.Response> responses = followMemberMapper.followMemberToFollowMemberResponseDtos(followMemberList);
+
         return  responses;
     }
 
