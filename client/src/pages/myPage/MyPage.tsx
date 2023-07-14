@@ -44,7 +44,7 @@ export function Component() {
   const [isListShowed, setIsListShowed] = useState<boolean>(false);
 
   // 마이 info 데이터 불러오기
-  const memberId = useContext(MemberIdContext);
+  const state = useContext(MemberIdContext);
 
   const accessToken = useReadLocalStorage<string>('accessToken');
 
@@ -89,7 +89,7 @@ export function Component() {
 
   // 유저 정보 수정 페이지로 이동
   const handleUserEdit = () => {
-    navigate(`/info/${memberId}`, {
+    navigate(`/info/${state?.memberId}`, {
       state: {
         name: data?.name,
         nickname: data?.memberInfo.nickname,
@@ -202,7 +202,6 @@ export function Component() {
                         name={name}
                         information={information}
                         petId={petId}
-                        memberId={memberId as string}
                         sex={sex}
                         age={age}
                         uploadFileURL={uploadFileURL}
@@ -297,7 +296,10 @@ export function Component() {
                                   title={content}
                                   friends={maximum}
                                   location={location}
-                                  isclosed={`${open}`}></WalkCard>
+                                  isclosed={`${open}`}
+                                  nickname={item.memberInfo.nickname}
+                                  imageURL={item.memberInfo.imageURL}
+                                />
                               </Link>
                             );
                           })}

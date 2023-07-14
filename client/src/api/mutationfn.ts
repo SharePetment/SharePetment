@@ -226,7 +226,7 @@ export const postWalkFeed = async (payload: FillWalkPosProp) => {
     payload;
 
   const result = await axios.post(
-    `${SERVER_URL}walkmates`,
+    `${SERVER_URL}/walkmates`,
     {
       title,
       content,
@@ -257,6 +257,57 @@ export const postSubscribe = async (body: SubscribeProp) => {
     url,
     {},
     { headers: { Authorization: accessToken } },
+  );
+  return result.data;
+};
+/* -------------------------------- 산책 게시물 모집 변경 -------------------------------- */
+interface WalkStatusProp {
+  url: string;
+  accessToken: string;
+}
+export const patchWalkStatus = async (body: WalkStatusProp) => {
+  const { url, accessToken } = body;
+  const result = await axios.patch(
+    url,
+    {},
+    { headers: { Authorization: accessToken } },
+  );
+  return result.data;
+};
+
+/* -------------------------------- 산책 게시물 삭제 -------------------------------- */
+
+export const deleteWalkFeed = async (body: WalkStatusProp) => {
+  const { url, accessToken } = body;
+  const result = await axios.delete(url, {
+    headers: { Authorization: accessToken },
+  });
+  return result.data;
+};
+
+/* -------------------------------- 산책 게시물 수정 -------------------------------- */
+
+export const patchWalkFeed = async (payload: FillWalkPosProp) => {
+  const { title, content, mapURL, chatURL, location, time, open, maximum } =
+    payload;
+
+  const result = await axios.post(
+    `${SERVER_URL}/walkmates`,
+    {
+      title,
+      content,
+      mapURL,
+      chatURL,
+      location,
+      time,
+      open,
+      maximum,
+    },
+    {
+      headers: {
+        Authorization: payload.accessToken,
+      },
+    },
   );
   return result.data;
 };

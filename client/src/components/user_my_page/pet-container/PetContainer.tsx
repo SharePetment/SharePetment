@@ -22,9 +22,7 @@ interface Prop {
   age: number;
   uploadFileURL: string;
   isPetCheck: number | undefined;
-  memberId: string;
   setIsPetCheck: React.Dispatch<React.SetStateAction<number>>;
-
   index: number;
 }
 // petCheck 여부 확인하기

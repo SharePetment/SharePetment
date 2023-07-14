@@ -1,9 +1,13 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import { useReadLocalStorage } from 'usehooks-ts';
-import { addComment } from '../../api/mutationfn';
+import {
+  addComment,
+  deleteWalkFeed,
+  patchWalkStatus,
+} from '../../api/mutationfn';
 import { getServerDataWithJwt } from '../../api/queryfn';
 import { SERVER_URL } from '../../api/url';
 import { ReactComponent as CommentIcon } from '../../assets/button/comment.svg';
@@ -14,9 +18,12 @@ import { ReactComponent as Dog } from '../../assets/dog.svg';
 import { ReactComponent as Chatlink } from '../../assets/link.svg';
 import { ReactComponent as Pin } from '../../assets/pin.svg';
 import Comment from '../../common/comment/Comment';
+import Popup from '../../common/popup/Popup';
 import LoadingComponent from '../../components/loading/LoadingComponent';
-import { MemberIdContext } from '../../store/Context';
+import ShowMap from '../../components/map-show/ShowMap';
+import { MemberIdContext, State } from '../../store/Context';
 import { WalkFeed } from '../../types/walkType';
+import { changeDateFormat } from '../../util/changeDateFormat';
 import {
   CommentButton,
   Divider,
@@ -25,8 +32,9 @@ import {
 } from './WalkFeed.styled';
 
 export function Component() {
+  const navigate = useNavigate();
   const { postId } = useParams();
-  const memberId = useContext(MemberIdContext);
+  const { memberId: userId } = useContext(MemberIdContext) as State;
   const accessToken = useReadLocalStorage<string | null>('accessToken');
 
   // 댓글 등록
@@ -59,24 +67,88 @@ export function Component() {
         `${SERVER_URL}/walkmates/bywalk/${postId}`,
         accessToken as string,
       ),
+    onSuccess(data) {
+      setAddress((data?.location as string) + ' ' + data?.mapURL.split(' ')[2]);
+      setLat(data?.mapURL.split(' ')[0]);
+      setLng(data?.mapURL.split(' ')[1]);
+    },
   });
 
-  if (isLoading) {
-    return;
-  }
-
   const reversedData = data ? [...data.comments].reverse() : [];
+
+  // 모집 변경
+  const walkStatusMutation = useMutation({
+    mutationFn: patchWalkStatus,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['walkFeed', postId] });
+    },
+  });
+
+  const handleWalkStatus = () => {
+    walkStatusMutation.mutate({
+      url: `${SERVER_URL}/walkmates/openstatus/${!data?.open}/${
+        data?.walkMatePostId
+      }`,
+      accessToken: accessToken as string,
+    });
+  };
+
+  // 게시글 수정
+  const handleWalkFeedEdit = () => {
+    // 수정 페이지로 이동
+    navigate(`/walk-posting/${data?.walkMatePostId}`);
+  };
+
+  // 게시글 삭제
+  const walkDeleteMutation = useMutation({
+    mutationFn: deleteWalkFeed,
+    onSuccess: () => {
+      navigate('/walkmate');
+    },
+    onError() {
+      setIsOpened(false);
+      setIsError(true);
+    },
+  });
+
+  const [isOpened, setIsOpened] = useState(false);
+  const handleWalkFeedDeletePopUp = () => {
+    setIsOpened(true);
+  };
+  const handleWalkFeedDelete = () => {
+    walkDeleteMutation.mutate({
+      url: `${SERVER_URL}/walkmates/${data?.walkMatePostId}`,
+      accessToken: accessToken as string,
+    });
+  };
+
+  // error PopUp
+  const [isError, setIsError] = useState(false);
+
+  // 지도 그리기
+  // 위도, 경도, 주소
+  const [address, setAddress] = useState('');
+  const [lat, setLat] = useState('');
+  const [lng, setLng] = useState('');
 
   return (
     <>
       {isLoading ? (
         <LoadingComponent />
       ) : (
-        <div className="w-[450px] max-sm:w-[320px] mx-auto mt-7">
-          {`${data?.memberInfo?.memberId}` === memberId && (
-            <div>
-              <Edit />
-              <Delete />
+        <div className="w-[500px] max-sm:w-[320px] mx-auto mt-7 relative">
+          {`${data?.memberInfo?.memberId}` === userId && (
+            <div className="flex justify-end gap-4 items-center">
+              <button
+                className="bg-deepgreen px-2 py-1 rounded-md text-white"
+                onClick={handleWalkStatus}>
+                모집변경
+              </button>
+              <Edit className="cursor-pointer" onClick={handleWalkFeedEdit} />
+              <Delete
+                className="cursor-pointer"
+                onClick={handleWalkFeedDeletePopUp}
+              />
             </div>
           )}
           {/* 제목부분 */}
@@ -94,11 +166,11 @@ export function Component() {
             </WalkInfo>
             <WalkInfo>
               <Calendar />
-              <span>{data?.time}</span>
+              <span>{changeDateFormat(data?.time as string)}</span>
             </WalkInfo>
             <WalkInfo>
               <Pin />
-              <span>{data?.location}</span>
+              <span>{address}</span>
             </WalkInfo>
             <WalkInfo>
               <Chatlink />
@@ -110,10 +182,11 @@ export function Component() {
           {/* 본문 */}
           <div className="mb-7">{data?.content}</div>
           {/* 지도 이미지 부분 */}
-          <div></div>
+          <ShowMap address={address} lat={lat} lng={lng} />
+
           <Divider />
           {/* 댓글 */}
-          <div>
+          <div className="mt-5">
             <div className="flex items-center gap-1 text-deepgray mb-3">
               <CommentIcon className=" stroke-deepgray" />
               <span>댓글 {data?.comments?.length}</span>
@@ -149,7 +222,44 @@ export function Component() {
             </ul>
           </div>
         </div>
-      )}{' '}
+      )}
+      <>
+        {isOpened && (
+          <Popup
+            countbtn={2}
+            title="정말로 삭제하시겠습니까?"
+            btnsize={['sm', 'sm']}
+            isgreen={['true', 'false']}
+            buttontext={['삭제', '취소']}
+            popupcontrol={() => {
+              setIsOpened(false);
+            }}
+            handler={[
+              handleWalkFeedDelete,
+              () => {
+                setIsOpened(false);
+              },
+            ]}
+          />
+        )}
+        {isError && (
+          <Popup
+            countbtn={1}
+            title="게시글 삭제에 실패했습니다."
+            btnsize={['md']}
+            isgreen={['true']}
+            buttontext={['확인']}
+            popupcontrol={() => {
+              setIsError(false);
+            }}
+            handler={[
+              () => {
+                setIsError(false);
+              },
+            ]}
+          />
+        )}
+      </>
     </>
   );
 }

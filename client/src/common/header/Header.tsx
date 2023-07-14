@@ -1,22 +1,25 @@
 import { useQuery } from '@tanstack/react-query';
+import { useContext } from 'react';
 import { useMatch, Link, useNavigate } from 'react-router-dom';
 import { useReadLocalStorage } from 'usehooks-ts';
 import { getServerDataWithJwt } from '../../api/queryfn';
 import { SERVER_URL } from '../../api/url';
 import { ReactComponent as Logo } from '../../assets/logo.svg';
 import Path from '../../routers/paths';
+import { MemberIdContext, State } from '../../store/Context';
 import Button from '../button/Button';
 import Profile from '../profile/Profile';
 import { HeaderContainer, NavItem, NavList } from './Header.styled';
-
 export default function Header() {
   const matchHome = useMatch('/home');
   const matchWalkmate = useMatch('/walkmate');
   const matchPost = useMatch('/feed-posting');
   const matchMypage = useMatch('/my-page');
   const accessToken = useReadLocalStorage<string | null>('accessToken');
-  const animalParents = useReadLocalStorage<string | null>('animalParents');
+  console.log(accessToken);
   const navigate = useNavigate();
+  // context api 반려동물 등록 여부
+  const { animalParents } = useContext(MemberIdContext) as State;
 
   const { data, isSuccess } = useQuery({
     queryKey: ['myPage'],
@@ -27,12 +30,11 @@ export default function Header() {
 
   const handleClick = () => {
     localStorage.removeItem('accessToken');
-    localStorage.removeItem('animalParents');
     localStorage.removeItem('refreshToken');
     navigate('/');
   };
 
-  if (isSuccess) {
+  if (accessToken && isSuccess) {
     return (
       <HeaderContainer>
         <div>
@@ -45,7 +47,7 @@ export default function Header() {
             <NavItem active={matchHome !== null ? 'false' : 'true'}>
               <Link to={Path.Home}>홈</Link>
             </NavItem>
-            {animalParents === 'true' && (
+            {animalParents && (
               <NavItem active={matchWalkmate !== null ? 'false' : 'true'}>
                 <Link to={Path.WalkMate}>산책</Link>
               </NavItem>

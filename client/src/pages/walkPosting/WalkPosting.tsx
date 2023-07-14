@@ -15,7 +15,7 @@ import {
 } from '../../common/input/Input.styled';
 import Popup from '../../common/popup/Popup';
 import { Textarea } from '../../components/card/feedwritecard/FeedWriteCard.styled';
-import Map from '../../components/map/Map';
+import Map from '../../components/map-make/Map';
 import Path from '../../routers/paths';
 import { WalkFeed } from '../../types/walkType';
 import { PostForm } from './WalkPosting.styled';

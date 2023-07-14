@@ -34,15 +34,14 @@ export default function SideNav({
 
   const likeMutation = useMutation({
     mutationFn: patchFeedLike,
-    onSuccess: data => {
-      console.log(data);
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['hostRandomFeed'] });
       queryClient.invalidateQueries({ queryKey: ['feedPopUp'] });
+      queryClient.invalidateQueries({ queryKey: ['hostFeed'] });
     },
   });
 
   const handleClickLike = () => {
-    console.log(feedid);
     if (!accessToken) {
       if (guesthandler) return guesthandler();
     }
