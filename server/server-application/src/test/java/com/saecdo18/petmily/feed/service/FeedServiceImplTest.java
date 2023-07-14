@@ -4,6 +4,7 @@ import com.saecdo18.petmily.awsConfig.S3UploadService;
 import com.saecdo18.petmily.feed.dto.FeedCommentDto;
 import com.saecdo18.petmily.feed.dto.FeedDto;
 import com.saecdo18.petmily.feed.dto.FeedDtoList;
+import com.saecdo18.petmily.feed.dto.FeedServiceDto;
 import com.saecdo18.petmily.feed.entity.Feed;
 import com.saecdo18.petmily.feed.entity.FeedImage;
 import com.saecdo18.petmily.feed.entity.FeedLike;
@@ -82,7 +83,7 @@ class FeedServiceImplTest {
         ReflectionTestUtils.setField(member, "feedCount", 0);
 
         List<MultipartFile> imageList = new ArrayList<>();
-        FeedDto.Post post = FeedDto.Post.builder()
+        FeedServiceDto.Post post = FeedServiceDto.Post.builder()
                 .content("content")
                 .images(imageList)
                 .build();
@@ -122,7 +123,7 @@ class FeedServiceImplTest {
         assertEquals(result.getImages().size(), 0);
         assertEquals(result.getMemberInfo().getMemberId(), memberId);
         assertEquals(result.getContent(), post.getContent());
-        assertEquals(result.getShareURL(), "http://43.202.86.53:8080/feeds/all/"+feedId+"/0");
+        assertEquals(result.getShareURL(), "http://43.202.86.53:8080/feeds/all/"+feedId);
         assertEquals(member.getFeedCount(), 1);
     }
 
@@ -138,7 +139,7 @@ class FeedServiceImplTest {
 
         List<MultipartFile> imageList = List.of(new MockMultipartFile("image", "gitimage.png", "image/png",
                 new FileInputStream(getClass().getResource("/gitimage.png").getFile())));
-        FeedDto.Post post = FeedDto.Post.builder()
+        FeedServiceDto.Post post = FeedServiceDto.Post.builder()
                 .content("content")
                 .images(imageList)
                 .build();
@@ -201,7 +202,7 @@ class FeedServiceImplTest {
 
         List<MultipartFile> imageList = List.of(new MockMultipartFile("image", "gitimage.png", "image/png",
                 new FileInputStream(getClass().getResource("/gitimage.png").getFile())));
-        FeedDto.Post post = FeedDto.Post.builder()
+        FeedServiceDto.Post post = FeedServiceDto.Post.builder()
                 .content("content")
                 .images(imageList)
                 .build();
@@ -284,7 +285,7 @@ class FeedServiceImplTest {
     void getFeedsRecent() {
         long memberId = 1L;
         long totalCount = 1L;
-        FeedDto.PreviousListIds listIds = new FeedDto.PreviousListIds();
+        FeedServiceDto.PreviousListIds listIds = new FeedServiceDto.PreviousListIds();
         listIds.setPreviousListIds(new ArrayList<Long>(){});
         Member member = new Member();
         ReflectionTestUtils.setField(member, "memberId", 2L);
@@ -372,7 +373,7 @@ class FeedServiceImplTest {
     void getFeedsByMemberFollow() {
         long memberId = 1L;
         List<FollowMember> followMemberList = new ArrayList<>();
-        FeedDto.PreviousListIds listIds = new FeedDto.PreviousListIds();
+        FeedServiceDto.PreviousListIds listIds = new FeedServiceDto.PreviousListIds();
         listIds.setPreviousListIds(new ArrayList<Long>(){});
         Member member = new Member();
         ReflectionTestUtils.setField(member, "memberId", 2L);
@@ -422,7 +423,7 @@ class FeedServiceImplTest {
         Member member = new Member();
         List<MultipartFile> multipartFiles = new ArrayList<>();
         List<String> deleteImageList = new ArrayList<>();
-        FeedDto.Patch patch = FeedDto.Patch.builder()
+        FeedServiceDto.Patch patch = FeedServiceDto.Patch.builder()
                 .feedId(1L)
                 .content("content2")
                 .addImages(multipartFiles)
@@ -474,7 +475,7 @@ class FeedServiceImplTest {
     void patchFeedFails() {
         long memberId = 1L;
         Member member = new Member();
-        FeedDto.Patch patch = FeedDto.Patch.builder().feedId(1L).build();
+        FeedServiceDto.Patch patch = FeedServiceDto.Patch.builder().feedId(1L).build();
         ReflectionTestUtils.setField(member, "memberId", 2L);
         Feed feed = Feed.builder()
                 .content("content")
