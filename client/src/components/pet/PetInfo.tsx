@@ -114,7 +114,7 @@ export default function PetInfo(prop: Prop) {
     if (method === 'post') {
       const data = {
         formData,
-        url: `${SERVER_URL}pets`,
+        url: `${SERVER_URL}/pets`,
         accessToken: accessToken as string,
       };
       petPostMutation.mutate(data);
@@ -122,7 +122,7 @@ export default function PetInfo(prop: Prop) {
     if (method === 'patch') {
       const data = {
         formData,
-        url: `${SERVER_URL}pets/status/${memberId}/${petId}`,
+        url: `${SERVER_URL}/pets/status/${petId}`,
         accessToken: accessToken as string,
       };
       petPatchMutation.mutate(data);
