@@ -15,7 +15,6 @@ export default function Header() {
   const matchPost = useMatch('/feed-posting');
   const matchMypage = useMatch('/my-page');
   const accessToken = useReadLocalStorage<string | null>('accessToken');
-  const animalParents = useReadLocalStorage<string | null>('animalParents');
   const navigate = useNavigate();
 
   const { data, isSuccess } = useQuery({
@@ -27,7 +26,6 @@ export default function Header() {
 
   const handleClick = () => {
     localStorage.removeItem('accessToken');
-    localStorage.removeItem('animalParents');
     localStorage.removeItem('refreshToken');
     navigate('/');
   };
@@ -45,7 +43,7 @@ export default function Header() {
             <NavItem active={matchHome !== null ? 'false' : 'true'}>
               <Link to={Path.Home}>홈</Link>
             </NavItem>
-            {animalParents === 'true' && (
+            {data.animalParents && (
               <NavItem active={matchWalkmate !== null ? 'false' : 'true'}>
                 <Link to={Path.WalkMate}>산책</Link>
               </NavItem>
