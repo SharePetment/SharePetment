@@ -96,19 +96,6 @@ public class WalkMateService {
         return responseList;
     }
 
-    public List<WalkMate> recentPageMember(long memberId, int page, int size, boolean openFilter){
-
-        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
-        Member member = methodFindByMemberId(memberId);
-        List<WalkMate> response = walkMateRepository.findByMember(pageRequest, member).getContent();
-
-        if(openFilter){
-            onlyOpenWalk(response);
-        }
-
-        return response;
-    }
-
 
     public List<WalkMateDto.Response> findCommentedWalks(long memberId){
 
@@ -142,33 +129,6 @@ public class WalkMateService {
         return responseList;
     }
 
-    public static <T> List<T> removeDuplicates(List<T> list){
-        return list.stream()
-                .distinct()
-                .collect(Collectors.toList());
-    }
-
-    public List<WalkMate> findWalks(){
-
-        return walkMateRepository.findAll();
-    }
-
-    public void deleteWalk(long walkMateId, long memberId){
-
-        WalkMate walk = methodFindByWalkId(walkMateId);
-
-        if(memberId!=walk.getMember().getMemberId()){
-            throw new IllegalArgumentException("삭제할 권한이 없습니다.");
-        }
-
-        for(WalkMateComment comment : walk.getComments()){
-            walkMateCommentRepository.delete(comment);
-        }
-
-        walk.setComments(null);
-        walkMateRepository.delete(walk);
-    }
-
     public WalkMateDto.Response updateWalkMate(WalkMateDto.Patch walkPatchDto,
                                    long walkId, long memberId){
 
@@ -193,6 +153,58 @@ public class WalkMateService {
         MemberDto.Info info = getMemberInfoByWalk(walk);
         response.setMemberInfo(info);
         walkMateRepository.save(walk);
+
+        return response;
+    }
+
+    public List<WalkMateDto.Response> recentPage(int page, int size, String location, boolean openFilter){
+
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
+        List<WalkMate> walks = walkMateRepository.findByLocation(pageRequest, location).getContent();
+
+        if(openFilter){
+            onlyOpenWalk(walks);
+        }
+
+        List<WalkMateDto.Response> responseList = new ArrayList<>();
+        for(WalkMate walk : walks){
+            WalkMateDto.Response response = walkMateMapper.walkMateToWalkMateResponseDto(walk);
+            MemberDto.Info info = getMemberInfoByWalk(walk);
+            response.setMemberInfo(info);
+            responseList.add(response);
+        }
+        return responseList;
+
+    }
+
+    public void deleteWalk(long walkMateId, long memberId){
+
+        WalkMate walk = methodFindByWalkId(walkMateId);
+
+        if(memberId!=walk.getMember().getMemberId()){
+            throw new IllegalArgumentException("삭제할 권한이 없습니다.");
+        }
+
+        for(WalkMateComment comment : walk.getComments()){
+            walkMateCommentRepository.delete(comment);
+        }
+
+        walk.setComments(null);
+        walkMateRepository.delete(walk);
+    }
+
+    public WalkMateDto.Open changeOpenStatus(boolean status, long walkId, long memberId){
+
+        WalkMate walk = methodFindByWalkId(walkId);
+
+        if(memberId!=walk.getMember().getMemberId()){
+            throw new IllegalArgumentException("수정할 권한이 없습니다.");
+        }
+
+        WalkMateDto.Open response = WalkMateDto.Open.builder()
+                .walkMatePostId(walkId)
+                .open(status)
+                .build();
 
         return response;
     }
@@ -225,62 +237,6 @@ public class WalkMateService {
                 .build();
     }
 
-    public List<WalkMate> searchWalksMatchWithLocation(String location){
-
-        List<WalkMate> allWalks = findWalks();
-        List<WalkMate> matchWalks = allWalks.stream()
-                .filter(walk -> walk.getLocation().equals(location))
-                .collect(Collectors.toList());
-
-        return matchWalks;
-    }
-
-    public List<WalkMateDto.Response> recentPage(int page, int size, String location, boolean openFilter){
-
-
-        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
-        List<WalkMate> walks = walkMateRepository.findByLocation(pageRequest, location).getContent();
-
-        if(openFilter){
-            onlyOpenWalk(walks);
-        }
-
-        List<WalkMateDto.Response> responseList = new ArrayList<>();
-        for(WalkMate walk : walks){
-            WalkMateDto.Response response = walkMateMapper.walkMateToWalkMateResponseDto(walk);
-            MemberDto.Info info = getMemberInfoByWalk(walk);
-            response.setMemberInfo(info);
-            responseList.add(response);
-        }
-        return responseList;
-
-    }
-
-    public WalkMateDto.Open changeOpenStatus(boolean status, long walkId, long memberId){
-
-        WalkMate walk = methodFindByWalkId(walkId);
-
-        if(memberId!=walk.getMember().getMemberId()){
-            throw new IllegalArgumentException("수정할 권한이 없습니다.");
-        }
-
-        WalkMateDto.Open response = WalkMateDto.Open.builder()
-                .walkMatePostId(walkId)
-                .open(status)
-                .build();
-
-        return response;
-    }
-
-    public List<WalkMate> onlyOpenWalk(List<WalkMate> walkMates){
-
-        List<WalkMate> allWalks = findWalks();
-        List<WalkMate> openWalks = allWalks.stream()
-                .filter(walk -> walk.getOpen().equals(true))
-                .collect(Collectors.toList());
-
-        return openWalks;
-    }
 
     //-------------------------------------------------------------------//
 
@@ -316,6 +272,35 @@ public class WalkMateService {
                 .nickname(member.getNickname())
                 .build();
         return info;
+    }
+
+    private List<WalkMate> recentPageMember(long memberId, int page, int size, boolean openFilter){
+
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
+        Member member = methodFindByMemberId(memberId);
+        List<WalkMate> response = walkMateRepository.findByMember(pageRequest, member).getContent();
+
+        if(openFilter){
+            onlyOpenWalk(response);
+        }
+
+        return response;
+    }
+
+    private List<WalkMate> onlyOpenWalk(List<WalkMate> walkMates){
+
+        List<WalkMate> allWalks = walkMateRepository.findAll();;
+        List<WalkMate> openWalks = allWalks.stream()
+                .filter(walk -> walk.getOpen().equals(true))
+                .collect(Collectors.toList());
+
+        return openWalks;
+    }
+
+    private static <T> List<T> removeDuplicates(List<T> list){
+        return list.stream()
+                .distinct()
+                .collect(Collectors.toList());
     }
 
 }

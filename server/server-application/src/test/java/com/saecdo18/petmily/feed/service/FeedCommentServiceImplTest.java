@@ -76,6 +76,12 @@ class FeedCommentServiceImplTest {
     }
 
     @Test
+    @DisplayName("댓글 생성 성공 - 피드백 받은 후 input, output 만 구현")
+    void createCommentWithFeedback() {
+
+    }
+
+    @Test
     @DisplayName("댓글 생성 실패 - 피드를 찾을 수 없다.")
     void createCommentWhenFeedNotFound() {
         long memberId = 1L;

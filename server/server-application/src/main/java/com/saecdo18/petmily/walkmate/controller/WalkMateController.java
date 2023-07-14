@@ -1,5 +1,6 @@
 package com.saecdo18.petmily.walkmate.controller;
 
+import com.saecdo18.petmily.feed.dto.FeedDtoList;
 import com.saecdo18.petmily.member.dto.MemberDto;
 import com.saecdo18.petmily.member.repository.MemberRepository;
 import com.saecdo18.petmily.util.AuthenticationGetMemberId;
@@ -70,8 +71,8 @@ public class WalkMateController {
         return new ResponseEntity(response, HttpStatus.OK);
     }
 
-    @GetMapping("/bymember")
-    @ApiOperation("산책 게시글 조회(회원 ID)")
+    @GetMapping("/my-walks")
+    @ApiOperation("본인 산책 게시글 조회(본인 마이페이지)")
     public ResponseEntity<List<WalkMateDto.Response>> getWalksByMemberId(@ApiParam("모집 여부") @RequestParam("openFilter") boolean open,
                                                                          @ApiParam("page") @RequestParam("page") int page,
                                                                          @ApiParam("size") @RequestParam("size") int size){
@@ -80,6 +81,18 @@ public class WalkMateController {
         List<WalkMateDto.Response> response = walkMateService.findWalksByMemberId(page, size, memberId, open);
         return new ResponseEntity(response, HttpStatus.OK);
     }
+
+    @GetMapping("/other-walks/{member-id}")
+    @ApiOperation("타인 산책 게시글 조회(타인 마이페이지)")
+    public ResponseEntity<List<WalkMateDto.Response>> getWalksByMemberId(@ApiParam("모집 여부") @RequestParam("openFilter") boolean open,
+                                                                         @ApiParam("page") @RequestParam("page") int page,
+                                                                         @ApiParam("size") @RequestParam("size") int size,
+                                                                         @ApiParam("조회할 타인의 id") @PathVariable("member-id") long memberId){
+
+        List<WalkMateDto.Response> response = walkMateService.findWalksByMemberId(page, size, memberId, open);
+        return new ResponseEntity(response, HttpStatus.OK);
+    }
+
 
 
     @GetMapping("/walks")
