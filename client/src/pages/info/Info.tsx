@@ -84,7 +84,7 @@ export function Component() {
       if (errors.nickname.message !== ERROR_MESSAGE.DUPLICATE) return;
     }
     const result = await axios.post(
-      `${SERVER_URL}members/nickname-check/${nicknameValue}`,
+      `${SERVER_URL}/members/nickname-check/${nicknameValue}`,
     );
     console.log(result);
     if (result.data.enable) {
@@ -103,7 +103,7 @@ export function Component() {
       if (!userId)
         return setError('nickname', { message: ERROR_MESSAGE.DUPLICATE });
     }
-    const url = `${SERVER_URL}members/status`;
+    const url = `${SERVER_URL}/members/status`;
     data = {
       ...data,
       address: zip.trim(),

@@ -45,7 +45,7 @@ export default function Map({
     queryKey: ['myPage', memberId],
     queryFn: () =>
       getServerDataWithJwt(
-        `${SERVER_URL}members/${memberId}/${memberId}`,
+        `${SERVER_URL}/members/${memberId}/${memberId}`,
         accessToken as string,
       ),
     onSuccess(data) {

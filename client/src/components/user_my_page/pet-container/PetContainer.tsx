@@ -60,7 +60,7 @@ export default function PetContainer(prop: Prop) {
   });
   const handleDeletePet = () => {
     deletePetMutation.mutate({
-      url: `${SERVER_URL}pets/${memberId}/${petId}`,
+      url: `${SERVER_URL}/pets/${memberId}/${petId}`,
       token: accessToken as string,
     });
   };
@@ -79,7 +79,7 @@ export default function PetContainer(prop: Prop) {
     // 추후 작성
     setIsPetCheck(index);
     mutationPatchUserProfile.mutate({
-      url: `${SERVER_URL}members/image/${memberId}/${petId}`,
+      url: `${SERVER_URL}/members/image/${memberId}/${petId}`,
       accessToken: accessToken as string,
     });
   };

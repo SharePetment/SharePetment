@@ -5,6 +5,7 @@ import Header from './common/header/Header';
 function App() {
   const matchHome = useMatch('/'); //object || null
   const matchInfo = useMatch('/info'); //object || null
+  const matchFeedPopUp = useMatch('/home/:feedId'); //object || null
   const matchInfoEditing = useMatch('/info/:userId'); //object || null
   const matchFeed = useMatch('/home');
   const matchFeedPosting = useMatch('/feed-posting');
@@ -17,7 +18,8 @@ function App() {
         matchInfo ||
         matchInfoEditing ||
         matchFeedPosting ||
-        loadingFeed
+        loadingFeed ||
+        matchFeedPopUp
       ) && <Header />}
       <Outlet />
       {!(
@@ -25,7 +27,8 @@ function App() {
         matchInfo ||
         matchFeed ||
         matchInfoEditing ||
-        matchFeedPosting
+        matchFeedPosting ||
+        matchFeedPopUp
       ) && <Footer />}
     </>
   );
