@@ -8,6 +8,7 @@ import { SERVER_URL } from '../../api/url';
 import { ReactComponent as Setting } from '../../assets/button/setting.svg';
 import { ReactComponent as CommentListIcon } from '../../assets/comment-list.svg';
 import { ReactComponent as FeedIcon } from '../../assets/feed.svg';
+import Cat404 from '../../assets/illustration/404cat.png';
 import { ReactComponent as WalkFeedIcon } from '../../assets/walk-feed.svg';
 import Profile from '../../common/profile/Profile';
 import WalkCard from '../../components/card/walkCard/walkCard';
@@ -24,6 +25,7 @@ import { Feed } from '../../types/feedTypes';
 import { Follow, UserInfo } from '../../types/userType';
 import { WalkFeed } from '../../types/walkType';
 import changeTime from '../../util/changeTiem';
+import { ErrorText } from '../notFound/NotFound.style';
 import { CommentList } from '../walkMate/WalkMate.styled';
 import {
   Container,
@@ -311,7 +313,12 @@ export function Component() {
                   ) : (
                     <div>
                       {!commentListData?.length ? (
-                        <NoticeNoData url="walkmate" />
+                        <div className="flex flex-col items-center justify-center">
+                          <ErrorText>
+                            아직 댓글을 단 산책 게시물이 없어요.
+                          </ErrorText>
+                          <img src={Cat404} className=" w-80" />
+                        </div>
                       ) : (
                         commentListData?.map(item => (
                           <Link

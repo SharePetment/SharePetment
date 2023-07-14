@@ -1,10 +1,11 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useReadLocalStorage } from 'usehooks-ts';
 import { deleteComment, editComment } from '../../api/mutationfn';
 import { SERVER_URL } from '../../api/url';
 import { ReactComponent as Write } from '../../assets/button/write.svg';
+import { MemberIdContext } from '../../store/Context';
 import { CommentProp } from '../../types/commentType';
 import changeTime from '../../util/changeTiem';
 import Popup from '../popup/Popup';
@@ -39,7 +40,9 @@ export default function Comment(props: CommentProp) {
     walkMatePostId,
   } = props;
 
-  const userId = useReadLocalStorage('memberId');
+  // const userId = useReadLocalStorage('memberId');
+  const userId = useContext(MemberIdContext);
+
   const accessToken = useReadLocalStorage<string | null>('accessToken');
 
   const [isEdited, setIsEdited] = useState(false);
@@ -55,8 +58,8 @@ export default function Comment(props: CommentProp) {
       id: feedCommentsId ? `${feedCommentsId}` : `${walkMateCommentId}`,
       content: newComment,
       url: feedCommentsId
-        ? `${SERVER_URL}/feeds/comments/${feedCommentsId}/${memberId}`
-        : `${SERVER_URL}/walkmates/comments/${walkMateCommentId}/${memberId}`,
+        ? `${SERVER_URL}/feeds/comments/${feedCommentsId}`
+        : `${SERVER_URL}/walkmates/comments/${walkMateCommentId}`,
       tag: feedCommentsId ? 'feed' : 'walk',
       accessToken,
     };
@@ -66,7 +69,7 @@ export default function Comment(props: CommentProp) {
   // 산책 댓글 삭제
   const handleDeleteComment = (walkMateCommentId: number | undefined) => {
     const data = {
-      url: `${SERVER_URL}/walkmates/comments/${walkMateCommentId}/${memberId}`,
+      url: `${SERVER_URL}/walkmates/comments/${walkMateCommentId}`,
       accessToken,
     };
     deleteCommentMutaion.mutate(data);
