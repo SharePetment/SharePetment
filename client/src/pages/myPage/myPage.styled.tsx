@@ -62,6 +62,7 @@ export const TabMenu = tw.ul`
   w-[300px] 
   mx-auto
   mb-8
+  mt-8
 `;
 
 export const TabMenuList = tw.li`
