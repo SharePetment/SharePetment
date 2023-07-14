@@ -70,6 +70,7 @@ public class FeedController {
         long memberId = authenticationGetMemberId.getMemberId();
         FeedDtoList responseList = feedService.getFeedsByMemberFollow(memberId, listIds);
         if (responseList.getResponseList().size() <= 10) {
+            listIds = feedService.checkIds(listIds, responseList);
             FeedDtoList addResponseList = feedService.getFeedsRecent(listIds, memberId);
             responseList.getResponseList().addAll(addResponseList.getResponseList());
         }

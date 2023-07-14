@@ -344,4 +344,14 @@ public class FeedServiceImpl implements FeedService {
                 .responseList(responseList)
                 .build();
     }
+
+    public FeedDto.PreviousListIds checkIds(FeedDto.PreviousListIds listIds, FeedDtoList feedDtoList) {
+        List<Long> addIds = new ArrayList<>();
+        for (FeedDto.Response response : feedDtoList.getResponseList()) {
+            addIds.add(response.getFeedId());
+        }
+
+        listIds.getPreviousListIds().addAll(addIds);
+        return listIds;
+    }
 }
