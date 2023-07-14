@@ -231,6 +231,33 @@ export const postFeedComment = async (body: PostFeedCommentProp) => {
   return result;
 };
 
+/* -------------------------------- 피드게시물 댓글 수정  -------------------------------- */
+export const patchFeedComment = async (body: PostFeedCommentProp) => {
+  const { url, token, content, feedId } = body;
+  console.log(body);
+  const result = await axios.patch(
+    url,
+    { content, feedId },
+    {
+      headers: {
+        Authorization: token,
+      },
+    },
+  );
+  return result;
+};
+
+/* -------------------------------- 피드게시물 댓글 삭제  -------------------------------- */
+export const deleteFeedComment = async (body: MutationProp) => {
+  const { url, accessToken } = body;
+  const result = await axios.delete(url, {
+    headers: {
+      Authorization: accessToken,
+    },
+  });
+  return result;
+};
+
 /* -------------------------------- 산책게시물 생성 -------------------------------- */
 interface FillWalkPosProp {
   title: string;

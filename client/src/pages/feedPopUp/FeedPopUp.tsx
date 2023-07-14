@@ -25,14 +25,14 @@ import {
 
 export function Component() {
   const accessToken = useReadLocalStorage('accessToken');
-  const memberId = useContext(MemberIdContext);
+  const state = useContext(MemberIdContext);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { feedId } = useParams();
   const [isToastOpen, setIsToastOpen] = useState<boolean>(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState<boolean>(false);
+  const [isBlank, setIsBlank] = useState<boolean>(false);
 
-  console.log(memberId);
   // 피드 게시물 정보 가져오기
   const { data, isSuccess, isLoading } = useQuery<Feed>({
     queryKey: ['feedPopUp', Number(feedId)],
@@ -41,8 +41,8 @@ export function Component() {
         `${SERVER_URL}/feeds/${feedId}`,
         accessToken as string,
       ),
+    enabled: !!state,
   });
-
   console.log(data);
 
   const deleteFeedMutation = useMutation({
@@ -52,7 +52,6 @@ export function Component() {
       navigate(-1);
       queryClient.invalidateQueries({ queryKey: ['guestFeed'] });
     },
-    // enabled: !!(Number(memberId) === data?.memberInfo.memberId),
   });
 
   const handlerDelete = () => {
@@ -80,6 +79,32 @@ export function Component() {
   if (isSuccess)
     return (
       <>
+        {isDeleteOpen && (
+          <Popup
+            title="피드를 삭제할까요?"
+            isgreen={['true']}
+            btnsize={['md', 'md']}
+            buttontext={['삭제할래요', '아니요']}
+            countbtn={2}
+            handler={[handlerDelete, () => setIsDeleteOpen(false)]}
+            popupcontrol={() => {
+              setIsDeleteOpen(false);
+            }}
+          />
+        )}
+        {isBlank && (
+          <Popup
+            title="공백은 입력할 수 없어요."
+            isgreen={['true']}
+            btnsize={['md']}
+            buttontext={['알겠어요']}
+            countbtn={1}
+            handler={[() => setIsBlank(false)]}
+            popupcontrol={() => {
+              setIsBlank(false);
+            }}
+          />
+        )}
         {isDeleteOpen && (
           <Popup
             title="피드를 삭제할까요?"
@@ -121,10 +146,17 @@ export function Component() {
                   data.feedComments.map(comment => (
                     <FeedComment
                       key={comment.feedCommentsId}
-                      memberid={comment.memberInfo.memberId}
+                      inperson={
+                        comment.memberInfo.memberId === Number(state?.memberId)
+                          ? 'true'
+                          : 'false'
+                      }
                       nickname={comment.memberInfo.nickname}
                       userimg={comment.memberInfo.imageURL}
                       content={comment.content}
+                      commentid={comment.feedCommentsId}
+                      feedid={data.feedId}
+                      blankhandler={setIsBlank}
                     />
                   ))}
               </CommentBox>
@@ -137,12 +169,12 @@ export function Component() {
                 toasthandler={setIsToastOpen}
                 deletehandler={setIsDeleteOpen}
                 inperson={
-                  Number(memberId) === data.memberInfo.memberId
+                  Number(state?.memberId) === data.memberInfo.memberId
                     ? 'true'
                     : 'false'
                 }
               />
-              <FeedInput feedid={data.feedId} />
+              <FeedInput feedid={data.feedId} blankhandler={setIsBlank} />
             </RightBox>
           </FeedContainer>
         </Container>
