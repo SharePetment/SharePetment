@@ -24,6 +24,8 @@ type walkCardProps = {
   chaturl?: string;
   isclosed: BooleanStr;
   size: 'lg' | 'sm';
+  nickname: string;
+  imageURL: string;
 };
 
 export default function WalkCard({
@@ -33,6 +35,8 @@ export default function WalkCard({
   location,
   isclosed,
   size,
+  nickname,
+  imageURL,
 }: walkCardProps) {
   return (
     <CardContainer size={size}>
@@ -53,8 +57,8 @@ export default function WalkCard({
       </WalkMateList>
       <WriterProfile>
         {/* TODO:이후 수정 필요 */}
-        <Profile size="sm" url="https://huchu.link/MZFVNjh" isgreen="false" />
-        <span className="text-semibold">Hello_world</span>
+        <Profile size="sm" url={imageURL} isgreen="false" />
+        <span className="text-semibold">{nickname}</span>
       </WriterProfile>
       {isclosed === 'false' && (
         <>

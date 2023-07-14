@@ -1,32 +1,71 @@
 import { useQuery } from '@tanstack/react-query';
-import { createContext, useState } from 'react';
+import { Dispatch, createContext, useReducer } from 'react';
 import { useReadLocalStorage } from 'usehooks-ts';
 import { getServerDataWithJwt } from '../api/queryfn';
 import { SERVER_URL } from '../api/url';
 import { UserInfo } from '../types/userType';
 
+export type State = {
+  memberId: string;
+  animalParents: boolean;
+};
+
+type Action =
+  | { type: 'NOT_TOKEN'; memberId: string; animalParents: boolean }
+  | { type: 'TOKEN'; memberId: string; animalParents: boolean };
+
+const reducer = (state: State, action: Action) => {
+  switch (action.type) {
+    case 'NOT_TOKEN': {
+      return { memberId: action.memberId, animalParents: action.animalParents };
+    }
+    case 'TOKEN': {
+      return { memberId: action.memberId, animalParents: action.animalParents };
+    }
+    default: {
+      return state;
+    }
+  }
+};
+
 type Props = {
   children?: React.ReactNode;
 };
 
-export const MemberIdContext = createContext('');
+export type ContextDispatch = Dispatch<Action>;
+export const MemberIdContext = createContext<State | null>(null);
+export const MemberIdDispatchContext = createContext<ContextDispatch | null>(
+  null,
+);
+const initaldate: State = {
+  memberId: '',
+  animalParents: false,
+};
 
 export default function ContextProvider({ children }: Props) {
+  const [state, dispatch] = useReducer(reducer, initaldate);
   const accessToken = useReadLocalStorage('accessToken');
-  const [memberId, setMemberId] = useState('');
-  // eslint-disable-next-line no-empty-pattern
-  const {} = useQuery<UserInfo>({
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { data } = useQuery<UserInfo>({
     queryKey: ['contextApi'],
     queryFn: () =>
       getServerDataWithJwt(`${SERVER_URL}/members`, accessToken as string),
+    enabled: !!accessToken,
     onSuccess(data) {
-      setMemberId(`${data.memberInfo.memberId}`);
+      dispatch({
+        type: 'TOKEN',
+        memberId: `${data.memberInfo.memberId}`,
+        animalParents: data.animalParents,
+      });
     },
   });
 
   return (
-    <MemberIdContext.Provider value={memberId}>
-      {children}
+    <MemberIdContext.Provider value={state}>
+      <MemberIdDispatchContext.Provider value={dispatch}>
+        {children}
+      </MemberIdDispatchContext.Provider>
     </MemberIdContext.Provider>
   );
 }
