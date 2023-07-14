@@ -69,6 +69,10 @@ public class FeedController {
     public ResponseEntity<FeedDtoList> getFeedsByMemberFollow(@ApiParam("전에 받은 피드 아이디 리스트") @RequestBody FeedDto.PreviousListIds listIds) {
         long memberId = authenticationGetMemberId.getMemberId();
         FeedDtoList responseList = feedService.getFeedsByMemberFollow(memberId, listIds);
+        if (responseList.getResponseList().size() <= 10) {
+            FeedDtoList addResponseList = feedService.getFeedsRecent(listIds, memberId);
+            responseList.getResponseList().addAll(addResponseList.getResponseList());
+        }
         return ResponseEntity.ok(responseList);
     }
 

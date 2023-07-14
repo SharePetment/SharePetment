@@ -6,6 +6,7 @@ import com.saecdo18.petmily.feed.entity.FeedComments;
 import com.saecdo18.petmily.feed.mapper.FeedMapper;
 import com.saecdo18.petmily.feed.repository.FeedCommentsRepository;
 import com.saecdo18.petmily.feed.repository.FeedRepository;
+import com.saecdo18.petmily.member.dto.MemberDto;
 import com.saecdo18.petmily.member.entity.Member;
 import com.saecdo18.petmily.member.repository.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -14,6 +15,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -46,25 +48,26 @@ class FeedCommentServiceImplTest {
                 .feedId(1L)
                 .build();
 
-        Feed feed = new Feed();
-        ReflectionTestUtils.setField(feed, "feedId", 1L);
-
         Member member = new Member();
         ReflectionTestUtils.setField(member, "memberId", 1L);
 
         FeedComments feedComments = FeedComments.builder()
                 .content(post.getContent())
-                .feed(feed)
+                .feed(new Feed())
                 .member(member)
                 .build();
 
-        FeedCommentDto.Response response = FeedCommentDto.Response.builder()
-                        .content(feedComments.getContent())
-                        .feedCommentsId(1L)
-                                .build();
+        MemberDto.Info memberInfo = MemberDto.Info.builder()
+                .memberId(memberId)
+                .build();
 
-        given(feedRepository.findById(Mockito.anyLong())).willReturn(Optional.of(feed));
-        given(memberRepository.findById(Mockito.anyLong())).willReturn(Optional.empty());
+        FeedCommentDto.Response response = FeedCommentDto.Response.builder()
+                .feedCommentsId(1L)
+                .content("content")
+                .memberInfo(memberInfo)
+                .build();
+
+        given(feedRepository.findById(Mockito.anyLong())).willReturn(Optional.of(new Feed()));
         given(feedCommentsRepository.save(Mockito.any(FeedComments.class))).willReturn(feedComments);
         given(feedMapper.feedCommentsToFeedCommentDto(Mockito.any(FeedComments.class))).willReturn(response);
         given(memberRepository.findById(Mockito.anyLong())).willReturn(Optional.of(member));
@@ -75,11 +78,7 @@ class FeedCommentServiceImplTest {
 
     }
 
-    @Test
-    @DisplayName("댓글 생성 성공 - 피드백 받은 후 input, output 만 구현")
-    void createCommentWithFeedback() {
 
-    }
 
     @Test
     @DisplayName("댓글 생성 실패 - 피드를 찾을 수 없다.")
