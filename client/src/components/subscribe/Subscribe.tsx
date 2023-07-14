@@ -7,10 +7,9 @@ import { SubScribeButton } from './subscribe.styled';
 interface Prop {
   guestFollow: boolean | undefined;
   usersId: string | undefined;
-  memberId: string | null;
 }
 
-export default function Subscribe({ guestFollow, usersId, memberId }: Prop) {
+export default function Subscribe({ guestFollow, usersId }: Prop) {
   // query 갱신하기
   const queryClient = useQueryClient();
 
@@ -20,10 +19,10 @@ export default function Subscribe({ guestFollow, usersId, memberId }: Prop) {
     mutationFn: postSubscribe,
     onSuccess() {
       queryClient.invalidateQueries({
-        queryKey: ['followList', memberId],
+        queryKey: ['followList'],
       });
       queryClient.invalidateQueries({
-        queryKey: ['userPage', memberId, usersId],
+        queryKey: ['userPage', usersId],
       });
     },
     onError(error) {
@@ -32,7 +31,7 @@ export default function Subscribe({ guestFollow, usersId, memberId }: Prop) {
   });
   const handleSubscribe = () => {
     subscribeMutation.mutate({
-      url: `${SERVER_URL}/members/following/${usersId}/${memberId}`,
+      url: `${SERVER_URL}/members/following/${usersId}`,
       accessToken: accessToken as string,
     });
   };

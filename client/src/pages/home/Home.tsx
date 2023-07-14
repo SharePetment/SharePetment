@@ -10,7 +10,7 @@ import { getGuestFeedList, getHostFeedList } from '../../api/queryfn';
 import { SERVER_URL } from '../../api/url';
 import FollowingCat from '../../assets/illustration/followingcat.png';
 import Popup from '../../common/popup/Popup';
-import FeedCard from '../../components/card/feedcard/FeedCard';
+import FeedCard from '../../components/card/feedCard/FeedCard';
 import SideNav from '../../components/card/sidenav/SideNav';
 import Toast from '../../components/toast/Toast';
 import { Feed } from '../../types/feedTypes';
