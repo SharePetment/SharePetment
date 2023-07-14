@@ -54,6 +54,16 @@ public class FeedController {
         return ResponseEntity.ok(responseList);
     }
 
+    @ApiOperation("타인 피드 리스트 가져오기(타인 마이 페이지 접속시 해당 회원의 피드리스트 보기 위함)")
+    @GetMapping("/other-feed/{member-id}")
+    public ResponseEntity<FeedDtoList> getFeedsByMember(@ApiParam("다른 회원 id") @PathVariable("member-id") long memberId,
+                                                        @ApiParam("페이지 번호") @RequestParam(defaultValue = "0") int page,
+                                                        @ApiParam("페이지당 받을 피드 수") @RequestParam(defaultValue = "10") int size) {
+
+        FeedDtoList responseList = feedService.getFeedsByMember(page, size, memberId);
+        return ResponseEntity.ok(responseList);
+    }
+
     @ApiOperation("팔로우한 사용자 피드 리스트 가져오기")
     @PostMapping("/list")
     public ResponseEntity<FeedDtoList> getFeedsByMemberFollow(@ApiParam("전에 받은 피드 아이디 리스트") @RequestBody FeedDto.PreviousListIds listIds) {

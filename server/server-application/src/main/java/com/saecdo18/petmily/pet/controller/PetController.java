@@ -6,6 +6,7 @@ import com.saecdo18.petmily.pet.entity.Pet;
 import com.saecdo18.petmily.pet.service.PetService;
 import com.saecdo18.petmily.util.AuthenticationGetMemberId;
 import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +30,7 @@ public class PetController {
     private final AuthenticationGetMemberId authenticationGetMemberId;
 
     @PostMapping
+    @Operation(summary = "펫 등록하기", description = "폼데이터 형식으로 주셔야 합니다")
     public ResponseEntity<PetDto.Response> postPet(@ApiParam("반려동물 이미지")@RequestParam("images") MultipartFile images,
                                                    @ApiParam("반려동물 이름")@RequestParam("name") String name,
                                                    @ApiParam("반려동물 나이")@RequestParam("age") String age,
@@ -56,6 +58,7 @@ public class PetController {
     }
 
     @GetMapping("/{pet-id}")
+    @Operation(summary = "펫 조회하기")
     public ResponseEntity<PetDto.Response> getPet(@ApiParam("반려동물")@PathVariable("pet-id") long petId) {
         PetDto.Response response = petService.getPet(petId);
 
@@ -64,6 +67,7 @@ public class PetController {
 
 
     @PatchMapping("/status/{pet-id}")
+    @Operation(summary = "펫 정보 수정하기", description = "폼데이터 형식으로 주셔야 합니다")
     public ResponseEntity<PetDto.Response> patchPet(@ApiParam("반려동물 식별자")@PathVariable("pet-id") long petId,
                                                     @ApiParam("반려동물 이미지")@RequestParam(value = "images", required = false) MultipartFile images,
                                                     @ApiParam("반려동물 이름")@RequestParam("name") String name,
@@ -89,6 +93,7 @@ public class PetController {
     }
 
     @DeleteMapping("/{pet-id}")
+    @Operation(summary = "펫 정보 삭제하기", description = "자신의 반려동물의 id를 적어야 삭제 됩니다")
     public ResponseEntity<?> deletePet(@ApiParam("반려동물")@PathVariable("pet-id") long petId) {
         long memberId = authenticationGetMemberId.getMemberId();
 
