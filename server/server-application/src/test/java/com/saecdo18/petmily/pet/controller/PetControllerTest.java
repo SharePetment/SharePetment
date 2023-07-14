@@ -189,7 +189,7 @@ class PetControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value(response.getName()))
                 .andExpect(jsonPath("$.age").value(response.getAge()))
-                .andExpect(jsonPath("$.images.originalFilename").value(response.getImages().getOriginalFilename()))
+                .andExpect(jsonPath("$.images.originalFilenam").value(response.getImages().getOriginalFilename()))
 
         ;
     }

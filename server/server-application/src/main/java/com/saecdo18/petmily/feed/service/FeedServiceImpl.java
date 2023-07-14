@@ -328,7 +328,7 @@ public class FeedServiceImpl implements FeedService {
         } else {
             response.setLike(feedLikesByMember(feed, methodFindByMemberId(memberId)));
         }
-        response.setShareURL(feed.getShareURI(BASE_URI).toString()+"/0");
+        response.setShareURL(feed.getShareURI(BASE_URI).toString());
 
         return response;
     }

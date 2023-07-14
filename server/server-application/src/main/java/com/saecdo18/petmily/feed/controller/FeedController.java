@@ -29,7 +29,7 @@ public class FeedController {
     private final AuthenticationGetMemberId authenticationGetMemberId;
 
     @ApiOperation("피드 가져오기")
-    @GetMapping("/all/{feed-id}")
+    @GetMapping("/{feed-id}")
     public ResponseEntity<FeedDto.Response> getFeed(@ApiParam("피드 아이디") @PathVariable("feed-id") long feedId) {
         long memberId = authenticationGetMemberId.getMemberId();
         FeedDto.Response response = feedService.getFeed(feedId, memberId);
@@ -38,7 +38,7 @@ public class FeedController {
     }
 
     @ApiOperation("최신 피드 리스트 가져오기")
-    @PostMapping("/all/list/random")
+    @PostMapping("/list/random")
     public ResponseEntity<FeedDtoList> getFeedsRandom(@ApiParam("전에 받은 피드 아이디 리스트") @RequestBody FeedDto.PreviousListIds listIds) {
         long memberId = authenticationGetMemberId.getMemberId();
         FeedDtoList responseList = feedService.getFeedsRecent(listIds, memberId);
@@ -50,6 +50,16 @@ public class FeedController {
     public ResponseEntity<FeedDtoList> getFeedsByMember(@ApiParam("페이지 번호") @RequestParam(defaultValue = "0") int page,
                                               @ApiParam("페이지당 받을 피드 수") @RequestParam(defaultValue = "10") int size) {
         long memberId = authenticationGetMemberId.getMemberId();
+        FeedDtoList responseList = feedService.getFeedsByMember(page, size, memberId);
+        return ResponseEntity.ok(responseList);
+    }
+
+    @ApiOperation("타인 피드 리스트 가져오기(타인 마이 페이지 접속시 해당 회원의 피드리스트 보기 위함)")
+    @GetMapping("/other-feed/{member-id}")
+    public ResponseEntity<FeedDtoList> getFeedsByMember(@ApiParam("다른 회원 id") @PathVariable("member-id") long memberId,
+                                                        @ApiParam("페이지 번호") @RequestParam(defaultValue = "0") int page,
+                                                        @ApiParam("페이지당 받을 피드 수") @RequestParam(defaultValue = "10") int size) {
+
         FeedDtoList responseList = feedService.getFeedsByMember(page, size, memberId);
         return ResponseEntity.ok(responseList);
     }
@@ -80,7 +90,7 @@ public class FeedController {
     }
 
     @ApiOperation("피드 수정")
-    @PatchMapping("/{feed-id}/")
+    @PatchMapping("/{feed-id}")
     public ResponseEntity<FeedDto.Response> patchFeed(@ApiParam("피드 아이디") @PathVariable("feed-id") long feedId,
                                        @ApiParam("피드 수정 내용") @RequestParam("content") String content,
                                        @ApiParam(value = "피드 추가 이미지 리스트") @RequestParam(value = "addImage", required = false)  MultipartFile[] addImages,
