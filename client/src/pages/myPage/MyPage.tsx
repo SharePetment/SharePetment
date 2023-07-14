@@ -15,6 +15,7 @@ import FollowList from '../../components/follow-list/FollowList';
 import LoadingComponent from '../../components/loading/LoadingComponent';
 import NoticeNoData from '../../components/notice/NoticeNoData';
 import NoticeOnlyOwner from '../../components/notice/NoticeOnlyOwner';
+import NoticeServerError from '../../components/notice/NoticeServerError';
 import PlusBtn from '../../components/plus-button/PlusBtn';
 import PetContainer from '../../components/user_my_page/pet-container/PetContainer';
 import { MemberIdContext } from '../../store/Context';
@@ -254,9 +255,7 @@ export function Component() {
                     {!feedData?.responseList.length ? (
                       <>
                         {walkFeedError ? (
-                          <div>
-                            데이터를 불러오는 과정에서 에러가 발생했습니다.
-                          </div>
+                          <NoticeServerError />
                         ) : (
                           <NoticeNoData url="feed-posting" />
                         )}

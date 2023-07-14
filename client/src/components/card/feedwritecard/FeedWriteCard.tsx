@@ -32,6 +32,7 @@ export default function FeedWriteCard() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [savedFile, setSavedFile] = useState<string[]>([]);
   const [prevFile, setPrevFile] = useState<File[]>([]);
+
   /* ----------------------------- useLocalStorage ---------------------------- */
   const accessToken = useReadLocalStorage<string>('accessToken');
 
