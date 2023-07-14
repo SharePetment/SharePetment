@@ -17,6 +17,7 @@ import { Feed } from '../../types/feedTypes';
 import { Container, FollowContainer, Img, Text, Button } from './Home.styled';
 
 export function Component() {
+  const queryClient = useQueryClient();
   const accessToken = useReadLocalStorage<string>('accessToken');
   const [isClicked, setIsClicked] = useState<boolean>(false);
   const [isToastOpen, setIsToastOpen] = useState<boolean>(false);

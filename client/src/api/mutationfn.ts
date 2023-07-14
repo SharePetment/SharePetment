@@ -179,14 +179,14 @@ export const feedPosting = async (body: FeedPostingProp) => {
 /* -------------------------------- 피드게시물 삭제 -------------------------------- */
 interface DeleteFeedProp {
   url: string;
-  accessToken: string | null;
+  token: string | null;
 }
 
 export const deleteFeed = async (body: DeleteFeedProp) => {
-  const { url, accessToken } = body;
+  const { url, token } = body;
   const result = await axios.delete(url, {
     headers: {
-      Authorization: accessToken,
+      Authorization: token,
     },
   });
   return result;
