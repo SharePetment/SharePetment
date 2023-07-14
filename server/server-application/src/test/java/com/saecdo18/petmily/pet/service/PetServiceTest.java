@@ -325,6 +325,63 @@ class PetServiceTest {
     }
 
     @Test
+    @DisplayName("펫 정보 수정하기 실패 : 해당 펫이 없는 경우 예외")
+    void updatePetNonePet() throws IOException {
+
+        long petId=1L;
+        long memberId = 1L;
+        String uploadFileURL = "http://image.jpg";
+
+        MultipartFile images = new MockMultipartFile("image", "gitimage.png", "image/png",
+                new FileInputStream(getClass().getResource("/gitimage.png").getFile()));
+
+        Member member = new Member();
+        ReflectionTestUtils.setField(member, "memberId", memberId);
+
+        PetDto.Patch petPatchDto = PetDto.Patch.builder()
+                .images(images)
+                .name("메시")
+                .build();
+
+        Pet pet = new Pet();
+        ReflectionTestUtils.setField(pet, "petId", 1L);
+        ReflectionTestUtils.setField(pet, "name", "메시");
+        ReflectionTestUtils.setField(pet, "member", member);
+
+        MemberDto.Response memberResponse = MemberDto.Response.builder()
+                .build();
+
+        MemberDto.Info memberInfo = MemberDto.Info.builder()
+                .memberId(1L)
+                .build();
+
+        PetDto.Response petResponse = PetDto.Response.builder()
+                .build();
+
+        Image image = Image.builder().uploadFileURL(uploadFileURL).build();
+
+        PetImage petImage = new PetImage();
+        ReflectionTestUtils.setField(petImage,"PetImageId", 1L);
+        ReflectionTestUtils.setField(petImage, "pet", pet);
+        ReflectionTestUtils.setField(petImage, "image", image);
+
+        ReflectionTestUtils.setField(pet, "petImage",petImage);
+
+        ImageDto imageDto = ImageDto.builder()
+                .imageId(1L)
+                .originalFilename("gitimage.png")
+                .uploadFileURL("image/png/gitimage.png")
+                .build();
+
+
+        given(petRepository.findById(Mockito.anyLong())).willReturn(Optional.empty());
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> petService.updatePet(memberId, petId, petPatchDto));
+        assertEquals(exception.getMessage(), "찾으시는 반려동물이 없습니다");
+
+
+    }
+
+    @Test
     @DisplayName("펫 삭제 성공")
     void deletePetSuccess() throws IOException {
 
@@ -370,6 +427,50 @@ class PetServiceTest {
 
         // when
         petService.deletePet(memberId, petId);
+    }
+
+    @Test
+    @DisplayName("펫 삭제 실패 : 삭제하려는 멤버가 없는 경우 예외")
+    void deletePetNoneMember() throws IOException {
+
+        long petId = 1L;
+        long memberId = 1L;
+        String uploadFileURL = "http://image.jpg";
+
+        MultipartFile images = new MockMultipartFile("image", "gitimage.png", "image/png",
+                new FileInputStream(getClass().getResource("/gitimage.png").getFile()));
+
+        Member member = new Member();
+        ReflectionTestUtils.setField(member, "memberId", memberId);
+
+        PetDto.Post petPostDto = PetDto.Post.builder()
+                .images(images)
+                .name("메시")
+                .build();
+
+        Pet pet = new Pet();
+        ReflectionTestUtils.setField(pet, "petId", 1L);
+        ReflectionTestUtils.setField(pet, "name", "메시");
+        ReflectionTestUtils.setField(pet, "member", member);
+
+
+        Image image = Image.builder().uploadFileURL(uploadFileURL).build();
+
+        PetImage petImage = new PetImage();
+        ReflectionTestUtils.setField(petImage,"PetImageId", 1L);
+        ReflectionTestUtils.setField(petImage, "pet", pet);
+        ReflectionTestUtils.setField(petImage, "image", image);
+
+        List<Pet> petList = List.of(pet);
+
+        ReflectionTestUtils.setField(member, "pets", petList);
+
+        ReflectionTestUtils.setField(pet, "petImage", petImage);
+
+        given(memberRepository.findById(Mockito.anyLong())).willReturn(Optional.empty());
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> petService.deletePet(memberId,petId));
+
+        assertEquals(exception.getMessage(), "해당 견주가 존재하지 않습니다");
     }
 
     @Test
