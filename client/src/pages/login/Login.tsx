@@ -1,4 +1,6 @@
+import { useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { useLocalStorage } from 'usehooks-ts';
 import LoginPets from '../../assets/illustration/loginpet.png';
 import { ReactComponent as Kakao } from '../../assets/kakao.svg';
 import { ReactComponent as Logo } from '../../assets/logo.svg';
@@ -7,6 +9,17 @@ import { Container, LoginBtn, LoginText, GuestText } from './Login.styled';
 
 export default function Login() {
   const navigate = useNavigate();
+
+  const [isFirstVisited, setFirstVisited] = useLocalStorage(
+    'firstVisited',
+    true,
+  );
+
+  useEffect(() => {
+    if (isFirstVisited) {
+      setFirstVisited(true);
+    }
+  }, [isFirstVisited, setFirstVisited]);
 
   return (
     <Container>
