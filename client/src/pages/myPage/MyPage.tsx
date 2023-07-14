@@ -267,7 +267,7 @@ export function Component() {
                         {feedData?.responseList?.map(item => (
                           <Link to={`/home/${item.feedId}`} key={item.feedId}>
                             <img
-                              className="w-full h-[180px] rounded-[28px] object-cover"
+                              className="w-full h-[180px] rounded-[28px] object-cover border-2 hover:drop-shadow-lg"
                               src={item.images[0].uploadFileURL}
                             />
                           </Link>

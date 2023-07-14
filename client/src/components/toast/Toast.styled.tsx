@@ -3,8 +3,6 @@ import tw from 'tailwind-styled-components';
 export const Container = tw.div`
   w-56
   p-4
-  border
-  border-lightgray
   rounded-xl
   drop-shadow-xl
   bg-deepgreen
