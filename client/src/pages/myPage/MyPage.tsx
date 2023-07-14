@@ -260,7 +260,7 @@ export function Component() {
                             데이터를 불러오는 과정에서 에러가 발생했습니다.
                           </div>
                         ) : (
-                          <NoticeNoData />
+                          <NoticeNoData url="feed-posting" />
                         )}
                       </>
                     ) : (
@@ -283,7 +283,7 @@ export function Component() {
                   ) : (
                     <div>
                       {!walkFeedData?.length ? (
-                        <NoticeNoData />
+                        <NoticeNoData url="walk-posting" />
                       ) : (
                         <GridContainerWalk>
                           {walkFeedData?.map(item => {
@@ -314,7 +314,7 @@ export function Component() {
                   ) : (
                     <div>
                       {!commentListData?.length ? (
-                        <NoticeNoData />
+                        <NoticeNoData url="walkmate" />
                       ) : (
                         commentListData?.map(item => (
                           <Link
