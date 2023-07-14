@@ -40,7 +40,7 @@ import {
 
 export function Component() {
   // userList 보여주기
-  const [isListShowed, setIsListShowed] = useState(false);
+  const [isListShowed, setIsListShowed] = useState<boolean>(false);
 
   // 마이 info 데이터 불러오기
   const memberId = useReadLocalStorage<string>('memberId');
@@ -51,7 +51,7 @@ export function Component() {
     queryKey: ['myPage', memberId],
     queryFn: () =>
       getServerDataWithJwt(
-        `${SERVER_URL}members/${memberId}`,
+        `${SERVER_URL}/members/${memberId}`,
         accessToken as string,
       ),
     onSuccess(data) {
@@ -65,7 +65,10 @@ export function Component() {
   }>({
     queryKey: ['myFeed', memberId],
     queryFn: () =>
-      getServerDataWithJwt(`${SERVER_URL}feeds/my-feed`, accessToken as string),
+      getServerDataWithJwt(
+        `${SERVER_URL}/feeds/my-feed`,
+        accessToken as string,
+      ),
   });
 
   console.log(feedData);
@@ -77,7 +80,7 @@ export function Component() {
     queryKey: ['followList', memberId],
     queryFn: () =>
       getServerDataWithJwt(
-        `${SERVER_URL}members/following/list`,
+        `${SERVER_URL}/members/following/list`,
         accessToken as string,
       ),
   });
@@ -129,7 +132,7 @@ export function Component() {
     queryKey: ['walkFeedList', memberId],
     queryFn: () =>
       getServerDataWithJwt(
-        `${SERVER_URL}walkmates/bymember?openFilter=false&page=0&size=10`,
+        `${SERVER_URL}/walkmates/bymember?openFilter=false&page=0&size=10`,
         accessToken as string,
       ),
   });
@@ -138,7 +141,7 @@ export function Component() {
     queryKey: ['commentList', memberId],
     queryFn: () =>
       getServerDataWithJwt(
-        `${SERVER_URL}walkmates/comments/bymember`,
+        `${SERVER_URL}/walkmates/comments/bymember`,
         accessToken as string,
       ),
   });
@@ -232,9 +235,7 @@ export function Component() {
                 <TabMenuList
                   onClick={() => setCurrentTab(1)}
                   className={
-                    currentTab === 1
-                      ? `border-t-2 border-t-[green] 	`
-                      : undefined
+                    currentTab === 1 ? `border-t-2 border-t-[green]` : undefined
                   }>
                   <WalkFeedIcon
                     className={currentTab === 1 ? `fill-deepgreen ` : undefined}
@@ -243,9 +244,7 @@ export function Component() {
                 <TabMenuList
                   onClick={() => setCurrentTab(2)}
                   className={
-                    currentTab === 2
-                      ? `border-t-2 border-t-[green] 	`
-                      : undefined
+                    currentTab === 2 ? `border-t-2 border-t-[green]` : undefined
                   }>
                   <CommentListIcon
                     className={currentTab === 2 ? `fill-deepgreen ` : undefined}

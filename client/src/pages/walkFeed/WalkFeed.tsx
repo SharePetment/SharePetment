@@ -42,7 +42,7 @@ export function Component() {
   const { register, handleSubmit, resetField } = useForm<FormValues>();
 
   const onSubmit: SubmitHandler<FormValues> = data => {
-    const url = `${SERVER_URL}walkmates/comments/${postId}/${memberId}`;
+    const url = `${SERVER_URL}/walkmates/comments/${postId}/${memberId}`;
     addCommentMutation.mutate({ ...data, url, accessToken });
     resetField('content');
   };
@@ -53,7 +53,7 @@ export function Component() {
     queryKey: ['walkFeed', postId],
     queryFn: () =>
       getServerDataWithJwt(
-        `${SERVER_URL}walkmates/bywalk/${postId}`,
+        `${SERVER_URL}/walkmates/bywalk/${postId}`,
         accessToken as string,
       ),
   });

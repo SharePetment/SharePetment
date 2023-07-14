@@ -37,7 +37,7 @@ export function Component() {
     queryKey: ['userPage', memberId, usersId],
     queryFn: () =>
       getServerDataWithJwt(
-        `${SERVER_URL}members/${usersId}/${memberId}`,
+        `${SERVER_URL}/members/${usersId}/${memberId}`,
         accessToken as string,
       ),
     onSuccess(data) {
@@ -55,7 +55,7 @@ export function Component() {
     queryKey: ['userFeed', usersId],
     queryFn: () =>
       getServerDataWithJwt(
-        `${SERVER_URL}feeds/my-feed/${usersId}`,
+        `${SERVER_URL}/feeds/my-feed/${usersId}`,
         accessToken as string,
       ),
   });
@@ -67,7 +67,7 @@ export function Component() {
     queryKey: ['followList', usersId],
     queryFn: () =>
       getServerDataWithJwt(
-        `${SERVER_URL}members/following/list/${usersId}`,
+        `${SERVER_URL}/members/following/list/${usersId}`,
         accessToken as string,
       ),
   });

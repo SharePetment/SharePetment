@@ -23,7 +23,7 @@ export default function Header() {
     queryKey: ['myPage', memberId],
     queryFn: () =>
       getServerDataWithJwt(
-        `${SERVER_URL}members/${memberId}`,
+        `${SERVER_URL}/members/${memberId}`,
         accessToken as string,
       ),
     enabled: !!accessToken,

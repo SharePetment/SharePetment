@@ -32,7 +32,7 @@ export default function Subscribe({ guestFollow, usersId, memberId }: Prop) {
   });
   const handleSubscribe = () => {
     subscribeMutation.mutate({
-      url: `${SERVER_URL}members/following/${usersId}/${memberId}`,
+      url: `${SERVER_URL}/members/following/${usersId}/${memberId}`,
       accessToken: accessToken as string,
     });
   };
