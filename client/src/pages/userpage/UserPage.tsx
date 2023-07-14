@@ -11,6 +11,7 @@ import WalkCard from '../../components/card/walkCard/walkCard';
 import FollowList from '../../components/follow-list/FollowList';
 import LoadingComponent from '../../components/loading/LoadingComponent';
 import NoticeNotWrite from '../../components/notice/NoticeNotWrite';
+import NoticeOnlyOwner from '../../components/notice/NoticeOnlyOwner';
 import NoticeServerError from '../../components/notice/NoticeServerError';
 import Subscribe from '../../components/subscribe/Subscribe';
 import PetInfoBox from '../../components/user_my_page/petinfo-box/PetInfoBox';
@@ -53,7 +54,7 @@ export function Component() {
     setIsListShowed(true);
   };
 
-  // 유저 데이터 가지고 오기
+  // (타)유저 데이터 가지고 오기
   const { data, isLoading } = useQuery<UserInfo>({
     queryKey: ['userPage', usersId],
     queryFn: () =>
@@ -67,6 +68,13 @@ export function Component() {
     onError(err) {
       console.log(err);
     },
+  });
+
+  // (본인) 유저 데이터 가지고 오기
+  const { data: myData } = useQuery<UserInfo>({
+    queryKey: ['myPage'],
+    queryFn: () =>
+      getServerDataWithJwt(`${SERVER_URL}/members`, accessToken as string),
   });
 
   // 유저가 작성한 피드 리스트 가져오기
@@ -225,28 +233,34 @@ export function Component() {
                 </div>
                 <div className={currentTab === 1 ? 'block' : 'hidden'}>
                   <div>
-                    {!walkFeedData?.length ? (
-                      <NoticeNotWrite />
+                    {!myData?.animalParents ? (
+                      <NoticeOnlyOwner />
                     ) : (
-                      <GridContainerWalk>
-                        {walkFeedData?.map(item => {
-                          const { time, content, maximum, location, open } =
-                            item;
-                          return (
-                            <Link
-                              to={`/walkmate/${item.walkMatePostId}`}
-                              key={item.walkMatePostId}>
-                              <WalkCard
-                                size="sm"
-                                time={time}
-                                title={content}
-                                friends={maximum}
-                                location={location}
-                                isclosed={`${open}`}></WalkCard>
-                            </Link>
-                          );
-                        })}
-                      </GridContainerWalk>
+                      <>
+                        {!walkFeedData?.length ? (
+                          <NoticeNotWrite />
+                        ) : (
+                          <GridContainerWalk>
+                            {walkFeedData?.map(item => {
+                              const { time, content, maximum, location, open } =
+                                item;
+                              return (
+                                <Link
+                                  to={`/walkmate/${item.walkMatePostId}`}
+                                  key={item.walkMatePostId}>
+                                  <WalkCard
+                                    size="sm"
+                                    time={time}
+                                    title={content}
+                                    friends={maximum}
+                                    location={location}
+                                    isclosed={`${open}`}></WalkCard>
+                                </Link>
+                              );
+                            })}
+                          </GridContainerWalk>
+                        )}
+                      </>
                     )}
                   </div>
                 </div>
