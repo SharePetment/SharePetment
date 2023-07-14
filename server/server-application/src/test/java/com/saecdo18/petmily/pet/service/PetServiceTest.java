@@ -219,6 +219,47 @@ class PetServiceTest {
     }
 
     @Test
+    @DisplayName("펫 조회하기 실패 : 해당 펫이 없는 경우 예외")
+    void getPetNonePet() {
+        long petId = 1L;
+        long memberId = 1L;
+        String uploadFileURL = "http://image.jpg";
+
+        Member member = new Member();
+        ReflectionTestUtils.setField(member, "memberId", memberId);
+
+
+        Pet pet = new Pet();
+        ReflectionTestUtils.setField(pet, "petId", 1L);
+        ReflectionTestUtils.setField(pet, "name", "메시");
+        ReflectionTestUtils.setField(pet, "member", member);
+
+
+        PetDto.Response petResponse = PetDto.Response.builder()
+                .build();
+
+        Image image = Image.builder().uploadFileURL(uploadFileURL).build();
+
+        PetImage petImage = new PetImage();
+        ReflectionTestUtils.setField(petImage,"PetImageId", 1L);
+        ReflectionTestUtils.setField(petImage, "pet", pet);
+        ReflectionTestUtils.setField(petImage, "image", image);
+
+        ImageDto imageDto = ImageDto.builder()
+                .imageId(1L)
+                .originalFilename("gitimage.png")
+                .uploadFileURL("image/png/gitimage.png")
+                .build();
+
+
+        given(petRepository.findById(Mockito.anyLong())).willReturn(Optional.empty());
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> petService.getPet(petId));
+
+        assertEquals(exception.getMessage(), "찾으시는 반려동물이 없습니다");
+
+    }
+
+    @Test
     @DisplayName("펫 정보 수정하기 성공")
     void updatePetSuccess() throws IOException {
 
