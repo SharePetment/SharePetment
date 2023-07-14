@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import Cat404 from '../../assets/illustration/404cat.png';
 import { ErrorText, HomeBtn } from '../../pages/notFound/NotFound.style';
 
-export default function NoticeOnlyOwner() {
+export default function NoticeServerError() {
   const navigate = useNavigate();
   return (
     <div className="flex flex-col items-center justify-center">
