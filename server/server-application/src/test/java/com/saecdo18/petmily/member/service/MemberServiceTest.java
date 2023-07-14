@@ -490,6 +490,50 @@ class MemberServiceTest {
     }
 
     @Test
-    void checkNickname() {
+    @DisplayName("닉네임이 중복되지 않아 사용이 가능한 경우")
+    void checkNicknameCanUse() {
+        long memberId = 1L;
+        String nickname= "testnick";
+
+        Member member = new Member();
+        ReflectionTestUtils.setField(member, "memberId", memberId);
+
+
+        MemberDto.Response memberResponse = MemberDto.Response.builder()
+                .build();
+
+        MemberDto.Info memberInfo = MemberDto.Info.builder()
+                .memberId(1L)
+                .build();
+
+
+        given(memberRepository.findByNickname(Mockito.anyString())).willReturn(Optional.of(member));
+
+
+
+        // when
+        memberService.checkNickname(nickname);
+    }
+
+    @Test
+    @DisplayName("닉네임이 중복되어 사용이 불가능한 경우")
+    void checkNicknameCantUse() {
+        long memberId = 1L;
+        String nickname= "testnick";
+
+        Member member = new Member();
+        ReflectionTestUtils.setField(member, "memberId", memberId);
+
+        MemberDto.Response memberResponse = MemberDto.Response.builder()
+                .build();
+
+        MemberDto.Info memberInfo = MemberDto.Info.builder()
+                .memberId(1L)
+                .build();
+
+        given(memberRepository.findByNickname(Mockito.anyString())).willReturn(Optional.empty());
+
+        // when
+        memberService.checkNickname(nickname);
     }
 }
