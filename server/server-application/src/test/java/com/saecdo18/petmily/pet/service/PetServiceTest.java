@@ -123,6 +123,59 @@ class PetServiceTest {
     }
 
     @Test
+    @DisplayName("펫 등록하기 실패 : 멤버가 없을 경우 예외")
+    void createPetNoneMember() throws IOException {
+        long memberId = 1L;
+        String uploadFileURL = "http://image.jpg";
+
+        MultipartFile images = new MockMultipartFile("image", "gitimage.png", "image/png",
+                new FileInputStream(getClass().getResource("/gitimage.png").getFile()));
+
+        Member member = new Member();
+        ReflectionTestUtils.setField(member, "memberId", memberId);
+
+        PetDto.Post petPostDto = PetDto.Post.builder()
+                .images(images)
+                .name("메시")
+                .build();
+
+        Pet pet = new Pet();
+        ReflectionTestUtils.setField(pet, "petId", 1L);
+        ReflectionTestUtils.setField(pet, "name", "메시");
+        ReflectionTestUtils.setField(pet, "member", member);
+
+        MemberDto.Response memberResponse = MemberDto.Response.builder()
+                .build();
+
+        MemberDto.Info memberInfo = MemberDto.Info.builder()
+                .memberId(1L)
+                .build();
+
+        PetDto.Response petResponse = PetDto.Response.builder()
+                .build();
+
+        Image image = Image.builder().uploadFileURL(uploadFileURL).build();
+
+        PetImage petImage = new PetImage();
+        ReflectionTestUtils.setField(petImage,"PetImageId", 1L);
+        ReflectionTestUtils.setField(petImage, "pet", pet);
+        ReflectionTestUtils.setField(petImage, "image", image);
+
+        ImageDto imageDto = ImageDto.builder()
+                .imageId(1L)
+                .originalFilename("gitimage.png")
+                .uploadFileURL("image/png/gitimage.png")
+                .build();
+
+
+        given(memberRepository.findById(Mockito.anyLong())).willReturn(Optional.empty());
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> petService.createPet(memberId,petPostDto));
+
+        assertEquals(exception.getMessage(), "해당 견주가 존재하지 않습니다");
+
+    }
+
+    @Test
     @DisplayName("펫 조회하기 성공")
     void getPetSuccess() {
         long petId = 1L;
