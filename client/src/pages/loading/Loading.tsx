@@ -2,7 +2,11 @@ import { useEffect, useContext } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useLocalStorage } from 'usehooks-ts';
 import LoadingComponent from '../../components/loading/LoadingComponent';
-import { ContextDispatch, MemberIdDispatchContext } from '../../store/Context';
+import {
+  ContextDispatch,
+  MemberIdContext,
+  MemberIdDispatchContext,
+} from '../../store/Context';
 
 export function Component() {
   const [searchParams] = useSearchParams();
@@ -12,9 +16,11 @@ export function Component() {
     'refreshToken',
     '',
   );
+  const [, setFirstVisited] = useLocalStorage('firstVisited', true);
 
   // local에 accessToken이 있는지 확인하기
   const dispatch = useContext(MemberIdDispatchContext);
+  const hasAnimal = useContext(MemberIdContext)?.animalParents;
 
   useEffect(() => {
     if (searchParams.size > 0) {
@@ -43,7 +49,19 @@ export function Component() {
         });
       }
     }
-  }, [setAccessToken, setRefreshToken, searchParams, navigate, dispatch]);
+
+    if (hasAnimal) {
+      setFirstVisited(false);
+    }
+  }, [
+    setAccessToken,
+    setRefreshToken,
+    searchParams,
+    navigate,
+    dispatch,
+    hasAnimal,
+    setFirstVisited,
+  ]);
 
   return <LoadingComponent />;
 }
