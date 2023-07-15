@@ -17,12 +17,12 @@ import { Feed } from '../../types/feedTypes';
 import { Container, FollowContainer, Img, Text, Button } from './Home.styled';
 
 export function Component() {
+  const queryClient = useQueryClient();
   const accessToken = useReadLocalStorage<string>('accessToken');
   const [isClicked, setIsClicked] = useState<boolean>(false);
   const [isToastOpen, setIsToastOpen] = useState<boolean>(false);
   const [isGuestOpen, setIsGuestOpen] = useState<boolean>(false);
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
 
   const guestFeedQuery = useQuery({
     queryKey: ['guestFeed'],

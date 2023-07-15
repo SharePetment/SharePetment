@@ -8,9 +8,10 @@ import { Container, Input, CommentBtn } from './FeedInput.styled';
 
 interface Prop {
   feedid: number;
+  blankhandler: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export default function FeedInput({ feedid }: Prop) {
+export default function FeedInput({ feedid, blankhandler }: Prop) {
   const accessToken = useReadLocalStorage('accessToken');
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const queryClient = useQueryClient();
@@ -25,7 +26,7 @@ export default function FeedInput({ feedid }: Prop) {
 
   const handleClick = () => {
     if (inputRef.current) {
-      if (inputRef.current.value === '') return alert('공백안된다');
+      if (inputRef.current.value === '') return blankhandler(true);
       const data = {
         url: `${SERVER_URL}/feeds/comments`,
         token: accessToken as string,

@@ -4,6 +4,8 @@ import { useReadLocalStorage } from 'usehooks-ts';
 import { patchFeedLike } from '../../../api/mutationfn';
 import { SERVER_URL } from '../../../api/url';
 import { ReactComponent as Comment } from '../../../assets/button/comment.svg';
+import { ReactComponent as Delete } from '../../../assets/button/delete.svg';
+import { ReactComponent as Edit } from '../../../assets/button/edit.svg';
 import { ReactComponent as Like } from '../../../assets/button/like.svg';
 import { ReactComponent as Share } from '../../../assets/button/share.svg';
 import { BooleanStr } from '../../../types/propType';
@@ -16,7 +18,9 @@ interface Prop {
   like: BooleanStr;
   guesthandler?: () => void;
   toasthandler?: React.Dispatch<React.SetStateAction<boolean>>;
+  deletehandler?: React.Dispatch<React.SetStateAction<boolean>>;
   url: string;
+  inperson?: BooleanStr;
 }
 
 export default function SideNav({
@@ -26,12 +30,15 @@ export default function SideNav({
   like,
   guesthandler,
   toasthandler,
+  deletehandler,
+  inperson,
   url,
 }: Prop) {
   const accessToken = useReadLocalStorage<string | null>('accessToken');
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const feedPopUp = useMatch('/home/:feedId');
+  // console.log(memberId);
 
   const likeMutation = useMutation({
     mutationFn: patchFeedLike,
@@ -100,22 +107,22 @@ export default function SideNav({
           <Share className="cursor-pointer ml-2" />
         </Wrap>
 
-        {/* {inperson === 'true' && (
+        {inperson === 'true' && (
           <>
-            <Wrap onClick={() => navigate(`/feed-posting/${feedid}`)}>
-              <Edit className="cursor-pointer ml-2" />
+            <Wrap
+              onClick={() => navigate(`/feed-posting/${feedid}`)}
+              className="cursor-pointer ml-2">
+              <Edit />
             </Wrap>
-            <Wrap>
-              <Delete
-                className="cursor-pointer ml-2"
-                onClick={() => {
-                  deletehandler();
-                  localStorage.setItem('feedId', String(feedid));
-                }}
-              />
+            <Wrap
+              className="cursor-pointer ml-2"
+              onClick={() => {
+                if (deletehandler) return deletehandler(true);
+              }}>
+              <Delete />
             </Wrap>
           </>
-        )} */}
+        )}
       </Container>
     </>
   );
