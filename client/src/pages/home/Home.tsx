@@ -95,14 +95,14 @@ export function Component() {
                 <div className="flex flex-col justify-center items-center h-full">
                   다양한 반려동물을 구경할 수 있어요.
                   <img src={PetFriends} className=" w-60" />
-                  <CircleProgressBar index={0} />
+                  <CircleProgressBar circle={{ index: 0, total: 3 }} />
                 </div>
               </SwiperSlide>
               <SwiperSlide className=" bg-defaultbg">
                 <div className="flex flex-col justify-center items-center h-full">
                   우리집 반려동물의 산책 친구를 만들어줄 수 있어요.
                   <img src={LyingDownDog} className=" w-60" />
-                  <CircleProgressBar index={1} />
+                  <CircleProgressBar circle={{ index: 1, total: 3 }} />
                 </div>
               </SwiperSlide>
               <SwiperSlide className=" bg-defaultbg">
@@ -128,7 +128,7 @@ export function Component() {
                       아뇨, 괜찮습니다!
                     </button>
                   </div>
-                  <CircleProgressBar index={2} />
+                  <CircleProgressBar circle={{ index: 2, total: 3 }} />
                 </div>
               </SwiperSlide>
             </Swiper>

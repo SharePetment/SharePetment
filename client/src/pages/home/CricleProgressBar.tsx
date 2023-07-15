@@ -1,30 +1,23 @@
 type CircleProgressBarProp = {
-  index: number;
+  circle: {
+    index: number;
+    total: number;
+  };
 };
-export default function CircleProgressBar({ index }: CircleProgressBarProp) {
-  if (index === 0) {
-    return (
-      <div className="flex gap-2">
-        <div className="w-2 h-2 rounded-full bg-black" />
-        <div className="w-2 h-2 rounded-full bg-lightgray" />
-        <div className="w-2 h-2 rounded-full bg-lightgray" />
-      </div>
-    );
-  } else if (index === 1) {
-    return (
-      <div className="flex gap-2">
-        <div className="w-2 h-2 rounded-full bg-lightgray" />
-        <div className="w-2 h-2 rounded-full bg-black" />
-        <div className="w-2 h-2 rounded-full bg-lightgray" />
-      </div>
-    );
-  } else if (index === 3) {
-    return (
-      <div className="flex gap-2">
-        <div className="w-2 h-2 rounded-full bg-lightgray" />
-        <div className="w-2 h-2 rounded-full bg-lightgray" />
-        <div className="w-2 h-2 rounded-full bg-black" />
-      </div>
-    );
-  }
+export default function CircleProgressBar({ circle }: CircleProgressBarProp) {
+  const { index, total } = circle;
+
+  return (
+    <div className="flex gap-2">
+      {Array(total)
+        .fill(undefined)
+        .map((_, idx) => {
+          return idx === index ? (
+            <div key={idx} className="w-2 h-2 rounded-full bg-black" />
+          ) : (
+            <div key={idx} className="w-2 h-2 rounded-full bg-lightgray" />
+          );
+        })}
+    </div>
+  );
 }
