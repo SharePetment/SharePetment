@@ -31,6 +31,7 @@ export default function Header() {
   const handleClick = () => {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
+    localStorage.removeItem('animalParents');
     navigate('/');
   };
 

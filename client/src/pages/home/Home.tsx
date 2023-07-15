@@ -23,6 +23,7 @@ import { Container, FollowContainer, Img, Text, Button } from './Home.styled';
 import '../../common/carousel/carousel.css';
 
 export function Component() {
+  const queryClient = useQueryClient();
   const accessToken = useReadLocalStorage<string>('accessToken');
   const [isFirstVisited, setFirstVisited] = useLocalStorage(
     'firstVisited',
@@ -34,7 +35,6 @@ export function Component() {
   const [isGuestOpen, setIsGuestOpen] = useState<boolean>(false);
 
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
 
   const guestFeedQuery = useQuery({
     queryKey: ['guestFeed'],

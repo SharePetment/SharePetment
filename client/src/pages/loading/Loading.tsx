@@ -13,7 +13,6 @@ export function Component() {
     '',
   );
 
-  console.log(searchParams.get('accessToken'));
   // local에 accessToken이 있는지 확인하기
   const dispatch = useContext(MemberIdDispatchContext);
 

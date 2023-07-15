@@ -179,14 +179,14 @@ export const feedPosting = async (body: FeedPostingProp) => {
 /* -------------------------------- 피드게시물 삭제 -------------------------------- */
 interface DeleteFeedProp {
   url: string;
-  accessToken: string | null;
+  token: string | null;
 }
 
 export const deleteFeed = async (body: DeleteFeedProp) => {
-  const { url, accessToken } = body;
+  const { url, token } = body;
   const result = await axios.delete(url, {
     headers: {
-      Authorization: accessToken,
+      Authorization: token,
     },
   });
   return result;
@@ -228,6 +228,33 @@ export const postFeedComment = async (body: PostFeedCommentProp) => {
       },
     },
   );
+  return result;
+};
+
+/* -------------------------------- 피드게시물 댓글 수정  -------------------------------- */
+export const patchFeedComment = async (body: PostFeedCommentProp) => {
+  const { url, token, content, feedId } = body;
+  console.log(body);
+  const result = await axios.patch(
+    url,
+    { content, feedId },
+    {
+      headers: {
+        Authorization: token,
+      },
+    },
+  );
+  return result;
+};
+
+/* -------------------------------- 피드게시물 댓글 삭제  -------------------------------- */
+export const deleteFeedComment = async (body: MutationProp) => {
+  const { url, accessToken } = body;
+  const result = await axios.delete(url, {
+    headers: {
+      Authorization: accessToken,
+    },
+  });
   return result;
 };
 

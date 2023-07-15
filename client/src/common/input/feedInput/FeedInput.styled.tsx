@@ -12,9 +12,8 @@ export const Input = tw.textarea`
   w-full
   h-10
   rounded-[10px]
-  px-3
+  p-3
   text-xs
-  py-3
   pr-10
 `;
 
