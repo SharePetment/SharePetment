@@ -116,7 +116,7 @@ export function Component() {
   });
 
   // memberId, usersId가 같을시 myPage로 이동
-  if (usersId === memberId) {
+  if (usersId === memberId?.memberId) {
     return <Navigate to="/my-page" />;
   }
 
@@ -244,6 +244,7 @@ export function Component() {
                             {walkFeedData?.map(item => {
                               const { time, content, maximum, location, open } =
                                 item;
+
                               return (
                                 <Link
                                   to={`/walkmate/${item.walkMatePostId}`}
@@ -254,7 +255,8 @@ export function Component() {
                                     title={content}
                                     friends={maximum}
                                     location={location}
-                                    isclosed={`${open}`}></WalkCard>
+                                    isclosed={`${open}`}
+                                  />
                                 </Link>
                               );
                             })}

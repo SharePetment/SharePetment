@@ -24,6 +24,7 @@ import '../../common/carousel/carousel.css';
 
 export function Component() {
   const queryClient = useQueryClient();
+
   const accessToken = useReadLocalStorage<string>('accessToken');
   const [isFirstVisited, setFirstVisited] = useLocalStorage(
     'firstVisited',
