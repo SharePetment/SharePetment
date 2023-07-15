@@ -29,20 +29,21 @@ public interface WalkMateMapper {
         }
     }
 
-    public default WalkMate walkPatchDtoToWalkMate(WalkMateDto.Patch patch) {
+    public default WalkMateDto.Response walkPatchDtoToWalkMateResponseDto(WalkMateDto.Patch patch) {
         if (patch == null) {
             return null;
         } else {
-            WalkMate.WalkMateBuilder walkMate = WalkMate.builder();
-            walkMate.title(patch.getTitle());
-            walkMate.content(patch.getContent());
-            walkMate.mapURL(patch.getMapURL());
-            walkMate.chatURL(patch.getChatURL());
-            walkMate.location(patch.getLocation());
-            walkMate.time(patch.getTime());
-            walkMate.open(patch.getOpen());
-            walkMate.maximum(patch.getMaximum());
-            return walkMate.build();
+            WalkMateDto.Response response = WalkMateDto.Response.builder()
+                    .title(patch.getTitle())
+                    .content(patch.getContent())
+                    .mapURL(patch.getMapURL())
+                    .chatURL(patch.getChatURL())
+                    .location(patch.getLocation())
+                    .time(patch.getTime())
+                    .open(patch.getOpen())
+                    .maximum(patch.getMaximum())
+                    .build();
+            return response;
         }
     }
     public default WalkMateDto.Response walkMateToWalkMateResponseDto(WalkMate walkMate) {
