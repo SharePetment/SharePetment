@@ -336,13 +336,25 @@ export const deleteWalkFeed = async (body: WalkStatusProp) => {
 };
 
 /* -------------------------------- 산책 게시물 수정 -------------------------------- */
+interface PatchWalkPosProp {
+  title: string;
+  content: string;
+  mapURL: string;
+  chatURL: string;
+  location: string;
+  time: string;
+  open: boolean;
+  maximum: number;
+  accessToken: string;
+  walkId: number;
+}
 
-export const patchWalkFeed = async (payload: FillWalkPosProp) => {
+export const patchWalkFeed = async (payload: PatchWalkPosProp) => {
   const { title, content, mapURL, chatURL, location, time, open, maximum } =
     payload;
 
-  const result = await axios.post(
-    `${SERVER_URL}/walkmates`,
+  const result = await axios.patch(
+    `${SERVER_URL}/walkmates/${payload.walkId}`,
     {
       title,
       content,
