@@ -136,7 +136,6 @@ export function Component() {
               type="text"
               readOnly
               value={`${mainAddress} ${detailAddress}`}
-              onClick={() => console.log('his')}
               {...register('location', {
                 required: '장소를 선택해주세요!',
                 value: `${mainAddress}`,
