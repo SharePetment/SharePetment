@@ -9,29 +9,26 @@ import 'swiper/css/navigation';
 import { useLocalStorage, useReadLocalStorage } from 'usehooks-ts';
 import { getGuestFeedList, getHostFeedList } from '../../api/queryfn';
 import { SERVER_URL } from '../../api/url';
-import FollowingCat from '../../assets/illustration/followingcat.png';
 import LyingDownDog from '../../assets/illustration/lying-down-dog.png';
 import PetFriends from '../../assets/illustration/pet-friends.png';
 import Popup from '../../common/popup/Popup';
 import { PopupBackGround } from '../../common/popup/popup.styled';
-import FeedCard from '../../components/card/feedCard/FeedCard';
+import FeedCard from '../../components/card/feedcard/FeedCard';
 import SideNav from '../../components/card/sidenav/SideNav';
 import Toast from '../../components/toast/Toast';
 import { Feed } from '../../types/feedTypes';
 import CircleProgressBar from './CricleProgressBar';
-import { Container, FollowContainer, Img, Text, Button } from './Home.styled';
+import { Container } from './Home.styled';
 import '../../common/carousel/carousel.css';
 
 export function Component() {
   const queryClient = useQueryClient();
-
   const accessToken = useReadLocalStorage<string>('accessToken');
   const [isFirstVisited, setFirstVisited] = useLocalStorage(
     'firstVisited',
     true,
   );
 
-  const [isClicked, setIsClicked] = useState<boolean>(false);
   const [isToastOpen, setIsToastOpen] = useState<boolean>(false);
   const [isGuestOpen, setIsGuestOpen] = useState<boolean>(false);
 
@@ -43,16 +40,6 @@ export function Component() {
     enabled: !!(accessToken === null),
   });
 
-  const hostRandomFeedQuery = useQuery({
-    queryKey: ['hostRandomFeed'],
-    queryFn: () =>
-      getHostFeedList(`${SERVER_URL}/feeds/list/random`, accessToken),
-    enabled: !!(accessToken && isClicked),
-    onSuccess() {
-      queryClient.invalidateQueries({ queryKey: ['contextApi'] });
-    },
-  });
-
   const hostFeedQuery = useQuery({
     queryKey: ['hostFeed'],
     queryFn: () => getHostFeedList(`${SERVER_URL}/feeds/list`, accessToken),
@@ -62,24 +49,7 @@ export function Component() {
     },
   });
 
-  if (
-    hostFeedQuery.isSuccess &&
-    hostFeedQuery.data.responseList.length === 0 &&
-    !isClicked &&
-    accessToken
-  ) {
-    return (
-      <FollowContainer>
-        <Img src={FollowingCat} />
-        <Text>
-          아직 올라온 피드가 없어요.
-          <br />
-          랜덤으로 피드를 추천받으세요!
-        </Text>
-        <Button onClick={() => setIsClicked(true)}>추천받기</Button>
-      </FollowContainer>
-    );
-  } else if (hostFeedQuery.isSuccess && !isClicked) {
+  if (hostFeedQuery.isSuccess && accessToken) {
     return (
       <>
         {/* 웰컴팝업 */}
@@ -172,52 +142,6 @@ export function Component() {
                 </div>
               </SwiperSlide>
             ))}
-          </Swiper>
-        </Container>
-      </>
-    );
-  } else if (hostRandomFeedQuery.isSuccess) {
-    return (
-      <>
-        {isToastOpen && (
-          <div className="fixed right-8 bottom-8">
-            <Toast />
-          </div>
-        )}
-        <Container>
-          <Swiper
-            direction={'vertical'}
-            slidesPerView={window.innerWidth < 400 ? 1 : 1.1}
-            mousewheel={true}
-            modules={[Mousewheel, Pagination]}
-            className="w-full h-full flex flex-col items-center justify-center">
-            {hostRandomFeedQuery.data.responseList.map(
-              (img: Feed, idx: number) => (
-                <SwiperSlide
-                  className="w-96 max-sm:w-full max-sm:h-full"
-                  key={idx}>
-                  <div className="flex justify-center items-center gap-5 max-sm:flex-col">
-                    <FeedCard
-                      memberid={img.memberInfo.memberId}
-                      username={img.memberInfo.nickname}
-                      context={img.content}
-                      userimg={img.memberInfo.imageURL}
-                      images={img.images}
-                      guesthandler={() => setIsGuestOpen(true)}
-                    />
-                    <SideNav
-                      feedid={img.feedId}
-                      direction={window.innerWidth < 640 ? 'row' : 'col'}
-                      likes={img.likes}
-                      like={img.isLike ? 'true' : 'false'}
-                      guesthandler={() => setIsGuestOpen(true)}
-                      toasthandler={setIsToastOpen}
-                      url={img.shareURL}
-                    />
-                  </div>
-                </SwiperSlide>
-              ),
-            )}
           </Swiper>
         </Container>
       </>
