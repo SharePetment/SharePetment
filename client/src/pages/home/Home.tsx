@@ -49,7 +49,7 @@ export function Component() {
     },
   });
 
-  if (hostFeedQuery.isSuccess) {
+  if (hostFeedQuery.isSuccess && accessToken) {
     return (
       <>
         {/* 웰컴팝업 */}
