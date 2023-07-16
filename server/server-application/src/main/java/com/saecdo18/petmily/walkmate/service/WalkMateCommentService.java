@@ -54,17 +54,11 @@ public class WalkMateCommentService {
         return response;
     }
 
-    public WalkMateComment findComments(long commentId){
-
-        Optional<WalkMateComment> optionalWalkMateComment = walkMateCommentRepository.findById(commentId);
-        WalkMateComment findComment = optionalWalkMateComment.orElseThrow();
-
-        return findComment;
-    }
-
     public WalkMateCommentDto.Response findComment(long commentId){
 
-        WalkMateComment comment = walkMateCommentRepository.findById(commentId).orElseThrow();
+        WalkMateComment comment = walkMateCommentRepository.findById(commentId).orElseThrow(
+                ()->new RuntimeException("댓글을 찾을 수 없습니다.")
+        );
         WalkMateCommentDto.Response response = walkMateCommentMapper.commentToCommentResponseDto(comment);
 
         Member member = methodFindByMemberId(comment.getMember().getMemberId());
@@ -78,14 +72,6 @@ public class WalkMateCommentService {
         return response;
     }
 
-    public List<WalkMateCommentDto.Response> findAllComments(){
-
-        List<WalkMateComment> allComments = walkMateCommentRepository.findAll();
-        List<WalkMateCommentDto.Response> response = getResponseListFromCommentList(allComments);
-
-        return response;
-    }
-
     public List<WalkMateCommentDto.Response> findCommentsByWalkId(long walkId){
 
         List<WalkMateComment> allComments = walkMateCommentRepository.findAll();
@@ -95,14 +81,6 @@ public class WalkMateCommentService {
 
         List<WalkMateCommentDto.Response> response = getResponseListFromCommentList(findComments);
 
-        return response;
-    }
-
-    private List<WalkMateCommentDto.Response> getResponseListFromCommentList(List<WalkMateComment> findComments) {
-        List<WalkMateCommentDto.Response> response =
-                findComments.stream()
-                        .map(comment -> findComment(comment.getWalkMateCommentId()))
-                        .collect(Collectors.toList());
         return response;
     }
 
@@ -120,7 +98,9 @@ public class WalkMateCommentService {
 
     public WalkMateCommentDto.Response updateComment(WalkMateCommentDto.Patch commentPatchDto, long commentId, long memberId){
 
-        WalkMateComment findComment = walkMateCommentRepository.findById(commentId).orElseThrow();
+        WalkMateComment findComment = walkMateCommentRepository.findById(commentId).orElseThrow(
+                ()->new RuntimeException("댓글을 찾을 수 없습니다.")
+        );
 
         if(memberId!=findComment.getMember().getMemberId()){
             throw new IllegalArgumentException("수정할 권한이 없습니다.");
@@ -170,4 +150,20 @@ public class WalkMateCommentService {
                 .build();
         return info;
     }
+
+    private List<WalkMateCommentDto.Response> getResponseListFromCommentList(List<WalkMateComment> findComments) {
+        List<WalkMateCommentDto.Response> response =
+                findComments.stream()
+                        .map(comment -> findComment(comment.getWalkMateCommentId()))
+                        .collect(Collectors.toList());
+        return response;
+    }
+
+//        private List<WalkMateCommentDto.Response> findAllComments(){
+//
+//        List<WalkMateComment> allComments = walkMateCommentRepository.findAll();
+//        List<WalkMateCommentDto.Response> response = getResponseListFromCommentList(allComments);
+//
+//        return response;
+//    }
 }
