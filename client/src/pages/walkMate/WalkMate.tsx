@@ -13,7 +13,7 @@ import { CardContainer } from '../../components/card/walkCard/walkCard.styled';
 import LoadingComponent from '../../components/loading/LoadingComponent';
 import Path from '../../routers/paths';
 import { WalkFeed } from '../../types/walkType';
-import { SearchButton, SelectContainer } from './WalkMate.styled';
+import { SearchButton } from './WalkMate.styled';
 
 export function Component() {
   // 주소 값 받아오기
@@ -65,11 +65,11 @@ export function Component() {
   }
 
   return (
-    <div className="mx-40 py-10 max-md:mx-20 ">
-      <SelectContainer className="justify-end">
+    <div className="mt-10 flex flex-col justify-center">
+      <div className=" flex justify-end max-sm:flex-col items-center gap-4 pr-6">
         <Select size="md" direction="row" setZip={setZip} />
         <SearchButton onClick={handleClickSearchAddress}>검색</SearchButton>
-      </SelectContainer>
+      </div>
       <GridContainer>
         <Link to={Path.WalkPosting}>
           <CardContainer size="lg" className="items-center justify-center">

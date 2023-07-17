@@ -27,6 +27,7 @@ export const WalkDate = tw.div`
 export const Title = tw.div`
   font-semibold
   text-lg
+  min-h-[56px]
 `;
 
 export const WalkMateList = tw.ul`
@@ -55,7 +56,7 @@ export const WriterProfile = tw.div`
 `;
 
 export const Backdrop = tw.div<{ size: string }>`
-  ${prop => prop.size === 'sm' && `w-[224px] h-[262px]`}
+  ${prop => prop.size === 'sm' && `w-[224px] h-[290px]`}
   ${prop => prop.size === 'lg' && `w-60 h-72`}
   rounded-[28px]
   bg-defaulttext
