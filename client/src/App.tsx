@@ -1,6 +1,7 @@
 import { Outlet, useMatch } from 'react-router-dom';
 import Footer from './common/footer/Footer';
 import Header from './common/header/Header';
+import NavBar from './components/nav/NavBar';
 
 function App() {
   const matchHome = useMatch('/'); //object || null
@@ -21,6 +22,14 @@ function App() {
         loadingFeed ||
         matchFeedPopUp
       ) && <Header />}
+      {!(
+        matchHome ||
+        matchInfo ||
+        matchInfoEditing ||
+        matchFeedPosting ||
+        loadingFeed ||
+        matchFeedPopUp
+      ) && <NavBar />}
       <Outlet />
       {!(
         matchHome ||
