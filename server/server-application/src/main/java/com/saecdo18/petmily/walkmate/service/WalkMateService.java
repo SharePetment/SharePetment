@@ -160,7 +160,8 @@ public class WalkMateService {
     public List<WalkMateDto.Response> recentPage(int page, int size, String location, boolean openFilter){
 
         PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
-        List<WalkMate> walks = walkMateRepository.findByLocation(pageRequest, location).getContent();
+        List<WalkMate> walkMates = findWalksInThisLocation(location);
+        List<WalkMate> walks = walkMateRepository.findByLocation(pageRequest, walkMates).getContent();
 
         if(openFilter){
             onlyOpenWalk(walks);
@@ -306,4 +307,18 @@ public class WalkMateService {
                 .collect(Collectors.toList());
     }
 
+    private List<WalkMate> findWalksInThisLocation(String location){
+
+        List<WalkMate> allWalks = walkMateRepository.findAll();
+        List<WalkMate> result = new ArrayList<>();
+
+        for(WalkMate walk : allWalks){
+
+            if(walk.getLocation().contains(location)){
+                result.add(walk);
+            }
+        }
+
+        return result;
+    }
 }
