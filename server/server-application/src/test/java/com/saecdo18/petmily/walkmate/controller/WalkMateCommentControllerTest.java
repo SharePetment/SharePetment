@@ -1,30 +1,20 @@
 package com.saecdo18.petmily.walkmate.controller;
 
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.saecdo18.petmily.jwt.TokenProvider;
-import com.saecdo18.petmily.member.dto.MemberDto;
 import com.saecdo18.petmily.member.entity.Member;
-import com.saecdo18.petmily.member.service.MemberService;
 import com.saecdo18.petmily.walkmate.dto.WalkMateCommentDto;
-import com.saecdo18.petmily.walkmate.dto.WalkMateDto;
 import com.saecdo18.petmily.walkmate.entity.WalkMate;
 import com.saecdo18.petmily.walkmate.entity.WalkMateComment;
 import com.saecdo18.petmily.walkmate.mapper.WalkMateCommentMapper;
-import com.saecdo18.petmily.walkmate.mapper.WalkMateMapper;
 import com.saecdo18.petmily.walkmate.service.WalkMateCommentService;
-import com.saecdo18.petmily.walkmate.service.WalkMateService;
+
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -33,7 +23,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
