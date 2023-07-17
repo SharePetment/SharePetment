@@ -14,7 +14,7 @@ import LyingDownDog from '../../assets/illustration/lying-down-dog.png';
 import PetFriends from '../../assets/illustration/pet-friends.png';
 import Popup from '../../common/popup/Popup';
 import { PopupBackGround } from '../../common/popup/popup.styled';
-import FeedCard from '../../components/card/feedcard/FeedCard';
+import FeedCard from '../../components/card/feed-card/FeedCard';
 import SideNav from '../../components/card/sidenav/SideNav';
 import Toast from '../../components/toast/Toast';
 import { Feed } from '../../types/feedTypes';
