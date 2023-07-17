@@ -7,7 +7,7 @@ import { SERVER_URL } from '../../api/url';
 import { ReactComponent as FeedIcon } from '../../assets/feed.svg';
 import { ReactComponent as WalkFeedIcon } from '../../assets/walk-feed.svg';
 import Profile from '../../common/profile/Profile';
-import WalkCard from '../../components/card/walkCard/walkCard';
+import WalkCard from '../../components/card/walkcard/walkCard';
 import FollowList from '../../components/follow-list/FollowList';
 import LoadingComponent from '../../components/loading/LoadingComponent';
 import NoticeNotWrite from '../../components/notice/NoticeNotWrite';

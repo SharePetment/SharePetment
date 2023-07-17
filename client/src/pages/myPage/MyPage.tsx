@@ -11,7 +11,7 @@ import { ReactComponent as FeedIcon } from '../../assets/feed.svg';
 import Cat404 from '../../assets/illustration/404cat.png';
 import { ReactComponent as WalkFeedIcon } from '../../assets/walk-feed.svg';
 import Profile from '../../common/profile/Profile';
-import WalkCard from '../../components/card/walkCard/walkCard';
+import WalkCard from '../../components/card/walkcard/walkCard';
 import FollowList from '../../components/follow-list/FollowList';
 import LoadingComponent from '../../components/loading/LoadingComponent';
 import NoticeNoData from '../../components/notice/NoticeNoData';
