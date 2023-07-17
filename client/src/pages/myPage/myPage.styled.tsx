@@ -9,6 +9,7 @@ mt-10
 max-sm:mt-8
 bg-defaultbg
 w-screen
+mb-20
 `;
 
 // User Box
@@ -61,7 +62,7 @@ export const TabMenu = tw.ul`
   border-t-lightgray 
   w-[300px] 
   mx-auto
-  mb-8
+  mb-14
   mt-8
 `;
 
