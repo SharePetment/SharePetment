@@ -11,6 +11,7 @@ import com.saecdo18.petmily.image.repository.ImageRepository;
 import com.saecdo18.petmily.member.entity.Member;
 import com.saecdo18.petmily.member.repository.MemberRepository;
 import com.saecdo18.petmily.member.service.MemberService;
+import com.saecdo18.petmily.pet.dto.PetServiceDto;
 import com.saecdo18.petmily.pet.entity.PetImage;
 import com.saecdo18.petmily.pet.mapper.PetMapper;
 import com.saecdo18.petmily.pet.dto.PetDto;
@@ -41,7 +42,7 @@ public class PetService {
     private final MemberService memberService;
     private final static String BASE_IMAGE_URL = "https://main-project-junyoung.s3.ap-northeast-2.amazonaws.com/%E1%84%80%E1%85%B5%E1%84%87%E1%85%A9%E1%86%AB%E1%84%8B%E1%85%B5%E1%84%86%E1%85%B5%E1%84%8C%E1%85%B5%E1%84%91%E1%85%B3%E1%84%89%E1%85%A1.jpeg";
 
-    public PetDto.Response createPet(long memberId, PetDto.Post petPostDto) throws IOException {
+    public PetDto.Response createPet(long memberId, PetServiceDto.Post petPostDto) throws IOException {
         Member findMember = methodFindByMemberIdMember(memberId);
 
         Pet pet = Pet.nonePetIdAndMessage()
@@ -81,7 +82,7 @@ public class PetService {
     }
 
 
-    public PetDto.Response updatePet(long memberId, long petId, PetDto.Patch patchPet)throws IOException{
+    public PetDto.Response updatePet(long memberId, long petId, PetServiceDto.Patch patchPet)throws IOException{
         Pet findPet = methodFindByPetId(petId);
 
         if(memberId != findPet.getMember().getMemberId()){
