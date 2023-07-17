@@ -56,7 +56,6 @@ export default function WalkCard({
         </WalkMateItem>
       </WalkMateList>
       <WriterProfile>
-        {/* TODO:이후 수정 필요 */}
         <Profile size="sm" url={imageURL} isgreen="false" />
         <span className="text-semibold">{nickname}</span>
       </WriterProfile>

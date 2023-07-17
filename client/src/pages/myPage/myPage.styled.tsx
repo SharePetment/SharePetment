@@ -81,7 +81,9 @@ export const GridContainerFeed = tw.div`
 
 export const GridContainerWalk = tw.div`
   grid
+  gap-y-4
   grid-cols-[240px_240px_240px]
   max-sm:grid-cols-[240px_240px]
+  max-[500px]:grid-cols-[240px]
   justify-items-center	
 `;

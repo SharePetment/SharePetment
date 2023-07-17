@@ -108,6 +108,8 @@ export function Component() {
       ),
   });
 
+  console.log(walkFeedData);
+
   // 자신이 작성한 댓글 리스트 조회
   const { data: commentListData } = useQuery<CommentProp[]>({
     queryKey: ['commentList'],
@@ -279,13 +281,13 @@ export function Component() {
                   {!data?.animalParents ? (
                     <NoticeOnlyOwner />
                   ) : (
-                    <div>
+                    <div className="flex justify-center">
                       {!walkFeedData?.length ? (
                         <NoticeNoData url="walk-posting" />
                       ) : (
                         <GridContainerWalk>
                           {walkFeedData?.map(item => {
-                            const { time, content, maximum, location, open } =
+                            const { time, title, maximum, location, open } =
                               item;
                             return (
                               <Link
@@ -294,7 +296,7 @@ export function Component() {
                                 <WalkCard
                                   size="sm"
                                   time={time}
-                                  title={content}
+                                  title={title}
                                   friends={maximum}
                                   location={location}
                                   isclosed={`${open}`}

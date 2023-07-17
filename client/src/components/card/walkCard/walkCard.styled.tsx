@@ -27,6 +27,7 @@ export const WalkDate = tw.div`
 export const Title = tw.div`
   font-semibold
   text-lg
+  min-h-[56px]
 `;
 
 export const WalkMateList = tw.ul`
