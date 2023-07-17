@@ -44,7 +44,7 @@ export default function SelectComponent({ size, direction, setZip }: Prop) {
   const [zipNameVillage, setZipNameVillage] = useState('');
   const zipRef = useRef('');
   //  주소 저장
-  zipRef.current = `${zipNameCountry} ${zipNameCity} ${zipNameVillage}`;
+  zipRef.current = `${zipNameCountry} ${zipNameCity} ${zipNameVillage}`.trim();
   // hook 사용하기
 
   const { data: counrtyData, isLoading: countryLoading } = useQuery<getData>({
