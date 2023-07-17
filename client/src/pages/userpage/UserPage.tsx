@@ -256,6 +256,8 @@ export function Component() {
                                     friends={maximum}
                                     location={location}
                                     isclosed={`${open}`}
+                                    nickname={item.memberInfo.nickname}
+                                    imageURL={item.memberInfo.imageURL}
                                   />
                                 </Link>
                               );
