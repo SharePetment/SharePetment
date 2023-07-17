@@ -65,8 +65,8 @@ export function Component() {
   }
 
   return (
-    <div className="mt-10 flex flex-col justify-center">
-      <div className=" flex justify-end max-sm:flex-col items-center gap-4 pr-6">
+    <div className="mt-10 items-center flex flex-col justify-center">
+      <div className=" flex justify-end max-sm:justify-center gap-4 ">
         <Select size="md" direction="row" setZip={setZip} />
         <SearchButton onClick={handleClickSearchAddress}>검색</SearchButton>
       </div>
