@@ -1,6 +1,8 @@
 package com.saecdo18.petmily.feed.controller;
 
 import com.saecdo18.petmily.feed.dto.FeedCommentDto;
+import com.saecdo18.petmily.feed.dto.FeedCommentServiceDto;
+import com.saecdo18.petmily.feed.mapper.FeedMapper;
 import com.saecdo18.petmily.feed.service.FeedCommentServiceImpl;
 import com.saecdo18.petmily.util.AuthenticationGetMemberId;
 import lombok.RequiredArgsConstructor;
@@ -16,11 +18,13 @@ import javax.validation.Valid;
 public class FeedCommentController {
     private final FeedCommentServiceImpl feedCommentService;
     private final AuthenticationGetMemberId authenticationGetMemberId;
+    private final FeedMapper feedMapper;
 
     @PostMapping
     public ResponseEntity<FeedCommentDto.Response> createComment(@Valid @RequestBody FeedCommentDto.Post post) {
         long memberId = authenticationGetMemberId.getMemberId();
-        FeedCommentDto.Response response = feedCommentService.createComment(post, memberId);
+        FeedCommentServiceDto.Post postService = feedMapper.postCommentToServiceDto(post);
+        FeedCommentDto.Response response = feedCommentService.createComment(postService, memberId);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
@@ -28,7 +32,8 @@ public class FeedCommentController {
     public ResponseEntity<FeedCommentDto.Response> patchComment(@PathVariable("comment-id") long commentId,
                                           @Valid @RequestBody FeedCommentDto.Patch patch) {
         long memberId = authenticationGetMemberId.getMemberId();
-        FeedCommentDto.Response response = feedCommentService.updateComment(patch, commentId, memberId);
+        FeedCommentServiceDto.Patch patchService = feedMapper.patchCommentToServiceDto(patch);
+        FeedCommentDto.Response response = feedCommentService.updateComment(patchService, commentId, memberId);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

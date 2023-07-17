@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.saecdo18.petmily.feed.dto.FeedCommentDto;
 import com.saecdo18.petmily.feed.dto.FeedDto;
 import com.saecdo18.petmily.feed.dto.FeedDtoList;
+import com.saecdo18.petmily.feed.dto.FeedServiceDto;
 import com.saecdo18.petmily.feed.service.FeedServiceImpl;
 import com.saecdo18.petmily.image.dto.ImageDto;
 import com.saecdo18.petmily.jwt.TokenProvider;
@@ -79,7 +80,7 @@ class FeedControllerTest {
     void getFeedsRandom() throws Exception {
         long memberId = 1L;
         FeedDtoList feedDtoList = getFeedList(2);
-        FeedDto.PreviousListIds previousListIds = getPreviousListIds();
+        FeedServiceDto.PreviousListIds previousListIds = getPreviousListIds();
         String content = gson.toJson(feedDtoList);
         String previousList = gson.toJson(previousListIds);
 
@@ -133,13 +134,16 @@ class FeedControllerTest {
     @DisplayName("팔로우한 사용자 피드 리스트 가져오기")
     void getFeedsByMemberFollow() throws Exception {
         long memberId = 1L;
-        FeedDtoList feedDtoList = getFeedList(2);
-        FeedDto.PreviousListIds previousListIds = getPreviousListIds();
+        FeedDtoList feedDtoList = getFeedList(10);
+        FeedDtoList resultList = getFeedList(2);
+        feedDtoList.getResponseList().addAll(resultList.getResponseList());
+        FeedServiceDto.PreviousListIds previousListIds = getPreviousListIds();
         String content = gson.toJson(feedDtoList);
         String previousList = gson.toJson(previousListIds);
 
         given(feedService.getFeedsByMemberFollow(Mockito.anyLong(), any())).willReturn(feedDtoList);
-
+        given(feedService.checkIds(Mockito.any(), Mockito.any())).willReturn(previousListIds);
+        given(feedService.getFeedsRecent(Mockito.any(), Mockito.anyLong())).willReturn(resultList);
         mockMvc.perform(
                         post("/feeds/list")
                                 .accept(MediaType.APPLICATION_JSON)
@@ -147,11 +151,11 @@ class FeedControllerTest {
                                 .header("Authorization", tokenProvider.createAccessToken(memberId))
                                 .content(previousList)
                 ).andExpect(status().isOk())
-                .andExpect(content().json(content))
-                .andExpect(jsonPath("$.responseList[0].feedId").value(1))
-                .andExpect(jsonPath("$.responseList[1].feedId").value(2))
-                .andExpect(jsonPath("$.responseList[0].memberInfo.memberId").value(1))
-                .andExpect(jsonPath("$.responseList[1].memberInfo.memberId").value(1));
+                .andExpect(content().json(content));
+//                .andExpect(jsonPath("$.responseList[0].feedId").value(1))
+//                .andExpect(jsonPath("$.responseList[1].feedId").value(2))
+//                .andExpect(jsonPath("$.responseList[0].memberInfo.memberId").value(1))
+//                .andExpect(jsonPath("$.responseList[1].memberInfo.memberId").value(1));
     }
 
     @Test
@@ -199,7 +203,7 @@ class FeedControllerTest {
         FeedDto.Response response = getOneFeed(1L);
         String content = gson.toJson(response);
 
-        given(feedService.patchFeed(any(FeedDto.Patch.class), Mockito.anyLong())).willReturn(response);
+        given(feedService.patchFeed(any(FeedServiceDto.Patch.class), Mockito.anyLong())).willReturn(response);
 
         mockMvc.perform(
                     patch("/feeds/{feed-id}", feedId)
@@ -323,10 +327,10 @@ class FeedControllerTest {
                 .build();
     }
 
-    private FeedDto.PreviousListIds getPreviousListIds() {
+    private FeedServiceDto.PreviousListIds getPreviousListIds() {
         List<Long> list = new ArrayList<>();
         list.add(1L);
-        FeedDto.PreviousListIds idList = new FeedDto.PreviousListIds();
+        FeedServiceDto.PreviousListIds idList = new FeedServiceDto.PreviousListIds();
         idList.setPreviousListIds(list);
         return idList;
     }

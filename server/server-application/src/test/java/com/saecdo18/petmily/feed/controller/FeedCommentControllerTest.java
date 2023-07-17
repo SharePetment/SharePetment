@@ -2,6 +2,7 @@ package com.saecdo18.petmily.feed.controller;
 
 import com.google.gson.Gson;
 import com.saecdo18.petmily.feed.dto.FeedCommentDto;
+import com.saecdo18.petmily.feed.dto.FeedCommentServiceDto;
 import com.saecdo18.petmily.feed.service.FeedCommentServiceImpl;
 import com.saecdo18.petmily.feed.service.FeedServiceImpl;
 import com.saecdo18.petmily.jwt.TokenProvider;
@@ -47,7 +48,7 @@ class FeedCommentControllerTest {
         long feedId = 1L;
 
         FeedCommentDto.Response response = getFeedCommentDto(memberId);
-        FeedCommentDto.Post post = FeedCommentDto.Post.builder()
+        FeedCommentServiceDto.Post post = FeedCommentServiceDto.Post.builder()
                 .feedId(feedId)
                 .content("content")
                 .build();
@@ -73,7 +74,7 @@ class FeedCommentControllerTest {
         long commentId = 1L;
         long feedId = 1L;
         FeedCommentDto.Response response = getFeedCommentDto(memberId);
-        FeedCommentDto.Patch patch = FeedCommentDto.Patch.builder()
+        FeedCommentServiceDto.Patch patch = FeedCommentServiceDto.Patch.builder()
                 .feedId(feedId)
                 .content("content")
                 .build();
@@ -81,7 +82,7 @@ class FeedCommentControllerTest {
         String requestContent = gson.toJson(patch);
         String responseContent = gson.toJson(response);
 
-        given(feedCommentService.updateComment(any(), Mockito.anyLong(), Mockito.anyLong())).willReturn(response);
+        given(feedCommentService.updateComment(Mockito.any(FeedCommentServiceDto.Patch.class), Mockito.anyLong(), Mockito.anyLong())).willReturn(response);
 
         mockMvc.perform(
                 patch("/feeds/comments/{comment-id}", commentId)

@@ -1,6 +1,7 @@
 package com.saecdo18.petmily.feed.service;
 
 import com.saecdo18.petmily.feed.dto.FeedCommentDto;
+import com.saecdo18.petmily.feed.dto.FeedCommentServiceDto;
 import com.saecdo18.petmily.feed.entity.Feed;
 import com.saecdo18.petmily.feed.entity.FeedComments;
 import com.saecdo18.petmily.feed.mapper.FeedMapper;
@@ -43,7 +44,7 @@ class FeedCommentServiceImplTest {
     @DisplayName("댓글 생성 성공")
     void createCommentSuccess() {
         long memberId = 1L;
-        FeedCommentDto.Post post = FeedCommentDto.Post.builder()
+        FeedCommentServiceDto.Post post = FeedCommentServiceDto.Post.builder()
                 .content("content")
                 .feedId(1L)
                 .build();
@@ -84,7 +85,7 @@ class FeedCommentServiceImplTest {
     @DisplayName("댓글 생성 실패 - 피드를 찾을 수 없다.")
     void createCommentWhenFeedNotFound() {
         long memberId = 1L;
-        FeedCommentDto.Post post = FeedCommentDto.Post.builder()
+        FeedCommentServiceDto.Post post = FeedCommentServiceDto.Post.builder()
                 .content("content")
                 .feedId(1L)
                 .build();
@@ -100,7 +101,7 @@ class FeedCommentServiceImplTest {
     @DisplayName("댓글 생성 실패 - 사용자를 찾을 수 없다.")
     void createCommentWhenMemberNotFound() {
         long memberId = 1L;
-        FeedCommentDto.Post post = FeedCommentDto.Post.builder()
+        FeedCommentServiceDto.Post post = FeedCommentServiceDto.Post.builder()
                 .content("content")
                 .feedId(1L)
                 .build();
@@ -121,7 +122,7 @@ class FeedCommentServiceImplTest {
     void updateCommentSuccess() {
         long memberId = 1L;
         long commentId = 1L;
-        FeedCommentDto.Patch patch = FeedCommentDto.Patch.builder()
+        FeedCommentServiceDto.Patch patch = FeedCommentServiceDto.Patch.builder()
                 .content("수정")
                 .feedId(1L)
                 .build();
@@ -156,7 +157,7 @@ class FeedCommentServiceImplTest {
     void updateCommentFailsWhenCommentNotFound() {
         long memberId = 1L;
         long commentId = 1L;
-        FeedCommentDto.Patch patch = FeedCommentDto.Patch.builder()
+        FeedCommentServiceDto.Patch patch = FeedCommentServiceDto.Patch.builder()
                 .content("수정")
                 .feedId(1L)
                 .build();
@@ -173,7 +174,7 @@ class FeedCommentServiceImplTest {
     void updateCommentFailsWhenNoAuthorizePatch() {
         long memberId = 1L;
         long commentId = 1L;
-        FeedCommentDto.Patch patch = FeedCommentDto.Patch.builder()
+        FeedCommentServiceDto.Patch patch = FeedCommentServiceDto.Patch.builder()
                 .content("수정")
                 .feedId(1L)
                 .build();
@@ -223,7 +224,7 @@ class FeedCommentServiceImplTest {
     void deleteCommentFailsWhenCommentNotFound() {
         long memberId = 1L;
         long commentId = 1L;
-        FeedCommentDto.Patch patch = FeedCommentDto.Patch.builder()
+        FeedCommentServiceDto.Patch patch = FeedCommentServiceDto.Patch.builder()
                 .content("삭제")
                 .feedId(1L)
                 .build();
