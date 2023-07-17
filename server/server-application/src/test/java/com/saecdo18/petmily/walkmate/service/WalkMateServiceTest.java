@@ -487,7 +487,7 @@ class WalkMateServiceTest {
 
         given(walkMateMapper.walkMateToWalkMateResponseDto(Mockito.any(WalkMate.class))).willReturn(response);
         given(memberRepository.findById(Mockito.anyLong())).willReturn(Optional.of(member));
-        given(walkMateRepository.findByLocation(Mockito.any(Pageable.class), Mockito.anyString())).willReturn(walkMatePage);
+        given(walkMateRepository.findByLocationContaining(Mockito.any(Pageable.class), Mockito.anyString())).willReturn(walkMatePage);
 
         List<WalkMateDto.Response> result = walkMateService.recentPage(0, 10, response.getLocation(), response.getOpen());
 
@@ -537,7 +537,7 @@ class WalkMateServiceTest {
         responseList.add(response);
 
         given(memberRepository.findById(Mockito.anyLong())).willReturn(Optional.empty());
-        given(walkMateRepository.findByLocation(Mockito.any(Pageable.class), Mockito.anyString())).willReturn(walkMatePage);
+        given(walkMateRepository.findByLocationContaining(Mockito.any(Pageable.class), Mockito.anyString())).willReturn(walkMatePage);
         RuntimeException exception = assertThrows(RuntimeException.class, ()->walkMateService.recentPage(0, 10, responseList.get(0).getLocation(), responseList.get(0).getOpen()));
         assertEquals(exception.getMessage(), "사용자를 찾을 수 없습니다.");
     }
