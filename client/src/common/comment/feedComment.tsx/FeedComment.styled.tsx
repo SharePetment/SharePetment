@@ -8,18 +8,19 @@ export const UserBox = tw.div`
   flex
   items-center
   gap-2
+  cursor-pointer
 `;
 
 export const UserId = tw.span`
   font-black
   text-defaulttext
   text-xs
-  
 `;
 
 export const Time = tw.span`
   text-deepgray
   text-xs
+  cursor-default
 `;
 
 export const Content = tw.span`
