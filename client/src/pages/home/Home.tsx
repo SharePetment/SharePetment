@@ -1,5 +1,6 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useInView } from 'react-intersection-observer';
 import { useNavigate } from 'react-router-dom';
 import { Mousewheel, Navigation, Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -48,6 +49,13 @@ export function Component() {
       queryClient.invalidateQueries({ queryKey: ['contextApi'] });
     },
   });
+
+  // 무한 쿼리 구현
+  const { ref, inView } = useInView();
+
+  useEffect(() => {
+    console.log('done');
+  }, [inView]);
 
   if (hostFeedQuery.isSuccess && accessToken) {
     return (
@@ -121,7 +129,9 @@ export function Component() {
               <SwiperSlide
                 className="w-96 max-sm:w-full max-sm:h-full"
                 key={idx}>
-                <div className="flex justify-center items-center gap-5 max-sm:flex-col">
+                <div
+                  className="flex justify-center items-center gap-5 max-sm:flex-col"
+                  ref={ref}>
                   <FeedCard
                     memberid={img.memberInfo.memberId}
                     username={img.memberInfo.nickname}
