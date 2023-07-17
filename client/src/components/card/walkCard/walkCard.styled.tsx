@@ -56,7 +56,7 @@ export const WriterProfile = tw.div`
 `;
 
 export const Backdrop = tw.div<{ size: string }>`
-  ${prop => prop.size === 'sm' && `w-[224px] h-[262px]`}
+  ${prop => prop.size === 'sm' && `w-[224px] h-[290px]`}
   ${prop => prop.size === 'lg' && `w-60 h-72`}
   rounded-[28px]
   bg-defaulttext
