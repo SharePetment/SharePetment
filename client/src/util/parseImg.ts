@@ -1,8 +1,10 @@
+import { FeedImage } from '../types/feedTypes';
+
 interface ParseImgProp {
   e: React.ChangeEvent<HTMLInputElement>;
   setSavedFile: React.Dispatch<React.SetStateAction<string[]>>;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setPrevFile: React.Dispatch<React.SetStateAction<File[]>>;
+  setPrevFile: React.Dispatch<React.SetStateAction<(File | FeedImage)[]>>;
   savedFile: string[];
 }
 
@@ -31,7 +33,10 @@ export const parseImg = ({
     const readAndPreview = (file: File) => {
       if (/\.(jpe?g|png)$/i.test(file.name)) {
         const reader = new FileReader();
-        setPrevFile(prev => [...prev, file]);
+        setPrevFile(prev => {
+          console.log(prev);
+          return [...prev, file];
+        });
         reader.readAsDataURL(file);
         return new Promise<void>(resolve => {
           reader.onload = () => {
@@ -51,8 +56,9 @@ interface DeleteImgProp {
   setSavedFile: React.Dispatch<React.SetStateAction<string[]>>;
   savedFile: string[];
   order: number;
-  setPrevFile: React.Dispatch<React.SetStateAction<File[]>>;
-  prevFile: File[];
+  setPrevFile: React.Dispatch<React.SetStateAction<(File | FeedImage)[]>>;
+  prevFile: (File | FeedImage)[];
+  setRemovedFile: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 export const deleteImg = ({
@@ -61,11 +67,17 @@ export const deleteImg = ({
   order,
   setPrevFile,
   prevFile,
+  setRemovedFile,
 }: DeleteImgProp) => {
   let preCopy = prevFile;
+  if ('originalFilename' in preCopy[order]) {
+    const removeFile = preCopy[order] as FeedImage;
+    setRemovedFile(prev => [...prev, removeFile.originalFilename]);
+  }
   preCopy = preCopy.filter((_, idx) => idx !== order);
   let copy = savedFile;
   copy = copy.filter((_, idx) => idx !== order);
+
   setPrevFile(preCopy);
   setSavedFile(copy);
 };

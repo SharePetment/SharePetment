@@ -72,15 +72,16 @@ export function Component() {
     },
   });
 
-  const onSumbit = (data: Inputs) => {
-    const body = {
-      ...data,
+  const onSumbit = (body: Inputs) => {
+    const obj = {
+      ...body,
       mapURL: `${coordinates.La} ${coordinates.Ma} ${detailAddress}`,
       open: true,
       accessToken: accessToken as string,
+      walkId: data?.walkMatePostId as number,
     };
 
-    walkPatchFillMutation.mutate(body);
+    walkPatchFillMutation.mutate(obj);
   };
 
   // 주소 값 저장하기
@@ -114,9 +115,9 @@ export function Component() {
                 <Label htmlFor="title">제목</Label>
                 <InputText
                   id="title"
-                  value={data?.title}
                   {...register('title', {
                     required: '텍스트 필수입니다.',
+                    value: data?.title ? data?.title : '',
                     maxLength: {
                       value: 20,
                       message: '20자 이내로 작성해주세요 ;)',
@@ -138,9 +139,9 @@ export function Component() {
                   id="time"
                   className=" cursor-pointer"
                   type="datetime-local"
-                  value={data?.time}
                   {...register('time', {
                     required: '날짜도 필수입니다.',
+                    value: data?.time ? data?.time : '',
                     maxLength: {
                       value: 20,
                       message: '20자 이내로 작성해주세요 ;)',
@@ -164,7 +165,6 @@ export function Component() {
                   type="text"
                   readOnly
                   value={`${mainAddress} ${detailAddress}`}
-                  onClick={() => console.log('his')}
                   {...register('location', {
                     required: '장소를 선택해주세요!',
                     value: `${mainAddress}`,
@@ -189,9 +189,10 @@ export function Component() {
                 <InputText
                   id="chatURL"
                   type="text"
-                  value={data?.chatURL}
                   placeholder="(필수X)채팅방 링크가 있다면 입력해주세요:) "
-                  {...register('chatURL')}
+                  {...register('chatURL', {
+                    value: data?.chatURL ? data?.chatURL : '',
+                  })}
                   error={errors.chatURL?.message}
                 />
                 <ErrorMessage
@@ -209,9 +210,9 @@ export function Component() {
                 <InputText
                   id="maximum"
                   type="number"
-                  value={data?.maximum}
                   {...register('maximum', {
                     required: '필수',
+                    value: data?.maximum ? data?.maximum : 0,
                     min: {
                       value: 1,
                       message: '1마리 이상이어야해요!',
@@ -229,8 +230,8 @@ export function Component() {
               {/* 텍스트 입력창 */}
               <Textarea
                 placeholder="글을 작성해주세요"
-                value={data?.content}
                 {...register('content', {
+                  value: data?.content ? data?.content : '',
                   maxLength: 300,
                 })}
               />

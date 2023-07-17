@@ -165,7 +165,7 @@ interface FeedPostingProp {
   accessToken: string | null;
   formData: FormData;
 }
-export const feedPosting = async (body: FeedPostingProp) => {
+export const postFeed = async (body: FeedPostingProp) => {
   const { url, accessToken, formData } = body;
   const result = await axios.post(url, formData, {
     headers: {
@@ -174,6 +174,19 @@ export const feedPosting = async (body: FeedPostingProp) => {
     },
   });
   return result.data;
+};
+
+/* -------------------------------- 피드게시물 수정 -------------------------------- */
+
+export const patchFeed = async (body: FeedPostingProp) => {
+  const { url, accessToken, formData } = body;
+  const result = await axios.patch(url, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+      Authorization: accessToken,
+    },
+  });
+  return result;
 };
 
 /* -------------------------------- 피드게시물 삭제 -------------------------------- */
@@ -336,13 +349,25 @@ export const deleteWalkFeed = async (body: WalkStatusProp) => {
 };
 
 /* -------------------------------- 산책 게시물 수정 -------------------------------- */
+interface PatchWalkPosProp {
+  title: string;
+  content: string;
+  mapURL: string;
+  chatURL: string;
+  location: string;
+  time: string;
+  open: boolean;
+  maximum: number;
+  accessToken: string;
+  walkId: number;
+}
 
-export const patchWalkFeed = async (payload: FillWalkPosProp) => {
+export const patchWalkFeed = async (payload: PatchWalkPosProp) => {
   const { title, content, mapURL, chatURL, location, time, open, maximum } =
     payload;
 
-  const result = await axios.post(
-    `${SERVER_URL}/walkmates`,
+  const result = await axios.patch(
+    `${SERVER_URL}/walkmates/${payload.walkId}`,
     {
       title,
       content,

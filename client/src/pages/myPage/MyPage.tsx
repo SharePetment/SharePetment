@@ -269,7 +269,11 @@ export function Component() {
                           <Link to={`/home/${item.feedId}`} key={item.feedId}>
                             <img
                               className="w-full h-[180px] rounded-[28px] object-cover border-2 hover:drop-shadow-lg"
-                              src={item.images[0].uploadFileURL}
+                              src={
+                                item.images[0]
+                                  ? item.images[0].uploadFileURL
+                                  : ''
+                              }
                             />
                           </Link>
                         ))}

@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useReadLocalStorage } from 'usehooks-ts';
 import { deleteFeedComment, patchFeedComment } from '../../../api/mutationfn';
 import { SERVER_URL } from '../../../api/url';
@@ -25,6 +26,7 @@ interface Prop {
   content: string;
   commentid: number;
   blankhandler: React.Dispatch<React.SetStateAction<boolean>>;
+  memberid: number;
 }
 
 export default function FeedComment({
@@ -35,15 +37,16 @@ export default function FeedComment({
   content,
   commentid,
   blankhandler,
+  memberid,
 }: Prop) {
+  const navigate = useNavigate();
   const accessToken = useReadLocalStorage('accessToken');
   const [isEditOpen, setIsEditOpen] = useState<boolean>(false);
   const queryClient = useQueryClient();
 
   const commentEditMuation = useMutation({
     mutationFn: patchFeedComment,
-    onSuccess: data => {
-      console.log(data);
+    onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['feedPopUp', feedid],
       });
@@ -84,7 +87,7 @@ export default function FeedComment({
 
   return (
     <Container>
-      <UserBox>
+      <UserBox onClick={() => navigate(`/users/${memberid}`)}>
         <Profile size="sm" isgreen="false" url={userimg} />
         <UserId>{nickname}</UserId>
         <Time>몇시간전</Time>

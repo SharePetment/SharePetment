@@ -10,6 +10,7 @@ function App() {
   const matchInfoEditing = useMatch('/info/:userId'); //object || null
   const matchFeed = useMatch('/home');
   const matchFeedPosting = useMatch('/feed-posting');
+  const matchFeedEditing = useMatch('/feed-posting/:feedId');
   const loadingFeed = useMatch('/loading');
 
   return (
@@ -20,7 +21,8 @@ function App() {
         matchInfoEditing ||
         matchFeedPosting ||
         loadingFeed ||
-        matchFeedPopUp
+        matchFeedPopUp ||
+        matchFeedEditing
       ) && <Header />}
       {!(
         matchHome ||
@@ -37,7 +39,8 @@ function App() {
         matchFeed ||
         matchInfoEditing ||
         matchFeedPosting ||
-        matchFeedPopUp
+        matchFeedPopUp ||
+        matchFeedEditing
       ) && <Footer />}
     </>
   );

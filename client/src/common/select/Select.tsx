@@ -14,6 +14,25 @@ interface Prop {
 
 const BASE_PATTERN = '*00000000';
 
+const BASE_CODE: { [key: string]: string } = {
+  서울특별시: '서울',
+  부산광역시: '부산',
+  대구광역시: '대구',
+  인천광역시: '인천',
+  광주광역시: '광주',
+  대전광역시: '대전',
+  울산광역시: '울산',
+  경기도: '경기',
+  충청북도: '충북',
+  충청남도: '충남',
+  전라북도: '전북',
+  전라남도: '전남',
+  경상북도: '경북',
+  경상남도: '경남',
+  제주특별자치도: '제주특별자치도',
+  강원특별자치도: '강원특별자치도',
+};
+
 export default function SelectComponent({ size, direction, setZip }: Prop) {
   //state
   const [countryCode, setCountryCode] = useState<undefined | string>(undefined);
@@ -26,8 +45,8 @@ export default function SelectComponent({ size, direction, setZip }: Prop) {
   const zipRef = useRef('');
   //  주소 저장
   zipRef.current = `${zipNameCountry} ${zipNameCity} ${zipNameVillage}`;
-
   // hook 사용하기
+
   const { data: counrtyData, isLoading: countryLoading } = useQuery<getData>({
     queryKey: ['country'],
     queryFn: () => getLocal(BASE_PATTERN),
@@ -49,7 +68,7 @@ export default function SelectComponent({ size, direction, setZip }: Prop) {
   useEffect(() => {
     if (!countryLoading) {
       setCountryCode(changeCountryCode(cityData?.regcodes[0].code as string));
-      setZipNameCountry('서울특별시');
+      setZipNameCountry(BASE_CODE.서울특별시);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [countryLoading]);
@@ -70,7 +89,7 @@ export default function SelectComponent({ size, direction, setZip }: Prop) {
           const valueArr = e.target.value.split(' ');
           setCountryCode(changeCountryCode(valueArr[0]));
           setCityCode('');
-          setZipNameCountry(valueArr[1]);
+          setZipNameCountry(BASE_CODE[valueArr[1]]);
           setZipNameCity('');
           setZipNameVillage('');
         }}>

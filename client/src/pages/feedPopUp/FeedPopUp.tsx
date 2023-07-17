@@ -157,6 +157,7 @@ export function Component() {
                       commentid={comment.feedCommentsId}
                       feedid={data.feedId}
                       blankhandler={setIsBlank}
+                      memberid={comment.memberInfo.memberId}
                     />
                   ))}
               </CommentBox>
