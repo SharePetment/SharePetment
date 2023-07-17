@@ -27,12 +27,10 @@ export function Component() {
     data,
     isLoading,
     refetch,
-    hasNextPage,
     fetchNextPage,
-    isFetchingNextPage,
     // isError,
   } = useInfiniteQuery<WalkFeed[]>({
-    queryKey: ['walkmateList'],
+    queryKey: ['walkmateList', 'key'],
     queryFn: ({ pageParam = 0 }) => {
       console.log(pageParam);
       return getServerDataWithJwt(
@@ -50,6 +48,7 @@ export function Component() {
     enabled: !!zip,
   });
   const handleClickSearchAddress = () => {
+    console.log(zip);
     refetch();
   };
 
@@ -97,13 +96,7 @@ export function Component() {
             </React.Fragment>
           ))}
       </GridContainer>
-      <div ref={ref}>
-        {isFetchingNextPage
-          ? 'Loading more...'
-          : hasNextPage
-          ? 'Load Newer'
-          : 'Nothing more to load'}
-      </div>
+      <div ref={ref}></div>
     </div>
   );
 }
