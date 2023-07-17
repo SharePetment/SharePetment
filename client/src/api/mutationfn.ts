@@ -165,7 +165,7 @@ interface FeedPostingProp {
   accessToken: string | null;
   formData: FormData;
 }
-export const feedPosting = async (body: FeedPostingProp) => {
+export const postFeed = async (body: FeedPostingProp) => {
   const { url, accessToken, formData } = body;
   const result = await axios.post(url, formData, {
     headers: {
@@ -174,6 +174,19 @@ export const feedPosting = async (body: FeedPostingProp) => {
     },
   });
   return result.data;
+};
+
+/* -------------------------------- 피드게시물 수정 -------------------------------- */
+
+export const patchFeed = async (body: FeedPostingProp) => {
+  const { url, accessToken, formData } = body;
+  const result = await axios.patch(url, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+      Authorization: accessToken,
+    },
+  });
+  return result;
 };
 
 /* -------------------------------- 피드게시물 삭제 -------------------------------- */
