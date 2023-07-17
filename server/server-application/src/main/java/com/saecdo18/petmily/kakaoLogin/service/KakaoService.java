@@ -156,7 +156,7 @@ public class KakaoService {
 //                .host("localhost")
                 .host("share-petment.s3-website.ap-northeast-2.amazonaws.com")
 //                .port(5374)
-//                .path("loading")
+                .path("loading")
                 .queryParams(queryParams)
                 .build()
                 .toUri();
