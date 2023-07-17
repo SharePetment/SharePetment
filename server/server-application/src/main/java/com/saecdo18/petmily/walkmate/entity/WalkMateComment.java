@@ -26,7 +26,7 @@ public class WalkMateComment extends BaseEntity {
 
 
     @ManyToOne
-    @JoinColumn(name = "walkmatepost_id")
+    @JoinColumn(name = "walkmatepost_id") //수정1
     private WalkMate walkMate;
 
     @ManyToOne
