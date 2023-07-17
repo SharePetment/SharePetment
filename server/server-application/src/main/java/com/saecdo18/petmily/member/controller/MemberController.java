@@ -37,7 +37,7 @@ public class MemberController {
     private final MemberMapper memberMapper;
     private final MemberService memberService;
     private final MemberRepository memberRepository;
-    private final AuthenticationGetMemberId authenticationGetMemberId;
+    private final AuthenticationGetMemberId authenticationGetMemberId;//
 
 
 
