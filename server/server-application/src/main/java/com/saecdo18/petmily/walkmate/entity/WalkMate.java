@@ -2,6 +2,7 @@ package com.saecdo18.petmily.walkmate.entity;
 
 import com.saecdo18.petmily.feed.entity.BaseEntity;
 import com.saecdo18.petmily.member.entity.Member;
+import com.saecdo18.petmily.member.entity.Role;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -70,6 +71,13 @@ public class WalkMate extends BaseEntity {
         this.likeCount = likeCount;
     }
 
+    @Builder(builderMethodName = "testWalkSet")
+    public WalkMate(long walkMatePostId,String title, String content){
+        this.walkMatePostId = walkMatePostId;
+        this.title=title;
+        this.content = content;
+    }
+
     public void updateWalk(String title, String content, String mapURL, String chatURL, String location,
                            String time, Boolean open, Integer maximum) {
 
@@ -82,6 +90,12 @@ public class WalkMate extends BaseEntity {
         this.open = open;
         this.maximum = maximum;
     }
+
+    public void setOpen(Boolean open){
+        this.open=open;
+    }
+
+
 
     public void setMember(Member member) {
         this.member = member;

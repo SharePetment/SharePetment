@@ -3,6 +3,8 @@ package com.saecdo18.petmily.feed.service;
 import com.saecdo18.petmily.awsConfig.S3UploadService;
 import com.saecdo18.petmily.feed.dto.FeedCommentDto;
 import com.saecdo18.petmily.feed.dto.FeedDto;
+import com.saecdo18.petmily.feed.dto.FeedDtoList;
+import com.saecdo18.petmily.feed.dto.FeedServiceDto;
 import com.saecdo18.petmily.feed.entity.Feed;
 import com.saecdo18.petmily.feed.entity.FeedImage;
 import com.saecdo18.petmily.feed.entity.FeedLike;
@@ -15,6 +17,7 @@ import com.saecdo18.petmily.image.dto.ImageDto;
 import com.saecdo18.petmily.image.entity.Image;
 import com.saecdo18.petmily.image.repository.ImageRepository;
 import com.saecdo18.petmily.member.dto.MemberDto;
+import com.saecdo18.petmily.member.entity.FollowMember;
 import com.saecdo18.petmily.member.entity.Member;
 import com.saecdo18.petmily.member.repository.FollowMemberRepository;
 import com.saecdo18.petmily.member.repository.MemberRepository;
@@ -26,6 +29,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.mock.web.MockMultipartFile;
@@ -79,7 +83,7 @@ class FeedServiceImplTest {
         ReflectionTestUtils.setField(member, "feedCount", 0);
 
         List<MultipartFile> imageList = new ArrayList<>();
-        FeedDto.Post post = FeedDto.Post.builder()
+        FeedServiceDto.Post post = FeedServiceDto.Post.builder()
                 .content("content")
                 .images(imageList)
                 .build();
@@ -119,7 +123,7 @@ class FeedServiceImplTest {
         assertEquals(result.getImages().size(), 0);
         assertEquals(result.getMemberInfo().getMemberId(), memberId);
         assertEquals(result.getContent(), post.getContent());
-        assertEquals(result.getShareURL(), "http://43.202.86.53:8080/feeds/all/"+feedId+"/0");
+        assertEquals(result.getShareURL(), "http://43.202.86.53:8080/feeds/all/"+feedId);
         assertEquals(member.getFeedCount(), 1);
     }
 
@@ -135,7 +139,7 @@ class FeedServiceImplTest {
 
         List<MultipartFile> imageList = List.of(new MockMultipartFile("image", "gitimage.png", "image/png",
                 new FileInputStream(getClass().getResource("/gitimage.png").getFile())));
-        FeedDto.Post post = FeedDto.Post.builder()
+        FeedServiceDto.Post post = FeedServiceDto.Post.builder()
                 .content("content")
                 .images(imageList)
                 .build();
@@ -198,7 +202,7 @@ class FeedServiceImplTest {
 
         List<MultipartFile> imageList = List.of(new MockMultipartFile("image", "gitimage.png", "image/png",
                 new FileInputStream(getClass().getResource("/gitimage.png").getFile())));
-        FeedDto.Post post = FeedDto.Post.builder()
+        FeedServiceDto.Post post = FeedServiceDto.Post.builder()
                 .content("content")
                 .images(imageList)
                 .build();
@@ -277,38 +281,210 @@ class FeedServiceImplTest {
     }
 
     @Test
-    @DisplayName("피드 최신순 가져오기 성공 - 사용자 아이디 0")
+    @DisplayName("피드 최신순 가져오기 성공")
     void getFeedsRecent() {
-//        long memberId = 0L;
-//        long totalCount = 15;
-//        int page = 0;
-//        List<Long> previousIds = List.of(1L, 2L);
-//        FeedDto.PreviousListIds listIds = new FeedDto.PreviousListIds();
-//        listIds.setPreviousListIds(previousIds);
-//        List<Feed> pageDataList = new ArrayList<>();
-//
-//        for (int i = 15; i >= 1; i--) {
-//            Feed feed = new Feed();
-//            ReflectionTestUtils.setField(feed, "feedId", i);
-//            pageDataList.add(feed);
-//        }
-//        List<Feed> feedList = new ArrayList<>();
-//
-//        given(feedRepository.count()).willReturn(totalCount);
-//        given(feedRepository.findAll(Mockito.any(PageRequest.class))).willReturn(new Page<Feed>() {
-//        });
+        long memberId = 1L;
+        long totalCount = 1L;
+        FeedServiceDto.PreviousListIds listIds = new FeedServiceDto.PreviousListIds();
+        listIds.setPreviousListIds(new ArrayList<Long>(){});
+        Member member = new Member();
+        ReflectionTestUtils.setField(member, "memberId", 2L);
+        Feed feed = new Feed();
+        ReflectionTestUtils.setField(feed, "feedId", 1L);
+        ReflectionTestUtils.setField(feed, "member", member);
+        List<Feed> pageDataList = List.of(feed);
+        Page<Feed> pageFeed = new PageImpl<>(pageDataList);
+        List<Feed> feedList = List.of(feed);
+        MemberDto.Info memberInfo = MemberDto.Info.builder().memberId(1L).build();
+        List<FeedImage> feedImageList = new ArrayList<>();
+        Image image = new Image();
+        ReflectionTestUtils.setField(image, "imageId", 1L);
+        FeedImage feedImage = FeedImage.builder().image(image).feed(feed).build();
+        feedImageList.add(feedImage);
+        ImageDto imageDto = ImageDto.builder().imageId(image.getImageId()).build();
+        List<ImageDto> imageDtoList = List.of(imageDto);
+        FeedDto.Response response = FeedDto.Response.builder()
+                .feedId(1L)
+                .memberInfo(memberInfo)
+                .images(imageDtoList)
+                .build();
+
+        given(feedRepository.count()).willReturn(totalCount);
+        given(feedRepository.findAll(Mockito.any(PageRequest.class))).willReturn(pageFeed);
+
+        given(feedMapper.FeedToFeedDtoResponse(Mockito.any(Feed.class))).willReturn(response);
+        given(feedCommentsRepository.findByFeedFeedId(Mockito.anyLong())).willReturn(Optional.empty());
+        given(feedImageRepository.findByFeed(Mockito.any(Feed.class))).willReturn(feedImageList);
+        given(feedMapper.imageToImageDto(Mockito.any(Image.class))).willReturn(imageDto);
+        given(memberRepository.findById(Mockito.anyLong())).willReturn(Optional.of(member));
+
+        FeedDtoList result = feedService.getFeedsRecent(listIds, memberId);
+
+        assertEquals(result.getResponseList().size(), 1);
     }
 
     @Test
+    @DisplayName("사용자 피드 리스트 가져오기")
     void getFeedsByMember() {
+        int page = 0;
+        int size = 10;
+        long memberId = 1L;
+        FeedDto.PreviousListIds listIds = new FeedDto.PreviousListIds();
+        listIds.setPreviousListIds(new ArrayList<Long>(){});
+        Member member = new Member();
+        ReflectionTestUtils.setField(member, "memberId", 2L);
+        Feed feed = new Feed();
+        ReflectionTestUtils.setField(feed, "feedId", 1L);
+        ReflectionTestUtils.setField(feed, "member", member);
+        List<Feed> pageDataList = List.of(feed);
+        Page<Feed> pageFeed = new PageImpl<>(pageDataList);
+        List<Feed> feedList = List.of(feed);
+        MemberDto.Info memberInfo = MemberDto.Info.builder().memberId(1L).build();
+        List<FeedImage> feedImageList = new ArrayList<>();
+        Image image = new Image();
+        ReflectionTestUtils.setField(image, "imageId", 1L);
+        FeedImage feedImage = FeedImage.builder().image(image).feed(feed).build();
+        feedImageList.add(feedImage);
+        ImageDto imageDto = ImageDto.builder().imageId(image.getImageId()).build();
+        List<ImageDto> imageDtoList = List.of(imageDto);
+        FeedDto.Response response = FeedDto.Response.builder()
+                .feedId(1L)
+                .memberInfo(memberInfo)
+                .images(imageDtoList)
+                .build();
+
+        given(memberRepository.findById(Mockito.anyLong())).willReturn(Optional.of(member));
+        given(feedRepository.findAllByMemberOrderByCreatedAtDesc(Mockito.any(Member.class),Mockito.any(PageRequest.class))).willReturn(pageFeed);
+
+        given(feedMapper.FeedToFeedDtoResponse(Mockito.any(Feed.class))).willReturn(response);
+        given(feedCommentsRepository.findByFeedFeedId(Mockito.anyLong())).willReturn(Optional.empty());
+        given(feedImageRepository.findByFeed(Mockito.any(Feed.class))).willReturn(feedImageList);
+        given(feedMapper.imageToImageDto(Mockito.any(Image.class))).willReturn(imageDto);
+        given(memberRepository.findById(Mockito.anyLong())).willReturn(Optional.of(member));
+
+        FeedDtoList result = feedService.getFeedsByMember(page, size, memberId);
+
+        assertEquals(result.getResponseList().size(), 1);
+
     }
 
     @Test
+    @DisplayName("팔로우한 사용자들의 리스트 가져오기")
     void getFeedsByMemberFollow() {
+        long memberId = 1L;
+        List<FollowMember> followMemberList = new ArrayList<>();
+        FeedServiceDto.PreviousListIds listIds = new FeedServiceDto.PreviousListIds();
+        listIds.setPreviousListIds(new ArrayList<Long>(){});
+        Member member = new Member();
+        ReflectionTestUtils.setField(member, "memberId", 2L);
+        FollowMember followMember = FollowMember.builder()
+                .followerMember(member)
+                .followingId(memberId)
+                .build();
+        followMemberList.add(followMember);
+        Feed feed = new Feed();
+        ReflectionTestUtils.setField(feed, "feedId", 1L);
+        ReflectionTestUtils.setField(feed, "member", member);
+        List<Feed> pageDataList = List.of(feed);
+        Page<Feed> pageFeed = new PageImpl<>(pageDataList);
+        List<Feed> feedList = List.of(feed);
+        MemberDto.Info memberInfo = MemberDto.Info.builder().memberId(1L).build();
+        List<FeedImage> feedImageList = new ArrayList<>();
+        Image image = new Image();
+        ReflectionTestUtils.setField(image, "imageId", 1L);
+        FeedImage feedImage = FeedImage.builder().image(image).feed(feed).build();
+        feedImageList.add(feedImage);
+        ImageDto imageDto = ImageDto.builder().imageId(image.getImageId()).build();
+        List<ImageDto> imageDtoList = List.of(imageDto);
+        FeedDto.Response response = FeedDto.Response.builder()
+                .feedId(1L)
+                .memberInfo(memberInfo)
+                .images(imageDtoList)
+                .build();
+
+        given(followMemberRepository.findByFollowingId(Mockito.anyLong())).willReturn(Optional.of(followMemberList));
+        given(feedRepository.findAllByMemberOrderByCreatedAtDesc(Mockito.any(Member.class),Mockito.any(PageRequest.class))).willReturn(pageFeed);
+
+        given(feedMapper.FeedToFeedDtoResponse(Mockito.any(Feed.class))).willReturn(response);
+        given(feedCommentsRepository.findByFeedFeedId(Mockito.anyLong())).willReturn(Optional.empty());
+        given(feedImageRepository.findByFeed(Mockito.any(Feed.class))).willReturn(feedImageList);
+        given(feedMapper.imageToImageDto(Mockito.any(Image.class))).willReturn(imageDto);
+        given(memberRepository.findById(Mockito.anyLong())).willReturn(Optional.of(member));
+
+        FeedDtoList result = feedService.getFeedsByMemberFollow(memberId, listIds);
+
+        assertEquals(result.getResponseList().size(), 1);
     }
 
     @Test
-    void patchFeed() {
+    @DisplayName("피드 수정 성공")
+    void patchFeedSuccess() throws IOException {
+        long memberId = 1L;
+        Member member = new Member();
+        List<MultipartFile> multipartFiles = new ArrayList<>();
+        List<String> deleteImageList = new ArrayList<>();
+        FeedServiceDto.Patch patch = FeedServiceDto.Patch.builder()
+                .feedId(1L)
+                .content("content2")
+                .addImages(multipartFiles)
+                .deleteImages(deleteImageList)
+                .build();
+        ReflectionTestUtils.setField(member, "memberId", 1L);
+        Feed feed = Feed.builder()
+                .content("content")
+                .member(member)
+                .build();
+        ReflectionTestUtils.setField(feed, "feedId", 1L);
+        MemberDto.Info memberInfo = MemberDto.Info.builder()
+                .memberId(memberId)
+                .build();
+
+        List<FeedImage> feedImageList = new ArrayList<>();
+        Image image = new Image();
+        ReflectionTestUtils.setField(image, "imageId", 1L);
+        FeedImage feedImage = FeedImage.builder().image(image).feed(feed).build();
+        feedImageList.add(feedImage);
+        List<ImageDto> imageDtoList = new ArrayList<>();
+        ImageDto imageDto = ImageDto.builder().imageId(image.getImageId()).build();
+        imageDtoList.add(imageDto);
+        FeedDto.Response response = FeedDto.Response.builder()
+                .feedId(feed.getFeedId())
+                .memberInfo(memberInfo)
+                .content(patch.getContent())
+                .images(imageDtoList)
+                .build();
+
+        given(feedRepository.findById(Mockito.anyLong())).willReturn(Optional.of(feed));
+
+        given(feedMapper.FeedToFeedDtoResponse(Mockito.any(Feed.class))).willReturn(response);
+        given(feedCommentsRepository.findByFeedFeedId(Mockito.anyLong())).willReturn(Optional.empty());
+        given(memberRepository.findById(Mockito.anyLong())).willReturn(Optional.of(member));
+        given(feedImageRepository.findByFeed(Mockito.any(Feed.class))).willReturn(feedImageList);
+        given(feedMapper.imageToImageDto(Mockito.any(Image.class))).willReturn(imageDto);
+        given(memberRepository.findById(Mockito.anyLong())).willReturn(Optional.of(member));
+        given(feedLikeRepository.findByMemberAndFeed(Mockito.any(Member.class), Mockito.any(Feed.class))).willReturn(Optional.empty());
+
+        FeedDto.Response result = feedService.patchFeed(patch, memberId);
+
+        assertEquals(result.getContent(), "content2");
+
+    }
+
+    @Test
+    @DisplayName("피드 수정 실패 - 수정할 권한이 없습니다.")
+    void patchFeedFails() {
+        long memberId = 1L;
+        Member member = new Member();
+        FeedServiceDto.Patch patch = FeedServiceDto.Patch.builder().feedId(1L).build();
+        ReflectionTestUtils.setField(member, "memberId", 2L);
+        Feed feed = Feed.builder()
+                .content("content")
+                .member(member)
+                .build();
+        given(feedRepository.findById(Mockito.anyLong())).willReturn(Optional.of(feed));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> feedService.patchFeed(patch, memberId));
+
+        assertEquals(exception.getMessage(), "수정할 권한이 없습니다.");
     }
 
     @Test

@@ -2,6 +2,8 @@ package com.saecdo18.petmily.feed.controller;
 
 import com.saecdo18.petmily.feed.dto.FeedDto;
 import com.saecdo18.petmily.feed.dto.FeedDtoList;
+import com.saecdo18.petmily.feed.dto.FeedServiceDto;
+import com.saecdo18.petmily.feed.mapper.FeedMapper;
 import com.saecdo18.petmily.feed.service.FeedServiceImpl;
 import com.saecdo18.petmily.util.AuthenticationGetMemberId;
 import io.swagger.annotations.Api;
@@ -27,9 +29,10 @@ public class FeedController {
 
     private final FeedServiceImpl feedService;
     private final AuthenticationGetMemberId authenticationGetMemberId;
+    private final FeedMapper feedMapper;
 
     @ApiOperation("피드 가져오기")
-    @GetMapping("/all/{feed-id}")
+    @GetMapping("/{feed-id}")
     public ResponseEntity<FeedDto.Response> getFeed(@ApiParam("피드 아이디") @PathVariable("feed-id") long feedId) {
         long memberId = authenticationGetMemberId.getMemberId();
         FeedDto.Response response = feedService.getFeed(feedId, memberId);
@@ -38,10 +41,11 @@ public class FeedController {
     }
 
     @ApiOperation("최신 피드 리스트 가져오기")
-    @PostMapping("/all/list/random")
+    @PostMapping("/list/random")
     public ResponseEntity<FeedDtoList> getFeedsRandom(@ApiParam("전에 받은 피드 아이디 리스트") @RequestBody FeedDto.PreviousListIds listIds) {
         long memberId = authenticationGetMemberId.getMemberId();
-        FeedDtoList responseList = feedService.getFeedsRecent(listIds, memberId);
+        FeedServiceDto.PreviousListIds listIdsService = feedMapper.idsToServiceIds(listIds);
+        FeedDtoList responseList = feedService.getFeedsRecent(listIdsService, memberId);
         return ResponseEntity.ok(responseList);
     }
 
@@ -54,11 +58,27 @@ public class FeedController {
         return ResponseEntity.ok(responseList);
     }
 
+    @ApiOperation("타인 피드 리스트 가져오기(타인 마이 페이지 접속시 해당 회원의 피드리스트 보기 위함)")
+    @GetMapping("/other-feed/{member-id}")
+    public ResponseEntity<FeedDtoList> getFeedsByMember(@ApiParam("다른 회원 id") @PathVariable("member-id") long memberId,
+                                                        @ApiParam("페이지 번호") @RequestParam(defaultValue = "0") int page,
+                                                        @ApiParam("페이지당 받을 피드 수") @RequestParam(defaultValue = "10") int size) {
+
+        FeedDtoList responseList = feedService.getFeedsByMember(page, size, memberId);
+        return ResponseEntity.ok(responseList);
+    }
+
     @ApiOperation("팔로우한 사용자 피드 리스트 가져오기")
     @PostMapping("/list")
     public ResponseEntity<FeedDtoList> getFeedsByMemberFollow(@ApiParam("전에 받은 피드 아이디 리스트") @RequestBody FeedDto.PreviousListIds listIds) {
         long memberId = authenticationGetMemberId.getMemberId();
-        FeedDtoList responseList = feedService.getFeedsByMemberFollow(memberId, listIds);
+        FeedServiceDto.PreviousListIds listIdsService = feedMapper.idsToServiceIds(listIds);
+        FeedDtoList responseList = feedService.getFeedsByMemberFollow(memberId, listIdsService);
+        if (responseList.getResponseList().size() <= 10) {
+            listIdsService = feedService.checkIds(listIdsService, responseList);
+            FeedDtoList addResponseList = feedService.getFeedsRecent(listIdsService, memberId);
+            responseList.getResponseList().addAll(addResponseList.getResponseList());
+        }
         return ResponseEntity.ok(responseList);
     }
 
@@ -70,7 +90,7 @@ public class FeedController {
         long memberId = authenticationGetMemberId.getMemberId();
 
         List<MultipartFile> imageList = new ArrayList<>();
-        FeedDto.Post post = FeedDto.Post.builder()
+        FeedServiceDto.Post post = FeedServiceDto.Post.builder()
                 .content(content)
                 .images(images == null ? imageList : List.of(images))
                 .build();
@@ -80,7 +100,7 @@ public class FeedController {
     }
 
     @ApiOperation("피드 수정")
-    @PatchMapping("/{feed-id}/")
+    @PatchMapping("/{feed-id}")
     public ResponseEntity<FeedDto.Response> patchFeed(@ApiParam("피드 아이디") @PathVariable("feed-id") long feedId,
                                        @ApiParam("피드 수정 내용") @RequestParam("content") String content,
                                        @ApiParam(value = "피드 추가 이미지 리스트") @RequestParam(value = "addImage", required = false)  MultipartFile[] addImages,
@@ -89,7 +109,7 @@ public class FeedController {
         long memberId = authenticationGetMemberId.getMemberId();
         List<MultipartFile> addImageList = new ArrayList<>();
         List<String> deleteImagesList = new ArrayList<>();
-        FeedDto.Patch patch = FeedDto.Patch.builder()
+        FeedServiceDto.Patch patch = FeedServiceDto.Patch.builder()
                 .feedId(feedId)
                 .content(content)
                 .addImages(addImages == null ? addImageList: List.of(addImages))

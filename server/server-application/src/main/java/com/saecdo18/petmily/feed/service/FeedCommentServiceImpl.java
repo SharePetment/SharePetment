@@ -1,6 +1,7 @@
 package com.saecdo18.petmily.feed.service;
 
 import com.saecdo18.petmily.feed.dto.FeedCommentDto;
+import com.saecdo18.petmily.feed.dto.FeedCommentServiceDto;
 import com.saecdo18.petmily.feed.entity.Feed;
 import com.saecdo18.petmily.feed.entity.FeedComments;
 import com.saecdo18.petmily.feed.mapper.FeedMapper;
@@ -21,7 +22,7 @@ public class FeedCommentServiceImpl implements FeedCommentService{
     private final MemberRepository memberRepository;
     private final FeedMapper feedMapper;
     @Override
-    public FeedCommentDto.Response createComment(FeedCommentDto.Post post, long memberId) {
+    public FeedCommentDto.Response createComment(FeedCommentServiceDto.Post post, long memberId) {
         Feed findFeed = methodFindByFeedId(post.getFeedId());
         Member findMember = methodFindByMemberId(memberId);
         FeedComments feedComments = FeedComments.builder()
@@ -38,7 +39,7 @@ public class FeedCommentServiceImpl implements FeedCommentService{
     }
 
     @Override
-    public FeedCommentDto.Response updateComment(FeedCommentDto.Patch patch, long commentId, long memberId) {
+    public FeedCommentDto.Response updateComment(FeedCommentServiceDto.Patch patch, long commentId, long memberId) {
         FeedComments feedComments = methodFindByCommentId(commentId);
         if(feedComments.getMember().getMemberId() != memberId)
             throw new RuntimeException("수정할 권한이 없습니다.");
@@ -73,7 +74,7 @@ public class FeedCommentServiceImpl implements FeedCommentService{
 
     private Feed methodFindByFeedId(long feedId) {
         return feedRepository.findById(feedId).orElseThrow(
-                () -> new RuntimeException("피드를 찾을 수 없습니다")
+                () -> new RuntimeException("피드를 찾을 수 없습니다.")
         );
     }
 

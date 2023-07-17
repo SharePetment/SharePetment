@@ -61,14 +61,14 @@ public class WalkMateCommentController {
         return new ResponseEntity(response, HttpStatus.OK);
     }
 
-    @GetMapping("/allcomments")
-    @ApiOperation("산책 게시글 댓글 조회")
-    private ResponseEntity<List<WalkMateCommentDto.Response>> getAllComments(){
-
-        List<WalkMateCommentDto.Response> response = walkMateCommentService.findAllComments();
-
-        return new ResponseEntity(response, HttpStatus.OK);
-    }
+//    @GetMapping("/allcomments")
+//    @ApiOperation("산책 게시글 댓글 조회")
+//    private ResponseEntity<List<WalkMateCommentDto.Response>> getAllComments(){
+//
+//        List<WalkMateCommentDto.Response> response = walkMateCommentService.findAllComments();
+//
+//        return new ResponseEntity(response, HttpStatus.OK);
+//    }
 
     @PatchMapping("/{comment-id}")
     @ApiOperation("산책 게시글 댓글 수정")

@@ -41,8 +41,16 @@ public class MemberController {
 
 
 
+    @GetMapping
+    @Operation(summary = "자신 정보 조회", description = "회원 조회")
+    public ResponseEntity<MemberDto.Response> getMember() {
+        long memberId = authenticationGetMemberId.getMemberId();
+        MemberDto.Response responseMember = memberService.getMember(memberId, memberId);
+        return new ResponseEntity(responseMember, HttpStatus.OK);
+    }
+
     @GetMapping("/{host-member-id}")
-    @Operation(summary = "Get Member", description = "회원 조회")
+    @Operation(summary = "타인 정보 조회", description = "회원 조회")
     public ResponseEntity<MemberDto.Response> getMember(@ApiParam("조회될 사용자 식별자") @PathVariable("host-member-id") long hostMemberId) {
         long guestMemberId = authenticationGetMemberId.getMemberId();
         MemberDto.Response responseMember = memberService.getMember(hostMemberId, guestMemberId);
@@ -61,6 +69,7 @@ public class MemberController {
     }
 
     @PostMapping("/following/{follower-id}")
+    @Operation(summary = "팔로잉 신청하기", description = "follower-id에 팔로잉 할 id")
     public ResponseEntity<FollowMemberDto.Response> followingMember(@ApiParam("팔로우 당할 사용자") @PathVariable("follower-id") long followerId) {
         long followingId = authenticationGetMemberId.getMemberId();
         FollowMemberDto.Response response = memberService.followMember(followerId, followingId);
@@ -69,7 +78,7 @@ public class MemberController {
     }
 
     @GetMapping("/following/list")
-    @Operation(summary = "Get FollowingList", description = "팔로우회원 조회")
+    @Operation(summary = "자신이 팔로잉 한 회원 조회", description = "자신의 마이페이지에서 팔로잉리스트 보기 위함")
     public ResponseEntity<List<FollowMemberDto.Response>> followingList() {
         long followingId = authenticationGetMemberId.getMemberId();
 
@@ -77,7 +86,16 @@ public class MemberController {
         return new ResponseEntity<>(responses, HttpStatus.OK);
     }
 
+    @GetMapping("/following/list/{following-id}")
+    @Operation(summary = "타인이 팔로잉 한 회원 조회", description = "타인의 마이페이지에서 팔로잉리스트 보기 위함")
+    public ResponseEntity<List<FollowMemberDto.Response>> followingList(@ApiParam("조회될 사용자 식별자") @PathVariable("following-id") long followingId) {
+
+        List<FollowMemberDto.Response> responses = memberService.followList(followingId);
+        return new ResponseEntity<>(responses, HttpStatus.OK);
+    }
+
     @PatchMapping("/image/{pet-id}")
+    @Operation(summary = "회원 프로필 변경하기", description = "펫 아이디를 넣으면 해당 펫 이미지가 회원 대표 이미지로 선정")
     public ResponseEntity<MemberDto.Info> changeImage(@ApiParam("변경할 이미지의 반려동물") @PathVariable("pet-id") long petId) {
         long memberId = authenticationGetMemberId.getMemberId();
 
@@ -87,16 +105,17 @@ public class MemberController {
 
     @PostMapping("/nickname-check/{nickname}")
     @PreAuthorize("permitAll()")
+    @Operation(summary = "닉네임 중복 확인하기", description = "별도의 토큰 필요없이 닉네임만 적어서 보내주시면 됩니다")
     public ResponseEntity<MemberDto.NickCheckResponse> checkNickname(@ApiParam("중복 확인 할 닉네임") @PathVariable String nickname) {
 
         MemberDto.NickCheckResponse response = memberService.checkNickname(nickname);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{member-id}")
     @ApiOperation(value = "멤버 삭제 메서드!!! 함부로 삭제하지 마시구 사용자 조회를 통해 자신의 아이디를 우선 조회하세요!")
-    public ResponseEntity<?> deleteMember() {
-        long memberId = authenticationGetMemberId.getMemberId();
+    public ResponseEntity<?> deleteMember(@ApiParam @PathVariable("member-id") long memberId) {
+//        long memberId = authenticationGetMemberId.getMemberId();
 
         memberService.deleteMember(memberId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

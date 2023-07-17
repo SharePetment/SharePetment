@@ -30,6 +30,9 @@ public class Feed extends BaseEntity {
     private Member member;
 
     @OneToMany(mappedBy = "feed", cascade = CascadeType.REMOVE)
+    private List<FeedComments> feedComments;
+
+    @OneToMany(mappedBy = "feed", cascade = CascadeType.REMOVE)
     private List<FeedLike> feedLikeList;
 
     @OneToMany(mappedBy = "feed", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)

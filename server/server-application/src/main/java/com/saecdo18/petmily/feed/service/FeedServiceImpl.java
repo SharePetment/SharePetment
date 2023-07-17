@@ -4,6 +4,7 @@ import com.saecdo18.petmily.awsConfig.S3UploadService;
 import com.saecdo18.petmily.feed.dto.FeedCommentDto;
 import com.saecdo18.petmily.feed.dto.FeedDto;
 import com.saecdo18.petmily.feed.dto.FeedDtoList;
+import com.saecdo18.petmily.feed.dto.FeedServiceDto;
 import com.saecdo18.petmily.feed.entity.Feed;
 import com.saecdo18.petmily.feed.entity.FeedComments;
 import com.saecdo18.petmily.feed.entity.FeedImage;
@@ -53,7 +54,7 @@ public class FeedServiceImpl implements FeedService {
     private final static String BASE_URI = "http://43.202.86.53:8080/feeds/all/";
 
     @Override
-    public FeedDto.Response createFeed(FeedDto.Post post, long memberId) throws IOException {
+    public FeedDto.Response createFeed(FeedServiceDto.Post post, long memberId) throws IOException {
         Member findMember = methodFindByMemberId(memberId);
         Feed createFeed = Feed.builder()
                 .content(post.getContent())
@@ -81,7 +82,7 @@ public class FeedServiceImpl implements FeedService {
     }
 
     @Override
-    public FeedDtoList getFeedsRecent(FeedDto.PreviousListIds listIds, long memberId) {
+    public FeedDtoList getFeedsRecent(FeedServiceDto.PreviousListIds listIds, long memberId) {
         int newDataCount = 10;
         PageRequest pageRequest = PageRequest.of(0, newDataCount, Sort.by(Sort.Direction.DESC, "createdAt"));
 
@@ -127,7 +128,7 @@ public class FeedServiceImpl implements FeedService {
     }
 
     @Override
-    public FeedDtoList getFeedsByMemberFollow(long memberId, FeedDto.PreviousListIds listIds) {
+    public FeedDtoList getFeedsByMemberFollow(long memberId, FeedServiceDto.PreviousListIds listIds) {
         List<FollowMember> followMemberList = followMemberRepository.findByFollowingId(memberId)
                 .orElseThrow(() -> new RuntimeException("팔로우한 멤버가 없습니다."));
 
@@ -163,7 +164,7 @@ public class FeedServiceImpl implements FeedService {
         return changeFeedListToFeedResponseDto(feedList, memberId);
     }
 
-    private List<Feed> filterFeedsByPreviousListIds(List<Feed> feedList, FeedDto.PreviousListIds listIds) {
+    private List<Feed> filterFeedsByPreviousListIds(List<Feed> feedList, FeedServiceDto.PreviousListIds listIds) {
         List<Feed> filterFeeds = new ArrayList<>();
         for (Feed feed : feedList) {
             if (!listIds.getPreviousListIds().contains(feed.getFeedId())) {
@@ -174,11 +175,11 @@ public class FeedServiceImpl implements FeedService {
     }
 
     @Override
-    public FeedDto.Response patchFeed(FeedDto.Patch patch, long memberId) throws IOException {
+    public FeedDto.Response patchFeed(FeedServiceDto.Patch patch, long memberId) throws IOException {
         Feed findFeed = methodFindByFeedId(patch.getFeedId());
-        findFeed.updateContent(patch.getContent());
         if(memberId !=findFeed.getMember().getMemberId())
             throw new IllegalArgumentException("수정할 권한이 없습니다.");
+        findFeed.updateContent(patch.getContent());
 
         if (!patch.getAddImages().isEmpty()) {
             for (MultipartFile multipartFile : patch.getAddImages()) {
@@ -191,7 +192,6 @@ public class FeedServiceImpl implements FeedService {
             for (String originalFilename : patch.getDeleteImages()) {
                 for (FeedImage feedImage : findFeed.getFeedImageList()) {
                     if (originalFilename.equals(feedImage.getImage().getOriginalFilename())) {
-                        System.out.println(originalFilename+"!!!!!!!!!!!!!!"+feedImage.getImage().getOriginalFilename());
                         s3UploadService.deleteImage(feedImage.getImage().getOriginalFilename());
                         feedImageRepository.delete(feedImage);
                     }
@@ -328,7 +328,7 @@ public class FeedServiceImpl implements FeedService {
         } else {
             response.setLike(feedLikesByMember(feed, methodFindByMemberId(memberId)));
         }
-        response.setShareURL(feed.getShareURI(BASE_URI).toString()+"/0");
+        response.setShareURL(feed.getShareURI(BASE_URI).toString());
 
         return response;
     }
@@ -344,5 +344,16 @@ public class FeedServiceImpl implements FeedService {
         return FeedDtoList.builder()
                 .responseList(responseList)
                 .build();
+    }
+
+    public FeedServiceDto.PreviousListIds checkIds(FeedServiceDto.PreviousListIds listIds, FeedDtoList feedDtoList) {
+        List<Long> addIds = new ArrayList<>();
+        for (FeedDto.Response response : feedDtoList.getResponseList()) {
+            addIds.add(response.getFeedId());
+        }
+
+        listIds.getPreviousListIds().addAll(addIds);
+
+        return listIds;
     }
 }

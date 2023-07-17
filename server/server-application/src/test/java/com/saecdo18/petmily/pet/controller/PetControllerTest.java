@@ -5,6 +5,7 @@ import com.saecdo18.petmily.image.dto.ImageDto;
 import com.saecdo18.petmily.jwt.TokenProvider;
 import com.saecdo18.petmily.member.dto.MemberDto;
 import com.saecdo18.petmily.pet.dto.PetDto;
+import com.saecdo18.petmily.pet.dto.PetServiceDto;
 import com.saecdo18.petmily.pet.entity.Pet;
 import com.saecdo18.petmily.pet.service.PetService;
 import org.junit.jupiter.api.Test;
@@ -68,7 +69,7 @@ class PetControllerTest {
                 .information("안녕하세용")
                 .build();
 
-        given(petService.createPet(Mockito.anyLong(), Mockito.any(PetDto.Post.class))).willReturn(response);
+        given(petService.createPet(Mockito.anyLong(), Mockito.any(PetServiceDto.Post.class))).willReturn(response);
 
         MockMultipartFile image = new MockMultipartFile("images", "imagefile.jpeg", "image/jpeg", "<<jpeg data>>".getBytes());
 
@@ -146,7 +147,7 @@ class PetControllerTest {
                 .information("안녕하세용")
                 .build();
 
-        given(petService.updatePet(Mockito.anyLong(), Mockito.anyLong(), Mockito.any(PetDto.Patch.class))).willReturn(response);
+        given(petService.updatePet(Mockito.anyLong(), Mockito.anyLong(), Mockito.any(PetServiceDto.Patch.class))).willReturn(response);
 
         MockMultipartFile image = new MockMultipartFile("images", "imagefile.jpeg", "image/jpeg", "<<jpeg data>>".getBytes());
 
@@ -189,7 +190,7 @@ class PetControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value(response.getName()))
                 .andExpect(jsonPath("$.age").value(response.getAge()))
-                .andExpect(jsonPath("$.images.originalFilename").value(response.getImages().getOriginalFilename()))
+                .andExpect(jsonPath("$.images.originalFilenam").value(response.getImages().getOriginalFilename()))
 
         ;
     }
