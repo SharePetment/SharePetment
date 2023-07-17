@@ -1,5 +1,6 @@
-import { useQuery } from '@tanstack/react-query';
-import { useState, useEffect, useContext } from 'react';
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
+import React, { useState, useEffect, useContext } from 'react';
+import { useInView } from 'react-intersection-observer';
 import { useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
 import { useReadLocalStorage } from 'usehooks-ts';
@@ -94,21 +95,38 @@ export function Component() {
       ),
   });
 
+  /* ---------------------------- useInfiniteQuery ---------------------------- */
   // 자신이 작성한 산책 게시물 조회
+  const { ref, inView } = useInView();
   const {
     data: walkFeedData,
     isLoading: walkFeedLoading,
+    fetchNextPage,
     isError: walkFeedError,
-  } = useQuery<WalkFeed[]>({
+  } = useInfiniteQuery<WalkFeed[]>({
     queryKey: ['walkFeedList'],
-    queryFn: () =>
-      getServerDataWithJwt(
-        `${SERVER_URL}/walkmates/my-walks?openFilter=false&page=0&size=10`,
+    queryFn: ({ pageParam = 0 }) => {
+      console.log(pageParam);
+      return getServerDataWithJwt(
+        `${SERVER_URL}/walkmates/my-walks?openFilter=false&&page=${pageParam}&size=10`,
         accessToken as string,
-      ),
+      );
+    },
+
+    getNextPageParam: (lastPage, allPages) => {
+      console.log(lastPage, allPages);
+      const len = allPages.length;
+      const totalLength = allPages.length;
+      return allPages[totalLength - 1].length === 0 ? undefined : len;
+    },
   });
 
-  console.log(walkFeedData);
+  useEffect(() => {
+    if (inView) {
+      fetchNextPage();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [inView]);
 
   // 자신이 작성한 댓글 리스트 조회
   const { data: commentListData } = useQuery<CommentProp[]>({
@@ -286,31 +304,35 @@ export function Component() {
                     <NoticeOnlyOwner />
                   ) : (
                     <div className="flex justify-center">
-                      {!walkFeedData?.length ? (
+                      {!walkFeedData?.pages[0]?.length ? (
                         <NoticeNoData url="walk-posting" />
                       ) : (
-                        <GridContainerWalk>
-                          {walkFeedData?.map(item => {
-                            const { time, title, maximum, location, open } =
-                              item;
-                            return (
-                              <Link
-                                to={`/walkmate/${item.walkMatePostId}`}
-                                key={item.walkMatePostId}>
-                                <WalkCard
-                                  size="sm"
-                                  time={time}
-                                  title={title}
-                                  friends={maximum}
-                                  location={location}
-                                  isclosed={`${open}`}
-                                  nickname={item.memberInfo.nickname}
-                                  imageURL={item.memberInfo.imageURL}
-                                />
-                              </Link>
-                            );
-                          })}
-                        </GridContainerWalk>
+                        <div>
+                          <GridContainerWalk>
+                            {walkFeedData?.pages.map((page, index) => (
+                              <React.Fragment key={index}>
+                                {page.map(item => (
+                                  <Link
+                                    to={`/walkmate/${item.walkMatePostId}`}
+                                    key={item.walkMatePostId}>
+                                    <WalkCard
+                                      size="sm"
+                                      time={item.time}
+                                      title={item.title}
+                                      friends={item.maximum}
+                                      location={item.location}
+                                      isclosed={`${item.open}`}
+                                      nickname={item.memberInfo.nickname}
+                                      imageURL={item.memberInfo.imageURL}
+                                      key={item.walkMatePostId}
+                                    />
+                                  </Link>
+                                ))}
+                              </React.Fragment>
+                            ))}
+                          </GridContainerWalk>
+                          <div ref={ref}></div>
+                        </div>
                       )}
                     </div>
                   )}

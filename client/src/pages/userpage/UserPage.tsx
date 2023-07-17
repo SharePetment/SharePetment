@@ -1,5 +1,6 @@
-import { useQuery } from '@tanstack/react-query';
-import { useState, useContext } from 'react';
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
+import React, { useState, useContext, useEffect } from 'react';
+import { useInView } from 'react-intersection-observer';
 import { useParams, Navigate, Link } from 'react-router-dom';
 import { useReadLocalStorage } from 'usehooks-ts';
 import { getServerDataWithJwt } from '../../api/queryfn';
@@ -93,15 +94,32 @@ export function Component() {
       ),
   });
 
+  /* ---------------------------- useInfiniteQuery ---------------------------- */
   // 유저가 작성한 산책 리스트 가져오기
-  const { data: walkFeedData } = useQuery<WalkFeed[]>({
-    queryKey: ['UserwalkFeedList', usersId],
-    queryFn: () =>
-      getServerDataWithJwt(
-        `${SERVER_URL}/walkmates/other-walks/${usersId}?openFilter=false&page=0&size=10`,
+  const { ref, inView } = useInView();
+  const { data: walkFeedData, fetchNextPage } = useInfiniteQuery<WalkFeed[]>({
+    queryKey: ['UserwalkFeedList'],
+    queryFn: ({ pageParam = 0 }) => {
+      return getServerDataWithJwt(
+        `${SERVER_URL}/walkmates/other-walks/${usersId}?openFilter=false&&page=${pageParam}&size=10`,
         accessToken as string,
-      ),
+      );
+    },
+
+    getNextPageParam: (lastPage, allPages) => {
+      console.log(lastPage, allPages);
+      const len = allPages.length;
+      const totalLength = allPages.length;
+      return allPages[totalLength - 1].length === 0 ? undefined : len;
+    },
   });
+
+  useEffect(() => {
+    if (inView) {
+      fetchNextPage();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [inView]);
 
   // 팔로잉 회원 리스트 조회
   const { data: followingData, isLoading: followingLoading } = useQuery<
@@ -127,6 +145,7 @@ export function Component() {
       ) : (
         <>
           <Container>
+            {/* 유저info */}
             <UserBox>
               <Profile
                 isgreen="true"
@@ -160,6 +179,7 @@ export function Component() {
                 </div>
               </UserInfoBox>
             </UserBox>
+            {/* pet info */}
             <PetBox>
               {Array.isArray(data?.pets) && (
                 <>
@@ -180,6 +200,7 @@ export function Component() {
                 </>
               )}
             </PetBox>
+            {/* tab - 피드, 산책 */}
             <ListBox>
               <TabMenu>
                 <TabMenuList
@@ -204,6 +225,7 @@ export function Component() {
                 </TabMenuList>
               </TabMenu>
               <div>
+                {/* 피드 */}
                 <div className={currentTab === 0 ? 'block' : 'hidden'}>
                   <div>
                     {!feedData?.responseList.length ? (
@@ -231,38 +253,42 @@ export function Component() {
                     )}
                   </div>
                 </div>
+                {/* 산책 게시물 */}
                 <div className={currentTab === 1 ? 'block' : 'hidden'}>
                   <div>
                     {!myData?.animalParents ? (
                       <NoticeOnlyOwner />
                     ) : (
                       <>
-                        {!walkFeedData?.length ? (
+                        {!walkFeedData?.pages[0]?.length ? (
                           <NoticeNotWrite />
                         ) : (
-                          <GridContainerWalk>
-                            {walkFeedData?.map(item => {
-                              const { time, content, maximum, location, open } =
-                                item;
-
-                              return (
-                                <Link
-                                  to={`/walkmate/${item.walkMatePostId}`}
-                                  key={item.walkMatePostId}>
-                                  <WalkCard
-                                    size="sm"
-                                    time={time}
-                                    title={content}
-                                    friends={maximum}
-                                    location={location}
-                                    isclosed={`${open}`}
-                                    nickname={item.memberInfo.nickname}
-                                    imageURL={item.memberInfo.imageURL}
-                                  />
-                                </Link>
-                              );
-                            })}
-                          </GridContainerWalk>
+                          <div>
+                            <GridContainerWalk>
+                              {walkFeedData?.pages.map((page, index) => (
+                                <React.Fragment key={index}>
+                                  {page.map(item => (
+                                    <Link
+                                      to={`/walkmate/${item.walkMatePostId}`}
+                                      key={item.walkMatePostId}>
+                                      <WalkCard
+                                        size="sm"
+                                        time={item.time}
+                                        title={item.title}
+                                        friends={item.maximum}
+                                        location={item.location}
+                                        isclosed={`${item.open}`}
+                                        nickname={item.memberInfo.nickname}
+                                        imageURL={item.memberInfo.imageURL}
+                                        key={item.walkMatePostId}
+                                      />
+                                    </Link>
+                                  ))}
+                                </React.Fragment>
+                              ))}
+                            </GridContainerWalk>
+                            <div ref={ref}></div>
+                          </div>
                         )}
                       </>
                     )}

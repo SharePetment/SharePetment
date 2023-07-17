@@ -47,14 +47,14 @@ export function Component() {
     },
     enabled: !!zip,
   });
+
   const handleClickSearchAddress = () => {
-    console.log(zip);
     refetch();
   };
+  console.log(data?.pages, 'walkmate');
 
   useEffect(() => {
     if (inView) {
-      console.log('do');
       fetchNextPage();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -80,16 +80,19 @@ export function Component() {
           data?.pages.map((page, index) => (
             <React.Fragment key={index}>
               {page.map(item => (
-                <Link to={`/walkmate/${item.walkMatePostId}`}>
+                <Link
+                  to={`/walkmate/${item.walkMatePostId}`}
+                  key={item.walkMatePostId}>
                   <WalkCard
                     size="lg"
                     time={item.time}
-                    title={item.content}
+                    title={item.title}
                     friends={item.maximum}
                     location={item.location}
                     isclosed={`${item.open}`}
                     nickname={item.memberInfo.nickname}
                     imageURL={item.memberInfo.imageURL}
+                    key={item.walkMatePostId}
                   />
                 </Link>
               ))}
