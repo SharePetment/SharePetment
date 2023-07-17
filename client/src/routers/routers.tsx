@@ -48,7 +48,7 @@ export const router = createBrowserRouter([
       },
       {
         path: Path.FeedEditing,
-        lazy: () => import('../pages/feedEditing/FeedEditing'),
+        lazy: () => import('../pages/feedPosting/FeedPosting'),
       },
       {
         path: Path.WalkMate,
