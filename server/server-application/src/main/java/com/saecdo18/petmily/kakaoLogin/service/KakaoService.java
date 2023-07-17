@@ -153,9 +153,10 @@ public class KakaoService {
 
         return UriComponentsBuilder.newInstance()
                 .scheme("http")
-                .host("localhost")
-                .port(5374)
-                .path("loading")
+//                .host("localhost")
+                .host("share-petment.s3-website.ap-northeast-2.amazonaws.com")
+//                .port(5374)
+//                .path("loading")
                 .queryParams(queryParams)
                 .build()
                 .toUri();
