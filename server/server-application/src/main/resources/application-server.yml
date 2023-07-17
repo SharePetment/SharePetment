@@ -2,6 +2,10 @@ springdoc:
   swagger-ui:
     path: /swagger-ui.html
 spring:
+  servlet:
+    multipart:
+      maxFileSize: 5MB
+      maxRequestSize: 5MB
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://mainprojectdb.cdb3cg1btqgy.ap-northeast-2.rds.amazonaws.com:3306/testdb?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
