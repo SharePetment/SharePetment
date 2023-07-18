@@ -12,6 +12,7 @@ import com.saecdo18.petmily.kakaoLogin.repository.KakaoAccessTokenRepository;
 import com.saecdo18.petmily.member.dto.MemberDto;
 import com.saecdo18.petmily.member.entity.Member;
 import com.saecdo18.petmily.member.repository.MemberRepository;
+import com.saecdo18.petmily.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -38,6 +39,7 @@ public class KakaoService {
     private final MemberRepository memberRepository;
     private final TokenProvider tokenProvider;
     private final KakaoAccessTokenRepository kakaoAccessTokenRepository;
+    private final MemberService memberService;
 
     public String getAccessToken(String code) throws JsonProcessingException {
         WebClient client = WebClient.create("https://kauth.kakao.com/oauth/token");
@@ -195,7 +197,7 @@ public class KakaoService {
                 .bodyToMono(String.class)
                 .block();
 
-        memberRepository.delete(findMember);
+        memberService.deleteMember(memberId);
         kakaoAccessTokenRepository.delete(kakaoAccessToken);
 
     }

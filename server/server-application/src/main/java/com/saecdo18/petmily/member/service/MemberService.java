@@ -21,6 +21,7 @@ import com.saecdo18.petmily.walkmate.entity.WalkMate;
 import com.saecdo18.petmily.walkmate.entity.WalkMateComment;
 import com.saecdo18.petmily.walkmate.repository.WalkMateCommentRepository;
 import com.saecdo18.petmily.walkmate.repository.WalkMateRepository;
+import com.saecdo18.petmily.walkmate.service.WalkMateService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -48,6 +49,7 @@ public class MemberService {
     private final PetImageRepository petImageRepository;
     private final WalkMateRepository walkMateRepository;
     private final WalkMateCommentRepository walkMateCommentRepository;
+    private final WalkMateService walkMateService;
 
 
 
@@ -229,14 +231,8 @@ public class MemberService {
 
     public void deleteMember(long memberId) {
         Member findMember = methodFindByMemberIdMember(memberId);
-
-        List<WalkMate> walkMateList = findMember.getWalkMates();
-        for(WalkMate walkMate: walkMateList){
-            List<WalkMateComment> walkMateCommentList = walkMate.getComments();
-            for(WalkMateComment walkMateComment:walkMateCommentList){
-                walkMateCommentRepository.delete(walkMateComment);
-            }
-            walkMateRepository.delete(walkMate);
+        for(WalkMate walkMate : walkMateRepository.findAll()){
+            walkMateService.deleteWalk(walkMate.getWalkMatePostId(), memberId);
         }
 
         memberRepository.delete(findMember);

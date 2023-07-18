@@ -56,8 +56,6 @@ public class Member extends BaseEntity {
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private List<Feed> feeds;
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
-    private List<WalkMate> walkMates;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private List<FeedLike> feedLikes;
