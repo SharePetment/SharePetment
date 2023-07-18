@@ -32,7 +32,7 @@ export const getGuestFeedList = async (url: string) => {
   const result = await axios.post(url, {
     previousListIds: [0],
   });
-  return result.data;
+  return result.data.responseList;
 };
 
 /* -------------------------------- 기존 유저 피드리스트 가져오기 ------------------------------- */
@@ -51,7 +51,7 @@ export const getHostFeedList = async (
       },
     },
   );
-  return result.data;
+  return result.data.responseList;
 };
 
 /* ------------------------------- 산책 리스트 가져오기 ------------------------------ */
