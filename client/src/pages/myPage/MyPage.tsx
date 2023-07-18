@@ -106,7 +106,6 @@ export function Component() {
   } = useInfiniteQuery<WalkFeed[]>({
     queryKey: ['walkFeedList'],
     queryFn: ({ pageParam = 0 }) => {
-      console.log(pageParam);
       return getServerDataWithJwt(
         `${SERVER_URL}/walkmates/my-walks?openFilter=false&&page=${pageParam}&size=10`,
         accessToken as string,
