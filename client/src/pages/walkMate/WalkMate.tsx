@@ -13,6 +13,7 @@ import { CardContainer } from '../../components/card/walk-card/walkCard.styled';
 import LoadingComponent from '../../components/loading/LoadingComponent';
 import Path from '../../routers/paths';
 import { WalkFeed } from '../../types/walkType';
+import { changeDateFormat } from '../../util/changeDateFormat';
 import { SearchButton } from './WalkMate.styled';
 
 export function Component() {
@@ -83,7 +84,7 @@ export function Component() {
                 <Link to={`/walkmate/${item.walkMatePostId}`}>
                   <WalkCard
                     size="lg"
-                    time={item.time}
+                    time={changeDateFormat(item.time)}
                     title={item.content}
                     friends={item.maximum}
                     location={item.location}

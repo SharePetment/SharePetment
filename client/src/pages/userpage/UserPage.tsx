@@ -19,6 +19,7 @@ import { MemberIdContext } from '../../store/Context';
 import { Feed } from '../../types/feedTypes';
 import { Follow, UserInfo } from '../../types/userType';
 import { WalkFeed } from '../../types/walkType';
+import { changeDateFormat } from '../../util/changeDateFormat';
 import {
   GridContainerFeed,
   GridContainerWalk,
@@ -251,7 +252,7 @@ export function Component() {
                                   key={item.walkMatePostId}>
                                   <WalkCard
                                     size="sm"
-                                    time={time}
+                                    time={changeDateFormat(time)}
                                     title={content}
                                     friends={maximum}
                                     location={location}
