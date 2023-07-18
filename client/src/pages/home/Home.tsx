@@ -114,7 +114,7 @@ export function Component() {
           </PopupBackGround>
         )}
         {isToastOpen && (
-          <div className="fixed right-8 bottom-8">
+          <div className="fixed top-20 right-8">
             <Toast />
           </div>
         )}

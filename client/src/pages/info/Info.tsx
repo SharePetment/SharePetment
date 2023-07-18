@@ -97,6 +97,8 @@ export function Component() {
     }
   };
 
+  console.log(accessToken);
+
   // Submit 핸들러
   const onSubmit = (data: InfoProps) => {
     if (!isDuplicated) {

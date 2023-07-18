@@ -5,7 +5,7 @@ export const Container = tw.div`
   relative
 `;
 
-export const Input = tw.textarea`
+export const Input = tw.input`
   border-[1.5px]
   border-lightgray
   resize-none
@@ -19,6 +19,6 @@ export const Input = tw.textarea`
 
 export const CommentBtn = tw.button`
   absolute
-  bottom-3
+  bottom-[0.4rem]
   right-2
 `;

@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useState } from 'react';
 import { useMatch, useNavigate } from 'react-router-dom';
 import { useReadLocalStorage } from 'usehooks-ts';
 import { patchFeedLike } from '../../../api/mutationfn';
@@ -38,14 +39,15 @@ export default function SideNav({
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const feedPopUp = useMatch('/home/:feedId');
-  // console.log(memberId);
+  const [isLike, setIsLike] = useState<BooleanStr>(like);
+  const [isLikes, setIsLikes] = useState<number>(likes);
 
   const likeMutation = useMutation({
     mutationFn: patchFeedLike,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['hostRandomFeed'] });
+    onSuccess: ({ data }) => {
       queryClient.invalidateQueries({ queryKey: ['feedPopUp'] });
-      queryClient.invalidateQueries({ queryKey: ['hostFeed'] });
+      setIsLike(data.isLike.toString());
+      setIsLikes(data.likeCount);
     },
   });
 
@@ -79,7 +81,7 @@ export default function SideNav({
     <>
       <Container direction={direction}>
         <Wrap className="pl-2">
-          {like === 'true' ? (
+          {isLike === 'true' ? (
             <Like
               className="cursor-pointer"
               stroke="black"
@@ -94,7 +96,7 @@ export default function SideNav({
             />
           )}
 
-          <Text>{likes}</Text>
+          <Text>{isLikes}</Text>
         </Wrap>
 
         {!feedPopUp && (

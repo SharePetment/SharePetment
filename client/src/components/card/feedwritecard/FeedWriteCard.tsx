@@ -33,10 +33,18 @@ export default function FeedWriteCard() {
   const { feedId } = useParams();
   const navigate = useNavigate();
   const textRef = useRef<HTMLTextAreaElement>(null);
+
+  // 모달 state
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isNoneOpen, setIsNoneOpen] = useState<boolean>(false);
+
+  // file 저장 state
   const [removedFile, setRemovedFile] = useState<string[]>([]);
   const [savedFile, setSavedFile] = useState<string[]>([]);
   const [prevFile, setPrevFile] = useState<(File | FeedImage)[]>([]);
+
+  // param있을 시, query 불러온 여부
+  const [getQuery, setGetQuery] = useState<boolean>(false);
 
   /* ----------------------------- useLocalStorage ---------------------------- */
   const accessToken = useReadLocalStorage<string>('accessToken');
@@ -64,13 +72,14 @@ export default function FeedWriteCard() {
       result.images.map((image: FeedImage) => {
         setSavedFile(prev => [...prev, image.uploadFileURL]);
         setPrevFile(prev => [...prev, image]);
+        setGetQuery(true);
       });
       if (textRef.current) {
         textRef.current.value = result.content;
       }
       return result;
     },
-    enabled: !!feedId && savedFile.length === 0,
+    enabled: !!feedId && savedFile.length === 0 && !getQuery,
   });
 
   // 피드 게시물 올리기 mutation
@@ -89,7 +98,7 @@ export default function FeedWriteCard() {
     mutationFn: patchFeed,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['feedPopUp'] });
-      navigate(`/home/${feedId}`);
+      navigate(`/my-page`);
     },
   });
 
@@ -97,6 +106,7 @@ export default function FeedWriteCard() {
     const formData = new FormData();
     formData.append('content', textRef.current?.value as string);
     if (feedId === undefined) {
+      if (prevFile.length === 0) return setIsNoneOpen(true);
       prevFile.forEach(file => formData.append('images', file as File));
       const data = {
         url: `${SERVER_URL}/feeds`,
@@ -105,6 +115,7 @@ export default function FeedWriteCard() {
       };
       feedPostingMutation.mutate(data);
     } else {
+      if (prevFile.length === 0) return setIsNoneOpen(true);
       prevFile.forEach(file => formData.append('addImage', file as File));
       if (removedFile.length > 0)
         removedFile.forEach(fileName =>
@@ -154,6 +165,18 @@ export default function FeedWriteCard() {
           buttontext={['확인']}
           isgreen={['true']}
           popupcontrol={() => setIsOpen(false)}
+        />
+      )}
+
+      {isNoneOpen && (
+        <Popup
+          title="사진을 업로드 해주세요."
+          handler={[() => setIsNoneOpen(false)]}
+          btnsize={['md']}
+          countbtn={1}
+          buttontext={['확인']}
+          isgreen={['true']}
+          popupcontrol={() => setIsNoneOpen(false)}
         />
       )}
 

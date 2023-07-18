@@ -6,12 +6,12 @@ import { ReactComponent as Setting } from '../../../assets/button/setting.svg';
 
 export const Container = tw.div`
     relative
-    
+    drop-shadow-sm
 `;
 
 export const PetCheckTrue = tw(CheckTrue)`
-    w-[30px]
-    h-[30px]
+    w-[25px]
+    h-[25px]
     absolute
     top-[15px]
     left-[-45px]
@@ -19,8 +19,8 @@ export const PetCheckTrue = tw(CheckTrue)`
 `;
 
 export const PetCheckFalse = tw(CheckFalse)`
-    w-[30px]
-    h-[30px]
+    w-[25px]
+    h-[25px]
     absolute
     top-[15px]
     left-[-45px]
