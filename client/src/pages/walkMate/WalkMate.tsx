@@ -13,6 +13,7 @@ import { CardContainer } from '../../components/card/walk-card/walkCard.styled';
 import LoadingComponent from '../../components/loading/LoadingComponent';
 import Path from '../../routers/paths';
 import { WalkFeed } from '../../types/walkType';
+import { changeDateFormat } from '../../util/changeDateFormat';
 import { SearchButton } from './WalkMate.styled';
 
 export function Component() {
@@ -32,19 +33,18 @@ export function Component() {
   } = useInfiniteQuery<WalkFeed[]>({
     queryKey: ['walkmateList', 'key'],
     queryFn: ({ pageParam = 0 }) => {
-      console.log(pageParam);
       return getServerDataWithJwt(
         `${SERVER_URL}/walkmates/walks?openFilter=false&location=${zip}&page=${pageParam}&size=10`,
         accessToken as string,
       );
     },
 
-    getNextPageParam: (lastPage, allPages) => {
-      console.log(lastPage, allPages);
+    getNextPageParam: (_, allPages) => {
       const len = allPages.length;
       const totalLength = allPages.length;
       return allPages[totalLength - 1].length === 0 ? undefined : len;
     },
+
     enabled: !!zip,
   });
 
@@ -85,7 +85,7 @@ export function Component() {
                   key={item.walkMatePostId}>
                   <WalkCard
                     size="lg"
-                    time={item.time}
+                    time={changeDateFormat(item.time)}
                     title={item.title}
                     friends={item.maximum}
                     location={item.location}

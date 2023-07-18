@@ -2,8 +2,9 @@ export const changeDateFormat = (date: string) => {
   const day = ['일', '월', '화', '수', '목', '금', '토'];
 
   const originalDate = new Date(date);
+
   const dateFormat =
-    originalDate.getFullYear() +
+    `${originalDate.getFullYear()}`.slice(2) +
     '년 ' +
     (originalDate.getMonth() + 1) +
     '월 ' +

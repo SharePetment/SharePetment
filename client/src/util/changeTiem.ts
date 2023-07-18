@@ -4,6 +4,10 @@ const changeTime = (dateArr: number[]) => {
   const date = dateArr.slice(0, dateArr.length - 1).map((item, index) => {
     if (index === 1) {
       return Number(item) - 1;
+    } else if (index === 3) {
+      const newHour =
+        Number(item) + 9 > 24 ? Number(item) + 9 - 24 : Number(item) + 9;
+      return newHour;
     } else {
       return Number(item);
     }

@@ -192,6 +192,10 @@ export function Component() {
                   placeholder="(필수X)채팅방 링크가 있다면 입력해주세요:) "
                   {...register('chatURL', {
                     value: data?.chatURL ? data?.chatURL : '',
+                    pattern: {
+                      value: /^(http|https):\/\//gm,
+                      message: 'http://, https:// 시작해야 합니다.',
+                    },
                   })}
                   error={errors.chatURL?.message}
                 />
@@ -216,6 +220,10 @@ export function Component() {
                     min: {
                       value: 1,
                       message: '1마리 이상이어야해요!',
+                    },
+                    max: {
+                      value: 101,
+                      message: '101마리 이하',
                     },
                   })}
                   error={errors.maximum?.message}

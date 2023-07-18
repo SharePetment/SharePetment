@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState, useEffect, useContext } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
+import { Link } from 'react-router-dom';
 import { useReadLocalStorage } from 'usehooks-ts';
 import { deleteComment, editComment } from '../../api/mutationfn';
 import { SERVER_URL } from '../../api/url';
@@ -103,11 +104,13 @@ export default function Comment(props: CommentProp) {
         <div>
           {/* 유저 정보 기입 */}
           <HeaderBox>
-            <UserBox>
-              <Profile size="sm" url={imageURL} isgreen={'false'} />
-              <UserName>{nickname}</UserName>
-              <DateText>{changeTime(createdAt)}</DateText>
-            </UserBox>
+            <Link to={`/users/${memberId}`} className="hover:cursor-pointer">
+              <UserBox>
+                <Profile size="sm" url={imageURL} isgreen={'false'} />
+                <UserName>{nickname}</UserName>
+                <DateText>{changeTime(createdAt)}</DateText>
+              </UserBox>
+            </Link>
             {userId === `${memberId}` && (
               <BtnBox>
                 <EditBtn
