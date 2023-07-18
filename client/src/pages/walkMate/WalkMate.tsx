@@ -47,9 +47,11 @@ export function Component() {
 
     enabled: !!zip,
   });
+
   const handleClickSearchAddress = () => {
     refetch();
   };
+  console.log(data?.pages, 'walkmate');
 
   useEffect(() => {
     if (inView) {
@@ -63,8 +65,8 @@ export function Component() {
   }
 
   return (
-    <div className="mt-10 flex flex-col justify-center">
-      <div className=" flex justify-end max-sm:flex-col items-center gap-4 pr-6">
+    <div className="mt-10 items-center flex flex-col justify-center">
+      <div className=" flex justify-end max-sm:justify-center gap-4 ">
         <Select size="md" direction="row" setZip={setZip} />
         <SearchButton onClick={handleClickSearchAddress}>검색</SearchButton>
       </div>
@@ -78,16 +80,19 @@ export function Component() {
           data?.pages.map((page, index) => (
             <React.Fragment key={index}>
               {page.map(item => (
-                <Link to={`/walkmate/${item.walkMatePostId}`}>
+                <Link
+                  to={`/walkmate/${item.walkMatePostId}`}
+                  key={item.walkMatePostId}>
                   <WalkCard
                     size="lg"
                     time={changeDateFormat(item.time)}
-                    title={item.content}
+                    title={item.title}
                     friends={item.maximum}
                     location={item.location}
                     isclosed={`${item.open}`}
                     nickname={item.memberInfo.nickname}
                     imageURL={item.memberInfo.imageURL}
+                    key={item.walkMatePostId}
                   />
                 </Link>
               ))}
