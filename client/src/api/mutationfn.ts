@@ -386,3 +386,19 @@ export const patchWalkFeed = async (payload: PatchWalkPosProp) => {
   );
   return result.data;
 };
+
+/* -------------------------------- 회원 탈퇴 -------------------------------- */
+interface PostQuitMemberProp {
+  accessToken: string | null;
+}
+
+export const postQuitMember = async (payload: PostQuitMemberProp) => {
+  console.log(`${SERVER_URL}/auth/kakao/unlink`);
+  const { accessToken } = payload;
+
+  const result = await axios.delete(`${SERVER_URL}/auth/kakao/unlink`, {
+    headers: { Authorization: accessToken },
+  });
+
+  return result.data;
+};

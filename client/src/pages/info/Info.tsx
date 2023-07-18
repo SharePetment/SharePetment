@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useReadLocalStorage } from 'usehooks-ts';
-import { fillUserInfo } from '../../api/mutationfn';
+import { fillUserInfo, postQuitMember } from '../../api/mutationfn';
 import { SERVER_URL } from '../../api/url';
 import { ReactComponent as Like } from '../../assets/button/like.svg';
 import { ReactComponent as Logo } from '../../assets/logo.svg';
@@ -26,6 +26,11 @@ type InfoProps = {
   email: string;
   address: string;
   url: string;
+  accessToken: string | null;
+};
+
+type QuitProps = {
+  quitText: string;
   accessToken: string | null;
 };
 
@@ -107,8 +112,6 @@ export function Component() {
     }
   };
 
-  console.log(accessToken);
-
   // Submit 핸들러
   const onSubmit = (data: InfoProps) => {
     if (isDuplicated) {
@@ -138,24 +141,40 @@ export function Component() {
     userInfoFillMutation.mutate(data);
   };
 
+  /* ---------------------------------- 회원탈퇴---------------------------------- */
+  const {
+    register: quitRegister,
+    handleSubmit: quitHandleSubmit,
+    formState: { errors: quitErrors },
+  } = useForm<QuitProps>();
+
+  // 회원탈퇴 mutaition
+  const userQuitMutation = useMutation({
+    mutationFn: postQuitMember,
+    onSuccess() {
+      console.log('success');
+    },
+    onError() {
+      console.log('error');
+    },
+  });
+
+  const onSubmitQuit = (data: QuitProps) => {
+    if (data.quitText) {
+      userQuitMutation.mutate({ accessToken });
+    }
+  };
+
   if (userId) {
     return (
       <>
-        {userId ? (
-          <Logo
-            width="400"
-            className="ml-8 max-sm:w-80 max-sm:mx-auto cursor-pointer"
-            onClick={() => {
-              navigate('/home');
-            }}
-          />
-        ) : (
-          <ExtraInfoLogo>
-            <Like className="stroke-deepgreen fill-deepgreen w-6 h-6" />
-            <span className="ml-2 text-xl font-black">추가정보 입력</span>
-          </ExtraInfoLogo>
-        )}
-
+        <Logo
+          width="400"
+          className="ml-8 max-sm:w-80 max-sm:mx-auto cursor-pointer"
+          onClick={() => {
+            navigate('/home');
+          }}
+        />
         <FormContainer>
           <InfoForm onSubmit={handleSubmit(onSubmit)}>
             {/* 이름 */}
@@ -218,32 +237,42 @@ export function Component() {
               <Label>주소</Label>
               <Select size="lg" direction="column" setZip={setZip} />
             </div>
-            <Button
-              size="lg"
-              text={userId ? '회원정보 수정' : '회원가입'}
-              isgreen="true"
-            />
+            <Button size="lg" text="회원정보 수정" isgreen="true" />
           </InfoForm>
+
+          {/* 탈퇴버튼 */}
+          <div className="flex flex-col items-center gap-1 mt-3">
+            <span className="text-xs">
+              탈퇴를 원하신다면 '탈퇴할게요'를 적어주세요🥲
+            </span>
+            <form
+              className="flex gap-1"
+              onSubmit={quitHandleSubmit(onSubmitQuit)}>
+              <input
+                className="w-full bg-lightgray p-1 text-xs rounded-md"
+                {...quitRegister('quitText', {
+                  validate: value =>
+                    value === '탈퇴할게요' || '정확하게 입력해주세요',
+                })}
+              />
+              <button className="p-1 text-xs bg-deepgreen flex-shrink-0 rounded-md text-defaultbg">
+                확인
+              </button>
+            </form>
+            <p className="text-xs text-rose-500">
+              {quitErrors.quitText?.message}
+            </p>
+          </div>
         </FormContainer>
       </>
     );
   } else {
     return (
       <>
-        {userId ? (
-          <Logo
-            width="400"
-            className="ml-8 max-sm:w-80 max-sm:mx-auto cursor-pointer"
-            onClick={() => {
-              navigate('/my-page');
-            }}
-          />
-        ) : (
-          <ExtraInfoLogo>
-            <Like className="stroke-deepgreen fill-deepgreen w-6 h-6" />
-            <span className="ml-2 text-xl font-black">추가정보 입력</span>
-          </ExtraInfoLogo>
-        )}
+        <ExtraInfoLogo>
+          <Like className="stroke-deepgreen fill-deepgreen w-6 h-6" />
+          <span className="ml-2 text-xl font-black">추가정보 입력</span>
+        </ExtraInfoLogo>
 
         <FormContainer>
           <InfoForm onSubmit={handleSubmit(onSubmit)}>
@@ -298,11 +327,7 @@ export function Component() {
               <Label>주소</Label>
               <Select size="lg" direction="column" setZip={setZip} />
             </div>
-            <Button
-              size="lg"
-              text={userId ? '회원정보 수정' : '회원가입'}
-              isgreen="true"
-            />
+            <Button size="lg" text="회원가입" isgreen="true" />
           </InfoForm>
         </FormContainer>
       </>
