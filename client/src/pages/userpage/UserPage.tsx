@@ -20,6 +20,7 @@ import { MemberIdContext } from '../../store/Context';
 import { Feed } from '../../types/feedTypes';
 import { Follow, UserInfo } from '../../types/userType';
 import { WalkFeed } from '../../types/walkType';
+import { changeDateFormat } from '../../util/changeDateFormat';
 import {
   GridContainerFeed,
   GridContainerWalk,
@@ -263,7 +264,6 @@ export function Component() {
                         {!walkFeedData?.pages[0]?.length ? (
                           <NoticeNotWrite />
                         ) : (
-
                           <div>
                             <GridContainerWalk>
                               {walkFeedData?.pages.map((page, index) => (
@@ -274,7 +274,7 @@ export function Component() {
                                       key={item.walkMatePostId}>
                                       <WalkCard
                                         size="sm"
-                                        time={item.time}
+                                        time={changeDateFormat(item.time)}
                                         title={item.title}
                                         friends={item.maximum}
                                         location={item.location}
@@ -290,7 +290,6 @@ export function Component() {
                             </GridContainerWalk>
                             <div ref={ref}></div>
                           </div>
-
                         )}
                       </>
                     )}

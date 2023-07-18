@@ -27,6 +27,7 @@ interface Prop {
   commentid: number;
   blankhandler: React.Dispatch<React.SetStateAction<boolean>>;
   memberid: number;
+  time: string;
 }
 
 export default function FeedComment({
@@ -38,6 +39,7 @@ export default function FeedComment({
   commentid,
   blankhandler,
   memberid,
+  time,
 }: Prop) {
   const navigate = useNavigate();
   const accessToken = useReadLocalStorage('accessToken');
@@ -96,7 +98,7 @@ export default function FeedComment({
         <UserId onClick={() => navigate(`/users/${memberid}`)}>
           {nickname}
         </UserId>
-        <Time>몇시간전</Time>
+        <Time>{time}</Time>
         {inperson === 'true' && (
           <div className="flex gap-2 pl-24">
             <EditText onClick={() => setIsEditOpen(prev => !prev)}>
