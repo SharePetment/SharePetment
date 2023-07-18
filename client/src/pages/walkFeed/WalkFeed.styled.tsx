@@ -27,4 +27,5 @@ export const CommentButton = tw.button`
 export const GatherMate = tw.span<{ isopen: BooleanStr }>`
   shrink-0
   ${prop => (prop.isopen === 'true' ? 'text-yellow' : 'text-deepgray')}
+  max-sm:text-xl
 `;

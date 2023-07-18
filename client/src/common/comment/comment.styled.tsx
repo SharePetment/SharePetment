@@ -28,6 +28,7 @@ export const DateText = tw.span`
 export const ContentBox = tw.div`
     py-3
     px-5
+    break-all
 `;
 
 export const Content = tw.span`

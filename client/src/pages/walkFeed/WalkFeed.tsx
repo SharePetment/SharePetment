@@ -16,6 +16,7 @@ import { ReactComponent as Edit } from '../../assets/button/edit.svg';
 import { ReactComponent as Calendar } from '../../assets/calendar.svg';
 import { ReactComponent as Dog } from '../../assets/dog.svg';
 import { ReactComponent as Chatlink } from '../../assets/link.svg';
+import { ReactComponent as ArrowLeft } from '../../assets/mobile/arrow-left.svg';
 import { ReactComponent as Pin } from '../../assets/pin.svg';
 import Comment from '../../common/comment/Comment';
 import Popup from '../../common/popup/Popup';
@@ -136,7 +137,11 @@ export function Component() {
       {isLoading ? (
         <LoadingComponent />
       ) : (
-        <div className="w-[500px] max-sm:w-[320px] mx-auto mt-7 relative">
+        <div className="w-[500px] max-sm:w-[320px] mx-auto mt-7">
+          <ArrowLeft
+            className="hidden max-sm:block w-6 h-6"
+            onClick={() => navigate(-1)}
+          />
           {`${data?.memberInfo?.memberId}` === userId && (
             <div className="flex justify-end gap-4 items-center">
               <button
@@ -152,11 +157,11 @@ export function Component() {
             </div>
           )}
           {/* 제목부분 */}
-          <div className="flex items-center text-3xl font-[900] justify-start mb-7">
+          <div className="flex items-baseline gap-3 text-3xl font-[900] justify-start mb-7 mt-3">
             <GatherMate isopen={data?.open ? 'true' : 'false'}>
               {data?.open ? '모집중' : '모집완료'}
             </GatherMate>
-            <h2 className="ml-5">{data?.title}</h2>
+            <h2 className="max-sm:text-xl">{data?.title}</h2>
           </div>
           {/* 산책정보 안내부분 */}
           <div className="grid grid-cols-2 gap-y-2 max-sm:grid-cols-1 mb-8">
@@ -173,9 +178,9 @@ export function Component() {
               <span>{address}</span>
             </WalkInfo>
             <WalkInfo>
-              <Chatlink />
+              <Chatlink className=" shrink-0" />
               <a href={data?.chatURL as string} target="_blank">
-                <span>{data?.chatURL}</span>
+                <span className=" break-all">{data?.chatURL}</span>
               </a>
             </WalkInfo>
           </div>
@@ -200,6 +205,10 @@ export function Component() {
                 type="text"
                 {...register('content', {
                   required: '댓글 작성시 텍스트 필수',
+                  maxLength: {
+                    value: 100,
+                    message: '100자 이내로 입력해주세요 :)',
+                  },
                 })}
               />
               <CommentButton>Comment</CommentButton>
