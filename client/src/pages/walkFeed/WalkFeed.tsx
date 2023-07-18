@@ -228,7 +228,7 @@ export function Component() {
           <Popup
             countbtn={2}
             title="정말로 삭제하시겠습니까?"
-            btnsize={['sm', 'sm']}
+            btnsize={['md', 'md']}
             isgreen={['true', 'false']}
             buttontext={['삭제', '취소']}
             popupcontrol={() => {

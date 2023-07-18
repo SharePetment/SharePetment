@@ -28,11 +28,9 @@ interface SelectDivProp {
 
 export const SelectContainer = tw.div<SelectDivProp>`
     flex
+    justify-center
     ${prop => (prop.direction === 'row' ? 'flex-row ' : 'flex-col')}
-    ${prop =>
-      prop.direction === 'row'
-        ? 'justify-end max-sm:justify-center'
-        : ' justify-center'}
     items-center
     gap-4
+    max-sm:gap-2
 `;
