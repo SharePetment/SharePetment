@@ -80,6 +80,7 @@ export default function PetInfo(prop: Prop) {
     },
     onError: error => {
       console.log(error);
+      setIsDisabled(false);
       setIsError(true);
     },
   });
@@ -280,7 +281,7 @@ export default function PetInfo(prop: Prop) {
           }}
           btnsize={['md']}
           countbtn={1}
-          title="펫 등록, 펫 수정에 실패했습니다 최대 이미지 크기는 5MB입니다."
+          title="실패했습니다. 최대 이미지 크기는 5MB입니다. 반드시 프로필을 포함해주세요!"
           isgreen={['true']}
           buttontext={['확인']}
           handler={[
