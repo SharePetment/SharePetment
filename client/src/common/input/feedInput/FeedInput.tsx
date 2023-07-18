@@ -13,7 +13,7 @@ interface Prop {
 
 export default function FeedInput({ feedid, blankhandler }: Prop) {
   const accessToken = useReadLocalStorage('accessToken');
-  const inputRef = useRef<HTMLTextAreaElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   const queryClient = useQueryClient();
   const { mutate } = useMutation({
     mutationFn: postFeedComment,
@@ -40,7 +40,7 @@ export default function FeedInput({ feedid, blankhandler }: Prop) {
 
   return (
     <Container>
-      <Input ref={inputRef} />
+      <Input ref={inputRef} type="text" />
       <CommentBtn onClick={handleClick}>
         <Write />
       </CommentBtn>

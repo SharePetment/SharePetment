@@ -8,13 +8,13 @@ export const UserBox = tw.div`
   flex
   items-center
   gap-2
-  cursor-pointer
 `;
 
 export const UserId = tw.span`
   font-black
   text-defaulttext
   text-xs
+  cursor-pointer
 `;
 
 export const Time = tw.span`
@@ -35,7 +35,7 @@ export const EditText = tw.span`
   cursor-pointer
 `;
 
-export const EditTextarea = tw.textarea`
+export const EditInput = tw.input`
   border-[1.5px]
   border-lightgray
   resize-none
@@ -51,5 +51,5 @@ export const EditTextarea = tw.textarea`
 export const EditBtn = tw.button`
   absolute
   right-4
-  bottom-2
+  bottom-[0.1rem]
 `;

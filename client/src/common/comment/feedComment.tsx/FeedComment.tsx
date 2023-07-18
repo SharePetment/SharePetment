@@ -14,7 +14,7 @@ import {
   Time,
   Content,
   EditText,
-  EditTextarea,
+  EditInput,
   EditBtn,
 } from './FeedComment.styled';
 
@@ -85,13 +85,19 @@ export default function FeedComment({
     commentDeleteMutation.mutate(body);
   };
 
-  const inputRef = useRef<HTMLTextAreaElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   return (
     <Container>
-      <UserBox onClick={() => navigate(`/users/${memberid}`)}>
-        <Profile size="sm" isgreen="false" url={userimg} />
-        <UserId>{nickname}</UserId>
+      <UserBox>
+        <div
+          onClick={() => navigate(`/users/${memberid}`)}
+          className="cursor-pointer">
+          <Profile size="sm" isgreen="false" url={userimg} />
+        </div>
+        <UserId onClick={() => navigate(`/users/${memberid}`)}>
+          {nickname}
+        </UserId>
         <Time>{time}</Time>
         {inperson === 'true' && (
           <div className="flex gap-2 pl-24">
@@ -105,7 +111,7 @@ export default function FeedComment({
       {!isEditOpen && <Content>{content}</Content>}
       {isEditOpen && (
         <div className="relative">
-          <EditTextarea defaultValue={content} ref={inputRef} />
+          <EditInput defaultValue={content} ref={inputRef} />
           <EditBtn onClick={handleEdit}>
             <Write width={22} />
           </EditBtn>

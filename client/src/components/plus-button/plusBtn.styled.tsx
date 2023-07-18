@@ -5,7 +5,10 @@ export const ButtonContainer = tw.button`
     bg-[#ffffff]
     p-1
     rounded-xl
-    
+    hover:bg-lightgray
+    transition-all
+    delay-75
+    mt-1.5
 `;
 export const PlusIcon = tw(Plus)`
     fill-deepgreen
