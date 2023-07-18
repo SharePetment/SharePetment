@@ -7,6 +7,8 @@ import com.saecdo18.petmily.kakaoLogin.dto.AccessTokenDto;
 import com.saecdo18.petmily.kakaoLogin.dto.KakaoProfile;
 
 import com.saecdo18.petmily.kakaoLogin.dto.MemberInfoAndJwtDto;
+import com.saecdo18.petmily.kakaoLogin.entity.KakaoAccessToken;
+import com.saecdo18.petmily.kakaoLogin.repository.KakaoAccessTokenRepository;
 import com.saecdo18.petmily.member.dto.MemberDto;
 import com.saecdo18.petmily.member.entity.Member;
 import com.saecdo18.petmily.member.repository.MemberRepository;
@@ -35,6 +37,7 @@ import java.util.Optional;
 public class KakaoService {
     private final MemberRepository memberRepository;
     private final TokenProvider tokenProvider;
+    private final KakaoAccessTokenRepository kakaoAccessTokenRepository;
 
     public String getAccessToken(String code) throws JsonProcessingException {
         WebClient client = WebClient.create("https://kauth.kakao.com/oauth/token");
@@ -73,6 +76,17 @@ public class KakaoService {
         ObjectMapper objectMapper = new ObjectMapper();
         KakaoProfile kakaoProfile = objectMapper.readValue(response, KakaoProfile.class);
 
+        String email = kakaoProfile.getKakao_account().getEmail();
+        Optional<KakaoAccessToken> optionalKakaoAccessToken = kakaoAccessTokenRepository.findByEmail(email);
+
+        if(optionalKakaoAccessToken.isEmpty()){
+            KakaoAccessToken kakaoAccessToken = KakaoAccessToken.builder().kakaoAccessToken(accessToken).email(email).build();
+
+            kakaoAccessTokenRepository.save(kakaoAccessToken);
+        }
+        else{
+            optionalKakaoAccessToken.get().updateAccesToken(accessToken);
+        }
 
         return kakaoProfile;
     }
@@ -160,6 +174,27 @@ public class KakaoService {
                 .queryParams(queryParams)
                 .build()
                 .toUri();
+    }
+
+    public void unlink(long memberId){
+        Member findMember = memberRepository.findById(memberId).get();
+        String email = findMember.getEmail();
+
+        KakaoAccessToken kakaoAccessToken = kakaoAccessTokenRepository.findByEmail(email).get();
+        String accessToken = kakaoAccessToken.getKakaoAccessToken();
+
+
+        WebClient client = WebClient.create("https://kapi.kakao.com/v1/user/unlink");
+        String response = client.post()
+                .uri("https://kapi.kakao.com/v1/user/unlink")
+                .header("Authorization", "Bearer "+accessToken)
+                .header("Content-type","application/x-www-form-urlencoded;charset=utf-8")
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
+
+        memberRepository.delete(findMember);
+
     }
 
 }
