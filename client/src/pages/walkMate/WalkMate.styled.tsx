@@ -2,7 +2,7 @@ import tw from 'tailwind-styled-components';
 
 export const SearchButton = tw.button`
   w-20 
-  max-sm:w-[200px]
+  max-sm:w-[80px]
   h-[50px]
   text-base
   rounded-2xl
