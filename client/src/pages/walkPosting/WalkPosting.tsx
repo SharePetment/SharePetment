@@ -112,7 +112,7 @@ export function Component() {
               className=" cursor-pointer"
               type="datetime-local"
               {...register('time', {
-                required: '날짜도 필수입니다.',
+                required: '날짜는 필수입니다.',
                 maxLength: {
                   value: 20,
                   message: '20자 이내로 작성해주세요 ;)',

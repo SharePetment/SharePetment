@@ -41,7 +41,7 @@ export const RightBox = tw.div`
 `;
 
 export const CommentBox = tw.div`
-  w-80
+  w-full
   h-[26rem]
   overflow-scroll
   flex
@@ -50,4 +50,6 @@ export const CommentBox = tw.div`
   mb-3
   border-b-[1.5px]
   border-lightgray
+  overflow-x-hidden
+  overflow-y-auto
 `;

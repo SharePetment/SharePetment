@@ -84,38 +84,47 @@ export function Component() {
       ),
   });
 
+  /* ---------------------------- useInfiniteQuery ---------------------------- */
   // 자신이 작성한 피드리스트 조회
-  const { data: feedData, isLoading: feedLoading } = useQuery<{
-    responseList: Feed[];
-  }>({
+  const feedListInView = useInView();
+  const {
+    data: feedData,
+    isLoading: feedLoading,
+    fetchNextPage: feedFetchNextPage,
+  } = useInfiniteQuery<Feed[]>({
     queryKey: ['myFeed'],
-    queryFn: () =>
-      getServerDataWithJwt(
-        `${SERVER_URL}/feeds/my-feed`,
+    queryFn: async ({ pageParam = 0 }) => {
+      const result = await getServerDataWithJwt(
+        `${SERVER_URL}/feeds/my-feed?page=${pageParam}&size=10`,
         accessToken as string,
-      ),
+      );
+      return result.responseList;
+    },
+    getNextPageParam: (_, allPages) => {
+      const len = allPages.length;
+      const totalLength = allPages.length;
+      return allPages[totalLength - 1].length === 0 ? undefined : len;
+    },
   });
 
   /* ---------------------------- useInfiniteQuery ---------------------------- */
   // 자신이 작성한 산책 게시물 조회
-  const { ref, inView } = useInView();
+  const walkListInView = useInView();
   const {
     data: walkFeedData,
     isLoading: walkFeedLoading,
-    fetchNextPage,
+    fetchNextPage: walkFetchNextPage,
     isError: walkFeedError,
   } = useInfiniteQuery<WalkFeed[]>({
     queryKey: ['walkFeedList'],
     queryFn: ({ pageParam = 0 }) => {
-      console.log(pageParam);
       return getServerDataWithJwt(
         `${SERVER_URL}/walkmates/my-walks?openFilter=false&&page=${pageParam}&size=10`,
         accessToken as string,
       );
     },
 
-    getNextPageParam: (lastPage, allPages) => {
-      console.log(lastPage, allPages);
+    getNextPageParam: (_, allPages) => {
       const len = allPages.length;
       const totalLength = allPages.length;
       return allPages[totalLength - 1].length === 0 ? undefined : len;
@@ -123,11 +132,18 @@ export function Component() {
   });
 
   useEffect(() => {
-    if (inView) {
-      fetchNextPage();
+    if (walkListInView.inView) {
+      walkFetchNextPage();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [inView]);
+  }, [walkListInView.inView]);
+
+  useEffect(() => {
+    if (feedListInView.inView) {
+      feedFetchNextPage();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [feedListInView.inView]);
 
   // 자신이 작성한 댓글 리스트 조회
   const { data: commentListData } = useQuery<CommentProp[]>({
@@ -246,9 +262,7 @@ export function Component() {
                       ? `border-t-2 border-t-[green] `
                       : undefined
                   }>
-                  <FeedIcon
-                    className={currentTab === 0 ? `fill-deepgreen ` : undefined}
-                  />
+                  <FeedIcon stroke={currentTab === 0 ? `#69B783` : '#d4d4d8'} />
                 </TabMenuList>
                 <TabMenuList
                   onClick={() => setCurrentTab(1)}
@@ -256,7 +270,7 @@ export function Component() {
                     currentTab === 1 ? `border-t-2 border-t-[green]` : undefined
                   }>
                   <WalkFeedIcon
-                    className={currentTab === 1 ? `fill-deepgreen ` : undefined}
+                    fill={currentTab === 1 ? `#69B783` : '#d4d4d8'}
                   />
                 </TabMenuList>
                 <TabMenuList
@@ -265,14 +279,14 @@ export function Component() {
                     currentTab === 2 ? `border-t-2 border-t-[green]` : undefined
                   }>
                   <CommentListIcon
-                    className={currentTab === 2 ? `fill-deepgreen ` : undefined}
+                    stroke={currentTab === 2 ? `#69B783` : '#d4d4d8'}
                   />
                 </TabMenuList>
               </TabMenu>
               <div>
                 <div className={currentTab === 0 ? 'block' : 'hidden'}>
                   <div>
-                    {!feedData?.responseList.length ? (
+                    {feedData === undefined ? (
                       <>
                         {walkFeedError ? (
                           <NoticeServerError />
@@ -281,20 +295,29 @@ export function Component() {
                         )}
                       </>
                     ) : (
-                      <GridContainerFeed>
-                        {feedData?.responseList?.map(item => (
-                          <Link to={`/home/${item.feedId}`} key={item.feedId}>
-                            <img
-                              className="w-full h-[180px] rounded-[28px] object-cover border-2 hover:drop-shadow-lg"
-                              src={
-                                item.images[0]
-                                  ? item.images[0].uploadFileURL
-                                  : ''
-                              }
-                            />
-                          </Link>
-                        ))}
-                      </GridContainerFeed>
+                      <>
+                        <GridContainerFeed>
+                          {feedData.pages.map((page, index) => (
+                            <React.Fragment key={index}>
+                              {page.map(item => (
+                                <Link
+                                  to={`/home/${item.feedId}`}
+                                  key={item.feedId}>
+                                  <img
+                                    className="w-full h-[180px] rounded-[28px] object-cover border hover:drop-shadow-lg transition-all delay-100"
+                                    src={
+                                      item.images[0]
+                                        ? item.images[0].uploadFileURL
+                                        : ''
+                                    }
+                                  />
+                                </Link>
+                              ))}
+                            </React.Fragment>
+                          ))}
+                        </GridContainerFeed>
+                        <div ref={feedListInView.ref}></div>
+                      </>
                     )}
                   </div>
                 </div>
@@ -330,7 +353,7 @@ export function Component() {
                               </React.Fragment>
                             ))}
                           </GridContainerWalk>
-                          <div ref={ref}></div>
+                          <div ref={walkListInView.ref}></div>
                         </div>
                       )}
                     </div>
