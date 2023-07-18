@@ -190,9 +190,7 @@ export function Component() {
               <UserInfoBox>
                 <div>
                   <span>게시물 </span>
-                  <HightliteText>
-                    {feedData?.responseList.length || 0}
-                  </HightliteText>
+                  <HightliteText>{data?.feedCount || 0}</HightliteText>
                 </div>
                 <div>
                   <span>랜선집사</span>
