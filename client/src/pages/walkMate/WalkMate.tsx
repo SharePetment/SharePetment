@@ -33,29 +33,26 @@ export function Component() {
   } = useInfiniteQuery<WalkFeed[]>({
     queryKey: ['walkmateList', 'key'],
     queryFn: ({ pageParam = 0 }) => {
-      console.log(pageParam);
       return getServerDataWithJwt(
         `${SERVER_URL}/walkmates/walks?openFilter=false&location=${zip}&page=${pageParam}&size=10`,
         accessToken as string,
       );
     },
 
-    getNextPageParam: (lastPage, allPages) => {
-      console.log(lastPage, allPages);
+    getNextPageParam: (_, allPages) => {
       const len = allPages.length;
       const totalLength = allPages.length;
       return allPages[totalLength - 1].length === 0 ? undefined : len;
     },
+
     enabled: !!zip,
   });
   const handleClickSearchAddress = () => {
-    console.log(zip);
     refetch();
   };
 
   useEffect(() => {
     if (inView) {
-      console.log('do');
       fetchNextPage();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
