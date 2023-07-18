@@ -46,4 +46,5 @@ export const UserName = tw.span`
     text-xl
     font-base
     ml-8
+    max-sm:text-sm
 `;

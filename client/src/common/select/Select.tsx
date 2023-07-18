@@ -96,7 +96,11 @@ export default function SelectComponent({ size, direction, setZip }: Prop) {
         {counrtyData &&
           counrtyData?.regcodes.map(({ code, name }) => (
             <option key={code} value={`${code} ${name}`}>
-              {name}
+              {BASE_CODE[name] === '제주특별자치도'
+                ? '제주'
+                : BASE_CODE[name] === '강원특별자치도'
+                ? '강원도'
+                : BASE_CODE[name]}
             </option>
           ))}
       </SelectInput>

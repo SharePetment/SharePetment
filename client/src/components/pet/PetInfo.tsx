@@ -16,7 +16,7 @@ import {
 } from '../../common/input/Input.styled';
 import Popup from '../../common/popup/Popup';
 import { PopupBackGround } from '../../common/popup/popup.styled';
-import { Container, Form, RadioBox, Title } from './petInfo.styled';
+import { Container, Form, RadioBox } from './petInfo.styled';
 import PetProfile from './petProfile/PetProfile';
 
 type Prop = {
@@ -144,7 +144,6 @@ export default function PetInfo(prop: Prop) {
           onClick={e => {
             e.stopPropagation();
           }}>
-          <Title>펫 등록</Title>
           <PetProfile
             image={image}
             setImage={setImage}

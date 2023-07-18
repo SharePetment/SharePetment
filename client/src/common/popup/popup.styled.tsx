@@ -23,7 +23,7 @@ export const PopupBox = tw.div`
     z-300
     rounded-3xl
     px-2.5
-    max-sm:w-3/4
+    max-sm:w-5/6
     w-1/3
     border
     absolute
@@ -37,7 +37,8 @@ export const Title = tw.h1`
     font-semibold
     text-center
     mb-8
-    max-sm:w-3/4
+    max-sm:w-100
+    max-sm:text-lg
 `;
 
 export const ButtonBox = tw.div`
