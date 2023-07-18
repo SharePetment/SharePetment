@@ -4,6 +4,7 @@ export const Container = tw.div`
   bg-defaultbg
   w-screen
   h-[670px]
+  max-sm:h-[896px]
   flex
   justify-center
   items-center
