@@ -9,7 +9,7 @@ import { ReactComponent as Close } from '../../assets/button/close.svg';
 import FeedComment from '../../common/comment/feedComment.tsx/FeedComment';
 import FeedInput from '../../common/input/feedInput/FeedInput';
 import Popup from '../../common/popup/Popup';
-import FeedCard from '../../components/card/feedcard/FeedCard';
+import FeedCard from '../../components/card/feed-card/FeedCard';
 import SideNav from '../../components/card/sidenav/SideNav';
 import LoadingComponent from '../../components/loading/LoadingComponent';
 import Toast from '../../components/toast/Toast';

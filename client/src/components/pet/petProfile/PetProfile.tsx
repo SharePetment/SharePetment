@@ -56,7 +56,7 @@ export default function PetProfile({
       const cropfile = await fetch(cropper.getCroppedCanvas().toDataURL())
         .then(res => res.blob())
         .then(blob => {
-          return new File([blob], 'newAvatar.png', { type: 'image/png' });
+          return new File([blob], 'newAvatar.jpeg', { type: 'image/jpeg' });
         });
       setFile(cropfile);
     }

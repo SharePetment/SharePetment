@@ -32,6 +32,7 @@ export default function ShowMap({ address, lat, lng }: Prop) {
       map: map,
       position: map.getCenter(),
     });
+    //
 
     // typeControl 설정
     const mapTypeControl = new kakao.maps.MapTypeControl();
