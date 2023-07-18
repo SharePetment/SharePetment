@@ -232,7 +232,9 @@ public class MemberService {
     public void deleteMember(long memberId) {
         Member findMember = methodFindByMemberIdMember(memberId);
         for(WalkMate walkMate : walkMateRepository.findAll()){
-            walkMateService.deleteWalk(walkMate.getWalkMatePostId(), memberId);
+            if(walkMate.getMember().getMemberId() == memberId){
+                walkMateService.deleteWalk(walkMate.getWalkMatePostId(), memberId);
+            }
         }
 
         memberRepository.delete(findMember);
