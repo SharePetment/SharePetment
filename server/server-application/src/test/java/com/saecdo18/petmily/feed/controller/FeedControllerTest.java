@@ -84,7 +84,7 @@ class FeedControllerTest {
         String content = gson.toJson(feedDtoList);
         String previousList = gson.toJson(previousListIds);
 
-        given(feedService.getFeedsRecent(any(), Mockito.anyLong())).willReturn(feedDtoList);
+        given(feedService.getFeedsRecent(any(), Mockito.anyLong(), Mockito.anyInt(), Mockito.anyInt())).willReturn(feedDtoList);
 
         ResultActions actions = mockMvc.perform(
                 post("/feeds/all/list/random")
@@ -141,9 +141,9 @@ class FeedControllerTest {
         String content = gson.toJson(feedDtoList);
         String previousList = gson.toJson(previousListIds);
 
-        given(feedService.getFeedsByMemberFollow(Mockito.anyLong(), any())).willReturn(feedDtoList);
+        given(feedService.getFeedsByMemberFollow(Mockito.anyLong(), any(), Mockito.anyInt(), Mockito.anyInt())).willReturn(feedDtoList);
         given(feedService.checkIds(Mockito.any(), Mockito.any())).willReturn(previousListIds);
-        given(feedService.getFeedsRecent(Mockito.any(), Mockito.anyLong())).willReturn(resultList);
+        given(feedService.getFeedsRecent(Mockito.any(), Mockito.anyLong(), Mockito.anyInt(), Mockito.anyInt())).willReturn(resultList);
         mockMvc.perform(
                         post("/feeds/list")
                                 .accept(MediaType.APPLICATION_JSON)

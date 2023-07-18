@@ -82,35 +82,28 @@ public class FeedServiceImpl implements FeedService {
     }
 
     @Override
-    public FeedDtoList getFeedsRecent(FeedServiceDto.PreviousListIds listIds, long memberId) {
-        int newDataCount = 10;
-        PageRequest pageRequest = PageRequest.of(0, newDataCount, Sort.by(Sort.Direction.DESC, "createdAt"));
+    public FeedDtoList getFeedsRecent(FeedServiceDto.PreviousListIds listIds, long memberId, int page, int size) {
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
 
         List<Feed> feedList = new ArrayList<>();
-        int page = 0;
         long totalCount = feedRepository.count();
 
-        while (feedList.size() < newDataCount) {
+        while (feedList.size() < size) {
             List<Feed> pageDataList = feedRepository.findAll(pageRequest).getContent();
-            List<Feed> filteredDataList;
-            if (memberId == 0) {
-                filteredDataList = pageDataList.stream()
-                        .filter(data -> !listIds.getPreviousListIds().contains(data.getFeedId()))
-                        .collect(Collectors.toList());
-            } else {
-                filteredDataList = pageDataList.stream()
-                        .filter(data -> !listIds.getPreviousListIds().contains(data.getFeedId()))
-                        .filter(data -> data.getMember().getMemberId() != memberId)
-                        .collect(Collectors.toList());
-            }
+
+            List<Feed> filteredDataList = pageDataList.stream()
+                    .filter(data -> !listIds.getPreviousListIds().contains(data.getFeedId()))
+                    .filter(data -> memberId == 0 || data.getMember().getMemberId() != memberId)
+                    .collect(Collectors.toList());
+
             feedList.addAll(filteredDataList);
 
             page++;
 
-            if((long) page * newDataCount >= totalCount)
+            if((long) page * size >= totalCount)
                 break;
 
-            pageRequest = PageRequest.of(0, newDataCount, Sort.by(Sort.Direction.DESC, "createdAt"));
+            pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
         }
 
         return changeFeedListToFeedResponseDto(feedList, memberId);
@@ -128,7 +121,7 @@ public class FeedServiceImpl implements FeedService {
     }
 
     @Override
-    public FeedDtoList getFeedsByMemberFollow(long memberId, FeedServiceDto.PreviousListIds listIds) {
+    public FeedDtoList getFeedsByMemberFollow(long memberId, FeedServiceDto.PreviousListIds listIds, int page, int size) {
         List<FollowMember> followMemberList = followMemberRepository.findByFollowingId(memberId)
                 .orElseThrow(() -> new RuntimeException("팔로우한 멤버가 없습니다."));
 
@@ -136,10 +129,12 @@ public class FeedServiceImpl implements FeedService {
         int dataCount = 20;
         int totalFeedCount = 0;
 
+        Collections.shuffle(followMemberList);
+
         while (feedSet.size() < dataCount && totalFeedCount < dataCount) {
             boolean added = false;
             for (FollowMember followMember : followMemberList) {
-                PageRequest pageRequest = PageRequest.of(0, 3, Sort.by(Sort.Direction.DESC, "createdAt"));
+                PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
                 List<Feed> memberFeedList = feedRepository
                         .findAllByMemberOrderByCreatedAtDesc(followMember.getFollowerMember(), pageRequest)
                         .getContent();

@@ -42,10 +42,12 @@ public class FeedController {
 
     @ApiOperation("최신 피드 리스트 가져오기")
     @PostMapping("/list/random")
-    public ResponseEntity<FeedDtoList> getFeedsRandom(@ApiParam("전에 받은 피드 아이디 리스트") @RequestBody FeedDto.PreviousListIds listIds) {
+    public ResponseEntity<FeedDtoList> getFeedsRandom(@ApiParam("전에 받은 피드 아이디 리스트") @RequestBody FeedDto.PreviousListIds listIds,
+                                                      @ApiParam("페이지 번호") @RequestParam(defaultValue = "0") int page,
+                                                      @ApiParam("페이지당 받을 피드 수") @RequestParam(defaultValue = "10") int size) {
         long memberId = authenticationGetMemberId.getMemberId();
         FeedServiceDto.PreviousListIds listIdsService = feedMapper.idsToServiceIds(listIds);
-        FeedDtoList responseList = feedService.getFeedsRecent(listIdsService, memberId);
+        FeedDtoList responseList = feedService.getFeedsRecent(listIdsService, memberId, page, size);
         return ResponseEntity.ok(responseList);
     }
 
@@ -70,13 +72,15 @@ public class FeedController {
 
     @ApiOperation("팔로우한 사용자 피드 리스트 가져오기")
     @PostMapping("/list")
-    public ResponseEntity<FeedDtoList> getFeedsByMemberFollow(@ApiParam("전에 받은 피드 아이디 리스트") @RequestBody FeedDto.PreviousListIds listIds) {
+    public ResponseEntity<FeedDtoList> getFeedsByMemberFollow(@ApiParam("전에 받은 피드 아이디 리스트") @RequestBody FeedDto.PreviousListIds listIds,
+                                                              @ApiParam("페이지 번호") @RequestParam(defaultValue = "0") int page,
+                                                              @ApiParam("페이지당 받을 피드 수") @RequestParam(defaultValue = "10") int size) {
         long memberId = authenticationGetMemberId.getMemberId();
         FeedServiceDto.PreviousListIds listIdsService = feedMapper.idsToServiceIds(listIds);
-        FeedDtoList responseList = feedService.getFeedsByMemberFollow(memberId, listIdsService);
+        FeedDtoList responseList = feedService.getFeedsByMemberFollow(memberId, listIdsService, page, size);
         if (responseList.getResponseList().size() <= 10) {
             listIdsService = feedService.checkIds(listIdsService, responseList);
-            FeedDtoList addResponseList = feedService.getFeedsRecent(listIdsService, memberId);
+            FeedDtoList addResponseList = feedService.getFeedsRecent(listIdsService, memberId, page, size);
             responseList.getResponseList().addAll(addResponseList.getResponseList());
         }
         return ResponseEntity.ok(responseList);
