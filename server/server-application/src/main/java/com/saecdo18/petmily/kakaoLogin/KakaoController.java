@@ -30,7 +30,7 @@ public class KakaoController {
         return memberInfoAndJwtDto;
     }
 
-    @DeleteMapping("/auth/kakao/unlink")
+    @PostMapping("/auth/kakao/unlink")
     @ApiOperation(value = "@@@@멤버 탈.퇴. 메서드@@@ Access_Token에 연관된 멤버의 카카오 링크를 끊고 추가로 멤버db 정보도 삭제가 됩니다")
     public ResponseEntity<?> unlink(){
         long memberId = authenticationGetMemberId.getMemberId();
