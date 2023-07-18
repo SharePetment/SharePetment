@@ -23,7 +23,6 @@ export const InputContainer = tw.div`
   w-[320px] max-sm:w-[220px]
   max-sm:flex
   max-sm:flex-col
-  
 `;
 
 export const Label = tw.label`
@@ -41,15 +40,16 @@ export const InputText = tw.input<ErrorMessage>`
   border
   rounded-[10px]
   w-[320px] max-sm:w-[220px]
-
   ${prop => prop.error === undefined && `border-lightgray`}
   ${prop => typeof prop.error === 'string' && `border-[#FF7B7B]`}
   ${prop => prop.duplicated === 'true' && `border-[#38ae8f]`}
+  ${prop => prop.error === '사용가능한 아이디입니다.' && `border-deepgreen`}
 `;
 
-export const ErrorNotice = tw.p`
+export const ErrorNotice = tw.p<{ messagetext?: string }>`
   text-[#FF7B7B]
   absolute
   top-0
   right-0
+  ${prop => prop.messagetext === '사용가능한 아이디입니다.' && `text-deepgreen`}
 `;

@@ -1,4 +1,5 @@
 import tw from 'tailwind-styled-components';
+import { BooleanStr } from '../../types/propType';
 
 export const InfoForm = tw.form`
   flex
@@ -7,7 +8,7 @@ export const InfoForm = tw.form`
   gap-7
 `;
 
-export const ConfirmButton = tw.button`
+export const ConfirmButton = tw.button<{ isduplicated: BooleanStr }>`
   px-4
   py-3
   bg-deepgreen
@@ -17,9 +18,9 @@ export const ConfirmButton = tw.button`
   absolute
   top-[33px]
   right-[6px]
-
-  hover:bg-white
-  hover:text-deepgreen
+  ${prop =>
+    prop.isduplicated === 'false' && `hover:bg-white hover:text-deepgreen`}
+  ${prop => prop.isduplicated === 'true' && `bg-lightgray cursor-default`}
 `;
 
 export const ExtraInfoLogo = tw.div`
