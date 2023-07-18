@@ -202,7 +202,15 @@ export function Component() {
             {/* 이메일 */}
             <InputContainer>
               <Label htmlFor="email">이메일</Label>
-              <InputText id="email" value={location.state.email} disabled />
+              <InputText
+                id="email"
+                value={
+                  location.state.email
+                    ? location.state.email
+                    : 'guest@email.com'
+                }
+                disabled
+              />
             </InputContainer>
 
             {/* 주소 */}
