@@ -17,6 +17,9 @@ import com.saecdo18.petmily.pet.entity.Pet;
 import com.saecdo18.petmily.pet.repository.PetImageRepository;
 import com.saecdo18.petmily.pet.repository.PetRepository;
 import com.saecdo18.petmily.pet.service.PetService;
+import com.saecdo18.petmily.walkmate.entity.WalkMate;
+import com.saecdo18.petmily.walkmate.entity.WalkMateComment;
+import com.saecdo18.petmily.walkmate.repository.WalkMateCommentRepository;
 import com.saecdo18.petmily.walkmate.repository.WalkMateRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -44,6 +47,7 @@ public class MemberService {
     private final PetMapper petMapper;
     private final PetImageRepository petImageRepository;
     private final WalkMateRepository walkMateRepository;
+    private final WalkMateCommentRepository walkMateCommentRepository;
 
 
 
@@ -225,6 +229,16 @@ public class MemberService {
 
     public void deleteMember(long memberId) {
         Member findMember = methodFindByMemberIdMember(memberId);
+
+        List<WalkMate> walkMateList = findMember.getWalkMates();
+        for(WalkMate walkMate: walkMateList){
+            List<WalkMateComment> walkMateCommentList = walkMate.getComments();
+            for(WalkMateComment walkMateComment:walkMateCommentList){
+                walkMateCommentRepository.delete(walkMateComment);
+            }
+            walkMateRepository.delete(walkMate);
+        }
+
         memberRepository.delete(findMember);
     }
 }
