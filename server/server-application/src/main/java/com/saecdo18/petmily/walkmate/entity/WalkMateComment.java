@@ -29,7 +29,7 @@ public class WalkMateComment extends BaseEntity {
     @JoinColumn(name = "walk_mate_post_id") //수정1
     private WalkMate walkMate;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
 
