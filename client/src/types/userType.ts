@@ -12,6 +12,7 @@ export interface UserInfo {
   pets: Pets[];
   createdAt: number[];
   modifiedAt: number[];
+  feedCount: number;
 }
 
 // 팔로잉 회원 리스트 조회

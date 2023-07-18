@@ -24,7 +24,8 @@ gap-2
 export const UserNameBox = tw.div`
 flex 
 items-center 
-gap-6
+gap-4
+
 `;
 
 export const UserName = tw.span`

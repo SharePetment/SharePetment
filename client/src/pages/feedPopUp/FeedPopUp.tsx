@@ -123,7 +123,7 @@ export function Component() {
             if (e.target === e.currentTarget) navigate(-1);
           }}>
           {isToastOpen && (
-            <div className="fixed right-8 bottom-8">
+            <div className="fixed right-8 bottom-10">
               <Toast />
             </div>
           )}

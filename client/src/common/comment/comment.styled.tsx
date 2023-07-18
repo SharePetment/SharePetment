@@ -64,7 +64,7 @@ export const Input = tw.input`
     pl-4
     pr-10
     w-[400px]
-    max-sm:w-[300px]
+    max-sm:w-[250px]
     rounded-2xl
 
     border-lightgray

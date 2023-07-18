@@ -80,47 +80,62 @@ export function Component() {
   });
 
   // 유저가 작성한 피드 리스트 가져오기
+  const feedListInView = useInView();
   const {
     data: feedData,
     isLoading: feedLoading,
     isError: walkFeedError,
-  } = useQuery<{
-    responseList: Feed[];
-  }>({
+    fetchNextPage: feedFetchNextPage,
+  } = useInfiniteQuery<Feed[]>({
     queryKey: ['userFeed', usersId],
-    queryFn: () =>
-      getServerDataWithJwt(
-        `${SERVER_URL}/feeds/other-feed/${usersId}`,
-        accessToken as string,
-      ),
-  });
-
-  /* ---------------------------- useInfiniteQuery ---------------------------- */
-  // 유저가 작성한 산책 리스트 가져오기
-  const { ref, inView } = useInView();
-  const { data: walkFeedData, fetchNextPage } = useInfiniteQuery<WalkFeed[]>({
-    queryKey: ['UserwalkFeedList'],
-    queryFn: ({ pageParam = 0 }) => {
-      return getServerDataWithJwt(
-        `${SERVER_URL}/walkmates/other-walks/${usersId}?openFilter=false&&page=${pageParam}&size=10`,
+    queryFn: async ({ pageParam = 0 }) => {
+      const result = await getServerDataWithJwt(
+        `${SERVER_URL}/feeds/other-feed/${usersId}?page=${pageParam}&size=10`,
         accessToken as string,
       );
+      return result.responseList;
     },
-
-    getNextPageParam: (lastPage, allPages) => {
-      console.log(lastPage, allPages);
+    getNextPageParam: (_, allPages) => {
       const len = allPages.length;
       const totalLength = allPages.length;
       return allPages[totalLength - 1].length === 0 ? undefined : len;
     },
   });
 
+  /* ---------------------------- useInfiniteQuery ---------------------------- */
+  // 유저가 작성한 산책 리스트 가져오기
+  const walkListInView = useInView();
+  const { data: walkFeedData, fetchNextPage: walkFetchNextPage } =
+    useInfiniteQuery<WalkFeed[]>({
+      queryKey: ['UserwalkFeedList'],
+      queryFn: ({ pageParam = 0 }) => {
+        return getServerDataWithJwt(
+          `${SERVER_URL}/walkmates/other-walks/${usersId}?openFilter=false&&page=${pageParam}&size=10`,
+          accessToken as string,
+        );
+      },
+
+      getNextPageParam: (lastPage, allPages) => {
+        console.log(lastPage, allPages);
+        const len = allPages.length;
+        const totalLength = allPages.length;
+        return allPages[totalLength - 1].length === 0 ? undefined : len;
+      },
+    });
+
   useEffect(() => {
-    if (inView) {
-      fetchNextPage();
+    if (walkListInView.inView) {
+      walkFetchNextPage();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [inView]);
+  }, [walkListInView.inView]);
+
+  useEffect(() => {
+    if (feedListInView.inView) {
+      feedFetchNextPage();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [feedListInView.inView]);
 
   // 팔로잉 회원 리스트 조회
   const { data: followingData, isLoading: followingLoading } = useQuery<
@@ -164,9 +179,7 @@ export function Component() {
               <UserInfoBox>
                 <div>
                   <span>게시물 </span>
-                  <HightliteText>
-                    {feedData?.responseList?.length || 0}
-                  </HightliteText>
+                  <HightliteText>{data?.feedCount || 0}</HightliteText>
                 </div>
                 <div>
                   <span>랜선집사</span>
@@ -211,9 +224,7 @@ export function Component() {
                       ? `border-t-2 border-t-[green] `
                       : undefined
                   }>
-                  <FeedIcon
-                    className={currentTab === 0 ? `fill-deepgreen ` : undefined}
-                  />
+                  <FeedIcon stroke={currentTab === 0 ? `#69B783` : '#d4d4d8'} />
                 </TabMenuList>
                 <TabMenuList
                   onClick={() => setCurrentTab(1)}
@@ -221,7 +232,7 @@ export function Component() {
                     currentTab === 1 ? `border-t-2 border-t-[green]` : undefined
                   }>
                   <WalkFeedIcon
-                    className={currentTab === 1 ? `fill-deepgreen ` : undefined}
+                    fill={currentTab === 1 ? `#69B783` : '#d4d4d8'}
                   />
                 </TabMenuList>
               </TabMenu>
@@ -229,7 +240,7 @@ export function Component() {
                 {/* 피드 */}
                 <div className={currentTab === 0 ? 'block' : 'hidden'}>
                   <div>
-                    {!feedData?.responseList.length ? (
+                    {feedData === undefined ? (
                       <>
                         {walkFeedError ? (
                           <NoticeServerError />
@@ -238,19 +249,29 @@ export function Component() {
                         )}
                       </>
                     ) : (
-                      <GridContainerFeed>
-                        {feedData?.responseList?.map(item => (
-                          <Link
-                            to={`/home/${item.feedId}`}
-                            key={item.feedId}
-                            className=" cursor-pointer">
-                            <img
-                              className="w-full h-[180px] rounded-[28px] object-cover"
-                              src={item.images[0].uploadFileURL}
-                            />
-                          </Link>
-                        ))}
-                      </GridContainerFeed>
+                      <>
+                        <GridContainerFeed>
+                          {feedData.pages.map((page, index) => (
+                            <React.Fragment key={index}>
+                              {page.map(item => (
+                                <Link
+                                  to={`/home/${item.feedId}`}
+                                  key={item.feedId}>
+                                  <img
+                                    className="w-full h-[180px] rounded-[28px] object-cover border hover:drop-shadow-lg transition-all delay-100"
+                                    src={
+                                      item.images[0]
+                                        ? item.images[0].uploadFileURL
+                                        : ''
+                                    }
+                                  />
+                                </Link>
+                              ))}
+                            </React.Fragment>
+                          ))}
+                        </GridContainerFeed>
+                        <div ref={feedListInView.ref}></div>
+                      </>
                     )}
                   </div>
                 </div>
@@ -288,7 +309,7 @@ export function Component() {
                                 </React.Fragment>
                               ))}
                             </GridContainerWalk>
-                            <div ref={ref}></div>
+                            <div ref={walkListInView.ref}></div>
                           </div>
                         )}
                       </>

@@ -248,7 +248,7 @@ export default function Map({
               ${index + 1}.
             </span>
             <div>
-              <h5 class="font-semibold text-lg hover:text-deepgreen">${
+              <h5 class="font-semibold text-lg hover:text-deepgreen max-sm:text-base">${
                 places.place_name
               }</h5>
               ${
@@ -320,7 +320,7 @@ export default function Map({
         el.lastChild && el.removeChild(el.lastChild);
       }
     }
-  }, [isLoading, mainAddress, searchKeyword]);
+  }, [isLoading, searchKeyword]);
 
   return (
     <div className="flex flex-col items-center mb-1">
@@ -338,23 +338,21 @@ export default function Map({
           검색
         </button>
       </div>
-      <div className="flex  mt-3 justify-between gap-5">
-        <div id="search-result" className="h-[400px]">
-          <p className="mb-3">
-            <span className="font-semibold">{searchKeyword} </span>
-            {!!searchKeyword && '검색결과'}
-          </p>
-          <div className="no-scrollbar w-100 h-[300px] overflow-y-scroll">
-            <ul id="places-list" className="flex flex-col"></ul>
+      <div className="flex  mt-3 justify-between gap-5 max-sm:w-80 max-sm:flex-col">
+        {searchKeyword ? (
+          <div id="search-result" className="h-[400px]">
+            <p className="mb-3">
+              <span className="font-semibold">{searchKeyword} </span>
+              {!!searchKeyword && '검색결과'}
+            </p>
+            <div className="no-scrollbar w-100 h-[300px] overflow-y-scroll max-sm:w-[300px]">
+              <ul id="places-list" className="flex flex-col"></ul>
+            </div>
+            <div id="pagination" className="flex mt-2"></div>
           </div>
-          <div id="pagination" className="flex mt-2"></div>
-        </div>
-        <div
-          id="myMap"
-          style={{
-            width: '400px',
-            height: '350px',
-          }}></div>
+        ) : null}
+
+        <div id="myMap" className="h-[350px] w-[350px] max-sm:w-[300px]"></div>
       </div>
     </div>
   );

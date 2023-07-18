@@ -74,7 +74,7 @@ export default function PetProfile({
       <PetProfileDiv>
         <ProfileHeader>
           <Profile isgreen="false" size="md" url={image} />
-          <ProfileText>반려동물만이 포함된 이미지를 사용해주세요!</ProfileText>
+          <ProfileText>반려동물 이미지를 사용해주세요!</ProfileText>
         </ProfileHeader>
         <ProfileTail>
           <input
@@ -84,7 +84,7 @@ export default function PetProfile({
             onChange={handleProfile}
             className="hidden"
           />
-          <Label htmlFor="petImage">반려동물 프로필 등록</Label>
+          <Label htmlFor="petImage">프로필 등록</Label>
         </ProfileTail>
       </PetProfileDiv>
       {isViewImageCropper && (
