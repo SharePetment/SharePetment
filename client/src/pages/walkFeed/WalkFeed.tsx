@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useContext, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { Link, useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useReadLocalStorage } from 'usehooks-ts';
 import {
   addComment,
@@ -174,9 +174,9 @@ export function Component() {
             </WalkInfo>
             <WalkInfo>
               <Chatlink />
-              <Link to={data?.chatURL as string}>
+              <a href={data?.chatURL as string} target="_blank">
                 <span>{data?.chatURL}</span>
-              </Link>
+              </a>
             </WalkInfo>
           </div>
           {/* 본문 */}

@@ -43,6 +43,9 @@ export default function PetInfo(prop: Prop) {
   const { petId, profile, name, age, sex, information, method, setIsOpened } =
     prop;
 
+  // 버튼 disabled
+  const [isDisabled, setIsDisabled] = useState(false);
+
   // token
   const accessToken = useReadLocalStorage<string>('accessToken');
 
@@ -77,6 +80,7 @@ export default function PetInfo(prop: Prop) {
     },
     onError: error => {
       console.log(error);
+      setIsDisabled(false);
       setIsError(true);
     },
   });
@@ -95,6 +99,7 @@ export default function PetInfo(prop: Prop) {
 
   // submit Handler 작성
   const handlePetPost = async (data: Inputs) => {
+    setIsDisabled(true);
     const { name, age, information, radio } = data;
     const formData = new FormData();
     formData.append('name', name);
@@ -103,7 +108,7 @@ export default function PetInfo(prop: Prop) {
     formData.append('sex', radio);
     formData.append('species', '동물');
     formData.append('images', file as File);
-
+    console.log(file);
     if (!file) {
       const newFile = new File([], 'test', { type: 'image/png' });
       formData.append('images', newFile);
@@ -161,6 +166,10 @@ export default function PetInfo(prop: Prop) {
                     value: 10,
                     message: '최소글자는 1, 최대 글자는 10입니다',
                   },
+                  pattern: {
+                    value: /^(?!.*\s)[\p{L}\p{N}]+$/u,
+                    message: '공백과 특수기호를 제거해주세요.',
+                  },
                 })}
                 id="name"
                 error={errors.name?.message}
@@ -177,6 +186,14 @@ export default function PetInfo(prop: Prop) {
                 defaultValue={age ? age : 0}
                 {...register('age', {
                   required: '텍스트 필수입니다.',
+                  min: {
+                    value: 0,
+                    message: '양수만 입력해주세요.',
+                  },
+                  max: {
+                    value: 100,
+                    message: '100살이면 충분하지요?',
+                  },
                 })}
                 id="age"
                 type="number"
@@ -196,7 +213,9 @@ export default function PetInfo(prop: Prop) {
                     <Man />
                   </label>
                   <input
-                    {...register('radio')}
+                    {...register('radio', {
+                      required: true,
+                    })}
                     type="radio"
                     value="수컷"
                     id="man"
@@ -207,10 +226,22 @@ export default function PetInfo(prop: Prop) {
                     <Woman />
                   </label>
                   <input
-                    {...register('radio')}
+                    {...register('radio', {
+                      required: {
+                        value: true,
+                        message: '필수입니다.',
+                      },
+                    })}
                     type="radio"
                     value="암컷"
                     id="girl"
+                  />
+                  <ErrorMessage
+                    errors={errors}
+                    name="radio"
+                    render={({ message }) => (
+                      <ErrorNotice>{message}</ErrorNotice>
+                    )}
                   />
                 </div>
               </RadioBox>
@@ -234,7 +265,12 @@ export default function PetInfo(prop: Prop) {
                 render={({ message }) => <ErrorNotice>{message}</ErrorNotice>}
               />
             </InputContainer>
-            <Button text="반려동물 등록" isgreen="true" size="lg" />
+            <Button
+              text="반려동물 등록"
+              isgreen="true"
+              size="lg"
+              disabled={isDisabled}
+            />
           </Form>
         </Container>
       </PopupBackGround>
@@ -245,7 +281,7 @@ export default function PetInfo(prop: Prop) {
           }}
           btnsize={['md']}
           countbtn={1}
-          title="펫 등록, 펫 수정에 실패했습니다."
+          title="실패했습니다. 최대 이미지 크기는 5MB입니다. 반드시 프로필을 포함해주세요!"
           isgreen={['true']}
           buttontext={['확인']}
           handler={[

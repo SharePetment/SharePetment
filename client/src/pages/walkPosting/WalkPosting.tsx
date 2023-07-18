@@ -156,12 +156,17 @@ export function Component() {
           />
           {/* 오픈채팅 url */}
           <InputContainer>
-            <Label htmlFor="chatURL">오픈채팅방 링크</Label>
+            <Label htmlFor="chatURL">오픈채팅 링크</Label>
             <InputText
               id="chatURL"
               type="text"
               placeholder="(필수X)채팅방 링크가 있다면 입력해주세요:) "
-              {...register('chatURL')}
+              {...register('chatURL', {
+                pattern: {
+                  value: /^(http|https):\/\//gm,
+                  message: 'http://, https:// 시작해야 합니다.',
+                },
+              })}
               error={errors.chatURL?.message}
             />
             <ErrorMessage
@@ -181,7 +186,11 @@ export function Component() {
                 required: '필수',
                 min: {
                   value: 1,
-                  message: '1마리 이상이어야해요!',
+                  message: '1마리 이상.',
+                },
+                max: {
+                  value: 101,
+                  message: '101마리 이하.',
                 },
               })}
               error={errors.maximum?.message}
