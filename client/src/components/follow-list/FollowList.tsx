@@ -21,6 +21,7 @@ export default function FollowList({ setIsListShowed, follow, path }: Prop) {
   const navigate = useNavigate();
   console.log(path);
   const handleUserPage = (followerId: number) => {
+    setIsListShowed(false);
     navigate(`/users/${followerId}`);
   };
   const handleCloseList = () => {
