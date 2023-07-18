@@ -103,7 +103,7 @@ export default function PetInfo(prop: Prop) {
     formData.append('sex', radio);
     formData.append('species', '동물');
     formData.append('images', file as File);
-
+    console.log(file);
     if (!file) {
       const newFile = new File([], 'test', { type: 'image/png' });
       formData.append('images', newFile);

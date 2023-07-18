@@ -263,6 +263,7 @@ export function Component() {
                         {!walkFeedData?.pages[0]?.length ? (
                           <NoticeNotWrite />
                         ) : (
+
                           <div>
                             <GridContainerWalk>
                               {walkFeedData?.pages.map((page, index) => (
@@ -289,6 +290,7 @@ export function Component() {
                             </GridContainerWalk>
                             <div ref={ref}></div>
                           </div>
+
                         )}
                       </>
                     )}
