@@ -15,6 +15,7 @@ import LoadingComponent from '../../components/loading/LoadingComponent';
 import Toast from '../../components/toast/Toast';
 import { MemberIdContext } from '../../store/Context';
 import { Feed } from '../../types/feedTypes';
+import changeTime from '../../util/changeTiem';
 import {
   Container,
   CloseBtn,
@@ -43,7 +44,6 @@ export function Component() {
       ),
     enabled: !!state,
   });
-  console.log(data);
 
   const deleteFeedMutation = useMutation({
     mutationFn: deleteFeed,
@@ -158,6 +158,7 @@ export function Component() {
                       feedid={data.feedId}
                       blankhandler={setIsBlank}
                       memberid={comment.memberInfo.memberId}
+                      time={changeTime(comment.createdAt)}
                     />
                   ))}
               </CommentBox>
