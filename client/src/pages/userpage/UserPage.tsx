@@ -277,7 +277,7 @@ export function Component() {
                 </div>
                 {/* 산책 게시물 */}
                 <div className={currentTab === 1 ? 'block' : 'hidden'}>
-                  <div>
+                  <div className="flex justify-center">
                     {!myData?.animalParents ? (
                       <NoticeOnlyOwner />
                     ) : (

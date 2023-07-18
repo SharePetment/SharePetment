@@ -77,7 +77,7 @@ export const TabMenuList = tw.li`
 export const GridContainerFeed = tw.div`
   grid
   grid-cols-[180px_180px_180px]
-  max-sm:grid-cols-[180px_180px]
+  max-sm:grid-cols-[160px_160px]
   gap-1
 `;
 
