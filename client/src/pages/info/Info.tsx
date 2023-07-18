@@ -35,6 +35,7 @@ const ERROR_MESSAGE = {
   LENGTH: '10자 이내로 작성해주세요.',
   DUPLICATE: '중복을 확인해주세요.',
   EXIST: '이미 아이디가 있습니다.',
+  ENABLE: '사용가능한 아이디입니다.',
 };
 
 export function Component() {
@@ -48,15 +49,16 @@ export function Component() {
     handleSubmit,
     watch,
     setError,
-    clearErrors,
     setValue,
     formState: { errors },
   } = useForm<InfoProps>({ mode: 'onChange' });
   const nicknameValue = watch('nickname');
-  const [isDuplicated, setDuplicated] = useState<boolean>(false);
+
+  // 중복확인 정상적으로 끝내면 true, 아니면 false
+  const [isDuplicated, setDuplicated] = useState<boolean>(true);
   // 주소 값 받아오기
   const [zip, setZip] = useState('');
-  /* ----------------------------- useLocalStorage ---------------------------- */
+
   const accessToken = useReadLocalStorage<string>('accessToken');
 
   // 회원가입 등록 Mutation
@@ -80,16 +82,24 @@ export function Component() {
   // 중복확인 핸들러
   const handleCheckNickname = async (e: React.MouseEvent) => {
     e.preventDefault();
+
+    // 중복확인할 닉네임이 현재 닉네임과 동일하면 return
+    if (location.state.nickname === nicknameValue) {
+      setDuplicated(true);
+      return;
+    }
+
     if (errors.nickname) {
       if (errors.nickname.message !== ERROR_MESSAGE.DUPLICATE) return;
     }
+
     const result = await axios.post(
       `${SERVER_URL}/members/nickname-check/${nicknameValue}`,
     );
-    console.log(result);
+
     if (result.data.enable) {
       setDuplicated(true);
-      clearErrors('nickname');
+      setError('nickname', { message: ERROR_MESSAGE.ENABLE });
       setValue('nickname', nicknameValue);
     } else {
       setDuplicated(false);
@@ -99,17 +109,29 @@ export function Component() {
 
   // Submit 핸들러
   const onSubmit = (data: InfoProps) => {
-    if (!isDuplicated) {
+    if (isDuplicated) {
       if (!userId)
-        return setError('nickname', { message: ERROR_MESSAGE.DUPLICATE });
+        return setError('nickname', {
+          message: ERROR_MESSAGE.DUPLICATE,
+        });
     }
+
+    if (!isDuplicated) {
+      return setError('nickname', {
+        type: 'required',
+        message: ERROR_MESSAGE.DUPLICATE,
+      });
+    }
+
     const url = `${SERVER_URL}/members/status`;
+
     data = {
       ...data,
       address: zip.trim(),
       url,
       accessToken,
     };
+
     // userId params가 존재하면 userInfoEditMutation
     userInfoFillMutation.mutate(data);
   };
@@ -146,16 +168,32 @@ export function Component() {
               <InputText
                 id="nickname"
                 {...register('nickname', {
-                  value: location.state.nickname,
+                  required: ERROR_MESSAGE.NONE,
+                  pattern: {
+                    value: /^(?!.*\s)[\p{L}\p{N}]+$/u,
+                    message: ERROR_MESSAGE.EXTRA,
+                  },
+                  maxLength: {
+                    value: 10,
+                    message: ERROR_MESSAGE.LENGTH,
+                  },
+                  onChange: () => setDuplicated(false),
                 })}
                 error={errors.nickname?.message}
+                duplicated={`${isDuplicated}`}
                 defaultValue={location.state.nickname}
-                disabled
               />
+              <ConfirmButton
+                onClick={e => handleCheckNickname(e)}
+                isduplicated={`${isDuplicated}`}>
+                중복확인
+              </ConfirmButton>
               <ErrorMessage
                 errors={errors}
                 name="nickname"
-                render={({ message }) => <ErrorNotice>{message}</ErrorNotice>}
+                render={({ message }) => (
+                  <ErrorNotice messagetext={message}>{message}</ErrorNotice>
+                )}
               />
             </InputContainer>
 
@@ -228,9 +266,13 @@ export function Component() {
               <ErrorMessage
                 errors={errors}
                 name="nickname"
-                render={({ message }) => <ErrorNotice>{message}</ErrorNotice>}
+                render={({ message }) => (
+                  <ErrorNotice messagetext={message}>{message}</ErrorNotice>
+                )}
               />
-              <ConfirmButton onClick={e => handleCheckNickname(e)}>
+              <ConfirmButton
+                onClick={e => handleCheckNickname(e)}
+                isduplicated={`${isDuplicated}`}>
                 중복확인
               </ConfirmButton>
             </InputContainer>
