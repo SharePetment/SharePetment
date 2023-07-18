@@ -1,4 +1,4 @@
-import { Outlet, useMatch } from 'react-router-dom';
+import { Outlet, useMatch, ScrollRestoration } from 'react-router-dom';
 import Footer from './common/footer/Footer';
 import Header from './common/header/Header';
 import NavBar from './components/nav/NavBar';
@@ -32,6 +32,7 @@ function App() {
         loadingFeed ||
         matchFeedPopUp
       ) && <NavBar />}
+      <ScrollRestoration />
       <Outlet />
       {!(
         matchHome ||
