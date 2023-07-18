@@ -5,6 +5,7 @@ import com.saecdo18.petmily.feed.entity.BaseEntity;
 import com.saecdo18.petmily.feed.entity.Feed;
 import com.saecdo18.petmily.feed.entity.FeedLike;
 import com.saecdo18.petmily.pet.entity.Pet;
+import com.saecdo18.petmily.walkmate.entity.WalkMate;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -54,6 +55,9 @@ public class Member extends BaseEntity {
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private List<Feed> feeds;
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
+    private List<WalkMate> walkMates;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private List<FeedLike> feedLikes;
