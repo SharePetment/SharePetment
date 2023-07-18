@@ -4,12 +4,12 @@ export const changeDateFormat = (date: string) => {
   const originalDate = new Date(date);
 
   const dateFormat =
-    `${originalDate.getFullYear()}`.slice(2) +
-    '년 ' +
+    `${originalDate.getFullYear()}` +
+    '-' +
     (originalDate.getMonth() + 1) +
-    '월 ' +
+    '-' +
     originalDate.getDate() +
-    '일 ' +
+    ' ' +
     day[originalDate.getDay()] +
     ' ' +
     originalDate.getHours() +

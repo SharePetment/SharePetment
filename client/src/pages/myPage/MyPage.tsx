@@ -25,6 +25,7 @@ import { CommentProp } from '../../types/commentType';
 import { Feed } from '../../types/feedTypes';
 import { Follow, UserInfo } from '../../types/userType';
 import { WalkFeed } from '../../types/walkType';
+import { changeDateFormat } from '../../util/changeDateFormat';
 import changeTime from '../../util/changeTiem';
 import { ErrorText } from '../notFound/NotFound.style';
 import { CommentList } from '../walkMate/WalkMate.styled';
@@ -180,7 +181,7 @@ export function Component() {
           <Container>
             <UserBox>
               <Profile isgreen="true" size="lg" url={userProfileImage} />
-              <UserNameBox className="flex items-center gap-4">
+              <UserNameBox>
                 <UserName>{data?.memberInfo.nickname}</UserName>
                 <button>
                   <Setting onClick={handleUserEdit} />
@@ -317,7 +318,7 @@ export function Component() {
                                     key={item.walkMatePostId}>
                                     <WalkCard
                                       size="sm"
-                                      time={item.time}
+                                      time={changeDateFormat(item.time)}
                                       title={item.title}
                                       friends={item.maximum}
                                       location={item.location}
