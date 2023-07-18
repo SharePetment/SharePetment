@@ -162,13 +162,15 @@ public class WalkMateService {
         PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
         List<WalkMate> walks = walkMateRepository.findByLocationContaining(pageRequest, location).getContent();
 
+        List<WalkMate> filteredWalks = walks;
+
 
         if(openFilter){
-            onlyOpenWalk(walks);
+             filteredWalks = onlyOpenWalk(walks);
         }
 
         List<WalkMateDto.Response> responseList = new ArrayList<>();
-        for(WalkMate walk : walks){
+        for(WalkMate walk : filteredWalks){
             WalkMateDto.Response response = walkMateMapper.walkMateToWalkMateResponseDto(walk);
             MemberDto.Info info = getMemberInfoByWalk(walk);
             response.setMemberInfo(info);
@@ -293,7 +295,7 @@ public class WalkMateService {
 
     private List<WalkMate> onlyOpenWalk(List<WalkMate> walkMates){
 
-        List<WalkMate> allWalks = walkMateRepository.findAll();;
+        List<WalkMate> allWalks = walkMates;
         List<WalkMate> openWalks = allWalks.stream()
                 .filter(walk -> walk.getOpen().equals(true))
                 .collect(Collectors.toList());
