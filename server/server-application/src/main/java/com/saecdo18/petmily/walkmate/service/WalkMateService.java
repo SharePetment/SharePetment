@@ -164,6 +164,7 @@ public class WalkMateService {
 
         List<WalkMate> filteredWalks = walks;
 
+
         if(openFilter){
              filteredWalks = onlyOpenWalk(walks);
         }
