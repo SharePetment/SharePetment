@@ -14,7 +14,7 @@ import LoadingComponent from '../../components/loading/LoadingComponent';
 import Path from '../../routers/paths';
 import { WalkFeed } from '../../types/walkType';
 import { changeDateFormat } from '../../util/changeDateFormat';
-import { SearchButton } from './WalkMate.styled';
+import { FilterButton, SearchButton } from './WalkMate.styled';
 
 export function Component() {
   // 주소 값 받아오기
@@ -84,19 +84,24 @@ export function Component() {
   }
 
   return (
-    <div className="mt-10 items-center flex flex-col justify-center">
-      <div className=" flex justify-end max-sm:justify-center gap-4 ">
+    <div className="mt-10 flex flex-col items-center justify-center">
+      <div className="grid grid-cols-[max-content_max-content] gap-y-6 gap-x-4 max-sm:justify-center max-sm:gap-x-2">
         <Select size="md" direction="row" setZip={setZip} />
         <SearchButton onClick={handleClickSearchAddress}>검색</SearchButton>
+        <div className="flex gap-4 max-sm:gap-2">
+          <FilterButton
+            totalactive={showFilteredList}
+            onClick={() => setShowFilteredList('total')}>
+            전체
+          </FilterButton>
+          <FilterButton
+            advertiseactive={showFilteredList}
+            onClick={() => setShowFilteredList('advertise')}>
+            모집 중
+          </FilterButton>
+        </div>
       </div>
-      <div className="">
-        <button className="mr-4" onClick={() => setShowFilteredList('total')}>
-          전체 보기
-        </button>
-        <button onClick={() => setShowFilteredList('advertise')}>
-          모집 중만 보기
-        </button>
-      </div>
+
       <GridContainer>
         <Link to={Path.WalkPosting}>
           <CardContainer size="lg" className="items-center justify-center">

@@ -42,7 +42,7 @@ export default function WalkCard({
     <CardContainer size={size}>
       <WalkDate>
         <div className="text-xs">산책날짜</div>
-        <div>{time}</div>
+        <div className=" whitespace-nowrap overflow-hidden">{time}</div>
       </WalkDate>
       <Title>{title}</Title>
       <WalkMateList>
