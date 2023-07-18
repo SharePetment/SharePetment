@@ -28,7 +28,6 @@ import { WalkFeed } from '../../types/walkType';
 import { changeDateFormat } from '../../util/changeDateFormat';
 import changeTime from '../../util/changeTiem';
 import { ErrorText } from '../notFound/NotFound.style';
-import { CommentList } from '../walkMate/WalkMate.styled';
 import {
   Container,
   HightliteText,
@@ -42,6 +41,7 @@ import {
   UserNameBox,
   GridContainerFeed,
   GridContainerWalk,
+  CommentList,
 } from './myPage.styled';
 
 export function Component() {
@@ -359,11 +359,14 @@ export function Component() {
                     </div>
                   )}
                 </div>
-                <ul className={currentTab === 2 ? 'flex flex-col' : 'hidden'}>
+                <ul
+                  className={
+                    currentTab === 2 ? 'flex flex-col items-center' : 'hidden'
+                  }>
                   {!data?.animalParents ? (
                     <NoticeOnlyOwner />
                   ) : (
-                    <div>
+                    <div className="w-[300px]">
                       {!commentListData?.length ? (
                         <div className="flex flex-col items-center justify-center">
                           <ErrorText>
@@ -377,8 +380,10 @@ export function Component() {
                             to={`/walkmate/${item.walkMatePostId}`}
                             key={item.walkMateCommentId}>
                             <CommentList>
-                              <span>{item.content}</span>
-                              <time className="text-deepgray text-xs">
+                              <span className=" whitespace-nowrap overflow-hidden text-ellipsis ">
+                                {item.content}
+                              </span>
+                              <time className="text-deepgray text-xs flex-shrink-0">
                                 {changeTime(item.createdAt)}
                               </time>
                             </CommentList>

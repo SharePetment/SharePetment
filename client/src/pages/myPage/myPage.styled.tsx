@@ -89,3 +89,21 @@ export const GridContainerWalk = tw.div`
   max-[500px]:grid-cols-[240px]
   justify-items-center	
 `;
+
+export const CommentList = tw.li`
+  flex 
+  justify-between 
+  items-center 
+  gap-1 
+  py-1 
+  px-3 
+  border 
+  border-solid 
+  border-lightgray 
+  mb-1 
+  rounded-md 
+  hover:text-deepgreen 
+  transition-colors 
+  duration-200 
+  cursor-pointer
+`;
