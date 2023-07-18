@@ -45,8 +45,8 @@ public class KakaoService {
 
         formData.add("grant_type" , "authorization_code");
         formData.add("client_id" , "07df97c2858e60b2e19f630c2c397b31");
-        formData.add("redirect_uri" , "http://43.202.86.53:8080/auth/kakao/callback");
-//        formData.add("redirect_uri" , "http://localhost:8080/auth/kakao/callback");
+//        formData.add("redirect_uri" , "http://43.202.86.53:8080/auth/kakao/callback");
+        formData.add("redirect_uri" , "http://localhost:8080/auth/kakao/callback");
         formData.add("code" , code);
 
         String accessTokenRequest = client.post()
@@ -85,7 +85,9 @@ public class KakaoService {
             kakaoAccessTokenRepository.save(kakaoAccessToken);
         }
         else{
-            optionalKakaoAccessToken.get().updateAccesToken(accessToken);
+            KakaoAccessToken kakaoAccessToken = optionalKakaoAccessToken.get();
+            kakaoAccessToken.updateAccesToken(accessToken);
+            kakaoAccessTokenRepository.save(kakaoAccessToken);
         }
 
         return kakaoProfile;
@@ -194,6 +196,7 @@ public class KakaoService {
                 .block();
 
         memberRepository.delete(findMember);
+        kakaoAccessTokenRepository.delete(kakaoAccessToken);
 
     }
 
