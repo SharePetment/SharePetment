@@ -17,7 +17,7 @@ public class PetImage extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long PetImageId;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "pet_id")
     private Pet pet;
 

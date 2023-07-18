@@ -43,6 +43,7 @@ public class Member extends BaseEntity {
     private boolean animalParents;
 
 
+    @Column(length = 2000)
     private String refreshToken;
 
     @OneToMany(mappedBy = "followerMember", cascade = CascadeType.REMOVE)
