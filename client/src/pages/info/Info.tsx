@@ -3,7 +3,12 @@ import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import {
+  useLocation,
+  useMatch,
+  useNavigate,
+  useParams,
+} from 'react-router-dom';
 import { useReadLocalStorage } from 'usehooks-ts';
 import { fillUserInfo, postQuitMember } from '../../api/mutationfn';
 import { SERVER_URL } from '../../api/url';
@@ -17,6 +22,7 @@ import {
   InputText,
   Label,
 } from '../../common/input/Input.styled';
+import Popup from '../../common/popup/Popup';
 import Select from '../../common/select/Select';
 import { ConfirmButton, ExtraInfoLogo, InfoForm } from './Info.styled';
 
@@ -47,6 +53,7 @@ export function Component() {
   const navigate = useNavigate();
   const { userId } = useParams();
   const location = useLocation();
+  const matchInfo = useMatch('/info');
 
   // useHookForm 사용
   const {
@@ -71,7 +78,7 @@ export function Component() {
     mutationFn: fillUserInfo,
     onSuccess: () => {
       if (userId) return navigate('/my-page');
-      navigate('/home');
+      navigate('/loading');
     },
     onError: () => {
       navigate('/');
@@ -101,7 +108,7 @@ export function Component() {
     const result = await axios.post(
       `${SERVER_URL}/members/nickname-check/${nicknameValue}`,
     );
-
+    console.log(result.data.enable);
     if (result.data.enable) {
       setDuplicated(true);
       setError('nickname', { message: ERROR_MESSAGE.ENABLE });
@@ -114,7 +121,20 @@ export function Component() {
 
   // Submit 핸들러
   const onSubmit = (data: InfoProps) => {
+    const url = `${SERVER_URL}/members/status`;
+
+    data = {
+      ...data,
+      address: zip.trim(),
+      url,
+      accessToken,
+    };
+
     if (isDuplicated) {
+      if (matchInfo) {
+        userInfoFillMutation.mutate(data);
+      }
+
       if (!userId)
         return setError('nickname', {
           message: ERROR_MESSAGE.DUPLICATE,
@@ -128,15 +148,6 @@ export function Component() {
       });
     }
 
-    const url = `${SERVER_URL}/members/status`;
-
-    data = {
-      ...data,
-      address: zip.trim(),
-      url,
-      accessToken,
-    };
-
     // userId params가 존재하면 userInfoEditMutation
     userInfoFillMutation.mutate(data);
   };
@@ -148,14 +159,18 @@ export function Component() {
     formState: { errors: quitErrors },
   } = useForm<QuitProps>();
 
+  const [isError, setIsError] = useState(false);
+
   // 회원탈퇴 mutaition
   const userQuitMutation = useMutation({
     mutationFn: postQuitMember,
     onSuccess() {
-      console.log('success');
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
+      navigate('/');
     },
     onError() {
-      console.log('error');
+      setIsError(true);
     },
   });
 
@@ -264,6 +279,23 @@ export function Component() {
             </p>
           </div>
         </FormContainer>
+        {isError && (
+          <Popup
+            popupcontrol={() => {
+              setIsError(false);
+            }}
+            btnsize={['md']}
+            countbtn={1}
+            title="실패했습니다. 다시 입력해주세요!"
+            isgreen={['true']}
+            buttontext={['확인']}
+            handler={[
+              () => {
+                setIsError(false);
+              },
+            ]}
+          />
+        )}
       </>
     );
   } else {
