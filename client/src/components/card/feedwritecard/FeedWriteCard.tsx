@@ -181,7 +181,7 @@ export default function FeedWriteCard() {
       )}
 
       <div
-        className="w-screen h-screen bg-zinc-900/75  absolute flex items-center justify-center"
+        className="w-screen h-screen bg-zinc-900/75  absolute flex items-center justify-center max-sm:items-start max-sm:pt-10"
         onClick={e => {
           if (e.target === e.currentTarget) navigate(-1);
         }}>

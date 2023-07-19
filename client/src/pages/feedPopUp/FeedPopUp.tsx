@@ -22,6 +22,9 @@ import {
   FeedContainer,
   RightBox,
   CommentBox,
+  FeedCardContainer,
+  CommentContainer,
+  CommentClose,
 } from './FeedPopUp.styled';
 
 export function Component() {
@@ -33,6 +36,7 @@ export function Component() {
   const [isToastOpen, setIsToastOpen] = useState<boolean>(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState<boolean>(false);
   const [isBlank, setIsBlank] = useState<boolean>(false);
+  const [isCommentOpen, setIsCommentOpen] = useState<boolean>(false);
 
   // 피드 게시물 정보 가져오기
   const { data, isSuccess, isLoading } = useQuery<Feed>({
@@ -47,10 +51,9 @@ export function Component() {
 
   const deleteFeedMutation = useMutation({
     mutationFn: deleteFeed,
-    onSuccess: data => {
-      console.log(data);
-      navigate(-1);
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['guestFeed'] });
+      navigate('/my-page');
     },
   });
 
@@ -77,7 +80,7 @@ export function Component() {
 
   if (isLoading) return <LoadingComponent />;
   if (isSuccess)
-    return (
+    return window.innerWidth < 420 ? (
       <>
         {isDeleteOpen && (
           <Popup
@@ -105,6 +108,79 @@ export function Component() {
             }}
           />
         )}
+        {isCommentOpen && (
+          <CommentContainer
+            onClick={e => {
+              if (e.target === e.currentTarget) setIsCommentOpen(false);
+            }}>
+            <CommentClose onClick={() => setIsCommentOpen(false)}>
+              <Close fill="white" />
+            </CommentClose>
+            <div className="bg-white/75 w-[320px] h-[482px] rounded-3xl p-3">
+              <CommentBox>
+                {data.feedComments !== null &&
+                  Array.isArray(data.feedComments) &&
+                  data.feedComments.map(comment => (
+                    <FeedComment
+                      key={comment.feedCommentsId}
+                      inperson={
+                        comment.memberInfo.memberId === Number(state?.memberId)
+                          ? 'true'
+                          : 'false'
+                      }
+                      nickname={comment.memberInfo.nickname}
+                      userimg={comment.memberInfo.imageURL}
+                      content={comment.content}
+                      commentid={comment.feedCommentsId}
+                      feedid={data.feedId}
+                      blankhandler={setIsBlank}
+                      memberid={comment.memberInfo.memberId}
+                      time={changeTime(comment.createdAt)}
+                    />
+                  ))}
+              </CommentBox>
+              <FeedInput feedid={data.feedId} blankhandler={setIsBlank} />
+            </div>
+          </CommentContainer>
+        )}
+        <FeedCardContainer
+          onClick={e => {
+            if (e.target === e.currentTarget) navigate(-1);
+          }}>
+          {isToastOpen && (
+            <div className="fixed right-3 bottom-4">
+              <Toast />
+            </div>
+          )}
+          <CloseBtn onClick={() => navigate(-1)}>
+            <Close fill="white" />
+          </CloseBtn>
+          <FeedCard
+            memberid={data.memberInfo.memberId}
+            username={data.memberInfo.nickname}
+            context={data.content}
+            userimg={data.memberInfo.imageURL}
+            images={data.images}
+          />
+          <SideNav
+            feedid={data.feedId}
+            direction="row"
+            likes={data.likes}
+            like={data.isLike ? 'true' : 'false'}
+            url={data.shareURL}
+            toasthandler={setIsToastOpen}
+            deletehandler={setIsDeleteOpen}
+            inperson={
+              Number(state?.memberId) === data.memberInfo.memberId
+                ? 'true'
+                : 'false'
+            }
+            commenthandler={setIsCommentOpen}
+          />
+        </FeedCardContainer>
+      </>
+    ) : (
+      <>
         {isDeleteOpen && (
           <Popup
             title="피드를 삭제할까요?"
@@ -115,6 +191,19 @@ export function Component() {
             handler={[handlerDelete, () => setIsDeleteOpen(false)]}
             popupcontrol={() => {
               setIsDeleteOpen(false);
+            }}
+          />
+        )}
+        {isBlank && (
+          <Popup
+            title="공백은 입력할 수 없어요."
+            isgreen={['true']}
+            btnsize={['md']}
+            buttontext={['알겠어요']}
+            countbtn={1}
+            handler={[() => setIsBlank(false)]}
+            popupcontrol={() => {
+              setIsBlank(false);
             }}
           />
         )}

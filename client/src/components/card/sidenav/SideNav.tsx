@@ -22,6 +22,7 @@ interface Prop {
   deletehandler?: React.Dispatch<React.SetStateAction<boolean>>;
   url: string;
   inperson?: BooleanStr;
+  commenthandler?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export default function SideNav({
@@ -34,6 +35,7 @@ export default function SideNav({
   deletehandler,
   inperson,
   url,
+  commenthandler,
 }: Prop) {
   const accessToken = useReadLocalStorage<string | null>('accessToken');
   const navigate = useNavigate();
@@ -69,6 +71,10 @@ export default function SideNav({
     navigate(`/home/${feedid}`);
   };
 
+  const handleClickSemiComment = () => {
+    if (commenthandler) commenthandler(true);
+  };
+
   const handleClickShare = async () => {
     await navigator.clipboard.writeText(url);
     if (toasthandler) {
@@ -101,6 +107,12 @@ export default function SideNav({
 
         {!feedPopUp && (
           <Wrap onClick={handleClickComment}>
+            <Comment className="cursor-pointer ml-2" stroke="black" />
+          </Wrap>
+        )}
+
+        {feedPopUp && window.innerWidth < 420 && (
+          <Wrap onClick={handleClickSemiComment}>
             <Comment className="cursor-pointer ml-2" stroke="black" />
           </Wrap>
         )}

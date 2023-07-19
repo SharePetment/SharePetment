@@ -32,6 +32,6 @@ export const Name = tw.span`
 `;
 
 export const Info = tw.span`
-    text-[#d9d9d9]
+    text-deepgray
     text-sm
 `;

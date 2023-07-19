@@ -174,10 +174,22 @@ export function Component() {
         <Container>
           <Swiper
             direction={'vertical'}
-            slidesPerView={window.innerWidth < 400 ? 1 : 1.1}
+            slidesPerView={
+              window.innerWidth < 500
+                ? window.innerWidth < 400
+                  ? 1
+                  : 1.5
+                : 1.1
+            }
             mousewheel={true}
             modules={[Mousewheel, Pagination]}
-            className="w-full h-full flex flex-col items-center justify-center">
+            className={
+              window.innerWidth < 500
+                ? window.innerWidth < 400
+                  ? 'w-full h-full flex flex-col items-center justify-center'
+                  : 'w-full h-full flex flex-col items-center justify-center mb-30'
+                : 'w-full h-full flex flex-col items-center justify-center'
+            }>
             {hostData.pages.map((page, index) => (
               <React.Fragment key={index}>
                 {page.map((img: Feed) => (
