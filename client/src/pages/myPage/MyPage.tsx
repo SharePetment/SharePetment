@@ -286,7 +286,7 @@ export function Component() {
               <div>
                 <div className={currentTab === 0 ? 'block' : 'hidden'}>
                   <div>
-                    {feedData === undefined ? (
+                    {feedData?.pages[0].length === 0 ? (
                       <>
                         {walkFeedError ? (
                           <NoticeServerError />
@@ -297,7 +297,7 @@ export function Component() {
                     ) : (
                       <>
                         <GridContainerFeed>
-                          {feedData.pages.map((page, index) => (
+                          {feedData?.pages.map((page, index) => (
                             <React.Fragment key={index}>
                               {page.map(item => (
                                 <Link
