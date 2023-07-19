@@ -11,7 +11,7 @@ z-300
 rounded-3xl
 px-2.5
 max-sm:w-3/4
-w-1/3
+w-[400px]
 h-2/3
 border
 `;

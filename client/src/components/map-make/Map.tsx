@@ -29,7 +29,6 @@ interface Prop {
 }
 
 export default function Map({
-  mainAddress,
   setMainAddress,
   setDetailAddress,
   setCoordinates,
@@ -41,7 +40,7 @@ export default function Map({
 
   // 쿼리를 통해 주소 값을 받아옵니다.
   const { isLoading } = useQuery<UserInfo>({
-    queryKey: ['myPage'],
+    queryKey: ['myMap'],
     queryFn: () =>
       getServerDataWithJwt(`${SERVER_URL}/members`, accessToken as string),
     onSuccess(data) {
@@ -62,17 +61,17 @@ export default function Map({
   };
 
   const { kakao }: any = window;
+  // 마커를 생성합니다.
+
   useEffect(() => {
     const container = document.getElementById('myMap');
     const options = {
-      center: new kakao.maps.LatLng(35.12, 129.1),
+      center: new kakao.maps.LatLng(37.566, 126.977),
       level: 3,
     };
 
     // 지도를 생성합니다.
     const map = new kakao.maps.Map(container, options);
-
-    // 마커를 생성합니다.
     const marker = new kakao.maps.Marker({
       map: map,
       position: map.getCenter(),
@@ -85,25 +84,6 @@ export default function Map({
     // zoomControl 설정
     const zoomControl = new kakao.maps.ZoomControl();
     map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
-
-    // 해당 유저가 지정한 주소 값을 바탕으로 최초 지도 마커 표시를 결정합니다.
-    if (!isLoading) {
-      // 주소-좌표 변환 객체를 생성합니다.
-      const geocoder = new kakao.maps.services.Geocoder();
-
-      // 주소로 좌표를 검색합니다..
-      geocoder.addressSearch(mainAddress, function (result: any, status: any) {
-        if (status === kakao.maps.services.Status.OK) {
-          const coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-          // 결과값으로 받은 위치를 마커로 표시합니다
-          marker.setPosition(coords);
-          // state에 coords 값 저장
-          setCoordinates(coords);
-          // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
-          map.setCenter(coords);
-        }
-      });
-    }
 
     // 마커 클릭 핸들러
     const handlerMarker = (e: any) => {
