@@ -38,9 +38,20 @@ export default function FeedInput({ feedid, blankhandler }: Prop) {
     }
   };
 
+  const handleSubmit = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      if (inputRef.current?.value !== '') handleClick();
+    }
+  };
+
   return (
     <Container>
-      <Input ref={inputRef} type="text" />
+      <Input
+        ref={inputRef}
+        type="text"
+        onKeyUp={e => handleSubmit(e)}
+        placeholder="댓글을 입력해주세요."
+      />
       <CommentBtn onClick={handleClick}>
         <Write />
       </CommentBtn>
