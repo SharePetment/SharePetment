@@ -77,6 +77,12 @@ export default function SideNav({
 
   const handleClickShare = async () => {
     await navigator.clipboard.writeText(url);
+    console.log('[navigator.clipboard]', navigator.clipboard);
+    console.log(
+      '[navigator.clipboard.writeText]',
+      navigator.clipboard.writeText(url),
+    );
+    console.log('[url]', url);
     if (toasthandler) {
       toasthandler(true);
       setTimeout(() => toasthandler(false), 1500);
