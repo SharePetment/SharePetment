@@ -11,6 +11,7 @@ export const Input = tw.input`
   resize-none
   w-full
   h-10
+  max-sm:h-9
   rounded-[10px]
   p-3
   text-xs
@@ -21,4 +22,5 @@ export const CommentBtn = tw.button`
   absolute
   bottom-[0.4rem]
   right-2
+  max-sm:bottom-[0.3rem]
 `;
