@@ -140,7 +140,7 @@ export function Component() {
         <div className="w-[500px] max-sm:w-[320px] mx-auto mt-7">
           <ArrowLeft
             className="hidden max-sm:block w-6 h-6"
-            onClick={() => navigate(-1)}
+            onClick={() => navigate('/walkmate')}
           />
           {`${data?.memberInfo?.memberId}` === userId && (
             <div className="flex justify-end gap-4 items-center">

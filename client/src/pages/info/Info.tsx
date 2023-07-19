@@ -78,7 +78,7 @@ export function Component() {
     mutationFn: fillUserInfo,
     onSuccess: () => {
       if (userId) return navigate('/my-page');
-      navigate('/loading');
+      navigate('/home');
     },
     onError: () => {
       navigate('/');
@@ -130,16 +130,23 @@ export function Component() {
       accessToken,
     };
 
-    if (isDuplicated) {
-      if (matchInfo) {
-        userInfoFillMutation.mutate(data);
-      }
-
-      if (!userId)
-        return setError('nickname', {
-          message: ERROR_MESSAGE.DUPLICATE,
-        });
+    if (isDuplicated && matchInfo) {
+      userInfoFillMutation.mutate(data);
     }
+
+    if (isDuplicated && !userId && matchInfo === null) {
+      return setError('nickname', {
+        message: ERROR_MESSAGE.DUPLICATE,
+      });
+    }
+
+    // if (isDuplicated) {
+    //   if (!userId) {
+    //     return setError('nickname', {
+    //       message: ERROR_MESSAGE.DUPLICATE,
+    //     });
+    //   }
+    // }
 
     if (!isDuplicated) {
       return setError('nickname', {
@@ -167,6 +174,7 @@ export function Component() {
     onSuccess() {
       localStorage.removeItem('accessToken');
       localStorage.removeItem('refreshToken');
+      localStorage.removeItem('firstVisited');
       navigate('/');
     },
     onError() {
