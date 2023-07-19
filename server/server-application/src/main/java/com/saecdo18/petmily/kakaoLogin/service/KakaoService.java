@@ -187,6 +187,9 @@ public class KakaoService {
         KakaoAccessToken kakaoAccessToken = kakaoAccessTokenRepository.findByEmail(email).get();
         String accessToken = kakaoAccessToken.getKakaoAccessToken();
 
+        memberService.deleteMember(memberId);
+        kakaoAccessTokenRepository.delete(kakaoAccessToken);
+
 
         WebClient client = WebClient.create("https://kapi.kakao.com/v1/user/unlink");
         String response = client.post()
@@ -197,8 +200,7 @@ public class KakaoService {
                 .bodyToMono(String.class)
                 .block();
 
-        memberService.deleteMember(memberId);
-        kakaoAccessTokenRepository.delete(kakaoAccessToken);
+
 
     }
 
