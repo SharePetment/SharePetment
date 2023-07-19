@@ -1,7 +1,11 @@
 springdoc:
   swagger-ui:
     path: /swagger-ui.html
+
 spring:
+  redis:
+    host: localhost
+    port: 6379
   profiles:
     active: local
   datasource:

@@ -318,7 +318,7 @@ class FeedServiceImplTest {
         given(feedMapper.imageToImageDto(Mockito.any(Image.class))).willReturn(imageDto);
         given(memberRepository.findById(Mockito.anyLong())).willReturn(Optional.of(member));
 
-        FeedDtoList result = feedService.getFeedsRecent(listIds, memberId, 0, 10);
+        FeedDtoList result = feedService.getFeedsRecent(memberId, 0, 10);
 
         assertEquals(result.getResponseList().size(), 1);
     }
@@ -411,7 +411,7 @@ class FeedServiceImplTest {
         given(feedMapper.imageToImageDto(Mockito.any(Image.class))).willReturn(imageDto);
         given(memberRepository.findById(Mockito.anyLong())).willReturn(Optional.of(member));
 
-        FeedDtoList result = feedService.getFeedsByMemberFollow(memberId, listIds, 0, 10);
+        FeedDtoList result = feedService.getFeedsByMemberFollow(memberId, 0, 10);
 
         assertEquals(result.getResponseList().size(), 1);
     }

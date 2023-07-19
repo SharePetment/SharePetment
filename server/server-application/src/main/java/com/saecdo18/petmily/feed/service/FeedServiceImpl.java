@@ -24,16 +24,19 @@ import com.saecdo18.petmily.member.repository.FollowMemberRepository;
 import com.saecdo18.petmily.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Service
@@ -51,6 +54,7 @@ public class FeedServiceImpl implements FeedService {
     private final FeedCommentsRepository feedCommentsRepository;
     private final FeedLikeRepository feedLikeRepository;
     private final FeedMapper feedMapper;
+    private final RedisTemplate<String, String> redisTemplate;
     private final static String BASE_URI = "http://43.202.86.53:8080/feeds/all/";
 
     @Override
@@ -82,17 +86,18 @@ public class FeedServiceImpl implements FeedService {
     }
 
     @Override
-    public FeedDtoList getFeedsRecent(FeedServiceDto.PreviousListIds listIds, long memberId, int page, int size) {
+    public FeedDtoList getFeedsRecent(long memberId, int page, int size) {
         PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
 
         List<Feed> feedList = new ArrayList<>();
         long totalCount = feedRepository.count();
+        Set<String> previousIds = getToRedis(memberId);
 
         while (feedList.size() < size) {
             List<Feed> pageDataList = feedRepository.findAll(pageRequest).getContent();
 
             List<Feed> filteredDataList = pageDataList.stream()
-                    .filter(data -> !listIds.getPreviousListIds().contains(data.getFeedId()))
+                    .filter(data -> !previousIds.contains(data.getFeedId().toString()))
                     .filter(data -> memberId == 0 || data.getMember().getMemberId() != memberId)
                     .collect(Collectors.toList());
 
@@ -105,6 +110,13 @@ public class FeedServiceImpl implements FeedService {
 
             pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
         }
+        if (feedList.size() > 10) {
+            feedList = feedList.subList(0, size);
+        }
+
+        addToRedisSet(feedList, memberId);
+
+        Collections.shuffle(feedList);
 
         return changeFeedListToFeedResponseDto(feedList, memberId);
     }
@@ -121,13 +133,15 @@ public class FeedServiceImpl implements FeedService {
     }
 
     @Override
-    public FeedDtoList getFeedsByMemberFollow(long memberId, FeedServiceDto.PreviousListIds listIds, int page, int size) {
+    public FeedDtoList getFeedsByMemberFollow(long memberId, int page, int size) {
         List<FollowMember> followMemberList = followMemberRepository.findByFollowingId(memberId)
                 .orElseThrow(() -> new RuntimeException("팔로우한 멤버가 없습니다."));
 
         Set<Feed> feedSet = new HashSet<>();
         int dataCount = 20;
         int totalFeedCount = 0;
+
+        Set<String> previousIds = getToRedis(memberId);
 
         Collections.shuffle(followMemberList);
 
@@ -146,7 +160,7 @@ public class FeedServiceImpl implements FeedService {
                     }
                 }
             }
-            feedSet = new HashSet<>(filterFeedsByPreviousListIds(new ArrayList<>(feedSet), listIds));
+            feedSet = new HashSet<>(filterFeedsByPreviousListIds(new ArrayList<>(feedSet), previousIds));
             if (!added) {
                 break;
             }
@@ -155,14 +169,19 @@ public class FeedServiceImpl implements FeedService {
         List<Feed> feedList = new ArrayList<>(feedSet);
 
         Collections.shuffle(feedList);
+        if (feedList.size() > 10) {
+            feedList = feedList.subList(0, size);
+        }
+
+        addToRedisSet(feedList, memberId);
 
         return changeFeedListToFeedResponseDto(feedList, memberId);
     }
 
-    private List<Feed> filterFeedsByPreviousListIds(List<Feed> feedList, FeedServiceDto.PreviousListIds listIds) {
+    private List<Feed> filterFeedsByPreviousListIds(List<Feed> feedList, Set<String> previousIds) {
         List<Feed> filterFeeds = new ArrayList<>();
         for (Feed feed : feedList) {
-            if (!listIds.getPreviousListIds().contains(feed.getFeedId())) {
+            if (!previousIds.contains(feed.getFeedId().toString())) {
                 filterFeeds.add(feed);
             }
         }
@@ -350,5 +369,23 @@ public class FeedServiceImpl implements FeedService {
         listIds.getPreviousListIds().addAll(addIds);
 
         return listIds;
+    }
+
+    private void addToRedisSet(List<Feed> values, long memberId) {
+        for (Feed value : values) {
+            String key = memberId + ":Feed";
+            redisTemplate.opsForZSet().add(key, value.getFeedId().toString(), System.currentTimeMillis() + (3600 * 1000));
+        }
+    }
+
+    private Set<String> getToRedis(long memberId) {
+        long currentTime = System.currentTimeMillis();
+        String key = memberId + ":Feed";
+        return redisTemplate.opsForZSet().rangeByScore(key, currentTime, Double.POSITIVE_INFINITY);
+    }
+
+    public void deleteRedis(long memberId) {
+        String key = memberId + ":Feed";
+        redisTemplate.delete(key);
     }
 }
