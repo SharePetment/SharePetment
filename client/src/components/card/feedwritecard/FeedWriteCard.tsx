@@ -136,10 +136,6 @@ export default function FeedWriteCard() {
     [savedFile],
   );
 
-  const handleEnter = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === 'Enter') handleSubmit();
-  };
-
   const handleSemiClose = useCallback(
     (order: number) =>
       deleteImg({
@@ -244,7 +240,6 @@ export default function FeedWriteCard() {
             placeholder="글을 입력해주세요."
             maxLength={200}
             ref={textRef}
-            onKeyUp={e => handleEnter(e)}
           />
           <SubmitBtn type="button" onClick={handleSubmit}>
             <Write />
