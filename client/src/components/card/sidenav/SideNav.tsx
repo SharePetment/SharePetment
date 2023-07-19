@@ -83,7 +83,8 @@ export default function SideNav({
     );
     console.log('[url]', url);
 
-    await navigator.clipboard.writeText(url);
+    const res = await navigator.clipboard.writeText(url);
+    console.log(res);
 
     if (toasthandler) {
       toasthandler(true);
