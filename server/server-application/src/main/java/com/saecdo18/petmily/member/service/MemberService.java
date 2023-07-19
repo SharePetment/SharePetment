@@ -266,6 +266,8 @@ public class MemberService {
         if(optionalFollowMembers.isPresent()){
             List<FollowMember> followMemberList = optionalFollowMembers.get();
             for(FollowMember followMember : followMemberList){
+                Member follower = followMember.getFollowerMember();
+                follower.updateFollowerCount(false);
                 followMemberRepository.delete(followMember);
             }
         }
