@@ -9,7 +9,7 @@ import { SERVER_URL } from '../../api/url';
 import { ReactComponent as Setting } from '../../assets/button/setting.svg';
 import { ReactComponent as CommentListIcon } from '../../assets/comment-list.svg';
 import { ReactComponent as FeedIcon } from '../../assets/feed.svg';
-import Cat404 from '../../assets/illustration/404cat.png';
+import NoCommentCat from '../../assets/illustration/nocomment-cat.png';
 import { ReactComponent as WalkFeedIcon } from '../../assets/walk-feed.svg';
 import Profile from '../../common/profile/Profile';
 import WalkCard from '../../components/card/walk-card/walkCard';
@@ -303,7 +303,7 @@ export function Component() {
                                   to={`/home/${item.feedId}`}
                                   key={item.feedId}>
                                   <img
-                                    className="w-full h-[180px] rounded-[28px] object-cover border hover:drop-shadow-lg transition-all delay-100"
+                                    className="w-full h-[180px] rounded-[28px] object-cover border hover:scale-105 transition-all delay-75"
                                     src={
                                       item.images[0]
                                         ? item.images[0].uploadFileURL
@@ -368,7 +368,7 @@ export function Component() {
                           <ErrorText>
                             아직 댓글을 단 산책 게시물이 없어요.
                           </ErrorText>
-                          <img src={Cat404} className=" w-80" />
+                          <img src={NoCommentCat} className="w-80 mt-10" />
                         </div>
                       ) : (
                         commentListData?.map(item => (

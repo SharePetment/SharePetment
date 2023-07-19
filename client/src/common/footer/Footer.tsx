@@ -1,11 +1,12 @@
-import { Link } from 'react-router-dom';
+import { useMatch, Link } from 'react-router-dom';
 import { ReactComponent as Github } from '../../assets/github.svg';
 import { ReactComponent as Notion } from '../../assets/notion.svg';
 import { Container, TopContainer, Text } from './Footer.styled';
 
 export default function Footer() {
+  const matchLogin = useMatch('/');
   return (
-    <Container>
+    <Container className={matchLogin === null ? 'mb-12' : ''}>
       <TopContainer>
         <div className="flex items-center">
           <Notion />

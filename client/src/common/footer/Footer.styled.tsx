@@ -7,7 +7,6 @@ export const Container = tw.div`
   gap-2
   bg-defaultbg
   mt-10
-  mb-12
 `;
 
 export const TopContainer = tw.div`

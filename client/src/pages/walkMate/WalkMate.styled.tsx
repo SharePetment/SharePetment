@@ -21,7 +21,7 @@ export const CommentList = tw.li`
   border-solid 
   border-lightgray 
   mb-1 
-  rounded-md 
+  rounded-lg
   hover:text-deepgreen 
   transition-colors
   duration-200 
