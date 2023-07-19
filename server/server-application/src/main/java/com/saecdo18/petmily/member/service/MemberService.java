@@ -262,6 +262,14 @@ public class MemberService {
             }
         }
 
+        Optional<List<FollowMember>> optionalFollowMembers = followMemberRepository.findByFollowingId(memberId);
+        if(optionalFollowMembers.isPresent()){
+            List<FollowMember> followMemberList = optionalFollowMembers.get();
+            for(FollowMember followMember : followMemberList){
+                followMemberRepository.delete(followMember);
+            }
+        }
+
         memberRepository.delete(findMember);
     }
 }
