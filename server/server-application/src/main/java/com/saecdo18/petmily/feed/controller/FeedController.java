@@ -17,6 +17,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,7 +48,13 @@ public class FeedController {
     public ResponseEntity<FeedDtoList> getFeedsRandom(@ApiParam("페이지 번호") @RequestParam(defaultValue = "0") int page,
                                                       @ApiParam("페이지당 받을 피드 수") @RequestParam(defaultValue = "10") int size) {
         long memberId = authenticationGetMemberId.getMemberId();
+        LocalTime start = LocalTime.now();
+        log.info("start: {}", start);
         FeedDtoList responseList = feedService.getFeedsRecent(memberId, page, size);
+        LocalTime end = LocalTime.now();
+        log.info("end: {}", end);
+        Duration duration = Duration.between(start, end);
+        log.info("total: {}", duration);
         return ResponseEntity.ok(responseList);
     }
 
@@ -139,6 +148,7 @@ public class FeedController {
     @DeleteMapping("/redis")
     public ResponseEntity<?> deleteRedis() {
         long memberId = authenticationGetMemberId.getMemberId();
+        feedService.deleteRedis(memberId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
