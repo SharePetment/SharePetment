@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // install event
 self.addEventListener('install', () => {
   console.log('[Service Worker] installed');
