@@ -17,6 +17,7 @@ import {
   InputText,
   Label,
 } from '../../common/input/Input.styled';
+import Popup from '../../common/popup/Popup';
 import Select from '../../common/select/Select';
 import { ConfirmButton, ExtraInfoLogo, InfoForm } from './Info.styled';
 
@@ -148,14 +149,16 @@ export function Component() {
     formState: { errors: quitErrors },
   } = useForm<QuitProps>();
 
+  const [isError, setIsError] = useState(false);
+
   // 회원탈퇴 mutaition
   const userQuitMutation = useMutation({
     mutationFn: postQuitMember,
     onSuccess() {
-      console.log('success');
+      navigate('/');
     },
     onError() {
-      console.log('error');
+      setIsError(true);
     },
   });
 
@@ -264,6 +267,23 @@ export function Component() {
             </p>
           </div>
         </FormContainer>
+        {isError && (
+          <Popup
+            popupcontrol={() => {
+              setIsError(false);
+            }}
+            btnsize={['md']}
+            countbtn={1}
+            title="실패했습니다. 다시 입력해주세요!"
+            isgreen={['true']}
+            buttontext={['확인']}
+            handler={[
+              () => {
+                setIsError(false);
+              },
+            ]}
+          />
+        )}
       </>
     );
   } else {
