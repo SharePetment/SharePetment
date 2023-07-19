@@ -24,7 +24,6 @@ import {
   CommentBox,
   FeedCardContainer,
   CommentContainer,
-  CommentClose,
 } from './FeedPopUp.styled';
 
 export function Component() {
@@ -82,6 +81,11 @@ export function Component() {
   if (isSuccess)
     return window.innerWidth < 420 ? (
       <>
+        {isToastOpen && (
+          <div className="fixed right-3 bottom-4 z-50">
+            <Toast />
+          </div>
+        )}
         {isDeleteOpen && (
           <Popup
             title="피드를 삭제할까요?"
@@ -113,11 +117,11 @@ export function Component() {
             onClick={e => {
               if (e.target === e.currentTarget) setIsCommentOpen(false);
             }}>
-            <CommentClose onClick={() => setIsCommentOpen(false)}>
-              <Close fill="white" />
-            </CommentClose>
-            <div className="bg-white/95 w-[320px] h-[482px] rounded-3xl p-3">
-              <CommentBox>
+            <div className="bg-white w-[320px] h-[570px] rounded-3xl p-3">
+              <CommentBox
+                className={
+                  window.innerHeight < 850 ? 'h-[31rem]' : 'h-[31rem]'
+                }>
                 {data.feedComments !== null &&
                   Array.isArray(data.feedComments) &&
                   data.feedComments.map(comment => (
@@ -147,11 +151,6 @@ export function Component() {
           onClick={e => {
             if (e.target === e.currentTarget) navigate(-1);
           }}>
-          {isToastOpen && (
-            <div className="fixed right-3 bottom-4 z-50">
-              <Toast />
-            </div>
-          )}
           <CloseBtn onClick={() => navigate(-1)}>
             <Close fill="white" />
           </CloseBtn>
@@ -181,6 +180,11 @@ export function Component() {
       </>
     ) : (
       <>
+        {isToastOpen && (
+          <div className="fixed right-8 bottom-10">
+            <Toast />
+          </div>
+        )}
         {isDeleteOpen && (
           <Popup
             title="피드를 삭제할까요?"
@@ -211,11 +215,6 @@ export function Component() {
           onClick={e => {
             if (e.target === e.currentTarget) navigate(-1);
           }}>
-          {isToastOpen && (
-            <div className="fixed right-8 bottom-10">
-              <Toast />
-            </div>
-          )}
           <CloseBtn onClick={() => navigate(-1)}>
             <Close fill="white" />
           </CloseBtn>

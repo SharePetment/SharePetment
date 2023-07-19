@@ -19,6 +19,7 @@ export const CloseBtn = tw.button`
   absolute
   right-10
   top-10
+  z-0
 `;
 
 export const FeedContainer = tw.div`
@@ -42,7 +43,7 @@ export const RightBox = tw.div`
 
 export const CommentBox = tw.div`
   w-full
-  h-[26rem]
+  h-[28rem]
   overflow-scroll
   flex
   flex-col
@@ -66,9 +67,8 @@ export const FeedCardContainer = tw.div`
   flex
   justify-center
   items-center
-  z-40
-  bg-zinc-900/75
   z-10
+  bg-zinc-900/75
   relative
   flex-col
   gap-5
@@ -77,12 +77,17 @@ export const FeedCardContainer = tw.div`
 
 export const CommentContainer = tw.div`
   fixed
-  w-full
-  h-full
+  w-screen
+  h-screen
+  top-0
+  right-0
   flex
   justify-center
+  items-center
   z-30
-  pt-[4.6rem]
+  pt-10
+  max-sm:pt-0
+  bg-zinc-900/75
 `;
 
 export const CommentClose = tw.div`

@@ -90,35 +90,43 @@ export default function SideNav({
           {isLike === 'true' ? (
             <Like
               className="cursor-pointer"
-              stroke="black"
+              stroke={window.innerWidth < 430 ? 'white' : 'black'}
               fill="#69B783"
               onClick={handleClickLike}
             />
           ) : (
             <Like
               className="cursor-pointer "
-              stroke="black"
+              stroke={window.innerWidth < 430 ? 'white' : 'black'}
               onClick={handleClickLike}
             />
           )}
 
-          <Text>{isLikes}</Text>
+          <Text className={window.innerWidth < 430 ? 'text-white' : ''}>
+            {isLikes}
+          </Text>
         </Wrap>
 
         {!feedPopUp && (
           <Wrap onClick={handleClickComment}>
-            <Comment className="cursor-pointer ml-2" stroke="black" />
+            <Comment className="cursor-pointer ml-2" />
           </Wrap>
         )}
 
         {feedPopUp && window.innerWidth < 420 && (
           <Wrap onClick={handleClickSemiComment}>
-            <Comment className="cursor-pointer ml-2" stroke="black" />
+            <Comment
+              className="cursor-pointer ml-2"
+              stroke={window.innerWidth < 430 ? 'white' : 'black'}
+            />
           </Wrap>
         )}
 
         <Wrap onClick={handleClickShare}>
-          <Share className="cursor-pointer ml-2" />
+          <Share
+            className="cursor-pointer ml-2"
+            stroke={window.innerWidth < 430 ? 'white' : 'black'}
+          />
         </Wrap>
 
         {inperson === 'true' && (
