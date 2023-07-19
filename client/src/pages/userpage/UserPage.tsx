@@ -179,7 +179,7 @@ export function Component() {
               <UserInfoBox>
                 <div>
                   <span>게시물 </span>
-                  <HightliteText>{data ? data.feedCount : 0}</HightliteText>
+                  <HightliteText>{data?.feedCount || 0}</HightliteText>
                 </div>
                 <div>
                   <span>랜선집사</span>
@@ -277,7 +277,7 @@ export function Component() {
                 </div>
                 {/* 산책 게시물 */}
                 <div className={currentTab === 1 ? 'block' : 'hidden'}>
-                  <div>
+                  <div className="flex justify-center">
                     {!myData?.animalParents ? (
                       <NoticeOnlyOwner />
                     ) : (

@@ -12,8 +12,11 @@ export const ProfileHeader = tw.div`
 
 export const ProfileText = tw.div`
     ml-2
-    w-2/5
+    w-3/5
+    text-bases
     font-semibold
+    max-sm:w-5/6
+    max-sm:text-sm
 `;
 
 export const ProfileTail = tw.div`
@@ -33,6 +36,8 @@ export const Label = tw.label`
     text-white
     rounded-2xl
     cursor-pointer
+    max-sm:w-[220px]
+    max-sm:text-sm
 `;
 
 export const CropDiv = tw.div`

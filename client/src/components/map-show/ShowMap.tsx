@@ -55,8 +55,8 @@ export default function ShowMap({ address, lat, lng }: Prop) {
       <h2 className="justify-self-start self-start px-2 py-1 font-semibold text-lg">
         {address}
       </h2>
-      <div id="myMap" className="w-[480px] h-[250px]"></div>
-      <button className="absolute bg-deepgreen bottom-[0px] right-[10px] z-10 rounded-lg">
+      <div id="myMap" className="w-[480px] h-[250px] max-sm:w-5/6"></div>
+      <button className="absolute bg-deepgreen bottom-[0px] right-[10px] z-10 rounded-lg max-sm:right-[25px] max-sm:bottom-[3px]">
         <a
           className="text-white flex px-2 py-1"
           target="_blank"

@@ -27,3 +27,18 @@ export const CommentList = tw.li`
   duration-200 
   cursor-pointer
 `;
+
+export const FilterButton = tw.button<{
+  totalactive?: string;
+  advertiseactive?: string;
+}>`
+border 
+border-lightgray
+py-2
+rounded-[28px] 
+px-8
+text-sm
+
+${prop => prop.totalactive === 'total' && `bg-deepgreen text-white`}
+${prop => prop.advertiseactive === 'advertise' && `bg-deepgreen text-white`}
+`;

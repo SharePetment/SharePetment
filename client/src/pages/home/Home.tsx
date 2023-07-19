@@ -1,5 +1,6 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { useState, useEffect } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
+import React, { useState, useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { useNavigate } from 'react-router-dom';
 import { Mousewheel, Navigation, Pagination } from 'swiper/modules';
@@ -34,30 +35,80 @@ export function Component() {
   const [isGuestOpen, setIsGuestOpen] = useState<boolean>(false);
 
   const navigate = useNavigate();
-
-  const guestFeedQuery = useQuery({
+  // Guest 요청
+  const {
+    data: guestData,
+    refetch: refetchGuest,
+    fetchNextPage: fetchNextPageGuest,
+    isSuccess: guestIsSucess,
+  } = useInfiniteQuery({
     queryKey: ['guestFeed'],
-    queryFn: () => getGuestFeedList(`${SERVER_URL}/feeds/all/list/random`),
+    queryFn: ({ pageParam = 0 }) => {
+      return getGuestFeedList(
+        `${SERVER_URL}/feeds/all/list/random?page=${pageParam}&size=10`,
+      );
+    },
+    getNextPageParam: (_, allPages) => {
+      const len = allPages.length;
+      const totalLength = allPages.length;
+      return allPages[totalLength - 1].length === 0 ? undefined : len;
+    },
     enabled: !!(accessToken === null),
+    onSuccess(data) {
+      console.log(data);
+    },
   });
 
-  const hostFeedQuery = useQuery({
+  // Host 요청
+  const {
+    data: hostData,
+    refetch: refetchHost,
+    fetchNextPage: fetchNextPageHost,
+    isSuccess: hostIsSucess,
+  } = useInfiniteQuery({
     queryKey: ['hostFeed'],
-    queryFn: () => getHostFeedList(`${SERVER_URL}/feeds/list`, accessToken),
+    queryFn: ({ pageParam = 0 }) => {
+      return getHostFeedList(
+        `${SERVER_URL}/feeds/list?page=${pageParam}&size=10`,
+        accessToken,
+      );
+    },
+    getNextPageParam: (_, allPages) => {
+      const len = allPages.length;
+      const totalLength = allPages.length;
+      return allPages[totalLength - 1].length === 0 ? undefined : len;
+    },
     enabled: !!accessToken,
-    onSuccess() {
+
+    onSuccess(data) {
+      console.log(data);
       queryClient.invalidateQueries({ queryKey: ['contextApi'] });
     },
   });
 
   // 무한 쿼리 구현
-  const { ref, inView } = useInView();
+  // 게스트  요청
+  const { ref: guestRef, inView: guestInview } = useInView();
+  // host 요청
+  const { ref: hostRef, inView: hostInview } = useInView();
 
+  // 구독자가 있는 경우
   useEffect(() => {
-    console.log('done');
-  }, [inView]);
+    if (hostInview) {
+      refetchHost();
+      fetchNextPageHost();
+    }
+  }, [hostInview]);
 
-  if (hostFeedQuery.isSuccess && accessToken) {
+  // 비로그인 및 구독자가 없는 경우
+  useEffect(() => {
+    if (guestInview) {
+      refetchGuest();
+      fetchNextPageGuest();
+    }
+  }, [guestInview]);
+
+  if (hostIsSucess && accessToken) {
     return (
       <>
         {/* 웰컴팝업 */}
@@ -69,28 +120,30 @@ export function Component() {
               }}
               navigation={true}
               modules={[Navigation]}
-              className=" w-[400px] h-[280px] rounded-[40px]">
+              className=" w-[400px] h-[280px] rounded-[40px] max-sm:w-[340px]">
               <SwiperSlide className=" bg-defaultbg">
-                <div className="flex flex-col justify-center items-center h-full">
+                <div className="flex flex-col justify-center items-center h-full font-semibold">
                   다양한 반려동물을 구경할 수 있어요.
                   <img src={PetFriends} className=" w-60" />
                   <CircleProgressBar circle={{ index: 0, total: 3 }} />
                 </div>
               </SwiperSlide>
               <SwiperSlide className=" bg-defaultbg">
-                <div className="flex flex-col justify-center items-center h-full">
-                  우리집 반려동물의 산책 친구를 만들어줄 수 있어요.
+                <div className="flex flex-col justify-center items-center h-full font-semibold">
+                  <span className="text-center max-sm:w-52">
+                    우리집 반려동물의 산책 친구를 만들어줄 수 있어요.
+                  </span>
                   <img src={LyingDownDog} className=" w-60" />
                   <CircleProgressBar circle={{ index: 1, total: 3 }} />
                 </div>
               </SwiperSlide>
               <SwiperSlide className=" bg-defaultbg">
-                <div className="flex flex-col justify-center items-center h-full gap-10">
+                <div className="flex flex-col justify-center items-center h-full gap-10 font-semibold">
                   여러분의 반려동물을 등록해보세요!
                   <div className="flex gap-5">
                     <button
-                      className="bg-deepgreen text-white w-[120px] max-sm:w-[80px] h-[50px]
-                      text-base rounded-2xl"
+                      className="bg-deepgreen text-white w-[120px]  h-[50px]
+                      text-base rounded-2xl max-sm:text-xs max-sm:w-[90px]"
                       onClick={() => {
                         navigate('/my-page');
                         setFirstVisited(false);
@@ -98,8 +151,8 @@ export function Component() {
                       네, 등록할래요!
                     </button>
                     <button
-                      className="bg-white text-deepgreen w-[120px] max-sm:w-[80px] h-[50px]
-                      text-base rounded-2xl "
+                      className="bg-white text-deepgreen w-[120px]  h-[50px]
+                      text-base rounded-2xl max-sm:w-[90px] max-sm:text-xs"
                       onClick={() => {
                         navigate('/home');
                         setFirstVisited(false);
@@ -137,32 +190,36 @@ export function Component() {
                   : 'w-full h-full flex flex-col items-center justify-center mb-30'
                 : 'w-full h-full flex flex-col items-center justify-center'
             }>
-            {hostFeedQuery.data.responseList.map((img: Feed, idx: number) => (
-              <SwiperSlide
-                className="w-96 max-sm:w-full max-sm:h-full"
-                key={idx}>
-                <div
-                  className="flex justify-center items-center gap-5 max-sm:flex-col"
-                  ref={ref}>
-                  <FeedCard
-                    memberid={img.memberInfo.memberId}
-                    username={img.memberInfo.nickname}
-                    context={img.content}
-                    userimg={img.memberInfo.imageURL}
-                    images={img.images}
-                    guesthandler={() => setIsGuestOpen(true)}
-                  />
-                  <SideNav
-                    feedid={img.feedId}
-                    direction={window.innerWidth < 640 ? 'row' : 'col'}
-                    likes={img.likes}
-                    like={img.isLike ? 'true' : 'false'}
-                    guesthandler={() => setIsGuestOpen(true)}
-                    toasthandler={setIsToastOpen}
-                    url={img.shareURL}
-                  />
-                </div>
-              </SwiperSlide>
+            {hostData.pages.map((page, index) => (
+              <React.Fragment key={index}>
+                {page.map((img: Feed) => (
+                  <SwiperSlide
+                    className="w-96 max-sm:w-full max-sm:h-full"
+                    key={img.feedId}>
+                    <div
+                      className="flex justify-center items-center gap-5 max-sm:flex-col"
+                      ref={hostRef}>
+                      <FeedCard
+                        memberid={img.memberInfo.memberId}
+                        username={img.memberInfo.nickname}
+                        context={img.content}
+                        userimg={img.memberInfo.imageURL}
+                        images={img.images}
+                        guesthandler={() => setIsGuestOpen(true)}
+                      />
+                      <SideNav
+                        feedid={img.feedId}
+                        direction={window.innerWidth < 640 ? 'row' : 'col'}
+                        likes={img.likes}
+                        like={img.isLike ? 'true' : 'false'}
+                        guesthandler={() => setIsGuestOpen(true)}
+                        toasthandler={setIsToastOpen}
+                        url={img.shareURL}
+                      />
+                    </div>
+                  </SwiperSlide>
+                ))}
+              </React.Fragment>
             ))}
           </Swiper>
         </Container>
@@ -170,7 +227,7 @@ export function Component() {
     );
   } else {
     return (
-      guestFeedQuery.isSuccess &&
+      guestIsSucess &&
       !accessToken && (
         <>
           {isToastOpen && (
@@ -196,31 +253,35 @@ export function Component() {
               mousewheel={true}
               modules={[Mousewheel, Pagination]}
               className="w-full h-full flex flex-col items-center justify-center">
-              {guestFeedQuery.data.responseList.map(
-                (img: Feed, idx: number) => (
-                  <SwiperSlide className="w-96" key={idx}>
-                    <div className="flex justify-center items-center gap-5 max-sm:flex-col">
-                      <FeedCard
-                        memberid={img.memberInfo.memberId}
-                        username={img.memberInfo.nickname}
-                        context={img.content}
-                        userimg={img.memberInfo.imageURL}
-                        images={img.images}
-                        guesthandler={() => setIsGuestOpen(true)}
-                      />
-                      <SideNav
-                        feedid={img.feedId}
-                        direction={window.innerWidth < 640 ? 'row' : 'col'}
-                        likes={img.likes}
-                        like={img.isLike ? 'true' : 'false'}
-                        guesthandler={() => setIsGuestOpen(true)}
-                        toasthandler={setIsToastOpen}
-                        url={img.shareURL}
-                      />
-                    </div>
-                  </SwiperSlide>
-                ),
-              )}
+              {guestData.pages.map((page, index) => (
+                <React.Fragment key={index}>
+                  {page.map((img: Feed) => (
+                    <SwiperSlide className="w-96" key={img.feedId}>
+                      <div
+                        className="flex justify-center items-center gap-5 max-sm:flex-col"
+                        ref={guestRef}>
+                        <FeedCard
+                          memberid={img.memberInfo.memberId}
+                          username={img.memberInfo.nickname}
+                          context={img.content}
+                          userimg={img.memberInfo.imageURL}
+                          images={img.images}
+                          guesthandler={() => setIsGuestOpen(true)}
+                        />
+                        <SideNav
+                          feedid={img.feedId}
+                          direction={window.innerWidth < 640 ? 'row' : 'col'}
+                          likes={img.likes}
+                          like={img.isLike ? 'true' : 'false'}
+                          guesthandler={() => setIsGuestOpen(true)}
+                          toasthandler={setIsToastOpen}
+                          url={img.shareURL}
+                        />
+                      </div>
+                    </SwiperSlide>
+                  ))}
+                </React.Fragment>
+              ))}
             </Swiper>
           </Container>
         </>

@@ -13,6 +13,8 @@ export const HeaderContainer = tw.div`
   border-lightgray
   shadow-md
   max-sm:hidden
+  sticky
+  top-0
 `;
 
 export const NavList = tw.ul`

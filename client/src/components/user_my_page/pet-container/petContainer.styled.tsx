@@ -6,6 +6,7 @@ import { ReactComponent as Setting } from '../../../assets/button/setting.svg';
 
 export const Container = tw.div`
     relative
+    ml-10
     drop-shadow-sm
 `;
 
