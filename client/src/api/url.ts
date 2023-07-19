@@ -1,4 +1,4 @@
-export const SERVER_URL = `http://43.202.86.53:8080`;
+export const SERVER_URL = `/proxy`;
 export const ZIP_URL =
   'https://grpc-proxy-server-mkvo6j4wsq-du.a.run.app/v1/regcodes?regcode_pattern=';
 export const MAP_URL = '';
