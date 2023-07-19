@@ -5,7 +5,7 @@ import svgr from 'vite-plugin-svgr';
 
 const manifestForPlugin: Partial<VitePWAOptions> = {
   registerType: 'prompt',
-  includeAssets: ['favicon.ico', 'apple-touch-icon.png'],
+  includeAssets: ['favicon.svg', 'apple-touch-icon.png'],
   manifest: {
     name: 'Share Petment',
     short_name: 'Petment',
