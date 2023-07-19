@@ -103,10 +103,10 @@ export default function FeedWriteCard() {
   });
 
   const handleSubmit = () => {
+    if (prevFile.length === 0) return setIsNoneOpen(true);
     const formData = new FormData();
     formData.append('content', textRef.current?.value as string);
     if (feedId === undefined) {
-      if (prevFile.length === 0) return setIsNoneOpen(true);
       prevFile.forEach(file => formData.append('images', file as File));
       const data = {
         url: `${SERVER_URL}/feeds`,
@@ -115,7 +115,6 @@ export default function FeedWriteCard() {
       };
       feedPostingMutation.mutate(data);
     } else {
-      if (prevFile.length === 0) return setIsNoneOpen(true);
       prevFile.forEach(file => formData.append('addImage', file as File));
       if (removedFile.length > 0)
         removedFile.forEach(fileName =>
@@ -136,6 +135,10 @@ export default function FeedWriteCard() {
     },
     [savedFile],
   );
+
+  const handleEnter = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Enter') handleSubmit();
+  };
 
   const handleSemiClose = useCallback(
     (order: number) =>
@@ -241,6 +244,7 @@ export default function FeedWriteCard() {
             placeholder="글을 입력해주세요."
             maxLength={200}
             ref={textRef}
+            onKeyUp={e => handleEnter(e)}
           />
           <SubmitBtn type="button" onClick={handleSubmit}>
             <Write />

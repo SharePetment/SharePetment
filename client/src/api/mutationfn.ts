@@ -247,7 +247,6 @@ export const postFeedComment = async (body: PostFeedCommentProp) => {
 /* -------------------------------- 피드게시물 댓글 수정  -------------------------------- */
 export const patchFeedComment = async (body: PostFeedCommentProp) => {
   const { url, token, content, feedId } = body;
-  console.log(body);
   const result = await axios.patch(
     url,
     { content, feedId },
@@ -393,7 +392,6 @@ interface PostQuitMemberProp {
 }
 
 export const postQuitMember = async (payload: PostQuitMemberProp) => {
-  console.log(`${SERVER_URL}/auth/kakao/unlink`);
   const { accessToken } = payload;
 
   const result = await axios.delete(`${SERVER_URL}/auth/kakao/unlink`, {

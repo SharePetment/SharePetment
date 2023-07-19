@@ -116,7 +116,7 @@ export function Component() {
             <CommentClose onClick={() => setIsCommentOpen(false)}>
               <Close fill="white" />
             </CommentClose>
-            <div className="bg-white/75 w-[320px] h-[482px] rounded-3xl p-3">
+            <div className="bg-white/95 w-[320px] h-[482px] rounded-3xl p-3">
               <CommentBox>
                 {data.feedComments !== null &&
                   Array.isArray(data.feedComments) &&
@@ -148,7 +148,7 @@ export function Component() {
             if (e.target === e.currentTarget) navigate(-1);
           }}>
           {isToastOpen && (
-            <div className="fixed right-3 bottom-4">
+            <div className="fixed right-3 bottom-4 z-50">
               <Toast />
             </div>
           )}

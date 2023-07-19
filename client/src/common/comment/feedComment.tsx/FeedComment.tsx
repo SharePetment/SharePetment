@@ -77,6 +77,10 @@ export default function FeedComment({
     }
   };
 
+  const handleSubmit = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') handleEdit();
+  };
+
   const handleDelete = () => {
     const body = {
       url: `${SERVER_URL}/feeds/comments/${commentid}`,
@@ -111,7 +115,11 @@ export default function FeedComment({
       {!isEditOpen && <Content>{content}</Content>}
       {isEditOpen && (
         <div className="relative">
-          <EditInput defaultValue={content} ref={inputRef} />
+          <EditInput
+            defaultValue={content}
+            ref={inputRef}
+            onKeyUp={e => handleSubmit(e)}
+          />
           <EditBtn onClick={handleEdit}>
             <Write width={22} />
           </EditBtn>
