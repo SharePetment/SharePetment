@@ -76,20 +76,30 @@ export default function SideNav({
   };
 
   const handleClickShare = async () => {
-    console.log('[navigator.clipboard]', navigator.clipboard);
+    console.log('[navigator.clipboard]', navigator.clipboard); // undefined
     console.log(
       '[navigator.clipboard.writeText]',
       navigator.clipboard.writeText(url),
     );
     console.log('[url]', url);
 
-    const res = await navigator.clipboard.writeText(url);
-    console.log(res);
+    try {
+      const res = await navigator.clipboard.writeText(url);
+      console.log(res);
 
-    if (toasthandler) {
-      toasthandler(true);
-      setTimeout(() => toasthandler(false), 1500);
+      if (toasthandler) {
+        toasthandler(true);
+        setTimeout(() => toasthandler(false), 1500);
+      }
+    } catch (err) {
+      console.dir(err);
+      console.log('======>', err);
     }
+
+    // try {
+    // } catch (error) {
+    //   console.log(error);
+    // }
   };
 
   return (
