@@ -171,9 +171,10 @@ public class KakaoService {
 
         return UriComponentsBuilder.newInstance()
                 .scheme("http")
-                .host("localhost")
+//                .host("localhost")
 //                .host("share-petment.s3-website.ap-northeast-2.amazonaws.com")
-                .port(5374)
+                .host("share-petment.netlify.app")
+//                .port(5374)
                 .path("loading")
                 .queryParams(queryParams)
                 .build()
@@ -187,6 +188,9 @@ public class KakaoService {
         KakaoAccessToken kakaoAccessToken = kakaoAccessTokenRepository.findByEmail(email).get();
         String accessToken = kakaoAccessToken.getKakaoAccessToken();
 
+        memberService.deleteMember(memberId);
+        kakaoAccessTokenRepository.delete(kakaoAccessToken);
+
 
         WebClient client = WebClient.create("https://kapi.kakao.com/v1/user/unlink");
         String response = client.post()
@@ -197,8 +201,7 @@ public class KakaoService {
                 .bodyToMono(String.class)
                 .block();
 
-        memberService.deleteMember(memberId);
-        kakaoAccessTokenRepository.delete(kakaoAccessToken);
+
 
     }
 
