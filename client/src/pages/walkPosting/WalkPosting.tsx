@@ -1,5 +1,5 @@
 import { ErrorMessage } from '@hookform/error-message';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
@@ -31,6 +31,7 @@ interface Inputs {
 
 export function Component() {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const {
     register,
     handleSubmit,
@@ -43,6 +44,7 @@ export function Component() {
     mutationFn: postWalkFeed,
     onSuccess: (data: WalkFeed) => {
       const walkId = data.walkMatePostId;
+      queryClient.invalidateQueries({ queryKey: ['walkmateList'] });
       navigate(`${Path.WalkMate}/${walkId}`);
     },
     onError: () => {

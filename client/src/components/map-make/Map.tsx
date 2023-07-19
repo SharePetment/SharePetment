@@ -320,7 +320,7 @@ export default function Map({
         el.lastChild && el.removeChild(el.lastChild);
       }
     }
-  }, [isLoading, searchKeyword]);
+  }, [isLoading, mainAddress, searchKeyword]);
 
   return (
     <div className="flex flex-col items-center mb-1">

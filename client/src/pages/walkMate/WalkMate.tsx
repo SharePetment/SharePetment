@@ -29,7 +29,7 @@ export function Component() {
   const { data, isLoading, refetch, fetchNextPage } = useInfiniteQuery<
     WalkFeed[]
   >({
-    queryKey: ['walkmateList', 'key'],
+    queryKey: ['walkmateList'],
     queryFn: ({ pageParam = 0 }) => {
       return getServerDataWithJwt(
         `${SERVER_URL}/walkmates/walks?openFilter=false&location=${zip}&page=${pageParam}&size=10`,
