@@ -41,7 +41,7 @@ export default function Map({
 
   // 쿼리를 통해 주소 값을 받아옵니다.
   const { isLoading } = useQuery<UserInfo>({
-    queryKey: ['myPage'],
+    queryKey: ['myMap'],
     queryFn: () =>
       getServerDataWithJwt(`${SERVER_URL}/members`, accessToken as string),
     onSuccess(data) {
