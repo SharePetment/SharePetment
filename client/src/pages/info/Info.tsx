@@ -165,6 +165,8 @@ export function Component() {
   const userQuitMutation = useMutation({
     mutationFn: postQuitMember,
     onSuccess() {
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
       navigate('/');
     },
     onError() {
