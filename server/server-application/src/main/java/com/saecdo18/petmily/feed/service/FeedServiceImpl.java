@@ -381,7 +381,13 @@ public class FeedServiceImpl implements FeedService {
     private Set<String> getToRedis(long memberId) {
         long currentTime = System.currentTimeMillis();
         String key = memberId + ":Feed";
-        return redisTemplate.opsForZSet().rangeByScore(key, currentTime, Double.POSITIVE_INFINITY);
+        Boolean result = redisTemplate.hasKey(key);
+        if (result != null && result) {
+            return redisTemplate.opsForZSet().rangeByScore(key, currentTime, Double.POSITIVE_INFINITY);
+        } else {
+            redisTemplate.expire(key, 3, TimeUnit.HOURS);
+            return redisTemplate.opsForZSet().rangeByScore(key, currentTime, Double.POSITIVE_INFINITY);
+        }
     }
 
     public void deleteRedis(long memberId) {
