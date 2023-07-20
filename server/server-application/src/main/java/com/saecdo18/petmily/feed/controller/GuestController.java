@@ -34,11 +34,9 @@ public class GuestController {
 
     @ApiOperation("최신 피드 리스트 가져오기")
     @PostMapping("/list/random")
-    public ResponseEntity<FeedDtoList> getFeedsRandom(@ApiParam("전에 받은 피드 아이디 리스트") @RequestBody FeedDto.PreviousListIds listIds,
-                                                      @ApiParam("페이지 번호") @RequestParam(defaultValue = "0") int page,
+    public ResponseEntity<FeedDtoList> getFeedsRandom(@ApiParam("페이지 번호") @RequestParam(defaultValue = "0") int page,
                                                       @ApiParam("페이지당 받을 피드 수") @RequestParam(defaultValue = "10") int size) {
-        FeedServiceDto.PreviousListIds previousListIds = feedMapper.idsToServiceIds(listIds);
-        FeedDtoList responseList = feedService.getFeedsRecent(previousListIds, 0, page, size);
+        FeedDtoList responseList = feedService.getFeedsRecent( 0, page, size);
         return ResponseEntity.ok(responseList);
     }
 }

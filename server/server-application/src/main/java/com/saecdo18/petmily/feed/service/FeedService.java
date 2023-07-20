@@ -15,11 +15,11 @@ public interface FeedService {
 
     public FeedDto.Response getFeed(long feedId, long memberId);
 
-    public FeedDtoList getFeedsRecent(FeedServiceDto.PreviousListIds listIds, long memberId, int page, int size);
+    public FeedDtoList getFeedsRecent(long memberId, int page, int size);
 
     public FeedDtoList getFeedsByMember(int page, int size, long memberId);
 
-    public FeedDtoList getFeedsByMemberFollow(long memberId, FeedServiceDto.PreviousListIds listIds, int page, int size);
+    public FeedDtoList getFeedsByMemberFollow(long memberId, int page, int size);
 
     public FeedDto.Response patchFeed(FeedServiceDto.Patch patch, long memberId) throws IOException;
 
