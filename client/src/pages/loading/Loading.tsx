@@ -14,12 +14,23 @@ export function Component() {
   );
   const [, setFirstVisited] = useLocalStorage('firstVisited', true);
 
+  console.log('setAccessToken');
+  console.log('setRefreshToken');
+
   // local에 accessToken이 있는지 확인하기
   const dispatch = useContext(MemberIdDispatchContext);
 
   useEffect(() => {
     if (searchParams.size > 0) {
       setAccessToken(searchParams.get('accessToken'));
+      console.log(
+        `[searchParams.get('accessToken')]`,
+        searchParams.get('accessToken'),
+      );
+      console.log(
+        `searchParams.get('refreshToken')`,
+        searchParams.get('refreshToken'),
+      );
       setRefreshToken(searchParams.get('refreshToken'));
       const memberId = searchParams.get('memberId');
 
