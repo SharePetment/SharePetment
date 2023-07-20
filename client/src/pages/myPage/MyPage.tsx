@@ -26,7 +26,7 @@ import { Feed } from '../../types/feedTypes';
 import { Follow, UserInfo } from '../../types/userType';
 import { WalkFeed } from '../../types/walkType';
 import { changeDateFormat } from '../../util/changeDateFormat';
-import changeTime from '../../util/changeTiem';
+import changeTime from '../../util/changeTime';
 import { ErrorText } from '../notFound/NotFound.style';
 import {
   Container,
@@ -212,7 +212,9 @@ export function Component() {
         <>
           <Container>
             <UserBox>
-              <Profile isgreen="true" size="lg" url={userProfileImage} />
+              <div className="drop-shadow-lg">
+                <Profile isgreen="true" size="lg" url={userProfileImage} />
+              </div>
               <UserNameBox>
                 <UserName>{data?.memberInfo.nickname}</UserName>
                 <button>

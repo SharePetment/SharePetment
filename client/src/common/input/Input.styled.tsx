@@ -23,6 +23,7 @@ export const InputContainer = tw.div`
   w-[320px] max-sm:w-[220px]
   max-sm:flex
   max-sm:flex-col
+  max-sm:text-sm
 `;
 
 export const Label = tw.label`
@@ -52,4 +53,8 @@ export const ErrorNotice = tw.p<{ messagetext?: string }>`
   top-0
   right-0
   ${prop => prop.messagetext === '사용가능한 아이디입니다.' && `text-deepgreen`}
+  max-sm:text-xs
+  max-sm:top-[-10px]
+  max-sm:text-end
+  max-sm:max-w-[92px]
 `;

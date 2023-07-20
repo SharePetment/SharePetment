@@ -58,9 +58,6 @@ export function Component() {
       return allPages[totalLength - 1].length === 0 ? undefined : len;
     },
     enabled: !!(accessToken === null),
-    onSuccess(data) {
-      console.log(data);
-    },
   });
 
   // Host 요청
@@ -86,10 +83,8 @@ export function Component() {
     },
     enabled: !!accessToken,
 
-    onSuccess(data) {
-      console.log(data);
-      queryClient.invalidateQueries({ queryKey: ['contextApi'] });
-    },
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: ['contextApi'] }),
   });
 
   // 무한 쿼리 구현
