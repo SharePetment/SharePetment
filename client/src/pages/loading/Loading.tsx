@@ -17,26 +17,28 @@ export function Component() {
   // local에 accessToken이 있는지 확인하기
   const dispatch = useContext(MemberIdDispatchContext);
 
-  console.log('여기 useEffect 바깥에서 setItem 해보기');
-  localStorage.setItem('test', '1번');
-  console.log(localStorage.getItem('test'));
-  console.log('searchParams는 들어오나?', searchParams.get('accessToken'));
-
-  console.log('=====================');
-
   useEffect(() => {
-    console.log('여기 searchParams.size 바깥');
     if (searchParams.size > 0) {
+      console.log(searchParams.size);
+      console.log('=====================');
+      const accessTokenValue = searchParams.get('accessToken');
+      setAccessToken(accessTokenValue);
+      console.log('[accessTokenValue 값이 뭐야?]', accessTokenValue);
+      console.log(
+        '[localStorage.getItem으로 얻어올 수 있을까?]',
+        localStorage.getItem('accessToken'),
+      );
+
       setAccessToken(searchParams.get('accessToken'));
       setRefreshToken(searchParams.get('refreshToken'));
       const memberId = searchParams.get('memberId');
+
+      console.log('setAccessToken코드 다음 줄');
 
       (dispatch as ContextDispatch)({
         memberId: memberId as string,
         type: 'NOT_TOKEN',
       });
-
-      console.log('setAccessToken코드 다음 줄');
 
       const present = searchParams.get('present');
       if (present === 'true') setTimeout(() => navigate('/home'), 1000);
