@@ -22,8 +22,6 @@ export default function Login() {
       setFirstVisited(false);
       return;
     }
-
-    setFirstVisited(true);
   }, [firstVisited, setFirstVisited]);
 
   if (accessToken) {

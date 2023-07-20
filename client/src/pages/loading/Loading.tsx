@@ -1,6 +1,6 @@
 import { useEffect, useContext } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { useLocalStorage } from 'usehooks-ts';
+import { useLocalStorage, useReadLocalStorage } from 'usehooks-ts';
 import LoadingComponent from '../../components/loading/LoadingComponent';
 import { ContextDispatch, MemberIdDispatchContext } from '../../store/Context';
 
@@ -12,6 +12,7 @@ export function Component() {
     'refreshToken',
     '',
   );
+  const firstVisited = useReadLocalStorage('firstVisited');
 
   // local에 accessToken이 있는지 확인하기
   const dispatch = useContext(MemberIdDispatchContext);
@@ -40,8 +41,19 @@ export function Component() {
           },
         });
       }
+
+      if (!firstVisited) {
+        localStorage.setItem('firstVisited', 'true');
+      }
     }
-  }, [setAccessToken, setRefreshToken, searchParams, navigate, dispatch]);
+  }, [
+    setAccessToken,
+    setRefreshToken,
+    searchParams,
+    navigate,
+    dispatch,
+    firstVisited,
+  ]);
 
   return <LoadingComponent />;
 }
