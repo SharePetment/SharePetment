@@ -8,10 +8,10 @@ export default defineConfig({
   plugins: [react(), svgr()],
   server: {
     proxy: {
-      '/api': {
+      '/proxy': {
         target: 'http://43.202.86.53:8080/',
         changeOrigin: true,
-        rewrite: path => path.replace(/^\/api/, ''),
+        rewrite: path => path.replace(/^\/proxy/, ''),
         secure: false,
         ws: true,
       },
