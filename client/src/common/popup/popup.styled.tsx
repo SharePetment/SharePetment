@@ -24,7 +24,7 @@ export const PopupBox = tw.div`
     rounded-3xl
     px-2.5
     max-sm:w-5/6
-    w-1/3
+    w-[500px]
     border
     absolute
     top-[50%]

@@ -114,9 +114,9 @@ export default function SelectComponent({ size, direction, setZip }: Prop) {
           const valueArr = e.target.value.split(' ');
           setCityCode(changeCityCode(valueArr[0]));
           setZipNameCity(valueArr[1] !== 'undefined' ? valueArr[1] : '');
-          setZipNameVillage('');
+          setZipNameVillage(' ');
         }}>
-        <option value={''}>선택</option>
+        <option value={' '}>선택</option>
         {!cityLdading &&
           cityData?.regcodes.slice(1).map(({ code, name }) => (
             <option key={code} value={`${code} ${name.split(' ')[1]}`}>
@@ -133,7 +133,7 @@ export default function SelectComponent({ size, direction, setZip }: Prop) {
         onChange={e => {
           setZipNameVillage(e.target.value);
         }}>
-        <option value={''}>선택</option>
+        <option value={' '}>선택</option>
         {!villageLoading &&
           villageData?.regcodes.slice(1).map(({ code, name }) => (
             <option
