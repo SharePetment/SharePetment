@@ -40,9 +40,12 @@ export const Title = tw.h1`
     max-sm:w-100
     max-sm:text-lg
 `;
-
-export const ButtonBox = tw.div`
+interface Prop {
+  countbtn: string;
+}
+export const ButtonBox = tw.div<Prop>`
     flex
     w-full
-    justify-around
+    ${prop => prop.countbtn === `1` && `justify-center`}
+    ${prop => prop.countbtn === `2` && `justify-around`}
 `;

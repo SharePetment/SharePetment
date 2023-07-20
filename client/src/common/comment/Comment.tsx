@@ -48,6 +48,11 @@ export default function Comment(props: CommentProp) {
   const [isDeleted, setIsDeleted] = useState(false);
   const [text] = useState(content);
 
+  // 댓글 수정 실패 팝업
+  const [isCommentError, setIsCommentError] = useState(false);
+  //댓글 삭제 실패 팝업
+  const [isDeleteError, setIsDeletError] = useState(false);
+
   const { register, handleSubmit, setFocus } = useForm<Inputs>();
 
   // useHookForm 댓글 수정
@@ -88,13 +93,18 @@ export default function Comment(props: CommentProp) {
       queryClient.invalidateQueries({ queryKey: ['walkFeed', walkMatePostId] });
       setIsEdited(false);
     },
-    onError: error => console.log(error),
+    onError: () => {
+      setIsCommentError(true);
+    },
   });
 
   const deleteCommentMutaion = useMutation({
     mutationFn: deleteComment,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['walkFeed', walkMatePostId] });
+    },
+    onError: () => {
+      setIsDeletError(true);
     },
   });
 
@@ -149,23 +159,6 @@ export default function Comment(props: CommentProp) {
           </ContentBox>
         </div>
       </Container>
-      {mutation.isError && (
-        <Popup
-          title="댓글 수정에 실패했습니다."
-          handler={[
-            () => {
-              window.location.reload();
-            },
-          ]}
-          btnsize={['md']}
-          buttontext={['확인']}
-          isgreen={['true']}
-          countbtn={1}
-          popupcontrol={() => {
-            window.location.reload();
-          }}
-        />
-      )}
       {isDeleted && (
         <Popup
           title="정말로 삭제하시겠습니까?"
@@ -186,6 +179,42 @@ export default function Comment(props: CommentProp) {
           countbtn={2}
           popupcontrol={() => {
             setIsDeleted(false);
+          }}
+        />
+      )}
+      {isCommentError && (
+        <Popup
+          title="댓글 수정에 실패했습니다."
+          handler={[
+            () => {
+              setFocus('comment');
+              setIsCommentError(false);
+            },
+          ]}
+          btnsize={['md']}
+          buttontext={['확인']}
+          isgreen={['true']}
+          countbtn={1}
+          popupcontrol={() => {
+            setFocus('comment');
+            setIsCommentError(false);
+          }}
+        />
+      )}
+      {isDeleteError && (
+        <Popup
+          title="댓글 삭제에 실패했습니다."
+          handler={[
+            () => {
+              setIsDeletError(false);
+            },
+          ]}
+          btnsize={['md']}
+          buttontext={['확인']}
+          isgreen={['true']}
+          countbtn={1}
+          popupcontrol={() => {
+            setIsDeletError(false);
           }}
         />
       )}

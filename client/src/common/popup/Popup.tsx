@@ -33,7 +33,7 @@ export default function Popup({
             e.stopPropagation();
           }}>
           <Title>{title}</Title>
-          <ButtonBox>
+          <ButtonBox countbtn={`${countbtn}`}>
             {countbtn === 1 && (
               <Button
                 size={btnsize[0]}
