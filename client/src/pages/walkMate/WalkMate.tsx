@@ -1,7 +1,7 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 import React, { useState, useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { useReadLocalStorage } from 'usehooks-ts';
 import { getServerDataWithJwt } from '../../api/queryfn';
 import { SERVER_URL } from '../../api/url';
@@ -11,6 +11,7 @@ import Select from '../../common/select/Select';
 import WalkCard from '../../components/card/walk-card/walkCard';
 import { CardContainer } from '../../components/card/walk-card/walkCard.styled';
 import LoadingComponent from '../../components/loading/LoadingComponent';
+import useCheckLogin from '../../hook/useCheckLogin';
 import NoticeServerError from '../../components/notice/NoticeServerError';
 import Path from '../../routers/paths';
 import { WalkFeed } from '../../types/walkType';
@@ -44,6 +45,8 @@ export function Component() {
     },
     enabled: !!zip,
   });
+  // 화면 분기 처리
+  const { isLogin } = useCheckLogin();
 
   const {
     data: advertiseData,
@@ -80,12 +83,19 @@ export function Component() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inView]);
 
+
+  // 화면 분기처리
+  if (!isLogin) {
+    return <Navigate to={'/home'} />;
+    }
+
   if (isError || advertiseIsError) {
     return (
       <div className=" mt-40">
         <NoticeServerError />
       </div>
     );
+
   }
 
   if (isLoading || advertiseIsLoading) {
