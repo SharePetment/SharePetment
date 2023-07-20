@@ -171,10 +171,10 @@ public class KakaoService {
 
         return UriComponentsBuilder.newInstance()
                 .scheme("https")
-//                .host("localhost")
-                .host("share-petment.s3-website.ap-northeast-2.amazonaws.com")
+                .host("localhost")
+//                .host("share-petment.s3-website.ap-northeast-2.amazonaws.com")
 //                .host("share-petment.netlify.app")
-//                .port(5374)
+                .port(5374)
                 .path("loading")
                 .queryParams(queryParams)
                 .build()
