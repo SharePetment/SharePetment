@@ -17,6 +17,8 @@ import Popup from '../../common/popup/Popup';
 import { PopupBackGround } from '../../common/popup/popup.styled';
 import FeedCard from '../../components/card/feed-card/FeedCard';
 import SideNav from '../../components/card/sidenav/SideNav';
+import LoadingComponent from '../../components/loading/LoadingComponent';
+import NoticeServerError from '../../components/notice/NoticeServerError';
 import Toast from '../../components/toast/Toast';
 import { Feed } from '../../types/feedTypes';
 import CircleProgressBar from './CricleProgressBar';
@@ -41,6 +43,8 @@ export function Component() {
     refetch: refetchGuest,
     fetchNextPage: fetchNextPageGuest,
     isSuccess: guestIsSucess,
+    isError: guestIsError,
+    isLoading: guestIsLoading,
   } = useInfiniteQuery({
     queryKey: ['guestFeed'],
     queryFn: ({ pageParam = 0 }) => {
@@ -65,6 +69,8 @@ export function Component() {
     refetch: refetchHost,
     fetchNextPage: fetchNextPageHost,
     isSuccess: hostIsSucess,
+    isError: hostIsError,
+    isLoading: hostIsLoading,
   } = useInfiniteQuery({
     queryKey: ['hostFeed'],
     queryFn: ({ pageParam = 0 }) => {
@@ -108,6 +114,19 @@ export function Component() {
     }
   }, [guestInview]);
 
+  // 로딩화면 보여주기
+  if (guestIsLoading && hostIsLoading) {
+    return <LoadingComponent />;
+  }
+
+  // 데이터 처리 실패화면 보여주기
+  if (guestIsError || hostIsError) {
+    return (
+      <div className="flex h-screen w-screen items-center justify-center ">
+        <NoticeServerError />
+      </div>
+    );
+  }
   if (hostIsSucess && accessToken) {
     return (
       <>
