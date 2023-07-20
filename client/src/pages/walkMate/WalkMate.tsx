@@ -11,8 +11,8 @@ import Select from '../../common/select/Select';
 import WalkCard from '../../components/card/walk-card/walkCard';
 import { CardContainer } from '../../components/card/walk-card/walkCard.styled';
 import LoadingComponent from '../../components/loading/LoadingComponent';
-import useCheckLogin from '../../hook/useCheckLogin';
 import NoticeServerError from '../../components/notice/NoticeServerError';
+import useCheckLogin from '../../hook/useCheckLogin';
 import Path from '../../routers/paths';
 import { WalkFeed } from '../../types/walkType';
 import { changeDateFormat } from '../../util/changeDateFormat';
@@ -83,11 +83,10 @@ export function Component() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inView]);
 
-
   // 화면 분기처리
   if (!isLogin) {
     return <Navigate to={'/home'} />;
-    }
+  }
 
   if (isError || advertiseIsError) {
     return (
@@ -95,7 +94,6 @@ export function Component() {
         <NoticeServerError />
       </div>
     );
-
   }
 
   if (isLoading || advertiseIsLoading) {

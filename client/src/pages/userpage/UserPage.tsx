@@ -119,14 +119,12 @@ export function Component() {
       );
     },
 
-
-      getNextPageParam: (_, allPages) => {
-        const len = allPages.length;
-        const totalLength = allPages.length;
-        return allPages[totalLength - 1].length === 0 ? undefined : len;
-      },
-    });
-
+    getNextPageParam: (_, allPages) => {
+      const len = allPages.length;
+      const totalLength = allPages.length;
+      return allPages[totalLength - 1].length === 0 ? undefined : len;
+    },
+  });
 
   useEffect(() => {
     if (walkListInView.inView) {
