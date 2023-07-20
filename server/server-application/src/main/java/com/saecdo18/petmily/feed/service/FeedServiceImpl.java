@@ -100,10 +100,23 @@ public class FeedServiceImpl implements FeedService {
             log.info("while문 진입  :  {}@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",feedList.size());
             List<Feed> pageDataList = feedRepository.findAll(pageRequest).getContent();
 
-            List<Feed> filteredDataList = pageDataList.stream()
-                    .filter(data -> !previousIds.contains(data.getFeedId().toString()))
-                    .filter(data -> memberId == 0 || data.getMember().getMemberId() != memberId)
-                    .collect(Collectors.toList());
+
+//            List<Feed> filteredDataList = pageDataList.stream()
+//                    .filter(data -> !previousIds.contains(data.getFeedId().toString()))
+//                    .filter(data -> memberId == 0 || data.getMember().getMemberId() != memberId)
+//                    .collect(Collectors.toList());
+
+
+            List<Feed> filteredDataList = new ArrayList<>();
+            for (Feed feed : pageDataList){
+                if (!previousIds.contains(feed.getFeedId().toString())){
+                    if (memberId==0 || feed.getMember().getMemberId() !=memberId){
+                        filteredDataList.add(feed);
+                    }
+                }
+            }
+
+
             log.info("필터 데이터 리스트 완료");
 
             feedList.addAll(filteredDataList);
