@@ -78,13 +78,16 @@ public class FeedController {
     public ResponseEntity<FeedDtoList> getFeedsByMemberFollow(@ApiParam("페이지 번호") @RequestParam(defaultValue = "0") int page,
                                                               @ApiParam("페이지당 받을 피드 수") @RequestParam(defaultValue = "10") int size) {
         log.info("getFeedsByMemberFollow start");
+        log.info("size = {}", size);
         long memberId = authenticationGetMemberId.getMemberId();
         FeedDtoList responseList = feedService.getFeedsByMemberFollow(memberId, page, size);
         if (responseList.getResponseList().size() < size) {
             FeedDtoList addResponseList = feedService.getFeedsRecent(memberId, page, size);
             responseList.getResponseList().addAll(addResponseList.getResponseList());
         }
+        log.info("init responseList size = {}", responseList.getResponseList().size());
         List<FeedDto.Response> responses = responseList.getResponseList().subList(0, size);
+
         responseList.setResponseList(responses);
         log.info("getFeedsByMemberFollow end");
         return ResponseEntity.ok(responseList);
