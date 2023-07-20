@@ -11,18 +11,19 @@ export default function Login() {
   const navigate = useNavigate();
   const accessToken = useReadLocalStorage('accessToken');
 
-  const [isFirstVisited, setFirstVisited] = useLocalStorage(
+  const [, setFirstVisited] = useLocalStorage<boolean | null>(
     'firstVisited',
-    true,
+    null,
   );
+  const firstVisited = useReadLocalStorage('firstVisited');
 
   useEffect(() => {
-    if (isFirstVisited === null) {
+    if (firstVisited === null) {
       setFirstVisited(true);
-    } else if (!isFirstVisited) {
+    } else {
       setFirstVisited(false);
     }
-  }, [isFirstVisited, setFirstVisited]);
+  }, [firstVisited, setFirstVisited]);
 
   if (accessToken) {
     return <Navigate to="/home" />;
