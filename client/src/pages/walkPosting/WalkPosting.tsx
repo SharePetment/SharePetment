@@ -91,10 +91,10 @@ export function Component() {
             <InputText
               id="title"
               {...register('title', {
-                required: '텍스트 필수입니다.',
+                required: '필수입니다.',
                 maxLength: {
                   value: 20,
-                  message: '20자 이내로 작성해주세요 ;)',
+                  message: '20자 이내',
                 },
               })}
               error={errors.title?.message}
@@ -114,10 +114,10 @@ export function Component() {
               className=" cursor-pointer"
               type="datetime-local"
               {...register('time', {
-                required: '날짜는 필수입니다.',
+                required: '필수입니다.',
                 maxLength: {
                   value: 20,
-                  message: '20자 이내로 작성해주세요 ;)',
+                  message: '20자 이내',
                 },
               })}
               error={errors.time?.message}
@@ -139,7 +139,7 @@ export function Component() {
               readOnly
               value={`${mainAddress} ${detailAddress}`}
               {...register('location', {
-                required: '장소를 선택해주세요!',
+                required: '필수입니다.',
                 value: `${mainAddress}`,
               })}
               error={errors.location?.message}
@@ -166,7 +166,7 @@ export function Component() {
               {...register('chatURL', {
                 pattern: {
                   value: /^(http|https):\/\//gm,
-                  message: 'http://, https:// 시작해야 합니다.',
+                  message: 'http://, https://로 시작해야 합니다.',
                 },
               })}
               error={errors.chatURL?.message}

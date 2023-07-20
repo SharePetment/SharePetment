@@ -11,6 +11,7 @@ import Select from '../../common/select/Select';
 import WalkCard from '../../components/card/walk-card/walkCard';
 import { CardContainer } from '../../components/card/walk-card/walkCard.styled';
 import LoadingComponent from '../../components/loading/LoadingComponent';
+import NoticeServerError from '../../components/notice/NoticeServerError';
 import Path from '../../routers/paths';
 import { WalkFeed } from '../../types/walkType';
 import { changeDateFormat } from '../../util/changeDateFormat';
@@ -26,7 +27,7 @@ export function Component() {
 
   /* ---------------------------- useInfiniteQuery ---------------------------- */
   const { ref, inView } = useInView();
-  const { data, isLoading, refetch, fetchNextPage } = useInfiniteQuery<
+  const { data, isLoading, refetch, fetchNextPage, isError } = useInfiniteQuery<
     WalkFeed[]
   >({
     queryKey: ['walkmateList'],
@@ -49,6 +50,7 @@ export function Component() {
     isLoading: advertiseIsLoading,
     refetch: advertiseRefetch,
     fetchNextPage: advertiseFetchNextPage,
+    isError: advertiseIsError,
   } = useInfiniteQuery<WalkFeed[]>({
     queryKey: ['walkmateList', 'advertise'],
     queryFn: ({ pageParam = 0 }) => {
@@ -62,7 +64,6 @@ export function Component() {
       const totalLength = allPages.length;
       return allPages[totalLength - 1].length === 0 ? undefined : len;
     },
-
     enabled: !!zip,
   });
 
@@ -78,6 +79,14 @@ export function Component() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inView]);
+
+  if (isError || advertiseIsError) {
+    return (
+      <div className=" mt-40">
+        <NoticeServerError />
+      </div>
+    );
+  }
 
   if (isLoading || advertiseIsLoading) {
     return <LoadingComponent />;
