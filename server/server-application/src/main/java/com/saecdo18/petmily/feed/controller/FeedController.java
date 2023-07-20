@@ -77,11 +77,11 @@ public class FeedController {
                                                               @ApiParam("페이지당 받을 피드 수") @RequestParam(defaultValue = "10") int size) {
         long memberId = authenticationGetMemberId.getMemberId();
         FeedDtoList responseList = feedService.getFeedsByMemberFollow(memberId, page, size);
-        if (responseList.getResponseList().size() <= 10) {
+        if (responseList.getResponseList().size() <= size) {
             FeedDtoList addResponseList = feedService.getFeedsRecent(memberId, page, size);
             responseList.getResponseList().addAll(addResponseList.getResponseList());
         }
-        responseList.getResponseList().subList(0, 11);
+        responseList.getResponseList().subList(0, size);
         return ResponseEntity.ok(responseList);
     }
 
