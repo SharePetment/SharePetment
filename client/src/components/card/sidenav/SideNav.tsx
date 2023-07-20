@@ -79,31 +79,16 @@ export default function SideNav({
   };
 
   const handleClickShare = async () => {
-    console.log('[navigator.clipboard]', navigator.clipboard); // undefined
-    console.log(
-      '[navigator.clipboard.writeText]',
-      navigator.clipboard.writeText(url),
-    );
-    console.log('[url]', url);
-
     try {
-      const res = await navigator.clipboard.writeText(url);
-      console.log(res);
+      await navigator.clipboard.writeText(url);
 
       if (toasthandler) {
         toasthandler(true);
         setTimeout(() => toasthandler(false), 1500);
       }
     } catch (err) {
-      console.dir(err);
-      console.log('======>', err);
       setIsAlert(true);
     }
-
-    // try {
-    // } catch (error) {
-    //   console.log(error);
-    // }
   };
 
   return (
@@ -148,7 +133,7 @@ export default function SideNav({
         <Wrap onClick={handleClickShare}>
           <Share
             className="cursor-pointer ml-2"
-            stroke={window.innerWidth < 430 ? 'white' : 'black'}
+            stroke={window.innerWidth < 430 ? 'white' : 'none'}
           />
         </Wrap>
 

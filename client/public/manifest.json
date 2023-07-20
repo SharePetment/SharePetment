@@ -1,7 +1,7 @@
 {
-    "name": "vite-pwa",
-    "short_name": "vite-pwa",
-    "start_url": "/",
+    "name": "Share Petment",
+    "short_name": "Share Petment",
+    "start_url": "./index.html",
     "display": "standalone",
     "background_color": "#ffffff",
     "theme_color": "#485EEE",
