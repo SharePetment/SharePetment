@@ -1,5 +1,7 @@
-export const SERVER_URL = 'http://43.202.86.53:8080';
-// window.location.hostname === 'localhost' ? '' : '/proxy';
+export const SERVER_URL =
+  window.location.hostname === 'localhost'
+    ? 'http://43.202.86.53:8080/'
+    : `/proxy/api`;
 
 export const ZIP_URL =
   'https://grpc-proxy-server-mkvo6j4wsq-du.a.run.app/v1/regcodes?regcode_pattern=';
