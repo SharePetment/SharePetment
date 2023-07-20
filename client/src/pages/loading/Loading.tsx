@@ -19,7 +19,7 @@ export function Component() {
 
   useEffect(() => {
     console.log(searchParams.size);
-    if (searchParams.size !== 0) {
+    if (searchParams.size !== undefined) {
       console.log(searchParams.size);
       console.log('0보다 큰게 아니고 0이 아니면으로 하면 들어오나?');
       console.log('=====================');
