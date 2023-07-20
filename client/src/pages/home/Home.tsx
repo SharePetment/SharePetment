@@ -233,7 +233,6 @@ export function Component() {
                         like={img.isLike ? 'true' : 'false'}
                         guesthandler={() => setIsGuestOpen(true)}
                         toasthandler={setIsToastOpen}
-                        url={img.shareURL}
                       />
                     </div>
                   </SwiperSlide>
@@ -294,7 +293,6 @@ export function Component() {
                           like={img.isLike ? 'true' : 'false'}
                           guesthandler={() => setIsGuestOpen(true)}
                           toasthandler={setIsToastOpen}
-                          url={img.shareURL}
                         />
                       </div>
                     </SwiperSlide>
