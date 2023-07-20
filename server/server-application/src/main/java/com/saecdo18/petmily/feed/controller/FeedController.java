@@ -87,9 +87,11 @@ public class FeedController {
             responseList.getResponseList().addAll(addResponseList.getResponseList());
         }
         log.info("init responseList size = {}", responseList.getResponseList().size());
-        List<FeedDto.Response> responses = responseList.getResponseList().subList(0, size);
+        if (responseList.getResponseList().size() > size) {
+            List<FeedDto.Response> responses = responseList.getResponseList().subList(0, size);
+            responseList.setResponseList(responses);
+        }
 
-        responseList.setResponseList(responses);
         log.info("getFeedsByMemberFollow end");
         return ResponseEntity.ok(responseList);
     }
