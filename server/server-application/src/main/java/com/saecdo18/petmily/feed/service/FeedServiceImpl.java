@@ -87,7 +87,7 @@ public class FeedServiceImpl implements FeedService {
 
     @Override
     public FeedDtoList getFeedsRecent(long memberId, int page, int size) {
-        log.info("getFeedsRecent start");
+        log.info("getFeedsRecent start : {}", memberId);
         PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
 
         List<Feed> feedList = new ArrayList<>();
@@ -95,10 +95,18 @@ public class FeedServiceImpl implements FeedService {
         log.info("data total count : {}", totalCount);
         Set<String> previousIds = getToRedis(memberId);
 
+
         while (feedList.size() < size) {
             log.info("recent while start");
             List<Feed> pageDataList = feedRepository.findAll(pageRequest).getContent();
             log.info("pageDataList.size : {}", pageDataList.size());
+            for (Feed feed : pageDataList) {
+                log.info("Find Feed ID : {}", feed.getFeedId().toString());
+                log.info("Find Feed Member ID : {}", feed.getMember().getMemberId());
+            }
+            for (String ids : previousIds) {
+                log.info("PreviousIds : {}", ids);
+            }
 
             List<Feed> filteredDataList = pageDataList.stream()
                     .filter(data -> !previousIds.contains(data.getFeedId().toString()))
