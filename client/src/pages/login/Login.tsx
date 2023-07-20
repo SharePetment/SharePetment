@@ -18,15 +18,12 @@ export default function Login() {
   const firstVisited = useReadLocalStorage('firstVisited');
 
   useEffect(() => {
-    if (firstVisited === null) {
-      setFirstVisited(true);
-      return;
-    }
-
     if (firstVisited) {
       setFirstVisited(false);
       return;
     }
+
+    setFirstVisited(true);
   }, [firstVisited, setFirstVisited]);
 
   if (accessToken) {
