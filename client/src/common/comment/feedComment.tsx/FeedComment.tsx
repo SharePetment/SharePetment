@@ -3,7 +3,7 @@ import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useReadLocalStorage } from 'usehooks-ts';
 import { deleteFeedComment, patchFeedComment } from '../../../api/mutationfn';
-// import { SERVER_URL } from '../../../api/url';
+import { SERVER_URL } from '../../../api/url';
 import { ReactComponent as Write } from '../../../assets/button/write.svg';
 import { BooleanStr } from '../../../types/propType';
 import Profile from '../../profile/Profile';
@@ -42,7 +42,6 @@ export default function FeedComment({
   time,
 }: Prop) {
   const navigate = useNavigate();
-  const PROXY = window.location.hostname === 'localhost' ? '' : '/proxy';
   const accessToken = useReadLocalStorage('accessToken');
   const [isEditOpen, setIsEditOpen] = useState<boolean>(false);
   const queryClient = useQueryClient();
@@ -71,7 +70,7 @@ export default function FeedComment({
       const body = {
         content: inputRef.current.value,
         feedId: feedid,
-        url: `${PROXY}/feeds/comments/${commentid}`,
+        url: `${SERVER_URL}/feeds/comments/${commentid}`,
         token: accessToken as string,
       };
       commentEditMuation.mutate(body);
@@ -84,7 +83,7 @@ export default function FeedComment({
 
   const handleDelete = () => {
     const body = {
-      url: `${PROXY}/feeds/comments/${commentid}`,
+      url: `${SERVER_URL}/feeds/comments/${commentid}`,
       accessToken: accessToken as string,
     };
     commentDeleteMutation.mutate(body);
