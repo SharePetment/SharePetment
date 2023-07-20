@@ -24,7 +24,7 @@ export const PopupBox = tw.div`
     rounded-3xl
     px-2.5
     max-sm:w-5/6
-    w-1/3
+    w-[500px]
     border
     absolute
     top-[50%]
@@ -40,9 +40,12 @@ export const Title = tw.h1`
     max-sm:w-100
     max-sm:text-lg
 `;
-
-export const ButtonBox = tw.div`
+interface Prop {
+  countbtn: string;
+}
+export const ButtonBox = tw.div<Prop>`
     flex
     w-full
-    justify-around
+    ${prop => prop.countbtn === `1` && `justify-center`}
+    ${prop => prop.countbtn === `2` && `justify-around`}
 `;

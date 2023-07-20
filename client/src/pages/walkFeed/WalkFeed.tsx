@@ -38,11 +38,20 @@ export function Component() {
   const { memberId: userId } = useContext(MemberIdContext) as State;
   const accessToken = useReadLocalStorage<string | null>('accessToken');
 
+  // 댓글 등록 실패 팝업
+  const [isCommentError, setIsCommentError] = useState(false);
+
+  // 모집 변경 실패 팝업
+  const [isChangeError, setIsChangeError] = useState(false);
+
   // 댓글 등록
   const addCommentMutation = useMutation({
     mutationFn: addComment,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['walkFeed', postId] });
+    },
+    onError: () => {
+      setIsCommentError(true);
     },
   });
 
@@ -90,6 +99,9 @@ export function Component() {
     mutationFn: patchWalkStatus,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['walkFeed', postId] });
+    },
+    onError: () => {
+      setIsChangeError(true);
     },
   });
 
@@ -282,6 +294,40 @@ export function Component() {
             handler={[
               () => {
                 setIsError(false);
+              },
+            ]}
+          />
+        )}
+        {isCommentError && (
+          <Popup
+            countbtn={1}
+            title="댓글 생성에 실패했습니다."
+            btnsize={['md']}
+            isgreen={['true']}
+            buttontext={['확인']}
+            popupcontrol={() => {
+              setIsCommentError(false);
+            }}
+            handler={[
+              () => {
+                setIsCommentError(false);
+              },
+            ]}
+          />
+        )}
+        {isChangeError && (
+          <Popup
+            countbtn={1}
+            title="모집 변경에 실패했습니다."
+            btnsize={['md']}
+            isgreen={['true']}
+            buttontext={['확인']}
+            popupcontrol={() => {
+              setIsChangeError(false);
+            }}
+            handler={[
+              () => {
+                setIsChangeError(false);
               },
             ]}
           />

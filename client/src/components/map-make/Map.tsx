@@ -32,6 +32,7 @@ export default function Map({
   setMainAddress,
   setDetailAddress,
   setCoordinates,
+  mainAddress,
 }: Prop) {
   // 마커를 담는 배열
   let markers: any[] = [];
@@ -77,6 +78,23 @@ export default function Map({
       position: map.getCenter(),
     });
 
+    // 해당 유저가 지정한 주소 값을 바탕으로 최초 지도 마커 표시를 결정합니다.
+    if (!isLoading) {
+      // 주소-좌표 변환 객체를 생성합니다.
+      const geocoder = new kakao.maps.services.Geocoder();
+      // 주소로 좌표를 검색합니다..
+      geocoder.addressSearch(mainAddress, function (result: any, status: any) {
+        if (status === kakao.maps.services.Status.OK) {
+          const coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+          // 결과값으로 받은 위치를 마커로 표시합니다
+          marker.setPosition(coords);
+          // state에 coords 값 저장
+          setCoordinates(coords);
+          // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+          map.setCenter(coords);
+        }
+      });
+    }
     // typeControl 설정
     const mapTypeControl = new kakao.maps.MapTypeControl();
     map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);
@@ -300,7 +318,7 @@ export default function Map({
         el.lastChild && el.removeChild(el.lastChild);
       }
     }
-  }, [isLoading, searchKeyword]);
+  }, [isLoading, mainAddress, searchKeyword]);
 
   return (
     <div className="flex flex-col items-center mb-1">

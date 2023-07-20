@@ -224,7 +224,10 @@ export function Component() {
                       ? `border-t-2 border-t-[green] `
                       : undefined
                   }>
-                  <FeedIcon stroke={currentTab === 0 ? `#69B783` : '#d4d4d8'} />
+                  <FeedIcon
+                    stroke={currentTab === 0 ? `#69B783` : '#d4d4d8'}
+                    className="cursor-pointer"
+                  />
                 </TabMenuList>
                 <TabMenuList
                   onClick={() => setCurrentTab(1)}
@@ -233,6 +236,7 @@ export function Component() {
                   }>
                   <WalkFeedIcon
                     fill={currentTab === 1 ? `#69B783` : '#d4d4d8'}
+                    className="cursor-pointer"
                   />
                 </TabMenuList>
               </TabMenu>
