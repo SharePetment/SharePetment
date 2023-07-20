@@ -6,15 +6,4 @@ import svgr from 'vite-plugin-svgr';
 export default defineConfig({
   base: './',
   plugins: [react(), svgr()],
-  server: {
-    proxy: {
-      '/proxy': {
-        target: 'http://43.202.86.53:8080/',
-        changeOrigin: true,
-        rewrite: path => path.replace(/^\/proxy/, ''),
-        secure: false,
-        ws: true,
-      },
-    },
-  },
 });

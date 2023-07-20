@@ -10,7 +10,7 @@ import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import { useLocalStorage, useReadLocalStorage } from 'usehooks-ts';
 import { getGuestFeedList, getHostFeedList } from '../../api/queryfn';
-// import { SERVER_URL } from '../../api/url';
+import { SERVER_URL } from '../../api/url';
 import LyingDownDog from '../../assets/illustration/lying-down-dog.png';
 import PetFriends from '../../assets/illustration/pet-friends.png';
 import Popup from '../../common/popup/Popup';
@@ -24,7 +24,6 @@ import { Container } from './Home.styled';
 import '../../common/carousel/carousel.css';
 
 export function Component() {
-  const PROXY = window.location.hostname === 'localhost' ? '' : '/proxy';
   const queryClient = useQueryClient();
   const accessToken = useReadLocalStorage<string>('accessToken');
   const [isFirstVisited, setFirstVisited] = useLocalStorage(
@@ -46,7 +45,7 @@ export function Component() {
     queryKey: ['guestFeed'],
     queryFn: ({ pageParam = 0 }) => {
       return getGuestFeedList(
-        `${PROXY}/feeds/all/list/random?page=${pageParam}&size=10`,
+        `${SERVER_URL}/feeds/all/list/random?page=${pageParam}&size=10`,
       );
     },
     getNextPageParam: (_, allPages) => {
@@ -70,7 +69,7 @@ export function Component() {
     queryKey: ['hostFeed'],
     queryFn: ({ pageParam = 0 }) => {
       return getHostFeedList(
-        `${PROXY}/feeds/list?page=${pageParam}&size=10`,
+        `${SERVER_URL}/feeds/list?page=${pageParam}&size=10`,
         accessToken,
       );
     },
