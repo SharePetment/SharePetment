@@ -18,24 +18,10 @@ export function Component() {
   const dispatch = useContext(MemberIdDispatchContext);
 
   useEffect(() => {
-    console.log(searchParams.size);
     if (searchParams.size !== 0) {
-      console.log(searchParams.size);
-      console.log('0보다 큰게 아니고 0이 아니면으로 하면 들어오나?');
-      console.log('=====================');
-      const accessTokenValue = searchParams.get('accessToken');
-      setAccessToken(accessTokenValue);
-      console.log('[accessTokenValue 값이 뭐야?]', accessTokenValue);
-      console.log(
-        '[localStorage.getItem으로 얻어올 수 있을까?]',
-        localStorage.getItem('accessToken'),
-      );
-
       setAccessToken(searchParams.get('accessToken'));
       setRefreshToken(searchParams.get('refreshToken'));
       const memberId = searchParams.get('memberId');
-
-      console.log('setAccessToken코드 다음 줄');
 
       (dispatch as ContextDispatch)({
         memberId: memberId as string,
