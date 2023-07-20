@@ -80,11 +80,12 @@ public class FeedController {
         log.info("getFeedsByMemberFollow start");
         long memberId = authenticationGetMemberId.getMemberId();
         FeedDtoList responseList = feedService.getFeedsByMemberFollow(memberId, page, size);
-        if (responseList.getResponseList().size() <= size) {
+        if (responseList.getResponseList().size() < size) {
             FeedDtoList addResponseList = feedService.getFeedsRecent(memberId, page, size);
             responseList.getResponseList().addAll(addResponseList.getResponseList());
         }
-        responseList.getResponseList().subList(0, size);
+        List<FeedDto.Response> responses = responseList.getResponseList().subList(0, size);
+        responseList.setResponseList(responses);
         log.info("getFeedsByMemberFollow end");
         return ResponseEntity.ok(responseList);
     }
