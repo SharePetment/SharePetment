@@ -61,7 +61,7 @@ export default function FeedWriteCard() {
   }, [navigate]);
 
   // param이 있을 경우,  피드 게시물 정보 가져오기
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   const getFeedDetailQuery = useQuery<Feed>({
     queryKey: ['feedPopUp', Number(feedId)],
     queryFn: async () => {
