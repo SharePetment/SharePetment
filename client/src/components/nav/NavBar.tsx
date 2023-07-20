@@ -24,7 +24,6 @@ export default function NavBar() {
   const handleClick = () => {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
-    localStorage.removeItem('animalParents');
     navigate('/');
   };
 
