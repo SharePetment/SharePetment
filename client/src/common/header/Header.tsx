@@ -1,15 +1,14 @@
 import { useQuery } from '@tanstack/react-query';
-import { useContext } from 'react';
 import { useMatch, Link, useNavigate } from 'react-router-dom';
 import { useReadLocalStorage } from 'usehooks-ts';
 import { getServerDataWithJwt } from '../../api/queryfn';
 import { SERVER_URL } from '../../api/url';
 import { ReactComponent as Logo } from '../../assets/logo.svg';
 import Path from '../../routers/paths';
-import { MemberIdContext, State } from '../../store/Context';
 import Button from '../button/Button';
 import Profile from '../profile/Profile';
 import { HeaderContainer, NavItem, NavList } from './Header.styled';
+
 export default function Header() {
   const matchHome = useMatch('/home');
   const matchWalkmate = useMatch('/walkmate');
