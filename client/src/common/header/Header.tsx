@@ -18,8 +18,6 @@ export default function Header() {
   const accessToken = useReadLocalStorage<string | null>('accessToken');
 
   const navigate = useNavigate();
-  // context api 반려동물 등록 여부
-  const { animalParents } = useContext(MemberIdContext) as State;
 
   const { data, isSuccess } = useQuery({
     queryKey: ['myPage'],
@@ -48,7 +46,7 @@ export default function Header() {
             <NavItem active={matchHome !== null ? 'false' : 'true'}>
               <Link to={Path.Home}>홈</Link>
             </NavItem>
-            {animalParents && (
+            {data?.animalParents && (
               <NavItem active={matchWalkmate !== null ? 'false' : 'true'}>
                 <Link to={Path.WalkMate}>산책</Link>
               </NavItem>
