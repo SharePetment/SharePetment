@@ -69,7 +69,6 @@ public class SecurityConfiguration {
 //        configuration.addAllowedOriginPattern("*");
         configuration.addAllowedOrigin("http://localhost:5374");
         configuration.addAllowedOrigin("http://share-petment.s3-website.ap-northeast-2.amazonaws.com");
-        configuration.addAllowedOrigin("https://share-petment.netlify.app");
         configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
