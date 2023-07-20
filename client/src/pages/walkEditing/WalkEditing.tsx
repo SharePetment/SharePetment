@@ -1,6 +1,6 @@
 import { ErrorMessage } from '@hookform/error-message';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useReadLocalStorage } from 'usehooks-ts';
@@ -20,6 +20,7 @@ import { Textarea } from '../../components/card/feedwritecard/FeedWriteCard.styl
 import LoadingComponent from '../../components/loading/LoadingComponent';
 import Map from '../../components/map-make/Map';
 import Path from '../../routers/paths';
+import { UserInfo } from '../../types/userType';
 import { WalkFeed } from '../../types/walkType';
 import { PostForm } from '../walkPosting/WalkPosting.styled';
 
@@ -91,6 +92,19 @@ export function Component() {
 
   // PopUpController
   const [isError, setIsError] = useState(false);
+
+  // 유저 login, pet 여부 검사
+  const { data: userData, isLoading: userLoading } = useQuery<UserInfo>({
+    queryKey: ['myPage'],
+    queryFn: () =>
+      getServerDataWithJwt(`${SERVER_URL}/members`, accessToken as string),
+  });
+  useEffect(() => {
+    if (!userLoading && !userData?.animalParents) {
+      console.log(userData);
+      navigate('/home');
+    }
+  }, [userData, navigate, userLoading]);
 
   return (
     <>
