@@ -26,7 +26,7 @@ import { Feed } from '../../types/feedTypes';
 import { Follow, UserInfo } from '../../types/userType';
 import { WalkFeed } from '../../types/walkType';
 import { changeDateFormat } from '../../util/changeDateFormat';
-import changeTime from '../../util/changeTiem';
+import changeTime from '../../util/changeTime';
 import { ErrorText } from '../notFound/NotFound.style';
 import {
   Container,

@@ -14,6 +14,7 @@ import Popup from '../../../common/popup/Popup';
 import { FeedImage, Feed } from '../../../types/feedTypes';
 import { parseImg, deleteImg } from '../../../util/parseImg';
 import LoadingComponent from '../../loading/LoadingComponent';
+import NoticeServerError from '../../notice/NoticeServerError';
 import {
   Container,
   Wrap,
@@ -151,7 +152,17 @@ export default function FeedWriteCard() {
     [savedFile, prevFile],
   );
 
-  if (feedPostingMutation.isLoading) {
+  if (getFeedDetailQuery.isError)
+    return (
+      <div className="w-screen h-screen flex justify-center items-center">
+        <NoticeServerError />
+      </div>
+    );
+  if (
+    getFeedDetailQuery.isFetching ||
+    feedPostingMutation.isLoading ||
+    feedEditingMutation.isLoading
+  ) {
     return <LoadingComponent />;
   } else
     return (

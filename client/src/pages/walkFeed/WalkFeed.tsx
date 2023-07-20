@@ -22,6 +22,7 @@ import Comment from '../../common/comment/Comment';
 import Popup from '../../common/popup/Popup';
 import LoadingComponent from '../../components/loading/LoadingComponent';
 import ShowMap from '../../components/map-show/ShowMap';
+import NoticeServerError from '../../components/notice/NoticeServerError';
 import { MemberIdContext, State } from '../../store/Context';
 import { WalkFeed } from '../../types/walkType';
 import { changeDateFormat } from '../../util/changeDateFormat';
@@ -38,11 +39,8 @@ export function Component() {
   const { memberId: userId } = useContext(MemberIdContext) as State;
   const accessToken = useReadLocalStorage<string | null>('accessToken');
 
-  // 댓글 등록 실패 팝업
-  const [isCommentError, setIsCommentError] = useState(false);
-
-  // 모집 변경 실패 팝업
-  const [isChangeError, setIsChangeError] = useState(false);
+  // 요청 실패 팝업
+  const [isOpen, setIsOpen] = useState<[boolean, string]>([false, '']);
 
   // 댓글 등록
   const addCommentMutation = useMutation({
@@ -50,9 +48,7 @@ export function Component() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['walkFeed', postId] });
     },
-    onError: () => {
-      setIsCommentError(true);
-    },
+    onError: () => setIsOpen([true, '댓글 생성에 실패했습니다.']),
   });
 
   type FormValues = {
@@ -78,7 +74,11 @@ export function Component() {
   const queryClient = useQueryClient();
 
   // 산책 게시글 가지고 오기
-  const { data, isLoading } = useQuery<WalkFeed>({
+  const {
+    data,
+    isLoading: isFeedLoading,
+    isError: isFeedError,
+  } = useQuery<WalkFeed>({
     queryKey: ['walkFeed', postId],
     queryFn: () =>
       getServerDataWithJwt(
@@ -100,9 +100,7 @@ export function Component() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['walkFeed', postId] });
     },
-    onError: () => {
-      setIsChangeError(true);
-    },
+    onError: () => setIsOpen([true, '모집 변경에 실패했습니다.']),
   });
 
   const handleWalkStatus = () => {
@@ -126,15 +124,12 @@ export function Component() {
     onSuccess: () => {
       navigate('/walkmate');
     },
-    onError() {
-      setIsOpened(false);
-      setIsError(true);
-    },
+    onError: () => setIsOpen([true, '게시글 삭제에 실패했습니다.']),
   });
 
-  const [isOpened, setIsOpened] = useState(false);
+  const [isDeleted, setIsDeleted] = useState(false);
   const handleWalkFeedDeletePopUp = () => {
-    setIsOpened(true);
+    setIsDeleted(true);
   };
   const handleWalkFeedDelete = () => {
     walkDeleteMutation.mutate({
@@ -143,20 +138,27 @@ export function Component() {
     });
   };
 
-  // error PopUp
-  const [isError, setIsError] = useState(false);
-
   // 지도 그리기
   // 위도, 경도, 주소
   const [address, setAddress] = useState('');
   const [lat, setLat] = useState('');
   const [lng, setLng] = useState('');
 
-  return (
-    <>
-      {isLoading ? (
-        <LoadingComponent />
-      ) : (
+  if (isFeedError)
+    return (
+      <div className="w-screen h-[550px] flex justify-center items-center">
+        <NoticeServerError />
+      </div>
+    );
+  if (
+    isFeedLoading ||
+    walkDeleteMutation.isLoading ||
+    walkStatusMutation.isLoading
+  )
+    return <LoadingComponent />;
+  else {
+    return (
+      <>
         <div className="w-[500px] max-sm:w-[320px] mx-auto mt-7">
           <ArrowLeft
             className="hidden max-sm:block w-6 h-6 cursor-pointer"
@@ -169,10 +171,15 @@ export function Component() {
                 onClick={handleWalkStatus}>
                 모집변경
               </button>
-              <Edit className="cursor-pointer" onClick={handleWalkFeedEdit} />
+              <Edit
+                className="cursor-pointer"
+                onClick={handleWalkFeedEdit}
+                stroke="black"
+              />
               <Delete
                 className="cursor-pointer"
                 onClick={handleWalkFeedDeletePopUp}
+                stroke="black"
               />
             </div>
           )}
@@ -261,80 +268,46 @@ export function Component() {
             </ul>
           </div>
         </div>
-      )}
-      <>
-        {isOpened && (
-          <Popup
-            countbtn={2}
-            title="정말로 삭제하시겠습니까?"
-            btnsize={['md', 'md']}
-            isgreen={['true', 'false']}
-            buttontext={['삭제', '취소']}
-            popupcontrol={() => {
-              setIsOpened(false);
-            }}
-            handler={[
-              handleWalkFeedDelete,
-              () => {
-                setIsOpened(false);
-              },
-            ]}
-          />
-        )}
-        {isError && (
-          <Popup
-            countbtn={1}
-            title="게시글 삭제에 실패했습니다."
-            btnsize={['md']}
-            isgreen={['true']}
-            buttontext={['확인']}
-            popupcontrol={() => {
-              setIsError(false);
-            }}
-            handler={[
-              () => {
-                setIsError(false);
-              },
-            ]}
-          />
-        )}
-        {isCommentError && (
-          <Popup
-            countbtn={1}
-            title="댓글 생성에 실패했습니다."
-            btnsize={['md']}
-            isgreen={['true']}
-            buttontext={['확인']}
-            popupcontrol={() => {
-              setIsCommentError(false);
-            }}
-            handler={[
-              () => {
-                setIsCommentError(false);
-              },
-            ]}
-          />
-        )}
-        {isChangeError && (
-          <Popup
-            countbtn={1}
-            title="모집 변경에 실패했습니다."
-            btnsize={['md']}
-            isgreen={['true']}
-            buttontext={['확인']}
-            popupcontrol={() => {
-              setIsChangeError(false);
-            }}
-            handler={[
-              () => {
-                setIsChangeError(false);
-              },
-            ]}
-          />
-        )}
+        <>
+          {isDeleted && (
+            <Popup
+              countbtn={2}
+              title="정말로 삭제하시겠습니까?"
+              btnsize={['md', 'md']}
+              isgreen={['true', 'false']}
+              buttontext={['삭제', '취소']}
+              popupcontrol={() => {
+                setIsDeleted(false);
+              }}
+              handler={[
+                handleWalkFeedDelete,
+                () => {
+                  setIsDeleted(false);
+                },
+              ]}
+            />
+          )}
+          {isOpen[0] && (
+            <Popup
+              countbtn={1}
+              title={isOpen[1]}
+              btnsize={['md']}
+              isgreen={['true']}
+              buttontext={['확인']}
+              popupcontrol={() => {
+                setIsOpen([false, '']);
+              }}
+              handler={[
+                () => {
+                  setIsOpen([false, '']);
+                },
+              ]}
+            />
+          )}
+        </>
       </>
-    </>
-  );
+    );
+  }
 }
 
 Component.displayName = 'WalkFeed';
