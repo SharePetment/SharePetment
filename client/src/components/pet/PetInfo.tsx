@@ -78,8 +78,7 @@ export default function PetInfo(prop: Prop) {
       queryClient.invalidateQueries({ queryKey: ['myPage'] });
       setIsOpened(false);
     },
-    onError: error => {
-      console.log(error);
+    onError: () => {
       setIsDisabled(false);
       setIsError(true);
     },
@@ -91,10 +90,7 @@ export default function PetInfo(prop: Prop) {
       queryClient.invalidateQueries({ queryKey: ['myPage'] });
       setIsOpened(false);
     },
-    onError: error => {
-      console.log(error);
-      setIsError(true);
-    },
+    onError: () => setIsError(true),
   });
 
   // submit Handler 작성
@@ -108,7 +104,7 @@ export default function PetInfo(prop: Prop) {
     formData.append('sex', radio);
     formData.append('species', '동물');
     formData.append('images', file as File);
-    console.log(file);
+
     if (!file) {
       const newFile = new File([], 'test', { type: 'image/png' });
       formData.append('images', newFile);

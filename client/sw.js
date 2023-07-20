@@ -1,15 +1,15 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-// install event
-self.addEventListener('install', () => {
-  console.log('[Service Worker] installed');
-});
+// /* eslint-disable @typescript-eslint/no-explicit-any */
+// // install event
+// self.addEventListener('install', () => {
+//   console.log('[Service Worker] installed');
+// });
 
-// activate event
-self.addEventListener('activate', e => {
-  console.log('[Service Worker] actived', e);
-});
+// // activate event
+// self.addEventListener('activate', e => {
+//   console.log('[Service Worker] actived', e);
+// });
 
-// fetch event
-self.addEventListener('fetch', e => {
-  console.log('[Service Worker] fetched resource ' + e.request.url);
-});
+// // fetch event
+// self.addEventListener('fetch', e => {
+//   console.log('[Service Worker] fetched resource ' + e.request.url);
+// });

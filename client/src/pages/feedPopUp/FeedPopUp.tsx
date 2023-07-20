@@ -12,6 +12,7 @@ import Popup from '../../common/popup/Popup';
 import FeedCard from '../../components/card/feed-card/FeedCard';
 import SideNav from '../../components/card/sidenav/SideNav';
 import LoadingComponent from '../../components/loading/LoadingComponent';
+// import NoticeServerError from '../../components/notice/NoticeServerError';
 import Toast from '../../components/toast/Toast';
 import { MemberIdContext } from '../../store/Context';
 import { Feed } from '../../types/feedTypes';
@@ -32,9 +33,11 @@ export function Component() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { feedId } = useParams();
+
+  // 알림 토스트 및 팝업창 state
   const [isToastOpen, setIsToastOpen] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState<[boolean, string]>([false, '']);
   const [isDeleteOpen, setIsDeleteOpen] = useState<boolean>(false);
-  const [isBlank, setIsBlank] = useState<boolean>(false);
   const [isCommentOpen, setIsCommentOpen] = useState<boolean>(false);
 
   // 피드 게시물 정보 가져오기
@@ -54,6 +57,7 @@ export function Component() {
       queryClient.invalidateQueries({ queryKey: ['guestFeed'] });
       navigate('/my-page');
     },
+    onError: () => setIsOpen([true, '요청에 실패했어요.']),
   });
 
   const handlerDelete = () => {
@@ -79,12 +83,18 @@ export function Component() {
 
   if (isLoading) return <LoadingComponent />;
   if (isSuccess)
-    return window.innerWidth < 420 ? (
+    return (
       <>
-        {isToastOpen && (
-          <div className="fixed right-3 bottom-4 z-50">
-            <Toast />
-          </div>
+        {isOpen[0] && (
+          <Popup
+            title={isOpen[1]}
+            isgreen={['true']}
+            btnsize={['md']}
+            buttontext={['확인']}
+            countbtn={1}
+            handler={[() => setIsOpen([false, ''])]}
+            popupcontrol={() => setIsOpen([false, ''])}
+          />
         )}
         {isDeleteOpen && (
           <Popup
@@ -99,157 +109,63 @@ export function Component() {
             }}
           />
         )}
-        {isBlank && (
-          <Popup
-            title="공백은 입력할 수 없어요."
-            isgreen={['true']}
-            btnsize={['md']}
-            buttontext={['알겠어요']}
-            countbtn={1}
-            handler={[() => setIsBlank(false)]}
-            popupcontrol={() => {
-              setIsBlank(false);
-            }}
-          />
-        )}
-        {isCommentOpen && (
-          <CommentContainer
-            onClick={e => {
-              if (e.target === e.currentTarget) setIsCommentOpen(false);
-            }}>
-            <div className="bg-white w-[320px] h-[570px] rounded-3xl p-3">
-              <CommentBox
-                className={
-                  window.innerHeight < 850 ? 'h-[31rem]' : 'h-[31rem]'
-                }>
-                {data.feedComments !== null &&
-                  Array.isArray(data.feedComments) &&
-                  data.feedComments.map(comment => (
-                    <FeedComment
-                      key={comment.feedCommentsId}
-                      inperson={
-                        comment.memberInfo.memberId === Number(state?.memberId)
-                          ? 'true'
-                          : 'false'
-                      }
-                      nickname={comment.memberInfo.nickname}
-                      userimg={comment.memberInfo.imageURL}
-                      content={comment.content}
-                      commentid={comment.feedCommentsId}
-                      feedid={data.feedId}
-                      blankhandler={setIsBlank}
-                      memberid={comment.memberInfo.memberId}
-                      time={changeTime(comment.createdAt)}
-                    />
-                  ))}
-              </CommentBox>
-              <FeedInput feedid={data.feedId} blankhandler={setIsBlank} />
-            </div>
-          </CommentContainer>
-        )}
-        <FeedCardContainer
-          onClick={e => {
-            if (e.target === e.currentTarget) navigate(-1);
-          }}>
-          <CloseBtn onClick={() => navigate(-1)}>
-            <Close fill="white" />
-          </CloseBtn>
-          <FeedCard
-            memberid={data.memberInfo.memberId}
-            username={data.memberInfo.nickname}
-            context={data.content}
-            userimg={data.memberInfo.imageURL}
-            images={data.images}
-          />
-          <SideNav
-            feedid={data.feedId}
-            direction="row"
-            likes={data.likes}
-            like={data.isLike ? 'true' : 'false'}
-            url={data.shareURL}
-            toasthandler={setIsToastOpen}
-            deletehandler={setIsDeleteOpen}
-            inperson={
-              Number(state?.memberId) === data.memberInfo.memberId
-                ? 'true'
-                : 'false'
-            }
-            commenthandler={setIsCommentOpen}
-          />
-        </FeedCardContainer>
-      </>
-    ) : (
-      <>
-        {isToastOpen && (
-          <div className="fixed right-8 bottom-10">
-            <Toast />
-          </div>
-        )}
-        {isDeleteOpen && (
-          <Popup
-            title="피드를 삭제할까요?"
-            isgreen={['true']}
-            btnsize={['md', 'md']}
-            buttontext={['삭제할래요', '아니요']}
-            countbtn={2}
-            handler={[handlerDelete, () => setIsDeleteOpen(false)]}
-            popupcontrol={() => {
-              setIsDeleteOpen(false);
-            }}
-          />
-        )}
-        {isBlank && (
-          <Popup
-            title="공백은 입력할 수 없어요."
-            isgreen={['true']}
-            btnsize={['md']}
-            buttontext={['알겠어요']}
-            countbtn={1}
-            handler={[() => setIsBlank(false)]}
-            popupcontrol={() => {
-              setIsBlank(false);
-            }}
-          />
-        )}
-        <Container
-          onClick={e => {
-            if (e.target === e.currentTarget) navigate(-1);
-          }}>
-          <CloseBtn onClick={() => navigate(-1)}>
-            <Close fill="white" />
-          </CloseBtn>
-          <FeedContainer>
-            <FeedCard
-              memberid={data.memberInfo.memberId}
-              username={data.memberInfo.nickname}
-              context={data.content}
-              userimg={data.memberInfo.imageURL}
-              images={data.images}
-            />
-
-            <RightBox>
-              <CommentBox>
-                {data.feedComments !== null &&
-                  Array.isArray(data.feedComments) &&
-                  data.feedComments.map(comment => (
-                    <FeedComment
-                      key={comment.feedCommentsId}
-                      inperson={
-                        comment.memberInfo.memberId === Number(state?.memberId)
-                          ? 'true'
-                          : 'false'
-                      }
-                      nickname={comment.memberInfo.nickname}
-                      userimg={comment.memberInfo.imageURL}
-                      content={comment.content}
-                      commentid={comment.feedCommentsId}
-                      feedid={data.feedId}
-                      blankhandler={setIsBlank}
-                      memberid={comment.memberInfo.memberId}
-                      time={changeTime(comment.createdAt)}
-                    />
-                  ))}
-              </CommentBox>
+        {window.innerWidth < 420 ? (
+          <>
+            {isCommentOpen && (
+              <CommentContainer
+                onClick={e => {
+                  if (e.target === e.currentTarget) setIsCommentOpen(false);
+                }}>
+                <div className="bg-white w-[320px] h-[570px] rounded-3xl p-3">
+                  <CommentBox
+                    className={
+                      window.innerHeight < 850 ? 'h-[31rem]' : 'h-[31rem]'
+                    }>
+                    {data.feedComments !== null &&
+                      Array.isArray(data.feedComments) &&
+                      data.feedComments.map(comment => (
+                        <FeedComment
+                          key={comment.feedCommentsId}
+                          inperson={
+                            comment.memberInfo.memberId ===
+                            Number(state?.memberId)
+                              ? 'true'
+                              : 'false'
+                          }
+                          nickname={comment.memberInfo.nickname}
+                          userimg={comment.memberInfo.imageURL}
+                          content={comment.content}
+                          commentid={comment.feedCommentsId}
+                          feedid={data.feedId}
+                          blankhandler={setIsOpen}
+                          memberid={comment.memberInfo.memberId}
+                          time={changeTime(comment.createdAt)}
+                        />
+                      ))}
+                  </CommentBox>
+                  <FeedInput feedid={data.feedId} blankhandler={setIsOpen} />
+                </div>
+              </CommentContainer>
+            )}
+            <FeedCardContainer
+              onClick={e => {
+                if (e.target === e.currentTarget) navigate(-1);
+              }}>
+              {isToastOpen && (
+                <div className="fixed right-3 bottom-4 z-50">
+                  <Toast />
+                </div>
+              )}
+              <CloseBtn onClick={() => navigate(-1)}>
+                <Close fill="white" />
+              </CloseBtn>
+              <FeedCard
+                memberid={data.memberInfo.memberId}
+                username={data.memberInfo.nickname}
+                context={data.content}
+                userimg={data.memberInfo.imageURL}
+                images={data.images}
+              />
               <SideNav
                 feedid={data.feedId}
                 direction="row"
@@ -263,11 +179,76 @@ export function Component() {
                     ? 'true'
                     : 'false'
                 }
+                commenthandler={setIsCommentOpen}
+                modalhandler={setIsOpen}
               />
-              <FeedInput feedid={data.feedId} blankhandler={setIsBlank} />
-            </RightBox>
-          </FeedContainer>
-        </Container>
+            </FeedCardContainer>
+          </>
+        ) : (
+          <Container
+            onClick={e => {
+              if (e.target === e.currentTarget) navigate(-1);
+            }}>
+            {isToastOpen && (
+              <div className="fixed right-8 bottom-10 z-50">
+                <Toast />
+              </div>
+            )}
+            <CloseBtn onClick={() => navigate(-1)}>
+              <Close fill="white" />
+            </CloseBtn>
+            <FeedContainer>
+              <FeedCard
+                memberid={data.memberInfo.memberId}
+                username={data.memberInfo.nickname}
+                context={data.content}
+                userimg={data.memberInfo.imageURL}
+                images={data.images}
+              />
+              <RightBox>
+                <CommentBox>
+                  {data.feedComments !== null &&
+                    Array.isArray(data.feedComments) &&
+                    data.feedComments.map(comment => (
+                      <FeedComment
+                        key={comment.feedCommentsId}
+                        inperson={
+                          comment.memberInfo.memberId ===
+                          Number(state?.memberId)
+                            ? 'true'
+                            : 'false'
+                        }
+                        nickname={comment.memberInfo.nickname}
+                        userimg={comment.memberInfo.imageURL}
+                        content={comment.content}
+                        commentid={comment.feedCommentsId}
+                        feedid={data.feedId}
+                        blankhandler={setIsOpen}
+                        memberid={comment.memberInfo.memberId}
+                        time={changeTime(comment.createdAt)}
+                      />
+                    ))}
+                </CommentBox>
+                <SideNav
+                  feedid={data.feedId}
+                  direction="row"
+                  likes={data.likes}
+                  like={data.isLike ? 'true' : 'false'}
+                  url={data.shareURL}
+                  toasthandler={setIsToastOpen}
+                  deletehandler={setIsDeleteOpen}
+                  inperson={
+                    Number(state?.memberId) === data.memberInfo.memberId
+                      ? 'true'
+                      : 'false'
+                  }
+                  modalhandler={setIsOpen}
+                />
+                <FeedInput feedid={data.feedId} blankhandler={setIsOpen} />
+              </RightBox>
+            </FeedContainer>
+          </Container>
+        )}
       </>
     );
 }
