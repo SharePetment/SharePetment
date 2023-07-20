@@ -88,20 +88,26 @@ public class FeedServiceImpl implements FeedService {
     @Override
     public FeedDtoList getFeedsRecent(long memberId, int page, int size) {
         PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
+        log.info("pageRequest : page  {}, size  {}@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",page, size);
 
         List<Feed> feedList = new ArrayList<>();
         long totalCount = feedRepository.count();
+        log.info("totalCount : {}@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",totalCount);
         Set<String> previousIds = getToRedis(memberId);
+        log.info("previousIds : {}@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",previousIds);
 
         while (feedList.size() < size) {
+            log.info("while문 진입  :  {}@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",feedList.size());
             List<Feed> pageDataList = feedRepository.findAll(pageRequest).getContent();
 
             List<Feed> filteredDataList = pageDataList.stream()
                     .filter(data -> !previousIds.contains(data.getFeedId().toString()))
                     .filter(data -> memberId == 0 || data.getMember().getMemberId() != memberId)
                     .collect(Collectors.toList());
+            log.info("필터 데이터 리스트 완료");
 
             feedList.addAll(filteredDataList);
+            log.info("피드리스트 생성완료");
 
 //            page++;
 //
@@ -110,13 +116,18 @@ public class FeedServiceImpl implements FeedService {
 
             pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
         }
+        log.info("while문 탈출");
+        log.info("feedList.size  {}", feedList.size());
         if (feedList.size() > 10) {
             feedList = feedList.subList(0, size);
         }
+        log.info("피드리스트 크기가 너무 클때 사이즈 만큼만 다시 생성 완료");
 
         addToRedisSet(feedList, memberId);
+        log.info("피드리스트에 있는거 레디스에 추가하기 완료");
 
         Collections.shuffle(feedList);
+        log.info("피드리스트 섞기 완료");
 
         return changeFeedListToFeedResponseDto(feedList, memberId);
     }
