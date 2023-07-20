@@ -12,11 +12,11 @@ import Popup from '../../common/popup/Popup';
 import FeedCard from '../../components/card/feed-card/FeedCard';
 import SideNav from '../../components/card/sidenav/SideNav';
 import LoadingComponent from '../../components/loading/LoadingComponent';
-// import NoticeServerError from '../../components/notice/NoticeServerError';
+import NoticeServerError from '../../components/notice/NoticeServerError';
 import Toast from '../../components/toast/Toast';
 import { MemberIdContext } from '../../store/Context';
 import { Feed } from '../../types/feedTypes';
-import changeTime from '../../util/changeTiem';
+import changeTime from '../../util/changeTime';
 import {
   Container,
   CloseBtn,
@@ -41,7 +41,7 @@ export function Component() {
   const [isCommentOpen, setIsCommentOpen] = useState<boolean>(false);
 
   // 피드 게시물 정보 가져오기
-  const { data, isSuccess, isLoading } = useQuery<Feed>({
+  const { data, isSuccess, isLoading, isError } = useQuery<Feed>({
     queryKey: ['feedPopUp', Number(feedId)],
     queryFn: () =>
       getServerDataWithJwt(
@@ -53,8 +53,8 @@ export function Component() {
 
   const deleteFeedMutation = useMutation({
     mutationFn: deleteFeed,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['guestFeed'] });
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ['guestFeed'] });
       navigate('/my-page');
     },
     onError: () => setIsOpen([true, '요청에 실패했어요.']),
@@ -82,6 +82,12 @@ export function Component() {
   }, [navigate]);
 
   if (isLoading) return <LoadingComponent />;
+  if (isError)
+    return (
+      <div className="w-screen h-screen flex justify-center items-center">
+        <NoticeServerError />
+      </div>
+    );
   if (isSuccess)
     return (
       <>

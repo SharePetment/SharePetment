@@ -8,7 +8,7 @@ import { SERVER_URL } from '../../api/url';
 import { ReactComponent as Write } from '../../assets/button/write.svg';
 import { MemberIdContext, State } from '../../store/Context';
 import { CommentProp } from '../../types/commentType';
-import changeTime from '../../util/changeTiem';
+import changeTime from '../../util/changeTime';
 import Popup from '../popup/Popup';
 import Profile from '../profile/Profile';
 import {
@@ -48,12 +48,10 @@ export default function Comment(props: CommentProp) {
   const [isDeleted, setIsDeleted] = useState(false);
   const [text] = useState(content);
 
-
   // 댓글 수정 실패 팝업
   const [isCommentError, setIsCommentError] = useState(false);
   //댓글 삭제 실패 팝업
   const [isDeleteError, setIsDeletError] = useState(false);
-
 
   const {
     register,
@@ -61,7 +59,6 @@ export default function Comment(props: CommentProp) {
     setFocus,
     formState: { errors },
   } = useForm<Inputs>({ mode: 'onChange' });
-
 
   // useHookForm 댓글 수정
   const handleEditText = (data: Inputs) => {
