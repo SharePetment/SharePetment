@@ -87,38 +87,51 @@ public class FeedServiceImpl implements FeedService {
 
     @Override
     public FeedDtoList getFeedsRecent(long memberId, int page, int size) {
+        log.info("getFeedsRecent start");
         PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
 
         List<Feed> feedList = new ArrayList<>();
         long totalCount = feedRepository.count();
+        log.info("data total count : {}", totalCount);
         Set<String> previousIds = getToRedis(memberId);
 
         while (feedList.size() < size) {
+            log.info("recent while start");
             List<Feed> pageDataList = feedRepository.findAll(pageRequest).getContent();
+            log.info("pageDataList.size : {}", pageDataList.size());
 
             List<Feed> filteredDataList = pageDataList.stream()
                     .filter(data -> !previousIds.contains(data.getFeedId().toString()))
                     .filter(data -> memberId == 0 || data.getMember().getMemberId() != memberId)
                     .collect(Collectors.toList());
 
+            log.info("filteredDataList.size : {}", filteredDataList.size());
+
             feedList.addAll(filteredDataList);
 
-            page++;
+            log.info("feedList.size : {}", feedList.size());
 
-            if((long) page * size >= totalCount)
+            page++;
+            log.info("page : {}", page);
+
+            if ((long) page * size >= totalCount) {
+                int sum = page*size;
+                log.info("page * size : {}", sum);
                 break;
+            }
 
             pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
+            log.info("recent while end");
         }
 
         if (feedList.size() > size) {
             feedList = feedList.subList(0, size);
         }
-
+        log.info("feedList.size222 : {}", feedList);
         addToRedisSet(feedList, memberId);
 
         Collections.shuffle(feedList);
-
+        log.info("getFeedsRecent end");
         return changeFeedListToFeedResponseDto(feedList, memberId);
     }
 

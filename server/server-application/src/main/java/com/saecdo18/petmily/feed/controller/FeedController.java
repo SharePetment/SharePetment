@@ -83,6 +83,7 @@ public class FeedController {
         FeedDtoList responseList = feedService.getFeedsByMemberFollow(memberId, page, size);
         if (responseList.getResponseList().size() < size) {
             FeedDtoList addResponseList = feedService.getFeedsRecent(memberId, page, size);
+            log.info("getFeedRecent size = {}" , addResponseList.getResponseList().size());
             responseList.getResponseList().addAll(addResponseList.getResponseList());
         }
         log.info("init responseList size = {}", responseList.getResponseList().size());
