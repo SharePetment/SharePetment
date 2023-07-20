@@ -121,7 +121,7 @@ export default function PetContainer(prop: Prop) {
           information={information}
           sex={sex}
         />
-        <DeletePet onClick={handleOpenDeletePopup} />
+        <DeletePet onClick={handleOpenDeletePopup} stroke="black" />
         <SettingPet onClick={handlePetEditPopUp} />
       </Container>
       {isPetOpened && (
