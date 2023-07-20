@@ -1,7 +1,7 @@
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import React, { useState, useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
-import { Link, Navigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useReadLocalStorage } from 'usehooks-ts';
 import { getServerDataWithJwt } from '../../api/queryfn';
 import { SERVER_URL } from '../../api/url';
@@ -12,13 +12,14 @@ import WalkCard from '../../components/card/walk-card/walkCard';
 import { CardContainer } from '../../components/card/walk-card/walkCard.styled';
 import LoadingComponent from '../../components/loading/LoadingComponent';
 import NoticeServerError from '../../components/notice/NoticeServerError';
-import useCheckLogin from '../../hook/useCheckLogin';
 import Path from '../../routers/paths';
+import { UserInfo } from '../../types/userType';
 import { WalkFeed } from '../../types/walkType';
 import { changeDateFormat } from '../../util/changeDateFormat';
 import { FilterButton, SearchButton } from './WalkMate.styled';
 
 export function Component() {
+  const navigate = useNavigate();
   // 주소 값 받아오기
   const [zip, setZip] = useState('서울');
   // 필터링 상태
@@ -45,8 +46,6 @@ export function Component() {
     },
     enabled: !!zip,
   });
-  // 화면 분기 처리
-  const { isLogin } = useCheckLogin();
 
   const {
     data: advertiseData,
@@ -83,10 +82,19 @@ export function Component() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inView]);
 
-  // 화면 분기처리
-  if (!isLogin) {
-    return <Navigate to={'/home'} />;
-  }
+  // 화면 분기 처리
+  // 유저 login, pet 여부 검사
+  const { data: userData, isLoading: userLoading } = useQuery<UserInfo>({
+    queryKey: ['myPage'],
+    queryFn: () =>
+      getServerDataWithJwt(`${SERVER_URL}/members`, accessToken as string),
+  });
+  useEffect(() => {
+    if (!userLoading && !userData?.animalParents) {
+      console.log(userData);
+      navigate('/home');
+    }
+  }, [userData, navigate, userLoading]);
 
   if (isError || advertiseIsError) {
     return (

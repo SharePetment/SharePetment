@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useReadLocalStorage } from 'usehooks-ts';
@@ -24,6 +24,7 @@ import LoadingComponent from '../../components/loading/LoadingComponent';
 import ShowMap from '../../components/map-show/ShowMap';
 import NoticeServerError from '../../components/notice/NoticeServerError';
 import { MemberIdContext, State } from '../../store/Context';
+import { UserInfo } from '../../types/userType';
 import { WalkFeed } from '../../types/walkType';
 import { changeDateFormat } from '../../util/changeDateFormat';
 import {
@@ -138,6 +139,19 @@ export function Component() {
     });
   };
 
+  const { data: userData, isLoading } = useQuery<UserInfo>({
+    queryKey: ['myPage'],
+    queryFn: () =>
+      getServerDataWithJwt(`${SERVER_URL}/members`, accessToken as string),
+  });
+
+  useEffect(() => {
+    if (!isLoading && !userData?.animalParents) {
+      console.log(userData);
+      navigate('/home');
+    }
+  }, [userData, navigate, isLoading]);
+
   // 지도 그리기
   // 위도, 경도, 주소
   const [address, setAddress] = useState('');
@@ -150,6 +164,7 @@ export function Component() {
         <NoticeServerError />
       </div>
     );
+
   if (
     isFeedLoading ||
     walkDeleteMutation.isLoading ||
