@@ -48,11 +48,24 @@ export default function Comment(props: CommentProp) {
   const [isDeleted, setIsDeleted] = useState(false);
   const [text] = useState(content);
 
-  const { register, handleSubmit, setFocus } = useForm<Inputs>();
+
+  // 댓글 수정 실패 팝업
+  const [isCommentError, setIsCommentError] = useState(false);
+  //댓글 삭제 실패 팝업
+  const [isDeleteError, setIsDeletError] = useState(false);
+
+
+  const {
+    register,
+    handleSubmit,
+    setFocus,
+    formState: { errors },
+  } = useForm<Inputs>({ mode: 'onChange' });
+
 
   // useHookForm 댓글 수정
   const handleEditText = (data: Inputs) => {
-    const newComment = data.comment;
+    const newComment = data.comment.trim();
     const postData = {
       id: feedCommentsId ? `${feedCommentsId}` : `${walkMateCommentId}`,
       content: newComment,
@@ -88,12 +101,18 @@ export default function Comment(props: CommentProp) {
       queryClient.invalidateQueries({ queryKey: ['walkFeed', walkMatePostId] });
       setIsEdited(false);
     },
+    onError: () => {
+      setIsCommentError(true);
+    },
   });
 
   const deleteCommentMutaion = useMutation({
     mutationFn: deleteComment,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['walkFeed', walkMatePostId] });
+    },
+    onError: () => {
+      setIsDeletError(true);
     },
   });
 
@@ -134,12 +153,21 @@ export default function Comment(props: CommentProp) {
                 <Input
                   defaultValue={text}
                   {...register('comment', {
-                    required: true,
+                    required: '텍스트 필수',
                     maxLength: 100,
+                    validate: value =>
+                      value.trim().length !== 0 || '공백만 안됨',
                   })}
                 />
                 <WriteBtn>
-                  <Write type="submit" />
+                  <Write
+                    type="submit"
+                    className={
+                      errors.comment?.message === undefined
+                        ? 'stroke-black cursor-pointer'
+                        : 'stroke-lightgray cursor-default'
+                    }
+                  />
                 </WriteBtn>
               </Form>
             ) : (
@@ -148,23 +176,6 @@ export default function Comment(props: CommentProp) {
           </ContentBox>
         </div>
       </Container>
-      {mutation.isError && (
-        <Popup
-          title="댓글 수정에 실패했습니다."
-          handler={[
-            () => {
-              window.location.reload();
-            },
-          ]}
-          btnsize={['md']}
-          buttontext={['확인']}
-          isgreen={['true']}
-          countbtn={1}
-          popupcontrol={() => {
-            window.location.reload();
-          }}
-        />
-      )}
       {isDeleted && (
         <Popup
           title="정말로 삭제하시겠습니까?"
@@ -185,6 +196,42 @@ export default function Comment(props: CommentProp) {
           countbtn={2}
           popupcontrol={() => {
             setIsDeleted(false);
+          }}
+        />
+      )}
+      {isCommentError && (
+        <Popup
+          title="댓글 수정에 실패했습니다."
+          handler={[
+            () => {
+              setFocus('comment');
+              setIsCommentError(false);
+            },
+          ]}
+          btnsize={['md']}
+          buttontext={['확인']}
+          isgreen={['true']}
+          countbtn={1}
+          popupcontrol={() => {
+            setFocus('comment');
+            setIsCommentError(false);
+          }}
+        />
+      )}
+      {isDeleteError && (
+        <Popup
+          title="댓글 삭제에 실패했습니다."
+          handler={[
+            () => {
+              setIsDeletError(false);
+            },
+          ]}
+          btnsize={['md']}
+          buttontext={['확인']}
+          isgreen={['true']}
+          countbtn={1}
+          popupcontrol={() => {
+            setIsDeletError(false);
           }}
         />
       )}

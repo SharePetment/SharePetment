@@ -38,11 +38,20 @@ export function Component() {
   const { memberId: userId } = useContext(MemberIdContext) as State;
   const accessToken = useReadLocalStorage<string | null>('accessToken');
 
+  // 댓글 등록 실패 팝업
+  const [isCommentError, setIsCommentError] = useState(false);
+
+  // 모집 변경 실패 팝업
+  const [isChangeError, setIsChangeError] = useState(false);
+
   // 댓글 등록
   const addCommentMutation = useMutation({
     mutationFn: addComment,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['walkFeed', postId] });
+    },
+    onError: () => {
+      setIsCommentError(true);
     },
   });
 
@@ -50,9 +59,17 @@ export function Component() {
     content: string;
   };
 
-  const { register, handleSubmit, resetField } = useForm<FormValues>();
+  const {
+    register,
+    handleSubmit,
+    resetField,
+    formState: { errors },
+  } = useForm<FormValues>({ mode: 'onChange' });
 
   const onSubmit: SubmitHandler<FormValues> = data => {
+    data = {
+      content: data.content.trim(),
+    };
     const url = `${SERVER_URL}/walkmates/comments/${postId}`;
     addCommentMutation.mutate({ ...data, url, accessToken });
     resetField('content');
@@ -82,6 +99,9 @@ export function Component() {
     mutationFn: patchWalkStatus,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['walkFeed', postId] });
+    },
+    onError: () => {
+      setIsChangeError(true);
     },
   });
 
@@ -139,7 +159,7 @@ export function Component() {
       ) : (
         <div className="w-[500px] max-sm:w-[320px] mx-auto mt-7">
           <ArrowLeft
-            className="hidden max-sm:block w-6 h-6"
+            className="hidden max-sm:block w-6 h-6 cursor-pointer"
             onClick={() => navigate('/walkmate')}
           />
           {`${data?.memberInfo?.memberId}` === userId && (
@@ -209,9 +229,19 @@ export function Component() {
                     value: 100,
                     message: '100자 이내로 입력해주세요 :)',
                   },
+                  validate: value => value.trim().length !== 0 || '공백만 안됨',
                 })}
               />
-              <CommentButton>Comment</CommentButton>
+
+              <CommentButton
+                disabled={!!errors.content?.message}
+                className={
+                  errors.content?.message === undefined
+                    ? 'bg-deepgreen'
+                    : 'bg-lightgray'
+                }>
+                Comment
+              </CommentButton>
             </form>
             {/* 댓글 렌더링 */}
             <ul>
@@ -264,6 +294,40 @@ export function Component() {
             handler={[
               () => {
                 setIsError(false);
+              },
+            ]}
+          />
+        )}
+        {isCommentError && (
+          <Popup
+            countbtn={1}
+            title="댓글 생성에 실패했습니다."
+            btnsize={['md']}
+            isgreen={['true']}
+            buttontext={['확인']}
+            popupcontrol={() => {
+              setIsCommentError(false);
+            }}
+            handler={[
+              () => {
+                setIsCommentError(false);
+              },
+            ]}
+          />
+        )}
+        {isChangeError && (
+          <Popup
+            countbtn={1}
+            title="모집 변경에 실패했습니다."
+            btnsize={['md']}
+            isgreen={['true']}
+            buttontext={['확인']}
+            popupcontrol={() => {
+              setIsChangeError(false);
+            }}
+            handler={[
+              () => {
+                setIsChangeError(false);
               },
             ]}
           />
