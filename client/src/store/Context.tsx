@@ -48,7 +48,7 @@ export default function ContextProvider({ children }: Props) {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { data } = useQuery<UserInfo>({
-    queryKey: ['contextApi'],
+    queryKey: ['contextApi', accessToken],
     queryFn: () =>
       getServerDataWithJwt(`${SERVER_URL}/members`, accessToken as string),
     enabled: !!accessToken,

@@ -9,6 +9,7 @@ import { ReactComponent as Delete } from '../../../assets/button/delete.svg';
 import { ReactComponent as Edit } from '../../../assets/button/edit.svg';
 import { ReactComponent as Like } from '../../../assets/button/like.svg';
 import { ReactComponent as Share } from '../../../assets/button/share.svg';
+import Popup from '../../../common/popup/Popup';
 import { BooleanStr } from '../../../types/propType';
 import { Container, Wrap, Text } from './SideNav.styled';
 
@@ -43,6 +44,8 @@ export default function SideNav({
   const feedPopUp = useMatch('/home/:feedId');
   const [isLike, setIsLike] = useState<BooleanStr>(like);
   const [isLikes, setIsLikes] = useState<number>(likes);
+
+  const [isAlert, setIsAlert] = useState(false);
 
   const likeMutation = useMutation({
     mutationFn: patchFeedLike,
@@ -94,6 +97,7 @@ export default function SideNav({
     } catch (err) {
       console.dir(err);
       console.log('======>', err);
+      setIsAlert(true);
     }
 
     // try {
@@ -165,6 +169,23 @@ export default function SideNav({
           </>
         )}
       </Container>
+      {isAlert && (
+        <Popup
+          title="에러가 발생했습니다. "
+          handler={[
+            () => {
+              setIsAlert(false);
+            },
+          ]}
+          isgreen={['true']}
+          btnsize={['md']}
+          buttontext={['확인']}
+          countbtn={1}
+          popupcontrol={() => {
+            setIsAlert(false);
+          }}
+        />
+      )}
     </>
   );
 }
