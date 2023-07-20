@@ -9,6 +9,7 @@ import { ReactComponent as Delete } from '../../../assets/button/delete.svg';
 import { ReactComponent as Edit } from '../../../assets/button/edit.svg';
 import { ReactComponent as Like } from '../../../assets/button/like.svg';
 import { ReactComponent as Share } from '../../../assets/button/share.svg';
+import Popup from '../../../common/popup/Popup';
 import { BooleanStr } from '../../../types/propType';
 import { Container, Wrap, Text } from './SideNav.styled';
 
@@ -44,6 +45,8 @@ export default function SideNav({
   const [isLike, setIsLike] = useState<BooleanStr>(like);
   const [isLikes, setIsLikes] = useState<number>(likes);
 
+  const [isAlert, setIsAlert] = useState(false);
+
   const likeMutation = useMutation({
     mutationFn: patchFeedLike,
     onSuccess: ({ data }) => {
@@ -76,11 +79,31 @@ export default function SideNav({
   };
 
   const handleClickShare = async () => {
-    await navigator.clipboard.writeText(url);
-    if (toasthandler) {
-      toasthandler(true);
-      setTimeout(() => toasthandler(false), 1500);
+    console.log('[navigator.clipboard]', navigator.clipboard); // undefined
+    console.log(
+      '[navigator.clipboard.writeText]',
+      navigator.clipboard.writeText(url),
+    );
+    console.log('[url]', url);
+
+    try {
+      const res = await navigator.clipboard.writeText(url);
+      console.log(res);
+
+      if (toasthandler) {
+        toasthandler(true);
+        setTimeout(() => toasthandler(false), 1500);
+      }
+    } catch (err) {
+      console.dir(err);
+      console.log('======>', err);
+      setIsAlert(true);
     }
+
+    // try {
+    // } catch (error) {
+    //   console.log(error);
+    // }
   };
 
   return (
@@ -146,6 +169,23 @@ export default function SideNav({
           </>
         )}
       </Container>
+      {isAlert && (
+        <Popup
+          title="에러가 발생했습니다. "
+          handler={[
+            () => {
+              setIsAlert(false);
+            },
+          ]}
+          isgreen={['true']}
+          btnsize={['md']}
+          buttontext={['확인']}
+          countbtn={1}
+          popupcontrol={() => {
+            setIsAlert(false);
+          }}
+        />
+      )}
     </>
   );
 }

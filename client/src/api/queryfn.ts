@@ -29,9 +29,7 @@ export const getServerDataWithJwt = async (url: string, token: string) => {
 
 /* -------------------------------- 게스트 피드리스트 가져오기 ------------------------------- */
 export const getGuestFeedList = async (url: string) => {
-  const result = await axios.post(url, {
-    previousListIds: [0],
-  });
+  const result = await axios.post(url);
   return result.data.responseList;
 };
 
@@ -42,9 +40,7 @@ export const getHostFeedList = async (
 ) => {
   const result = await axios.post(
     url,
-    {
-      previousListIds: [0],
-    },
+    {},
     {
       headers: {
         Authorization: accessToken,
