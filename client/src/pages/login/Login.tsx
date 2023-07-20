@@ -17,8 +17,10 @@ export default function Login() {
   );
 
   useEffect(() => {
-    if (isFirstVisited) {
+    if (isFirstVisited === null) {
       setFirstVisited(true);
+    } else if (!isFirstVisited) {
+      setFirstVisited(false);
     }
   }, [isFirstVisited, setFirstVisited]);
 
