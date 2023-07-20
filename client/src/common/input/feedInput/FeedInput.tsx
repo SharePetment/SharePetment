@@ -8,7 +8,7 @@ import { Container, Input, CommentBtn } from './FeedInput.styled';
 
 interface Prop {
   feedid: number;
-  blankhandler: React.Dispatch<React.SetStateAction<boolean>>;
+  blankhandler: React.Dispatch<React.SetStateAction<[boolean, string]>>;
 }
 
 export default function FeedInput({ feedid, blankhandler }: Prop) {
@@ -26,11 +26,15 @@ export default function FeedInput({ feedid, blankhandler }: Prop) {
 
   const handleClick = () => {
     if (inputRef.current) {
-      if (inputRef.current.value === '') return blankhandler(true);
+      const regex = /^\s*$/;
+      if (regex.test(inputRef.current.value))
+        return blankhandler([true, '공백은 입력할 수 없어요.']);
+      if (inputRef.current.value === '')
+        return blankhandler([true, '공백은 입력할 수 없어요.']);
       const data = {
         url: `${SERVER_URL}/feeds/comments`,
         token: accessToken as string,
-        content: inputRef.current.value,
+        content: inputRef.current.value.trim(),
         feedId: feedid,
       };
       mutate(data);

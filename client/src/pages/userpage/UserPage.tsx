@@ -57,7 +57,11 @@ export function Component() {
   };
 
   // (타)유저 데이터 가지고 오기
-  const { data, isLoading } = useQuery<UserInfo>({
+  const {
+    data,
+    isLoading,
+    isError: isUserError,
+  } = useQuery<UserInfo>({
     queryKey: ['userPage', usersId],
     queryFn: () =>
       getServerDataWithJwt(
@@ -66,9 +70,6 @@ export function Component() {
       ),
     onSuccess(data) {
       setIsSubscribed(data.guestFollow);
-    },
-    onError(err) {
-      console.log(err);
     },
   });
 
@@ -84,7 +85,7 @@ export function Component() {
   const {
     data: feedData,
     isLoading: feedLoading,
-    isError: walkFeedError,
+    isError: isFeedError,
     fetchNextPage: feedFetchNextPage,
   } = useInfiniteQuery<Feed[]>({
     queryKey: ['userFeed', usersId],
@@ -105,23 +106,27 @@ export function Component() {
   /* ---------------------------- useInfiniteQuery ---------------------------- */
   // 유저가 작성한 산책 리스트 가져오기
   const walkListInView = useInView();
-  const { data: walkFeedData, fetchNextPage: walkFetchNextPage } =
-    useInfiniteQuery<WalkFeed[]>({
-      queryKey: ['UserwalkFeedList'],
-      queryFn: ({ pageParam = 0 }) => {
-        return getServerDataWithJwt(
-          `${SERVER_URL}/walkmates/other-walks/${usersId}?openFilter=false&&page=${pageParam}&size=10`,
-          accessToken as string,
-        );
-      },
+  const {
+    data: walkFeedData,
+    fetchNextPage: walkFetchNextPage,
+    isError: isWalkFeedError,
+  } = useInfiniteQuery<WalkFeed[]>({
+    queryKey: ['UserwalkFeedList'],
+    queryFn: ({ pageParam = 0 }) => {
+      return getServerDataWithJwt(
+        `${SERVER_URL}/walkmates/other-walks/${usersId}?openFilter=false&&page=${pageParam}&size=10`,
+        accessToken as string,
+      );
+    },
 
-      getNextPageParam: (lastPage, allPages) => {
-        console.log(lastPage, allPages);
+
+      getNextPageParam: (_, allPages) => {
         const len = allPages.length;
         const totalLength = allPages.length;
         return allPages[totalLength - 1].length === 0 ? undefined : len;
       },
     });
+
 
   useEffect(() => {
     if (walkListInView.inView) {
@@ -154,6 +159,14 @@ export function Component() {
     return <Navigate to="/my-page" />;
   }
 
+  // 찾는 유저가 없을 시 혹은 에러 발생시
+  if (isUserError) {
+    return (
+      <div className="flex h-screen w-screen items-center justify-center ">
+        <NoticeServerError />
+      </div>
+    );
+  }
   return (
     <>
       {!(!isLoading && !feedLoading && !followingLoading) ? (
@@ -246,7 +259,7 @@ export function Component() {
                   <div>
                     {feedData === undefined ? (
                       <>
-                        {walkFeedError ? (
+                        {isFeedError ? (
                           <NoticeServerError />
                         ) : (
                           <NoticeNotWrite />
@@ -286,35 +299,41 @@ export function Component() {
                       <NoticeOnlyOwner />
                     ) : (
                       <>
-                        {!walkFeedData?.pages[0]?.length ? (
-                          <NoticeNotWrite />
+                        {isWalkFeedError ? (
+                          <NoticeServerError />
                         ) : (
-                          <div>
-                            <GridContainerWalk>
-                              {walkFeedData?.pages.map((page, index) => (
-                                <React.Fragment key={index}>
-                                  {page.map(item => (
-                                    <Link
-                                      to={`/walkmate/${item.walkMatePostId}`}
-                                      key={item.walkMatePostId}>
-                                      <WalkCard
-                                        size="sm"
-                                        time={changeDateFormat(item.time)}
-                                        title={item.title}
-                                        friends={item.maximum}
-                                        location={item.location}
-                                        isclosed={`${item.open}`}
-                                        nickname={item.memberInfo.nickname}
-                                        imageURL={item.memberInfo.imageURL}
-                                        key={item.walkMatePostId}
-                                      />
-                                    </Link>
+                          <>
+                            {!walkFeedData?.pages[0]?.length ? (
+                              <NoticeNotWrite />
+                            ) : (
+                              <div>
+                                <GridContainerWalk>
+                                  {walkFeedData?.pages.map((page, index) => (
+                                    <React.Fragment key={index}>
+                                      {page.map(item => (
+                                        <Link
+                                          to={`/walkmate/${item.walkMatePostId}`}
+                                          key={item.walkMatePostId}>
+                                          <WalkCard
+                                            size="sm"
+                                            time={changeDateFormat(item.time)}
+                                            title={item.title}
+                                            friends={item.maximum}
+                                            location={item.location}
+                                            isclosed={`${item.open}`}
+                                            nickname={item.memberInfo.nickname}
+                                            imageURL={item.memberInfo.imageURL}
+                                            key={item.walkMatePostId}
+                                          />
+                                        </Link>
+                                      ))}
+                                    </React.Fragment>
                                   ))}
-                                </React.Fragment>
-                              ))}
-                            </GridContainerWalk>
-                            <div ref={walkListInView.ref}></div>
-                          </div>
+                                </GridContainerWalk>
+                                <div ref={walkListInView.ref}></div>
+                              </div>
+                            )}
+                          </>
                         )}
                       </>
                     )}

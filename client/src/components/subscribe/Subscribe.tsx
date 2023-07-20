@@ -25,9 +25,6 @@ export default function Subscribe({ guestFollow, usersId }: Prop) {
         queryKey: ['userPage', usersId],
       });
     },
-    onError(error) {
-      console.log(error);
-    },
   });
   const handleSubscribe = () => {
     subscribeMutation.mutate({

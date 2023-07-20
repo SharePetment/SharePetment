@@ -26,7 +26,7 @@ import { Feed } from '../../types/feedTypes';
 import { Follow, UserInfo } from '../../types/userType';
 import { WalkFeed } from '../../types/walkType';
 import { changeDateFormat } from '../../util/changeDateFormat';
-import changeTime from '../../util/changeTiem';
+import changeTime from '../../util/changeTime';
 import { ErrorText } from '../notFound/NotFound.style';
 import {
   Container,
@@ -63,7 +63,11 @@ export function Component() {
   const accessToken = useReadLocalStorage<string>('accessToken');
 
   // 자신의 유저 정보 조회
-  const { data, isLoading } = useQuery<UserInfo>({
+  const {
+    data,
+    isLoading,
+    isError: isUserError,
+  } = useQuery<UserInfo>({
     queryKey: ['myPage'],
     queryFn: () =>
       getServerDataWithJwt(`${SERVER_URL}/members`, accessToken as string),
@@ -91,6 +95,7 @@ export function Component() {
     data: feedData,
     isLoading: feedLoading,
     fetchNextPage: feedFetchNextPage,
+    isError: isFeedError,
   } = useInfiniteQuery<Feed[]>({
     queryKey: ['myFeed'],
     queryFn: async ({ pageParam = 0 }) => {
@@ -146,7 +151,9 @@ export function Component() {
   }, [feedListInView.inView]);
 
   // 자신이 작성한 댓글 리스트 조회
-  const { data: commentListData } = useQuery<CommentProp[]>({
+  const { data: commentListData, isError: commentError } = useQuery<
+    CommentProp[]
+  >({
     queryKey: ['commentList'],
     queryFn: () =>
       getServerDataWithJwt(
@@ -183,6 +190,15 @@ export function Component() {
     setIsListShowed(true);
   };
 
+  // 전체 오류 화면
+  if (isUserError) {
+    return (
+      <div className="flex h-screen w-screen items-center justify-center ">
+        <NoticeServerError />
+      </div>
+    );
+  }
+
   return (
     <>
       {!(
@@ -196,7 +212,9 @@ export function Component() {
         <>
           <Container>
             <UserBox>
-              <Profile isgreen="true" size="lg" url={userProfileImage} />
+              <div className="drop-shadow-lg">
+                <Profile isgreen="true" size="lg" url={userProfileImage} />
+              </div>
               <UserNameBox>
                 <UserName>{data?.memberInfo.nickname}</UserName>
                 <button>
@@ -293,7 +311,7 @@ export function Component() {
                   <div>
                     {feedData?.pages[0].length === 0 ? (
                       <>
-                        {walkFeedError ? (
+                        {isFeedError ? (
                           <NoticeServerError />
                         ) : (
                           <NoticeNoData url="feed-posting" />
@@ -330,38 +348,44 @@ export function Component() {
                   {!data?.animalParents ? (
                     <NoticeOnlyOwner />
                   ) : (
-                    <div className="flex justify-center">
-                      {!walkFeedData?.pages[0]?.length ? (
-                        <NoticeNoData url="walk-posting" />
+                    <>
+                      {walkFeedError ? (
+                        <NoticeServerError />
                       ) : (
-                        <div>
-                          <GridContainerWalk>
-                            {walkFeedData?.pages.map((page, index) => (
-                              <React.Fragment key={index}>
-                                {page.map(item => (
-                                  <Link
-                                    to={`/walkmate/${item.walkMatePostId}`}
-                                    key={item.walkMatePostId}>
-                                    <WalkCard
-                                      size="sm"
-                                      time={changeDateFormat(item.time)}
-                                      title={item.title}
-                                      friends={item.maximum}
-                                      location={item.location}
-                                      isclosed={`${item.open}`}
-                                      nickname={item.memberInfo.nickname}
-                                      imageURL={item.memberInfo.imageURL}
-                                      key={item.walkMatePostId}
-                                    />
-                                  </Link>
+                        <div className="flex justify-center">
+                          {!walkFeedData?.pages[0]?.length ? (
+                            <NoticeNoData url="walk-posting" />
+                          ) : (
+                            <div>
+                              <GridContainerWalk>
+                                {walkFeedData?.pages.map((page, index) => (
+                                  <React.Fragment key={index}>
+                                    {page.map(item => (
+                                      <Link
+                                        to={`/walkmate/${item.walkMatePostId}`}
+                                        key={item.walkMatePostId}>
+                                        <WalkCard
+                                          size="sm"
+                                          time={changeDateFormat(item.time)}
+                                          title={item.title}
+                                          friends={item.maximum}
+                                          location={item.location}
+                                          isclosed={`${item.open}`}
+                                          nickname={item.memberInfo.nickname}
+                                          imageURL={item.memberInfo.imageURL}
+                                          key={item.walkMatePostId}
+                                        />
+                                      </Link>
+                                    ))}
+                                  </React.Fragment>
                                 ))}
-                              </React.Fragment>
-                            ))}
-                          </GridContainerWalk>
-                          <div ref={walkListInView.ref}></div>
+                              </GridContainerWalk>
+                              <div ref={walkListInView.ref}></div>
+                            </div>
+                          )}
                         </div>
                       )}
-                    </div>
+                    </>
                   )}
                 </div>
                 <ul
@@ -371,31 +395,37 @@ export function Component() {
                   {!data?.animalParents ? (
                     <NoticeOnlyOwner />
                   ) : (
-                    <div className="w-[300px]">
-                      {!commentListData?.length ? (
-                        <div className="flex flex-col items-center justify-center">
-                          <ErrorText>
-                            아직 댓글을 단 산책 게시물이 없어요.
-                          </ErrorText>
-                          <img src={NoCommentCat} className="w-80 mt-10" />
-                        </div>
+                    <>
+                      {commentError ? (
+                        <NoticeServerError />
                       ) : (
-                        commentListData?.map(item => (
-                          <Link
-                            to={`/walkmate/${item.walkMatePostId}`}
-                            key={item.walkMateCommentId}>
-                            <CommentList>
-                              <span className=" whitespace-nowrap overflow-hidden text-ellipsis ">
-                                {item.content}
-                              </span>
-                              <time className="text-deepgray text-xs flex-shrink-0">
-                                {changeTime(item.createdAt)}
-                              </time>
-                            </CommentList>
-                          </Link>
-                        ))
+                        <div className="w-[300px]">
+                          {!commentListData?.length ? (
+                            <div className="flex flex-col items-center justify-center">
+                              <ErrorText>
+                                아직 댓글을 단 산책 게시물이 없어요.
+                              </ErrorText>
+                              <img src={NoCommentCat} className="w-80 mt-10" />
+                            </div>
+                          ) : (
+                            commentListData?.map(item => (
+                              <Link
+                                to={`/walkmate/${item.walkMatePostId}`}
+                                key={item.walkMateCommentId}>
+                                <CommentList>
+                                  <span className=" whitespace-nowrap overflow-hidden text-ellipsis ">
+                                    {item.content}
+                                  </span>
+                                  <time className="text-deepgray text-xs flex-shrink-0">
+                                    {changeTime(item.createdAt)}
+                                  </time>
+                                </CommentList>
+                              </Link>
+                            ))
+                          )}
+                        </div>
                       )}
-                    </div>
+                    </>
                   )}
                 </ul>
               </div>

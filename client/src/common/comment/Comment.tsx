@@ -8,7 +8,7 @@ import { SERVER_URL } from '../../api/url';
 import { ReactComponent as Write } from '../../assets/button/write.svg';
 import { MemberIdContext, State } from '../../store/Context';
 import { CommentProp } from '../../types/commentType';
-import changeTime from '../../util/changeTiem';
+import changeTime from '../../util/changeTime';
 import Popup from '../popup/Popup';
 import Profile from '../profile/Profile';
 import {

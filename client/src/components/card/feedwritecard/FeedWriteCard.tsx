@@ -14,6 +14,7 @@ import Popup from '../../../common/popup/Popup';
 import { FeedImage, Feed } from '../../../types/feedTypes';
 import { parseImg, deleteImg } from '../../../util/parseImg';
 import LoadingComponent from '../../loading/LoadingComponent';
+import NoticeServerError from '../../notice/NoticeServerError';
 import {
   Container,
   Wrap,
@@ -35,8 +36,7 @@ export default function FeedWriteCard() {
   const textRef = useRef<HTMLTextAreaElement>(null);
 
   // 모달 state
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [isNoneOpen, setIsNoneOpen] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState<[boolean, string]>([false, '']);
 
   // file 저장 state
   const [removedFile, setRemovedFile] = useState<string[]>([]);
@@ -61,7 +61,7 @@ export default function FeedWriteCard() {
   }, [navigate]);
 
   // param이 있을 경우,  피드 게시물 정보 가져오기
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   const getFeedDetailQuery = useQuery<Feed>({
     queryKey: ['feedPopUp', Number(feedId)],
     queryFn: async () => {
@@ -91,6 +91,7 @@ export default function FeedWriteCard() {
       queryClient.invalidateQueries({ queryKey: ['followList'] });
       navigate('/my-page');
     },
+    onError: () => setIsOpen([true, '요청에 실패했습니다.']),
   });
 
   // 피드 게시물 수정하기 mutation
@@ -100,10 +101,12 @@ export default function FeedWriteCard() {
       queryClient.invalidateQueries({ queryKey: ['feedPopUp'] });
       navigate(`/my-page`);
     },
+    onError: () => setIsOpen([true, '요청에 실패했습니다.']),
   });
 
   const handleSubmit = () => {
-    if (prevFile.length === 0) return setIsNoneOpen(true);
+    if (prevFile.length === 0)
+      return setIsOpen([true, '사진을 업로드 해주세요.']);
     const formData = new FormData();
     formData.append('content', textRef.current?.value as string);
     if (feedId === undefined) {
@@ -149,103 +152,99 @@ export default function FeedWriteCard() {
     [savedFile, prevFile],
   );
 
-  if (feedPostingMutation.isLoading) {
-    return <LoadingComponent />;
-  }
-
-  return (
-    <>
-      {isOpen && (
-        <Popup
-          title="게시물은 최대 3개만 첨부할 수 있습니다."
-          handler={[() => setIsOpen(false)]}
-          btnsize={['md']}
-          countbtn={1}
-          buttontext={['확인']}
-          isgreen={['true']}
-          popupcontrol={() => setIsOpen(false)}
-        />
-      )}
-
-      {isNoneOpen && (
-        <Popup
-          title="사진을 업로드 해주세요."
-          handler={[() => setIsNoneOpen(false)]}
-          btnsize={['md']}
-          countbtn={1}
-          buttontext={['확인']}
-          isgreen={['true']}
-          popupcontrol={() => setIsNoneOpen(false)}
-        />
-      )}
-
-      <div
-        className="w-screen h-screen bg-zinc-900/75  absolute flex items-center justify-center max-sm:items-start max-sm:pt-10"
-        onClick={e => {
-          if (e.target === e.currentTarget) navigate(-1);
-        }}>
-        <Container>
-          <Close
-            className="absolute right-6 top-6 cursor-pointer"
-            fill="black"
-            onClick={() => navigate(-1)}
-          />
-          <Wrap>
-            <Title>게시물 작성</Title>
-          </Wrap>
-
-          <Swiper
-            pagination={{
-              type: 'fraction',
-            }}
-            navigation={true}
-            modules={[Navigation]}
-            className="w-80 h-[360px] rounded-lg">
-            {savedFile.map((file, idx) => (
-              <SwiperSlide
-                key={idx}
-                className="bg-lightgray flex justify-center items-center relative rounded-lg">
-                <img
-                  src={file}
-                  className="rounded-lg border border-lightgray"
-                />
-                <Close
-                  className="absolute top-3 right-3 cursor-pointer"
-                  fill="#a1a1aa"
-                  onClick={() => handleSemiClose(idx)}
-                />
-              </SwiperSlide>
-            ))}
-
-            {savedFile.length < 3 && (
-              <SwiperSlide>
-                <Form>
-                  <Pluslabel htmlFor="feedimg">
-                    <Plus className="w-full mt-[180px]" />
-                  </Pluslabel>
-                  <input
-                    id="feedimg"
-                    type="file"
-                    accept="image/*"
-                    onChange={e => handleUpload(e)}
-                    style={{ display: 'none' }}
-                    multiple
-                  />
-                </Form>
-              </SwiperSlide>
-            )}
-          </Swiper>
-
-          <Textarea
-            placeholder="글을 입력해주세요."
-            maxLength={200}
-            ref={textRef}
-          />
-          <SubmitBtn type="button" onClick={handleSubmit}>
-            <Write />
-          </SubmitBtn>
-        </Container>
+  if (getFeedDetailQuery.isError)
+    return (
+      <div className="w-screen h-screen flex justify-center items-center">
+        <NoticeServerError />
       </div>
-    </>
-  );
+    );
+  if (
+    getFeedDetailQuery.isFetching ||
+    feedPostingMutation.isLoading ||
+    feedEditingMutation.isLoading
+  ) {
+    return <LoadingComponent />;
+  } else
+    return (
+      <>
+        {isOpen[0] && (
+          <Popup
+            title={isOpen[1]}
+            handler={[() => setIsOpen([false, ''])]}
+            btnsize={['md']}
+            countbtn={1}
+            buttontext={['확인']}
+            isgreen={['true']}
+            popupcontrol={() => setIsOpen([false, ''])}
+          />
+        )}
+        <div
+          className="w-screen h-screen bg-zinc-900/75  absolute flex items-center justify-center max-sm:items-start max-sm:pt-10"
+          onClick={e => {
+            if (e.target === e.currentTarget) navigate(-1);
+          }}>
+          <Container>
+            <Close
+              className="absolute right-6 top-6 cursor-pointer"
+              fill="black"
+              onClick={() => navigate(-1)}
+            />
+            <Wrap>
+              <Title>게시물 작성</Title>
+            </Wrap>
+
+            <Swiper
+              pagination={{
+                type: 'fraction',
+              }}
+              navigation={true}
+              modules={[Navigation]}
+              className="w-80 h-[360px] rounded-lg">
+              {savedFile.map((file, idx) => (
+                <SwiperSlide
+                  key={idx}
+                  className="bg-lightgray flex justify-center items-center relative rounded-lg">
+                  <img
+                    src={file}
+                    className="rounded-lg border border-lightgray"
+                  />
+                  <Close
+                    className="absolute top-3 right-3 cursor-pointer"
+                    fill="#a1a1aa"
+                    onClick={() => handleSemiClose(idx)}
+                  />
+                </SwiperSlide>
+              ))}
+
+              {savedFile.length < 3 && (
+                <SwiperSlide>
+                  <Form>
+                    <Pluslabel htmlFor="feedimg">
+                      <Plus className="w-full mt-[180px]" />
+                    </Pluslabel>
+                    <input
+                      id="feedimg"
+                      type="file"
+                      accept="image/*"
+                      onChange={e => handleUpload(e)}
+                      style={{ display: 'none' }}
+                      multiple
+                    />
+                  </Form>
+                </SwiperSlide>
+              )}
+            </Swiper>
+
+            <Textarea
+              placeholder="글을 입력해주세요."
+              maxLength={200}
+              ref={textRef}
+            />
+            <SubmitBtn type="button" onClick={handleSubmit}>
+              <Write />
+            </SubmitBtn>
+          </Container>
+        </div>
+      </>
+    );
 }
