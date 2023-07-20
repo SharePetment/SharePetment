@@ -23,8 +23,6 @@ export function Component() {
       setRefreshToken(searchParams.get('refreshToken'));
       const memberId = searchParams.get('memberId');
 
-      console.log('setAccessToken코드 다음 줄');
-
       (dispatch as ContextDispatch)({
         memberId: memberId as string,
         type: 'NOT_TOKEN',
