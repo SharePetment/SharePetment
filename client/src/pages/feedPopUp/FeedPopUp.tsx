@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useReadLocalStorage } from 'usehooks-ts';
 import { deleteFeed } from '../../api/mutationfn';
-import { getServerDataWithJwt } from '../../api/queryfn';
+import { getServerData, getServerDataWithJwt } from '../../api/queryfn';
 import { SERVER_URL } from '../../api/url';
 import { ReactComponent as Close } from '../../assets/button/close.svg';
 import FeedComment from '../../common/comment/feedComment.tsx/FeedComment';
@@ -48,8 +48,16 @@ export function Component() {
         `${SERVER_URL}/feeds/${feedId}`,
         accessToken as string,
       ),
-    enabled: !!state,
+    enabled: !!(state && accessToken),
   });
+
+  const getGuestFeed = useQuery<Feed>({
+    queryKey: ['guestFeedPopUp', Number(feedId)],
+    queryFn: () => getServerData(`${SERVER_URL}/feeds/all/${feedId}`),
+    enabled: !!(accessToken === null),
+  });
+
+  console.log(getGuestFeed.data);
 
   const deleteFeedMutation = useMutation({
     mutationFn: deleteFeed,
@@ -81,8 +89,8 @@ export function Component() {
     return () => window.removeEventListener('keydown', getBackPage);
   }, [navigate]);
 
-  if (isLoading) return <LoadingComponent />;
-  if (isError)
+  if (isLoading && getGuestFeed.isLoading) return <LoadingComponent />;
+  if (isError || getGuestFeed.isError)
     return (
       <div className="w-screen h-screen flex justify-center items-center">
         <NoticeServerError />
@@ -177,7 +185,6 @@ export function Component() {
                 direction="row"
                 likes={data.likes}
                 like={data.isLike ? 'true' : 'false'}
-                url={data.shareURL}
                 toasthandler={setIsToastOpen}
                 deletehandler={setIsDeleteOpen}
                 inperson={
@@ -240,7 +247,6 @@ export function Component() {
                   direction="row"
                   likes={data.likes}
                   like={data.isLike ? 'true' : 'false'}
-                  url={data.shareURL}
                   toasthandler={setIsToastOpen}
                   deletehandler={setIsDeleteOpen}
                   inperson={
@@ -251,6 +257,159 @@ export function Component() {
                   modalhandler={setIsOpen}
                 />
                 <FeedInput feedid={data.feedId} blankhandler={setIsOpen} />
+              </RightBox>
+            </FeedContainer>
+          </Container>
+        )}
+      </>
+    );
+
+  if (getGuestFeed.isSuccess)
+    return (
+      <>
+        {isOpen[0] && (
+          <Popup
+            title={isOpen[1]}
+            isgreen={['true']}
+            btnsize={['md']}
+            buttontext={['확인']}
+            countbtn={1}
+            handler={[() => setIsOpen([false, ''])]}
+            popupcontrol={() => setIsOpen([false, ''])}
+          />
+        )}
+        {isDeleteOpen && (
+          <Popup
+            title="피드를 삭제할까요?"
+            isgreen={['true']}
+            btnsize={['md', 'md']}
+            buttontext={['삭제할래요', '아니요']}
+            countbtn={2}
+            handler={[handlerDelete, () => setIsDeleteOpen(false)]}
+            popupcontrol={() => {
+              setIsDeleteOpen(false);
+            }}
+          />
+        )}
+        {window.innerWidth < 420 ? (
+          <>
+            {isCommentOpen && (
+              <CommentContainer
+                onClick={e => {
+                  if (e.target === e.currentTarget) setIsCommentOpen(false);
+                }}>
+                <div className="bg-white w-[320px] h-[570px] rounded-3xl p-3">
+                  <CommentBox
+                    className={
+                      window.innerHeight < 850 ? 'h-[31rem]' : 'h-[31rem]'
+                    }>
+                    {getGuestFeed.data.feedComments !== null &&
+                      Array.isArray(getGuestFeed.data.feedComments) &&
+                      getGuestFeed.data.feedComments.map(comment => (
+                        <FeedComment
+                          key={comment.feedCommentsId}
+                          inperson={
+                            comment.memberInfo.memberId ===
+                            Number(state?.memberId)
+                              ? 'true'
+                              : 'false'
+                          }
+                          nickname={comment.memberInfo.nickname}
+                          userimg={comment.memberInfo.imageURL}
+                          content={comment.content}
+                          commentid={comment.feedCommentsId}
+                          feedid={getGuestFeed.data.feedId}
+                          blankhandler={setIsOpen}
+                          memberid={comment.memberInfo.memberId}
+                          time={changeTime(comment.createdAt)}
+                        />
+                      ))}
+                  </CommentBox>
+                </div>
+              </CommentContainer>
+            )}
+            <FeedCardContainer
+              onClick={e => {
+                if (e.target === e.currentTarget) navigate(-1);
+              }}>
+              {isToastOpen && (
+                <div className="fixed right-3 bottom-4 z-50">
+                  <Toast />
+                </div>
+              )}
+              <CloseBtn onClick={() => navigate(-1)}>
+                <Close fill="white" />
+              </CloseBtn>
+              <FeedCard
+                memberid={getGuestFeed.data.memberInfo.memberId}
+                username={getGuestFeed.data.memberInfo.nickname}
+                context={getGuestFeed.data.content}
+                userimg={getGuestFeed.data.memberInfo.imageURL}
+                images={getGuestFeed.data.images}
+              />
+              <SideNav
+                feedid={getGuestFeed.data.feedId}
+                direction="row"
+                likes={getGuestFeed.data.likes}
+                like={getGuestFeed.data.isLike ? 'true' : 'false'}
+                toasthandler={setIsToastOpen}
+                deletehandler={setIsDeleteOpen}
+                inperson={
+                  Number(state?.memberId) ===
+                  getGuestFeed.data.memberInfo.memberId
+                    ? 'true'
+                    : 'false'
+                }
+                commenthandler={setIsCommentOpen}
+                modalhandler={setIsOpen}
+              />
+            </FeedCardContainer>
+          </>
+        ) : (
+          <Container
+            onClick={e => {
+              if (e.target === e.currentTarget) navigate(-1);
+            }}>
+            {isToastOpen && (
+              <div className="fixed right-8 bottom-10 z-50">
+                <Toast />
+              </div>
+            )}
+            <CloseBtn onClick={() => navigate(-1)}>
+              <Close fill="white" />
+            </CloseBtn>
+            <FeedContainer>
+              <FeedCard
+                memberid={getGuestFeed.data.memberInfo.memberId}
+                username={getGuestFeed.data.memberInfo.nickname}
+                context={getGuestFeed.data.content}
+                userimg={getGuestFeed.data.memberInfo.imageURL}
+                images={getGuestFeed.data.images}
+              />
+              <RightBox>
+                <CommentBox>
+                  {getGuestFeed.data.feedComments !== null &&
+                    Array.isArray(getGuestFeed.data.feedComments) &&
+                    getGuestFeed.data.feedComments.map(comment => (
+                      <FeedComment
+                        key={comment.feedCommentsId}
+                        inperson={
+                          comment.memberInfo.memberId ===
+                          Number(state?.memberId)
+                            ? 'true'
+                            : 'false'
+                        }
+                        nickname={comment.memberInfo.nickname}
+                        userimg={comment.memberInfo.imageURL}
+                        content={comment.content}
+                        commentid={comment.feedCommentsId}
+                        feedid={getGuestFeed.data.feedId}
+                        blankhandler={setIsOpen}
+                        memberid={comment.memberInfo.memberId}
+                        time={changeTime(comment.createdAt)}
+                      />
+                    ))}
+                </CommentBox>
               </RightBox>
             </FeedContainer>
           </Container>
