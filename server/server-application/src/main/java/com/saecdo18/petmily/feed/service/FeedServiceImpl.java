@@ -103,14 +103,15 @@ public class FeedServiceImpl implements FeedService {
 
             feedList.addAll(filteredDataList);
 
-//            page++;
-//
-//            if((long) page * size >= totalCount)
-//                break;
+            page++;
+
+            if((long) page * size >= totalCount)
+                break;
 
             pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
         }
-        if (feedList.size() > 10) {
+
+        if (feedList.size() > size) {
             feedList = feedList.subList(0, size);
         }
 

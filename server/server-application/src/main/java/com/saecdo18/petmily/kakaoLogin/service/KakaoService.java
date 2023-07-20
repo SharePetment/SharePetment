@@ -42,6 +42,7 @@ public class KakaoService {
     private final MemberService memberService;
 
     public String getAccessToken(String code) throws JsonProcessingException {
+        log.info("getAccessToken start");
         WebClient client = WebClient.create("https://kauth.kakao.com/oauth/token");
         MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
 
@@ -61,11 +62,12 @@ public class KakaoService {
 
         ObjectMapper objectMapper = new ObjectMapper();
         AccessTokenDto.Response accessToken= objectMapper.readValue(accessTokenRequest, AccessTokenDto.Response.class);
-
+        log.info("getAccessToken end");
         return accessToken.getAccess_token();
     }
 
     public KakaoProfile getKakaoProfile(String accessToken) throws JsonProcessingException {
+        log.info("getKakaoProfile start");
         WebClient client = WebClient.create("https://kapi.kakao.com/v2/user/me");
         String response = client.post()
                 .uri("https://kapi.kakao.com/v2/user/me")
@@ -79,8 +81,9 @@ public class KakaoService {
         KakaoProfile kakaoProfile = objectMapper.readValue(response, KakaoProfile.class);
 
         String email = kakaoProfile.getKakao_account().getEmail();
+        log.info("getKakaoProfile Kakao Access Token Repo start");
         Optional<KakaoAccessToken> optionalKakaoAccessToken = kakaoAccessTokenRepository.findByEmail(email);
-
+        log.info("getKakaoProfile Kakao Access Token Repo end");
         if(optionalKakaoAccessToken.isEmpty()){
             KakaoAccessToken kakaoAccessToken = KakaoAccessToken.builder().kakaoAccessToken(accessToken).email(email).build();
 
@@ -91,7 +94,7 @@ public class KakaoService {
             kakaoAccessToken.updateAccesToken(accessToken);
             kakaoAccessTokenRepository.save(kakaoAccessToken);
         }
-
+        log.info("getKakaoProfile end");
         return kakaoProfile;
     }
 
@@ -101,6 +104,7 @@ public class KakaoService {
     }
 
     public MemberInfoAndJwtDto login(KakaoProfile kakaoProfile){
+        log.info("login start");
         String email = kakaoProfile.getKakao_account().getEmail();
         String nickname = kakaoProfile.getKakao_account().getProfile().getNickname();
 
@@ -122,8 +126,9 @@ public class KakaoService {
             registerMember.updateRegisterMember(nickname, email);
 
             registerMember.setDefaultImage();
-
+            log.info("memberRepo start");
             responseMember = memberRepository.save(registerMember);
+            log.info("memberRepo end");
         }
 
 
@@ -133,24 +138,25 @@ public class KakaoService {
                 .email(responseMember.getEmail())
                 .present(present)
                 .build();
-
+        log.info("login end");
         return memberInfoAndJwtDto;
     }
 
     public HttpServletResponse setJwtTokenInHeader(HttpServletResponse response, MemberInfoAndJwtDto memberInfoAndJwtDto) throws IOException {
         String accessToken = tokenProvider.createAccessToken(memberInfoAndJwtDto.getMemberId());
         String refreshToken = tokenProvider.createRefreshToken();
-
+        log.info("setJwtTokenInHeader start");
         tokenProvider.sendAccessAndRefreshToken(response, accessToken, refreshToken);
         Member refreshMember= memberRepository.findById(memberInfoAndJwtDto.getMemberId()).get();
         refreshMember.updateRefreshToken(refreshToken);
+        log.info("refreshMember token : {}", refreshMember.getRefreshToken());
         URI uri = createUri(accessToken,refreshToken,memberInfoAndJwtDto);
 
 
-
+        log.info("send uri start = {}", uri.toString());
         response.sendRedirect(uri.toString());
 
-
+        log.info("setJwtTokenInHeader end");
 
         return response;
     }
@@ -172,8 +178,8 @@ public class KakaoService {
         return UriComponentsBuilder.newInstance()
                 .scheme("http")
 //                .host("localhost")
-                .host("share-petment.s3-website.ap-northeast-2.amazonaws.com")
-//                .host("share-petment.netlify.app")
+//                .host("share-petment.s3-website.ap-northeast-2.amazonaws.com")
+                .host("share-petment.netlify.app")
 //                .port(5374)
                 .path("loading")
                 .queryParams(queryParams)
