@@ -14,23 +14,20 @@ export function Component() {
   );
   const [, setFirstVisited] = useLocalStorage('firstVisited', true);
 
-  console.log('setAccessToken');
-  console.log('setRefreshToken');
-
   // local에 accessToken이 있는지 확인하기
   const dispatch = useContext(MemberIdDispatchContext);
 
+  console.log('여기 useEffect 바깥에서 setItem 해보기');
+  localStorage.setItem('test', '1번');
+  console.log(localStorage.getItem('test'));
+  console.log('searchParams는 들어오나?', searchParams.get('accessToken'));
+
+  console.log('=====================');
+
   useEffect(() => {
+    console.log('여기 searchParams.size 바깥');
     if (searchParams.size > 0) {
       setAccessToken(searchParams.get('accessToken'));
-      console.log(
-        `[searchParams.get('accessToken')]`,
-        searchParams.get('accessToken'),
-      );
-      console.log(
-        `searchParams.get('refreshToken')`,
-        searchParams.get('refreshToken'),
-      );
       setRefreshToken(searchParams.get('refreshToken'));
       const memberId = searchParams.get('memberId');
 
@@ -38,6 +35,8 @@ export function Component() {
         memberId: memberId as string,
         type: 'NOT_TOKEN',
       });
+
+      console.log('setAccessToken코드 다음 줄');
 
       const present = searchParams.get('present');
       if (present === 'true') setTimeout(() => navigate('/home'), 1000);
