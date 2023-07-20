@@ -20,7 +20,6 @@ interface Prop {
   guesthandler?: () => void;
   toasthandler?: React.Dispatch<React.SetStateAction<boolean>>;
   deletehandler?: React.Dispatch<React.SetStateAction<boolean>>;
-  url: string;
   inperson?: BooleanStr;
   commenthandler?: React.Dispatch<React.SetStateAction<boolean>>;
   modalhandler?: React.Dispatch<React.SetStateAction<[boolean, string]>>;
@@ -35,7 +34,6 @@ export default function SideNav({
   toasthandler,
   deletehandler,
   inperson,
-  url,
   commenthandler,
   modalhandler,
 }: Prop) {
@@ -82,7 +80,9 @@ export default function SideNav({
 
   const handleClickShare = async () => {
     try {
-      await navigator.clipboard.writeText(url);
+      await navigator.clipboard.writeText(
+        `https://share-petment.netlify.app/home/${feedid}`,
+      );
       if (toasthandler) {
         toasthandler(true);
         setTimeout(() => toasthandler(false), 1500);
@@ -96,7 +96,7 @@ export default function SideNav({
     <>
       <Container direction={direction}>
         <Wrap className="pl-2">
-          {isLike === 'true' ? (
+          {isLike === 'true' && accessToken ? (
             <Like
               className="cursor-pointer"
               stroke={window.innerWidth < 430 ? 'white' : 'black'}
@@ -104,16 +104,20 @@ export default function SideNav({
               onClick={handleClickLike}
             />
           ) : (
-            <Like
-              className="cursor-pointer "
-              stroke={window.innerWidth < 430 ? 'white' : 'black'}
-              onClick={handleClickLike}
-            />
+            accessToken && (
+              <Like
+                className="cursor-pointer "
+                stroke={window.innerWidth < 430 ? 'white' : 'black'}
+                onClick={handleClickLike}
+              />
+            )
           )}
 
-          <Text className={window.innerWidth < 430 ? 'text-white' : ''}>
-            {isLikes}
-          </Text>
+          {accessToken && (
+            <Text className={window.innerWidth < 430 ? 'text-white' : ''}>
+              {isLikes}
+            </Text>
+          )}
         </Wrap>
 
         {!feedPopUp && (
@@ -131,12 +135,14 @@ export default function SideNav({
           </Wrap>
         )}
 
-        <Wrap onClick={handleClickShare}>
-          <Share
-            className="cursor-pointer ml-2"
-            stroke={window.innerWidth < 430 ? 'white' : 'none'}
-          />
-        </Wrap>
+        {accessToken && (
+          <Wrap onClick={handleClickShare}>
+            <Share
+              className="cursor-pointer ml-2"
+              stroke={window.innerWidth < 430 ? 'white' : 'none'}
+            />
+          </Wrap>
+        )}
 
         {inperson === 'true' && (
           <>
