@@ -66,6 +66,7 @@ export function Component() {
   const {
     data,
     isLoading,
+
     isError: isUserError,
   } = useQuery<UserInfo>({
     queryKey: ['myPage'],
@@ -84,6 +85,18 @@ export function Component() {
     queryFn: () =>
       getServerDataWithJwt(
         `${SERVER_URL}/members/following/list`,
+        accessToken as string,
+      ),
+  });
+
+  // 자신이 작성한 댓글 리스트 조회
+  const { data: commentListData, isError: commentError } = useQuery<
+    CommentProp[]
+  >({
+    queryKey: ['commentList'],
+    queryFn: () =>
+      getServerDataWithJwt(
+        `${SERVER_URL}/walkmates/comments/bymember`,
         accessToken as string,
       ),
   });
@@ -128,7 +141,6 @@ export function Component() {
         accessToken as string,
       );
     },
-
     getNextPageParam: (_, allPages) => {
       const len = allPages.length;
       const totalLength = allPages.length;
@@ -149,18 +161,6 @@ export function Component() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [feedListInView.inView]);
-
-  // 자신이 작성한 댓글 리스트 조회
-  const { data: commentListData, isError: commentError } = useQuery<
-    CommentProp[]
-  >({
-    queryKey: ['commentList'],
-    queryFn: () =>
-      getServerDataWithJwt(
-        `${SERVER_URL}/walkmates/comments/bymember`,
-        accessToken as string,
-      ),
-  });
 
   // 유저 정보 수정 페이지로 이동
   const handleUserEdit = () => {

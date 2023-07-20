@@ -7,20 +7,19 @@ import { UserInfo } from '../types/userType';
 
 export type State = {
   memberId: string;
-  animalParents: boolean;
 };
 
 type Action =
-  | { type: 'NOT_TOKEN'; memberId: string; animalParents: boolean }
-  | { type: 'TOKEN'; memberId: string; animalParents: boolean };
+  | { type: 'NOT_TOKEN'; memberId: string }
+  | { type: 'TOKEN'; memberId: string };
 
 const reducer = (state: State, action: Action) => {
   switch (action.type) {
     case 'NOT_TOKEN': {
-      return { memberId: action.memberId, animalParents: action.animalParents };
+      return { memberId: action.memberId };
     }
     case 'TOKEN': {
-      return { memberId: action.memberId, animalParents: action.animalParents };
+      return { memberId: action.memberId };
     }
     default: {
       return state;
@@ -39,7 +38,6 @@ export const MemberIdDispatchContext = createContext<ContextDispatch | null>(
 );
 const initaldate: State = {
   memberId: '',
-  animalParents: false,
 };
 
 export default function ContextProvider({ children }: Props) {
@@ -56,7 +54,6 @@ export default function ContextProvider({ children }: Props) {
       dispatch({
         type: 'TOKEN',
         memberId: `${data.memberInfo.memberId}`,
-        animalParents: data.animalParents,
       });
     },
   });
