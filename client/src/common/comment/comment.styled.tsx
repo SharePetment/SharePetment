@@ -32,25 +32,23 @@ export const ContentBox = tw.div`
 `;
 
 export const Content = tw.span`
-
 py-2
 `;
 
 export const BtnBox = tw.div`
     flex
     justify-between
-    w-[70px]
-    ml-2
+    w-[56px]
+    ml-[16px]
+    text-deepgray
 `;
 export const EditBtn = tw.span`
     cursor-pointer
-    text-lightgray
     text-sm
     hover:text-lightgreen
 `;
 export const DeleteBtn = tw.span`
     cursor-pointer
-    text-lightgray
     text-sm
     hover:text-lightgreen
 `;
