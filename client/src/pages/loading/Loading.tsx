@@ -12,7 +12,6 @@ export function Component() {
     'refreshToken',
     '',
   );
-  const [, setFirstVisited] = useLocalStorage('firstVisited', true);
 
   // local에 accessToken이 있는지 확인하기
   const dispatch = useContext(MemberIdDispatchContext);
@@ -42,14 +41,7 @@ export function Component() {
         });
       }
     }
-  }, [
-    setAccessToken,
-    setRefreshToken,
-    searchParams,
-    navigate,
-    dispatch,
-    setFirstVisited,
-  ]);
+  }, [setAccessToken, setRefreshToken, searchParams, navigate, dispatch]);
 
   return <LoadingComponent />;
 }
