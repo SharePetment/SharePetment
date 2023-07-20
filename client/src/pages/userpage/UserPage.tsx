@@ -112,7 +112,7 @@ export function Component() {
         );
       },
 
-      getNextPageParam: (lastPage, allPages) => {
+      getNextPageParam: (_, allPages) => {
         const len = allPages.length;
         const totalLength = allPages.length;
         return allPages[totalLength - 1].length === 0 ? undefined : len;
