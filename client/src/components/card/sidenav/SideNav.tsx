@@ -9,7 +9,6 @@ import { ReactComponent as Delete } from '../../../assets/button/delete.svg';
 import { ReactComponent as Edit } from '../../../assets/button/edit.svg';
 import { ReactComponent as Like } from '../../../assets/button/like.svg';
 import { ReactComponent as Share } from '../../../assets/button/share.svg';
-import Popup from '../../../common/popup/Popup';
 import { BooleanStr } from '../../../types/propType';
 import { Container, Wrap, Text } from './SideNav.styled';
 
@@ -24,6 +23,7 @@ interface Prop {
   url: string;
   inperson?: BooleanStr;
   commenthandler?: React.Dispatch<React.SetStateAction<boolean>>;
+  modalhandler?: React.Dispatch<React.SetStateAction<[boolean, string]>>;
 }
 
 export default function SideNav({
@@ -37,6 +37,7 @@ export default function SideNav({
   inperson,
   url,
   commenthandler,
+  modalhandler,
 }: Prop) {
   const accessToken = useReadLocalStorage<string | null>('accessToken');
   const navigate = useNavigate();
@@ -45,14 +46,15 @@ export default function SideNav({
   const [isLike, setIsLike] = useState<BooleanStr>(like);
   const [isLikes, setIsLikes] = useState<number>(likes);
 
-  const [isAlert, setIsAlert] = useState(false);
-
   const likeMutation = useMutation({
     mutationFn: patchFeedLike,
     onSuccess: ({ data }) => {
       queryClient.invalidateQueries({ queryKey: ['feedPopUp'] });
       setIsLike(data.isLike.toString());
       setIsLikes(data.likeCount);
+    },
+    onError: () => {
+      if (modalhandler) modalhandler([true, '요청에 실패했어요.']);
     },
   });
 
@@ -81,13 +83,12 @@ export default function SideNav({
   const handleClickShare = async () => {
     try {
       await navigator.clipboard.writeText(url);
-
       if (toasthandler) {
         toasthandler(true);
         setTimeout(() => toasthandler(false), 1500);
       }
     } catch (err) {
-      setIsAlert(true);
+      if (modalhandler) modalhandler([true, '요청에 실패했어요.']);
     }
   };
 
@@ -142,35 +143,18 @@ export default function SideNav({
             <Wrap
               onClick={() => navigate(`/feed-posting/${feedid}`)}
               className="cursor-pointer ml-2">
-              <Edit />
+              <Edit stroke={window.innerWidth < 430 ? 'white' : 'black'} />
             </Wrap>
             <Wrap
               className="cursor-pointer ml-2"
               onClick={() => {
                 if (deletehandler) return deletehandler(true);
               }}>
-              <Delete />
+              <Delete stroke={window.innerWidth < 430 ? 'white' : 'black'} />
             </Wrap>
           </>
         )}
       </Container>
-      {isAlert && (
-        <Popup
-          title="에러가 발생했습니다. "
-          handler={[
-            () => {
-              setIsAlert(false);
-            },
-          ]}
-          isgreen={['true']}
-          btnsize={['md']}
-          buttontext={['확인']}
-          countbtn={1}
-          popupcontrol={() => {
-            setIsAlert(false);
-          }}
-        />
-      )}
     </>
   );
 }

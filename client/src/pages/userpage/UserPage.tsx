@@ -67,9 +67,6 @@ export function Component() {
     onSuccess(data) {
       setIsSubscribed(data.guestFollow);
     },
-    onError(err) {
-      console.log(err);
-    },
   });
 
   // (본인) 유저 데이터 가지고 오기
@@ -116,7 +113,6 @@ export function Component() {
       },
 
       getNextPageParam: (lastPage, allPages) => {
-        console.log(lastPage, allPages);
         const len = allPages.length;
         const totalLength = allPages.length;
         return allPages[totalLength - 1].length === 0 ? undefined : len;

@@ -25,7 +25,7 @@ interface Prop {
   userimg: string;
   content: string;
   commentid: number;
-  blankhandler: React.Dispatch<React.SetStateAction<boolean>>;
+  blankhandler: React.Dispatch<React.SetStateAction<[boolean, string]>>;
   memberid: number;
   time: string;
 }
@@ -66,9 +66,13 @@ export default function FeedComment({
 
   const handleEdit = () => {
     if (inputRef.current) {
-      if (inputRef.current.value === '') return blankhandler(true);
+      const regex = /^\s*$/;
+      if (regex.test(inputRef.current.value))
+        return blankhandler([true, '공백은 입력할 수 없어요.']);
+      if (inputRef.current.value === '')
+        return blankhandler([true, '공백은 입력할 수 없어요.']);
       const body = {
-        content: inputRef.current.value,
+        content: inputRef.current.value.trim(),
         feedId: feedid,
         url: `${SERVER_URL}/feeds/comments/${commentid}`,
         token: accessToken as string,

@@ -196,7 +196,9 @@ export function Component() {
         <>
           <Container>
             <UserBox>
-              <Profile isgreen="true" size="lg" url={userProfileImage} />
+              <div className="drop-shadow-lg">
+                <Profile isgreen="true" size="lg" url={userProfileImage} />
+              </div>
               <UserNameBox>
                 <UserName>{data?.memberInfo.nickname}</UserName>
                 <button>

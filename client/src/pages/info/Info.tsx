@@ -108,7 +108,7 @@ export function Component() {
     const result = await axios.post(
       `${SERVER_URL}/members/nickname-check/${nicknameValue}`,
     );
-    console.log(result.data.enable);
+
     if (result.data.enable) {
       setDuplicated(true);
       setError('nickname', { message: ERROR_MESSAGE.ENABLE });

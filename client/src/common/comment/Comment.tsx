@@ -88,7 +88,6 @@ export default function Comment(props: CommentProp) {
       queryClient.invalidateQueries({ queryKey: ['walkFeed', walkMatePostId] });
       setIsEdited(false);
     },
-    onError: error => console.log(error),
   });
 
   const deleteCommentMutaion = useMutation({

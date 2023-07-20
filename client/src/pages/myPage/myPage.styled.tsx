@@ -72,6 +72,7 @@ export const TabMenuList = tw.li`
   pl-3
   pr-3
   mt-[-1px]
+  cursor-pointer
 `;
 
 export const GridContainerFeed = tw.div`
