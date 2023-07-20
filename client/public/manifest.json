@@ -1,7 +1,7 @@
 {
     "name": "Share Petment",
     "short_name": "Share Petment",
-    "start_url": "./index.html",
+    "start_url": "/",
     "display": "standalone",
     "background_color": "#ffffff",
     "theme_color": "#485EEE",
