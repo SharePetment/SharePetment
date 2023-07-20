@@ -47,8 +47,10 @@ public class FeedController {
     @PostMapping("/list/random")
     public ResponseEntity<FeedDtoList> getFeedsRandom(@ApiParam("페이지 번호") @RequestParam(defaultValue = "0") int page,
                                                       @ApiParam("페이지당 받을 피드 수") @RequestParam(defaultValue = "10") int size) {
+        log.info("getFeedsRandom start");
         long memberId = authenticationGetMemberId.getMemberId();
         FeedDtoList responseList = feedService.getFeedsRecent(memberId, page, size);
+        log.info("getFeedsRandom end");
         return ResponseEntity.ok(responseList);
     }
 
@@ -75,6 +77,7 @@ public class FeedController {
     @PostMapping("/list")
     public ResponseEntity<FeedDtoList> getFeedsByMemberFollow(@ApiParam("페이지 번호") @RequestParam(defaultValue = "0") int page,
                                                               @ApiParam("페이지당 받을 피드 수") @RequestParam(defaultValue = "10") int size) {
+        log.info("getFeedsByMemberFollow start");
         long memberId = authenticationGetMemberId.getMemberId();
         FeedDtoList responseList = feedService.getFeedsByMemberFollow(memberId, page, size);
         if (responseList.getResponseList().size() <= size) {
@@ -82,6 +85,7 @@ public class FeedController {
             responseList.getResponseList().addAll(addResponseList.getResponseList());
         }
         responseList.getResponseList().subList(0, size);
+        log.info("getFeedsByMemberFollow end");
         return ResponseEntity.ok(responseList);
     }
 
