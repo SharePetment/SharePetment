@@ -68,7 +68,7 @@ export const FeedCardContainer = tw.div`
   justify-center
   items-center
   z-10
-  bg-zinc-900/75
+  bg-zinc-900/30
   relative
   flex-col
   gap-5

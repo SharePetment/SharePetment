@@ -22,7 +22,7 @@ import NoticeServerError from '../../components/notice/NoticeServerError.tsx';
 import Toast from '../../components/toast/Toast.tsx';
 import { Feed } from '../../types/feedTypes.ts';
 import CircleProgressBar from './CricleProgressBar.tsx';
-import { Container } from './Home.styled.tsx';
+import { Container, ReBtn } from './Home.styled.tsx';
 import '../../common/carousel/carousel.css';
 
 export function Component() {
@@ -68,6 +68,7 @@ export function Component() {
     isSuccess: hostIsSucess,
     isError: hostIsError,
     isLoading: hostIsLoading,
+    refetch,
   } = useInfiniteQuery({
     queryKey: ['hostFeed'],
     queryFn: ({ pageParam = 0 }) => {
@@ -76,7 +77,7 @@ export function Component() {
         accessToken,
       );
     },
-    staleTime: 120000,
+    staleTime: 60000,
     getNextPageParam: (_, allPages) => {
       const len = allPages.length;
       const totalLength = allPages.length;
@@ -241,6 +242,18 @@ export function Component() {
               </React.Fragment>
             ))}
           </Swiper>
+          {hostData.pages[hostData.pages.length - 1].length === 0 && (
+            <ReBtn
+              className={
+                window.innerWidth < 430 ? 'bottom-[80px]' : 'bottom-10'
+              }
+              onClick={() => {
+                refetch();
+                window.location.reload();
+              }}>
+              피드 다시 받아오기
+            </ReBtn>
+          )}
         </Container>
       </>
     );
@@ -301,6 +314,18 @@ export function Component() {
                 </React.Fragment>
               ))}
             </Swiper>
+            {guestData.pages[guestData.pages.length - 1].length === 0 && (
+              <ReBtn
+                className={
+                  window.innerWidth < 430 ? 'bottom-[80px]' : 'bottom-10'
+                }
+                onClick={() => {
+                  refetch();
+                  window.location.reload();
+                }}>
+                피드 다시 받아오기
+              </ReBtn>
+            )}
           </Container>
         </>
       )

@@ -99,7 +99,7 @@ export default function SideNav({
           {isLike === 'true' && accessToken ? (
             <Like
               className="cursor-pointer"
-              stroke={window.innerWidth < 430 ? 'white' : 'black'}
+              stroke="black"
               fill="#69B783"
               onClick={handleClickLike}
             />
@@ -107,11 +107,12 @@ export default function SideNav({
             accessToken && (
               <Like
                 className="cursor-pointer "
-                stroke={window.innerWidth < 430 ? 'white' : 'black'}
+                stroke="black"
                 onClick={handleClickLike}
               />
             )
           )}
+
           {!accessToken && (
             <Like
               className="cursor-pointer"
@@ -120,11 +121,7 @@ export default function SideNav({
             />
           )}
 
-          {accessToken && (
-            <Text className={window.innerWidth < 430 ? 'text-white' : ''}>
-              {isLikes}
-            </Text>
-          )}
+          {accessToken && <Text>{isLikes}</Text>}
         </Wrap>
 
         {!feedPopUp && (
@@ -135,19 +132,13 @@ export default function SideNav({
 
         {feedPopUp && window.innerWidth < 420 && (
           <Wrap onClick={handleClickSemiComment}>
-            <Comment
-              className="cursor-pointer ml-2"
-              stroke={window.innerWidth < 430 ? 'white' : 'black'}
-            />
+            <Comment className="cursor-pointer ml-2" stroke="black" />
           </Wrap>
         )}
 
         {accessToken && (
           <Wrap onClick={handleClickShare}>
-            <Share
-              className="cursor-pointer ml-2"
-              stroke={window.innerWidth < 430 ? 'white' : 'none'}
-            />
+            <Share className="cursor-pointer ml-2" stroke="none" />
           </Wrap>
         )}
 

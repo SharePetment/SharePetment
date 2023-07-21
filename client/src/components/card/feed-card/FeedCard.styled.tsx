@@ -13,7 +13,10 @@ export const Feed = tw.img`
 export const ContentContainer = tw.div`
   absolute
   bottom-10
-  left-7
+  bg-zinc-900/30
+  left-5
+  p-3
+  rounded-xl
   flex
   flex-col
   gap-2
