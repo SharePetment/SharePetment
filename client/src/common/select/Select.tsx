@@ -1,10 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
 import { useState, useRef, useEffect } from 'react';
-import { getLocal } from '../../api/queryfn';
-import useZipCode, { getData } from '../../hook/useZipCode';
-import { Size } from '../../types/propType';
-import { changeCityCode, changeCountryCode } from '../../util/changezip';
-import { SelectContainer, SelectInput } from './select.styled';
+import { getLocal } from '../../api/queryfn.ts';
+import useZipCode, { getData } from '../../hook/useZipCode.tsx';
+import { Size } from '../../types/propType.ts';
+import { changeCityCode, changeCountryCode } from '../../util/changezip.ts';
+import { SelectContainer, SelectInput } from './select.styled.tsx';
 
 interface Prop {
   size: Size;

@@ -1,8 +1,8 @@
 import { createBrowserRouter } from 'react-router-dom';
-import App from '../App';
-import Login from '../pages/login/Login';
-import NotFound from '../pages/notFound/NotFound';
-import Path from './paths';
+import App from '../App.tsx';
+import Login from '../pages/login/Login.tsx';
+import NotFound from '../pages/notFound/NotFound.tsx';
+import Path from './paths.ts';
 
 export const router = createBrowserRouter([
   {

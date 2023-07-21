@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ZIP_URL } from './url';
+import { ZIP_URL } from './url.ts';
 
 // 쿼리함수를 관리합니다.
 

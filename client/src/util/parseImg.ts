@@ -1,4 +1,4 @@
-import { FeedImage } from '../types/feedTypes';
+import { FeedImage } from '../types/feedTypes.ts';
 
 interface ParseImgProp {
   e: React.ChangeEvent<HTMLInputElement>;

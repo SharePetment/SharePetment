@@ -1,7 +1,7 @@
 import { Outlet, useMatch, ScrollRestoration } from 'react-router-dom';
-import Footer from './common/footer/Footer';
-import Header from './common/header/Header';
-import NavBar from './components/nav/NavBar';
+import Footer from './common/footer/Footer.tsx';
+import Header from './common/header/Header.tsx';
+import NavBar from './components/nav/NavBar.tsx';
 
 function App() {
   const matchHome = useMatch('/'); //object || null

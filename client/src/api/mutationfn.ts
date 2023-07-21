@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { Subscribe } from '../types/subscribe';
-import { SERVER_URL } from './url';
+import { Subscribe } from '../types/subscribe.ts';
+import { SERVER_URL } from './url.ts';
 
 export interface Comment {
   id: string;

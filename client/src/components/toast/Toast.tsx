@@ -1,5 +1,5 @@
 import { ReactComponent as Star } from '../../assets/button/star.svg';
-import { Container, Text } from './Toast.styled';
+import { Container, Text } from './Toast.styled.tsx';
 
 export default function Toast() {
   return (
