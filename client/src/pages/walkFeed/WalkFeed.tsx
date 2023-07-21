@@ -8,8 +8,8 @@ import {
   deleteWalkFeed,
   patchWalkStatus,
 } from '../../api/mutationfn';
-import { getServerDataWithJwt } from '../../api/queryfn';
-import { SERVER_URL } from '../../api/url';
+import { getServerDataWithJwt } from '../../api/queryfn.ts';
+import { SERVER_URL } from '../../api/url.ts';
 import { ReactComponent as CommentIcon } from '../../assets/button/comment.svg';
 import { ReactComponent as Delete } from '../../assets/button/delete.svg';
 import { ReactComponent as Edit } from '../../assets/button/edit.svg';
@@ -18,15 +18,15 @@ import { ReactComponent as Dog } from '../../assets/dog.svg';
 import { ReactComponent as Chatlink } from '../../assets/link.svg';
 import { ReactComponent as ArrowLeft } from '../../assets/mobile/arrow-left.svg';
 import { ReactComponent as Pin } from '../../assets/pin.svg';
-import Comment from '../../common/comment/Comment';
-import Popup from '../../common/popup/Popup';
-import LoadingComponent from '../../components/loading/LoadingComponent';
-import ShowMap from '../../components/map-show/ShowMap';
-import NoticeServerError from '../../components/notice/NoticeServerError';
-import { MemberIdContext, State } from '../../store/Context';
-import { UserInfo } from '../../types/userType';
-import { WalkFeed } from '../../types/walkType';
-import { changeDateFormat } from '../../util/changeDateFormat';
+import Comment from '../../common/comment/Comment.tsx';
+import Popup from '../../common/popup/Popup.tsx';
+import LoadingComponent from '../../components/loading/LoadingComponent.tsx';
+import ShowMap from '../../components/map-show/ShowMap.tsx';
+import NoticeServerError from '../../components/notice/NoticeServerError.tsx';
+import { MemberIdContext, State } from '../../store/Context.tsx';
+import { UserInfo } from '../../types/userType.ts';
+import { WalkFeed } from '../../types/walkType.ts';
+import { changeDateFormat } from '../../util/changeDateFormat.ts';
 import {
   CommentButton,
   Divider,
@@ -48,6 +48,7 @@ export function Component() {
     mutationFn: addComment,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['walkFeed', postId] });
+      queryClient.invalidateQueries({ queryKey: ['walkmateList'] });
     },
     onError: () => setIsOpen([true, '댓글 생성에 실패했습니다.']),
   });

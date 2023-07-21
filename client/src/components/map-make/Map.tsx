@@ -29,10 +29,10 @@ interface Prop {
 }
 
 export default function Map({
+  mainAddress,
   setMainAddress,
   setDetailAddress,
   setCoordinates,
-  mainAddress,
 }: Prop) {
   // 마커를 담는 배열
   let markers: any[] = [];
@@ -66,6 +66,7 @@ export default function Map({
 
   useEffect(() => {
     const container = document.getElementById('myMap');
+
     const options = {
       center: new kakao.maps.LatLng(37.566, 126.977),
       level: 3,

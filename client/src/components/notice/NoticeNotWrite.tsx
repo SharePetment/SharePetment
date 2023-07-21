@@ -1,6 +1,7 @@
 import Cat404 from '../../assets/illustration/404cat.png';
 import { ErrorText } from '../../pages/notFound/NotFound.style.tsx';
 
+
 export default function NoticeNotWrite() {
   return (
     <div className="flex flex-col items-center justify-center">

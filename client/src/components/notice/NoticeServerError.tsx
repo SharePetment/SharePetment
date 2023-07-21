@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import Cat404 from '../../assets/illustration/404cat.png';
 import { ErrorText, HomeBtn } from '../../pages/notFound/NotFound.style.tsx';
 
+
 export default function NoticeServerError() {
   const navigate = useNavigate();
   return (
