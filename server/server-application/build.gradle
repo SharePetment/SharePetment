@@ -45,7 +45,8 @@ dependencies {
 	implementation 'com.auth0:java-jwt:4.2.2'
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
 	implementation 'com.google.code.gson:gson:2.10.1'
-
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+//	implementation("io.netty:netty-resolver-dns-native-macos:4.1.79.Final:osx-aarch_64")
 }
 
 tasks.named('test') {

@@ -1,5 +1,8 @@
 package com.saecdo18.petmily.member.service;
 
+import com.saecdo18.petmily.feed.entity.FeedComments;
+import com.saecdo18.petmily.feed.repository.FeedCommentsRepository;
+import com.saecdo18.petmily.feed.service.FeedCommentService;
 import com.saecdo18.petmily.image.dto.ImageDto;
 import com.saecdo18.petmily.image.entity.Image;
 import com.saecdo18.petmily.member.dto.FollowMemberDto;
@@ -17,6 +20,12 @@ import com.saecdo18.petmily.pet.entity.Pet;
 import com.saecdo18.petmily.pet.repository.PetImageRepository;
 import com.saecdo18.petmily.pet.repository.PetRepository;
 import com.saecdo18.petmily.pet.service.PetService;
+import com.saecdo18.petmily.walkmate.entity.WalkMate;
+import com.saecdo18.petmily.walkmate.entity.WalkMateComment;
+import com.saecdo18.petmily.walkmate.repository.WalkMateCommentRepository;
+import com.saecdo18.petmily.walkmate.repository.WalkMateRepository;
+import com.saecdo18.petmily.walkmate.service.WalkMateCommentService;
+import com.saecdo18.petmily.walkmate.service.WalkMateService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -42,6 +51,13 @@ public class MemberService {
     private final FollowMemberMapper followMemberMapper;
     private final PetMapper petMapper;
     private final PetImageRepository petImageRepository;
+    private final WalkMateRepository walkMateRepository;
+    private final WalkMateCommentRepository walkMateCommentRepository;
+    private final WalkMateService walkMateService;
+    private final FeedCommentsRepository feedCommentsRepository;
+    private final FeedCommentService feedCommentService;
+    private final WalkMateCommentService walkMateCommentService;
+
 
 
 
@@ -223,6 +239,39 @@ public class MemberService {
 
     public void deleteMember(long memberId) {
         Member findMember = methodFindByMemberIdMember(memberId);
+        for(WalkMate walkMate : walkMateRepository.findAll()){
+            if(walkMate.getMember().getMemberId() == memberId){
+                walkMateService.deleteWalk(walkMate.getWalkMatePostId(), memberId);
+            }
+        }
+
+        Optional<List<FeedComments>> optionalFeedComments = feedCommentsRepository.findByMember(findMember);
+        if (optionalFeedComments.isPresent()){
+            List<FeedComments> feedCommentsList = optionalFeedComments.get();
+            for(FeedComments feedComments: feedCommentsList){
+                feedCommentService.deleteComment(feedComments.getFeedCommentsId(), memberId);
+            }
+        }
+
+
+        Optional<List<WalkMateComment>> optionalWalkMateComments = walkMateCommentRepository.findByMember(findMember);
+        if(optionalWalkMateComments.isPresent()){
+            List<WalkMateComment> walkMateCommentList = optionalWalkMateComments.get();
+            for(WalkMateComment walkMateComment : walkMateCommentList){
+                walkMateCommentService.deleteComment(walkMateComment.getWalkMateCommentId(), memberId);
+            }
+        }
+
+        Optional<List<FollowMember>> optionalFollowMembers = followMemberRepository.findByFollowingId(memberId);
+        if(optionalFollowMembers.isPresent()){
+            List<FollowMember> followMemberList = optionalFollowMembers.get();
+            for(FollowMember followMember : followMemberList){
+                Member follower = followMember.getFollowerMember();
+                follower.updateFollowerCount(false);
+                followMemberRepository.delete(followMember);
+            }
+        }
+
         memberRepository.delete(findMember);
     }
 }

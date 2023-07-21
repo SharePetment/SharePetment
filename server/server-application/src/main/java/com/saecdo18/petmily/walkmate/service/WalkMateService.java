@@ -160,14 +160,17 @@ public class WalkMateService {
     public List<WalkMateDto.Response> recentPage(int page, int size, String location, boolean openFilter){
 
         PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
-        List<WalkMate> walks = walkMateRepository.findByLocation(pageRequest, location).getContent();
+        List<WalkMate> walks = walkMateRepository.findByLocationContaining(pageRequest, location).getContent();
+
+        List<WalkMate> filteredWalks = walks;
+
 
         if(openFilter){
-            onlyOpenWalk(walks);
+             filteredWalks = onlyOpenWalk(walks);
         }
 
         List<WalkMateDto.Response> responseList = new ArrayList<>();
-        for(WalkMate walk : walks){
+        for(WalkMate walk : filteredWalks){
             WalkMateDto.Response response = walkMateMapper.walkMateToWalkMateResponseDto(walk);
             MemberDto.Info info = getMemberInfoByWalk(walk);
             response.setMemberInfo(info);
@@ -292,7 +295,7 @@ public class WalkMateService {
 
     private List<WalkMate> onlyOpenWalk(List<WalkMate> walkMates){
 
-        List<WalkMate> allWalks = walkMateRepository.findAll();;
+        List<WalkMate> allWalks = walkMates;
         List<WalkMate> openWalks = allWalks.stream()
                 .filter(walk -> walk.getOpen().equals(true))
                 .collect(Collectors.toList());
@@ -305,5 +308,20 @@ public class WalkMateService {
                 .distinct()
                 .collect(Collectors.toList());
     }
+
+//    private List<WalkMate> findWalksInThisLocation(String location){
+//
+//        List<WalkMate> allWalks = walkMateRepository.findAll();
+//        List<WalkMate> result = new ArrayList<>();
+//
+//        for(WalkMate walk : allWalks){
+//
+//            if(walk.getLocation().contains(location)){
+//                result.add(walk);
+//            }
+//        }
+//
+//        return result;
+//    }
 
 }

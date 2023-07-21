@@ -4,6 +4,7 @@ import com.saecdo18.petmily.util.AuthenticationGetMemberId;
 import com.saecdo18.petmily.walkmate.dto.WalkMateCommentDto;
 import com.saecdo18.petmily.walkmate.entity.WalkMateComment;
 import com.saecdo18.petmily.walkmate.mapper.WalkMateCommentMapper;
+import com.saecdo18.petmily.walkmate.repository.WalkMateCommentRepository;
 import com.saecdo18.petmily.walkmate.service.WalkMateCommentService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -21,12 +22,16 @@ import java.util.stream.Collectors;
 public class WalkMateCommentController {
 
     private final WalkMateCommentService walkMateCommentService;
+    private final WalkMateCommentRepository walkMateCommentRepository;
     private final WalkMateCommentMapper mapper;
     private final AuthenticationGetMemberId authenticationGetMemberId;
 
 
-    public WalkMateCommentController(WalkMateCommentService walkMateCommentService, WalkMateCommentMapper mapper, AuthenticationGetMemberId authenticationGetMemberId) {
+    public WalkMateCommentController(WalkMateCommentService walkMateCommentService,
+                                     WalkMateCommentRepository walkMateCommentRepository,
+                                     WalkMateCommentMapper mapper, AuthenticationGetMemberId authenticationGetMemberId) {
         this.walkMateCommentService = walkMateCommentService;
+        this.walkMateCommentRepository = walkMateCommentRepository;
         this.mapper = mapper;
         this.authenticationGetMemberId = authenticationGetMemberId;
     }
@@ -60,15 +65,6 @@ public class WalkMateCommentController {
 
         return new ResponseEntity(response, HttpStatus.OK);
     }
-
-//    @GetMapping("/allcomments")
-//    @ApiOperation("산책 게시글 댓글 조회")
-//    private ResponseEntity<List<WalkMateCommentDto.Response>> getAllComments(){
-//
-//        List<WalkMateCommentDto.Response> response = walkMateCommentService.findAllComments();
-//
-//        return new ResponseEntity(response, HttpStatus.OK);
-//    }
 
     @PatchMapping("/{comment-id}")
     @ApiOperation("산책 게시글 댓글 수정")

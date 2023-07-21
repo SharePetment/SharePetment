@@ -18,7 +18,7 @@ public class WalkMateLike extends BaseEntity {
     private Long walkLikeId;
 
     @ManyToOne
-    @JoinColumn(name = "walkmatepost_id")
+    @JoinColumn(name = "walk_mate_post_id")
     private WalkMate walk;
 
     @ManyToOne
