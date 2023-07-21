@@ -12,7 +12,6 @@ export const Container = tw.div`
   z-40
   bg-zinc-900/75
   z-50
-  relative
 `;
 
 export const CloseBtn = tw.button`
@@ -68,7 +67,7 @@ export const FeedCardContainer = tw.div`
   justify-center
   items-center
   z-10
-  bg-zinc-900/75
+  bg-zinc-900/30
   relative
   flex-col
   gap-5

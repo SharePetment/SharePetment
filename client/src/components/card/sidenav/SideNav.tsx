@@ -99,32 +99,19 @@ export default function SideNav({
           {isLike === 'true' && accessToken ? (
             <Like
               className="cursor-pointer"
-              stroke={window.innerWidth < 430 ? 'white' : 'black'}
+              stroke="black"
               fill="#69B783"
               onClick={handleClickLike}
             />
           ) : (
-            accessToken && (
-              <Like
-                className="cursor-pointer "
-                stroke={window.innerWidth < 430 ? 'white' : 'black'}
-                onClick={handleClickLike}
-              />
-            )
-          )}
-          {!accessToken && (
             <Like
-              className="cursor-pointer"
+              className="cursor-pointer "
               stroke="black"
               onClick={handleClickLike}
             />
           )}
 
-          {accessToken && (
-            <Text className={window.innerWidth < 430 ? 'text-white' : ''}>
-              {isLikes}
-            </Text>
-          )}
+          <Text>{isLikes}</Text>
         </Wrap>
 
         {!feedPopUp && (
@@ -135,41 +122,27 @@ export default function SideNav({
 
         {feedPopUp && window.innerWidth < 420 && (
           <Wrap onClick={handleClickSemiComment}>
-            <Comment
-              className="cursor-pointer ml-2"
-              stroke={window.innerWidth < 430 ? 'white' : 'black'}
-            />
+            <Comment className="cursor-pointer ml-2" stroke="black" />
           </Wrap>
         )}
 
-        {accessToken && (
-          <Wrap onClick={handleClickShare}>
-            <Share
-              className="cursor-pointer ml-2"
-              stroke={window.innerWidth < 430 ? 'white' : 'none'}
-            />
-          </Wrap>
-        )}
-
-        {!accessToken && (
-          <Wrap onClick={handleClickShare}>
-            <Share className="cursor-pointer ml-2" stroke="none" />
-          </Wrap>
-        )}
+        <Wrap onClick={handleClickShare}>
+          <Share className="cursor-pointer ml-2" stroke="none" />
+        </Wrap>
 
         {inperson === 'true' && (
           <>
             <Wrap
               onClick={() => navigate(`/feed-posting/${feedid}`)}
               className="cursor-pointer ml-2">
-              <Edit stroke={window.innerWidth < 430 ? 'white' : 'black'} />
+              <Edit stroke="black" />
             </Wrap>
             <Wrap
               className="cursor-pointer ml-2"
               onClick={() => {
                 if (deletehandler) return deletehandler(true);
               }}>
-              <Delete stroke={window.innerWidth < 430 ? 'white' : 'black'} />
+              <Delete stroke="black" />
             </Wrap>
           </>
         )}
