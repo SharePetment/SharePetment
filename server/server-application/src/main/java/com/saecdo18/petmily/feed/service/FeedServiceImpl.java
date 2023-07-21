@@ -196,11 +196,11 @@ public class FeedServiceImpl implements FeedService {
 
         List<Feed> feedList = new ArrayList<>(feedSet);
 
-        Collections.shuffle(feedList);
         if (feedList.size() > 10) {
             feedList = feedList.subList(0, size);
         }
 
+        Collections.shuffle(feedList);
         addToRedisSet(feedList, memberId);
 
         return changeFeedListToFeedResponseDto(feedList, memberId);
