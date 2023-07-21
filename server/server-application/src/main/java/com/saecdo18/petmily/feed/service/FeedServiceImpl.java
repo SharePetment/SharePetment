@@ -85,6 +85,12 @@ public class FeedServiceImpl implements FeedService {
         return changeFeedToFeedDtoResponse(findFeed, memberId);
     }
 
+    public FeedDtoList getFeedsRecentForGuest(int page, int size) {
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
+        List<Feed> feedList = feedRepository.findAll(pageRequest).getContent();
+        return changeFeedListToFeedResponseDto(feedList, 0);
+    }
+
     @Override
     public FeedDtoList getFeedsRecent(long memberId, int page, int size) {
         log.info("getFeedsRecent start : {}", memberId);
@@ -407,7 +413,7 @@ public class FeedServiceImpl implements FeedService {
         if (result != null && result) {
             return redisTemplate.opsForZSet().rangeByScore(key, currentTime, Double.POSITIVE_INFINITY);
         } else {
-            redisTemplate.expire(key, 3, TimeUnit.HOURS);
+            redisTemplate.expire(key, 2, TimeUnit.MINUTES);
             return redisTemplate.opsForZSet().rangeByScore(key, currentTime, Double.POSITIVE_INFINITY);
         }
     }

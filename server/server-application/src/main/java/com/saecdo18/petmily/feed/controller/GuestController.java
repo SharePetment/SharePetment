@@ -36,7 +36,7 @@ public class GuestController {
     @PostMapping("/list/random")
     public ResponseEntity<FeedDtoList> getFeedsRandom(@ApiParam("페이지 번호") @RequestParam(defaultValue = "0") int page,
                                                       @ApiParam("페이지당 받을 피드 수") @RequestParam(defaultValue = "10") int size) {
-        FeedDtoList responseList = feedService.getFeedsRecent( 0, page, size);
+        FeedDtoList responseList = feedService.getFeedsRecentForGuest(page, size);
         return ResponseEntity.ok(responseList);
     }
 }
