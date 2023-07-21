@@ -76,6 +76,7 @@ export function Component() {
         accessToken,
       );
     },
+    staleTime: 120000,
     getNextPageParam: (_, allPages) => {
       const len = allPages.length;
       const totalLength = allPages.length;
