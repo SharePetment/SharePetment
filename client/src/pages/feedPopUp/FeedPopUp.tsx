@@ -6,7 +6,6 @@ import { deleteFeed } from '../../api/mutationfn.ts';
 import { getServerData, getServerDataWithJwt } from '../../api/queryfn.ts';
 import { SERVER_URL } from '../../api/url.ts';
 import { ReactComponent as Close } from '../../assets/button/close.svg';
-
 import FeedComment from '../../common/comment/feedComment/FeedComment';
 import FeedInput from '../../common/input/feedInput/FeedInput';
 import Popup from '../../common/popup/Popup';
@@ -57,8 +56,6 @@ export function Component() {
     queryFn: () => getServerData(`${SERVER_URL}/feeds/all/${feedId}`),
     enabled: !!(accessToken === null),
   });
-
-  console.log(getGuestFeed.data);
 
   const deleteFeedMutation = useMutation({
     mutationFn: deleteFeed,
