@@ -1,6 +1,5 @@
 import Cat404 from '../../assets/illustration/404cat.png';
-import { ErrorText } from '../../pages/notFound/NotFound.style.tsx';
-
+import { ErrorText } from '../../pages/notFound/NotFound.styled.tsx';
 
 export default function NoticeNotWrite() {
   return (
