@@ -6,17 +6,18 @@ import { deleteFeed } from '../../api/mutationfn.ts';
 import { getServerData, getServerDataWithJwt } from '../../api/queryfn.ts';
 import { SERVER_URL } from '../../api/url.ts';
 import { ReactComponent as Close } from '../../assets/button/close.svg';
-import FeedComment from '../../common/comment/feedComment/FeedComment.tsx';
-import FeedInput from '../../common/input/feedInput/FeedInput.tsx';
-import Popup from '../../common/popup/Popup.tsx';
-import FeedCard from '../../components/card/feed-card/FeedCard.tsx';
-import SideNav from '../../components/card/sidenav/SideNav.tsx';
-import LoadingComponent from '../../components/loading/LoadingComponent.tsx';
-import NoticeServerError from '../../components/notice/NoticeServerError.tsx';
-import Toast from '../../components/toast/Toast.tsx';
-import { MemberIdContext } from '../../store/Context.tsx';
-import { Feed } from '../../types/feedTypes.ts';
-import changeTime from '../../util/changeTime.ts';
+
+import FeedComment from '../../common/comment/feedComment/FeedComment';
+import FeedInput from '../../common/input/feedInput/FeedInput';
+import Popup from '../../common/popup/Popup';
+import FeedCard from '../../components/card/feed-card/FeedCard';
+import SideNav from '../../components/card/sidenav/SideNav';
+import LoadingComponent from '../../components/loading/LoadingComponent';
+import NoticeServerError from '../../components/notice/NoticeServerError';
+import Toast from '../../components/toast/Toast';
+import { MemberIdContext } from '../../store/Context';
+import { Feed } from '../../types/feedTypes';
+import changeTime from '../../util/changeTime';
 import {
   Container,
   CloseBtn,

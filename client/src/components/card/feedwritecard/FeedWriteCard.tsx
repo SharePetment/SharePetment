@@ -4,17 +4,17 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Navigation } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { useReadLocalStorage } from 'usehooks-ts';
-import { patchFeed, postFeed } from '../../../api/mutationfn';
-import { getServerDataWithJwt } from '../../../api/queryfn';
-import { SERVER_URL } from '../../../api/url';
+import { patchFeed, postFeed } from '../../../api/mutationfn.ts';
+import { getServerDataWithJwt } from '../../../api/queryfn.ts';
+import { SERVER_URL } from '../../../api/url.ts';
 import { ReactComponent as Close } from '../../../assets/button/close.svg';
 import { ReactComponent as Plus } from '../../../assets/button/plus.svg';
 import { ReactComponent as Write } from '../../../assets/button/write.svg';
-import Popup from '../../../common/popup/Popup';
-import { FeedImage, Feed } from '../../../types/feedTypes';
-import { parseImg, deleteImg } from '../../../util/parseImg';
-import LoadingComponent from '../../loading/LoadingComponent';
-import NoticeServerError from '../../notice/NoticeServerError';
+import Popup from '../../../common/popup/Popup.tsx';
+import { FeedImage, Feed } from '../../../types/feedTypes.ts';
+import { parseImg, deleteImg } from '../../../util/parseImg.ts';
+import LoadingComponent from '../../loading/LoadingComponent.tsx';
+import NoticeServerError from '../../notice/NoticeServerError.tsx';
 import {
   Container,
   Wrap,
@@ -23,7 +23,7 @@ import {
   Form,
   Textarea,
   SubmitBtn,
-} from './FeedWriteCard.styled';
+} from './FeedWriteCard.styled.tsx';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
@@ -74,6 +74,7 @@ export default function FeedWriteCard() {
         setPrevFile(prev => [...prev, image]);
         setGetQuery(true);
       });
+
       if (textRef.current) {
         textRef.current.value = result.content;
       }
@@ -152,15 +153,15 @@ export default function FeedWriteCard() {
     [savedFile, prevFile],
   );
 
-  if (getFeedDetailQuery.isError)
+  if (getFeedDetailQuery.isError || !accessToken)
     return (
       <div className="w-screen h-screen flex justify-center items-center">
         <NoticeServerError />
       </div>
     );
   if (
-    getFeedDetailQuery.isFetching ||
-    feedPostingMutation.isLoading ||
+    getFeedDetailQuery.isFetching &&
+    feedPostingMutation.isLoading &&
     feedEditingMutation.isLoading
   ) {
     return <LoadingComponent />;

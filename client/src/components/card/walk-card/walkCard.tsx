@@ -1,8 +1,8 @@
 import { ReactComponent as Paw } from '../../../assets/button/like.svg';
 import { ReactComponent as Dog } from '../../../assets/dog.svg';
 import { ReactComponent as Pin } from '../../../assets/pin.svg';
-import Profile from '../../../common/profile/Profile';
-import { BooleanStr } from '../../../types/propType';
+import Profile from '../../../common/profile/Profile.tsx';
+import { BooleanStr } from '../../../types/propType.ts';
 import {
   Backdrop,
   CardContainer,

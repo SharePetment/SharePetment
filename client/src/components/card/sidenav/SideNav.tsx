@@ -2,15 +2,15 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useMatch, useNavigate } from 'react-router-dom';
 import { useReadLocalStorage } from 'usehooks-ts';
-import { patchFeedLike } from '../../../api/mutationfn';
-import { SERVER_URL } from '../../../api/url';
+import { patchFeedLike } from '../../../api/mutationfn.ts';
+import { SERVER_URL } from '../../../api/url.ts';
 import { ReactComponent as Comment } from '../../../assets/button/comment.svg';
 import { ReactComponent as Delete } from '../../../assets/button/delete.svg';
 import { ReactComponent as Edit } from '../../../assets/button/edit.svg';
 import { ReactComponent as Like } from '../../../assets/button/like.svg';
 import { ReactComponent as Share } from '../../../assets/button/share.svg';
-import { BooleanStr } from '../../../types/propType';
-import { Container, Wrap, Text } from './SideNav.styled';
+import { BooleanStr } from '../../../types/propType.ts';
+import { Container, Wrap, Text } from './SideNav.styled.tsx';
 
 interface Prop {
   feedid: number;
@@ -112,6 +112,13 @@ export default function SideNav({
               />
             )
           )}
+          {!accessToken && (
+            <Like
+              className="cursor-pointer"
+              stroke="black"
+              onClick={handleClickLike}
+            />
+          )}
 
           {accessToken && (
             <Text className={window.innerWidth < 430 ? 'text-white' : ''}>
@@ -122,7 +129,7 @@ export default function SideNav({
 
         {!feedPopUp && (
           <Wrap onClick={handleClickComment}>
-            <Comment className="cursor-pointer ml-2" />
+            <Comment className="cursor-pointer ml-2" stroke="black" />
           </Wrap>
         )}
 
@@ -141,6 +148,12 @@ export default function SideNav({
               className="cursor-pointer ml-2"
               stroke={window.innerWidth < 430 ? 'white' : 'none'}
             />
+          </Wrap>
+        )}
+
+        {!accessToken && (
+          <Wrap onClick={handleClickShare}>
+            <Share className="cursor-pointer ml-2" stroke="none" />
           </Wrap>
         )}
 
