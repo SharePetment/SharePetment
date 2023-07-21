@@ -74,6 +74,7 @@ export default function FeedWriteCard() {
         setPrevFile(prev => [...prev, image]);
         setGetQuery(true);
       });
+
       if (textRef.current) {
         textRef.current.value = result.content;
       }
@@ -152,15 +153,15 @@ export default function FeedWriteCard() {
     [savedFile, prevFile],
   );
 
-  if (getFeedDetailQuery.isError)
+  if (getFeedDetailQuery.isError || !accessToken)
     return (
       <div className="w-screen h-screen flex justify-center items-center">
         <NoticeServerError />
       </div>
     );
   if (
-    getFeedDetailQuery.isFetching ||
-    feedPostingMutation.isLoading ||
+    getFeedDetailQuery.isFetching &&
+    feedPostingMutation.isLoading &&
     feedEditingMutation.isLoading
   ) {
     return <LoadingComponent />;

@@ -74,7 +74,10 @@ export default function PetProfile({
       <PetProfileDiv>
         <ProfileHeader>
           <Profile isgreen="false" size="md" url={image} />
-          <ProfileText>반려동물 이미지를 사용해주세요!</ProfileText>
+          <ProfileText>
+            반려동물 이미지를
+            <br /> 사용해주세요!
+          </ProfileText>
         </ProfileHeader>
         <ProfileTail>
           <input
