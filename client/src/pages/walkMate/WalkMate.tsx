@@ -170,7 +170,7 @@ export function Component() {
                       key={item.walkMatePostId}>
                       <WalkCard
                         size="lg"
-                        time={item.time}
+                        time={changeDateFormat(item.time)}
                         title={item.title}
                         friends={item.maximum}
                         location={item.location}
