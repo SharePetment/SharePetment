@@ -1,4 +1,4 @@
-import FeedWriteCard from '../../components/card/feedwritecard/FeedWriteCard';
+import FeedWriteCard from '../../components/card/feedwritecard/FeedWriteCard.tsx';
 
 export function Component() {
   return <FeedWriteCard />;
