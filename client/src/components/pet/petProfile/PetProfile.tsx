@@ -1,7 +1,7 @@
 import { ChangeEvent, useState, useRef } from 'react';
 import Cropper, { ReactCropperElement } from 'react-cropper';
-import Button from '../../../common/button/Button';
-import Profile from '../../../common/profile/Profile';
+import Button from '../../../common/button/Button.tsx';
+import Profile from '../../../common/profile/Profile.tsx';
 import {
   ButtonBox,
   CropDiv,

@@ -6,7 +6,7 @@ import { deleteFeed } from '../../api/mutationfn';
 import { getServerData, getServerDataWithJwt } from '../../api/queryfn';
 import { SERVER_URL } from '../../api/url';
 import { ReactComponent as Close } from '../../assets/button/close.svg';
-import FeedComment from '../../common/comment/feedComment.tsx/FeedComment';
+import FeedComment from '../../common/comment/feedComment/FeedComment';
 import FeedInput from '../../common/input/feedInput/FeedInput';
 import Popup from '../../common/popup/Popup';
 import FeedCard from '../../components/card/feed-card/FeedCard';

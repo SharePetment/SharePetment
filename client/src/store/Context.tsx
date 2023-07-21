@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
 import { Dispatch, createContext, useReducer } from 'react';
 import { useReadLocalStorage } from 'usehooks-ts';
-import { getServerDataWithJwt } from '../api/queryfn';
-import { SERVER_URL } from '../api/url';
-import { UserInfo } from '../types/userType';
+import { getServerDataWithJwt } from '../api/queryfn.ts';
+import { SERVER_URL } from '../api/url.ts';
+import { UserInfo } from '../types/userType.ts';
 
 export type State = {
   memberId: string;

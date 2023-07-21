@@ -1,4 +1,4 @@
-import { ProfileImage } from './Profile.styled';
+import { ProfileImage } from './Profile.styled.tsx';
 
 interface ProfileProps {
   size: 'lg' | 'md' | 'sm';

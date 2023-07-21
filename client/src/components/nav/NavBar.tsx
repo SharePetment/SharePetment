@@ -10,7 +10,7 @@ import { ReactComponent as PostActive } from '../../assets/mobile/post-active-ap
 import { ReactComponent as Post } from '../../assets/mobile/post-app.svg';
 import { ReactComponent as WalkmateActive } from '../../assets/mobile/walk-active-app.svg';
 import { ReactComponent as Walkmate } from '../../assets/mobile/walk-app.svg';
-import Path from '../../routers/paths';
+import Path from '../../routers/paths.ts';
 
 export default function NavBar() {
   const navigate = useNavigate();

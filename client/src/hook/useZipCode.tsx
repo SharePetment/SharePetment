@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { getLocal } from '../api/queryfn';
+import { getLocal } from '../api/queryfn.ts';
 
 export interface Record {
   code: string;

@@ -1,7 +1,7 @@
 import { useMatch, Link } from 'react-router-dom';
 import { ReactComponent as Github } from '../../assets/github.svg';
 import { ReactComponent as Notion } from '../../assets/notion.svg';
-import { Container, TopContainer, Text } from './Footer.styled';
+import { Container, TopContainer, Text } from './Footer.styled.tsx';
 
 export default function Footer() {
   const matchLogin = useMatch('/');
