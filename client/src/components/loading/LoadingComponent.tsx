@@ -1,7 +1,7 @@
 import LoadingDog from '../../assets/illustration/loading-dog.png';
 import { ReactComponent as LoadingText } from '../../assets/loading-text.svg';
 import { ReactComponent as Loading } from '../../assets/loading.svg';
-import { Container } from './loadingComponent.styled';
+import { Container } from './loadingComponent.styled.tsx';
 export default function LoadingComponent() {
   return (
     <Container>

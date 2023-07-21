@@ -4,23 +4,24 @@ import { useLocalStorage, useReadLocalStorage } from 'usehooks-ts';
 import LoginPets from '../../assets/illustration/loginpet.png';
 import { ReactComponent as Kakao } from '../../assets/kakao.svg';
 import { ReactComponent as Logo } from '../../assets/logo.svg';
-import Footer from '../../common/footer/Footer';
-import { Container, LoginBtn, LoginText, GuestText } from './Login.styled';
+import Footer from '../../common/footer/Footer.tsx';
+import { Container, LoginBtn, LoginText, GuestText } from './Login.styled.tsx';
 
 export default function Login() {
   const navigate = useNavigate();
   const accessToken = useReadLocalStorage('accessToken');
 
-  const [, setFirstVisited] = useLocalStorage<boolean | null>(
+  const [firstVisited, setFirstVisited] = useLocalStorage<boolean | null>(
     'firstVisited',
-    null,
+    true,
   );
-  const firstVisited = useReadLocalStorage('firstVisited');
 
   useEffect(() => {
-    if (firstVisited) {
+    if (!firstVisited) {
       setFirstVisited(false);
       return;
+    } else if (firstVisited) {
+      setFirstVisited(true);
     }
   }, [firstVisited, setFirstVisited]);
 

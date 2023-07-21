@@ -3,10 +3,10 @@
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useReadLocalStorage } from 'usehooks-ts';
-import { getServerDataWithJwt } from '../../api/queryfn';
-import { SERVER_URL } from '../../api/url';
-import { InputText } from '../../common/input/Input.styled';
-import { UserInfo } from '../../types/userType';
+import { getServerDataWithJwt } from '../../api/queryfn.ts';
+import { SERVER_URL } from '../../api/url.ts';
+import { InputText } from '../../common/input/Input.styled.tsx';
+import { UserInfo } from '../../types/userType.ts';
 
 interface placeType {
   place_name: string;

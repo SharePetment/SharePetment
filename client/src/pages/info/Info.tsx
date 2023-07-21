@@ -10,21 +10,21 @@ import {
   useParams,
 } from 'react-router-dom';
 import { useReadLocalStorage } from 'usehooks-ts';
-import { fillUserInfo, postQuitMember } from '../../api/mutationfn';
-import { SERVER_URL } from '../../api/url';
+import { fillUserInfo, postQuitMember } from '../../api/mutationfn.ts';
+import { SERVER_URL } from '../../api/url.ts';
 import { ReactComponent as Like } from '../../assets/button/like.svg';
 import { ReactComponent as Logo } from '../../assets/logo.svg';
-import Button from '../../common/button/Button';
+import Button from '../../common/button/Button.tsx';
 import {
   ErrorNotice,
   FormContainer,
   InputContainer,
   InputText,
   Label,
-} from '../../common/input/Input.styled';
-import Popup from '../../common/popup/Popup';
-import Select from '../../common/select/Select';
-import { ConfirmButton, ExtraInfoLogo, InfoForm } from './Info.styled';
+} from '../../common/input/Input.styled.tsx';
+import Popup from '../../common/popup/Popup.tsx';
+import Select from '../../common/select/Select.tsx';
+import { ConfirmButton, ExtraInfoLogo, InfoForm } from './Info.styled.tsx';
 
 type InfoProps = {
   nickname: string;

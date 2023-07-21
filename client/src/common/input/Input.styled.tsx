@@ -1,6 +1,6 @@
 import { FieldError, FieldErrorsImpl, Merge } from 'react-hook-form';
 import tw from 'tailwind-styled-components';
-import { BooleanStr } from '../../types/propType';
+import { BooleanStr } from '../../types/propType.ts';
 
 type ErrorMessage = {
   error?:

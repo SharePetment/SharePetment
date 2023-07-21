@@ -1,7 +1,7 @@
 import { ChangeEvent, useState, useRef } from 'react';
 import Cropper, { ReactCropperElement } from 'react-cropper';
-import Button from '../../../common/button/Button';
-import Profile from '../../../common/profile/Profile';
+import Button from '../../../common/button/Button.tsx';
+import Profile from '../../../common/profile/Profile.tsx';
 import {
   ButtonBox,
   CropDiv,
@@ -74,7 +74,10 @@ export default function PetProfile({
       <PetProfileDiv>
         <ProfileHeader>
           <Profile isgreen="false" size="md" url={image} />
-          <ProfileText>반려동물 이미지를 사용해주세요!</ProfileText>
+          <ProfileText>
+            반려동물 이미지를
+            <br /> 사용해주세요!
+          </ProfileText>
         </ProfileHeader>
         <ProfileTail>
           <input
