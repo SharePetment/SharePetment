@@ -4,25 +4,25 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useReadLocalStorage } from 'usehooks-ts';
-import { patchWalkFeed } from '../../api/mutationfn';
-import { getServerDataWithJwt } from '../../api/queryfn';
+import { patchWalkFeed } from '../../api/mutationfn.ts';
+import { getServerDataWithJwt } from '../../api/queryfn.ts';
 import { SERVER_URL } from '../../api/url';
 import { ReactComponent as Close } from '../../assets/button/close.svg';
-import Button from '../../common/button/Button';
+import Button from '../../common/button/Button.tsx';
 import {
   ErrorNotice,
   InputContainer,
   InputText,
   Label,
 } from '../../common/input/Input.styled';
-import Popup from '../../common/popup/Popup';
-import { Textarea } from '../../components/card/feedwritecard/FeedWriteCard.styled';
-import LoadingComponent from '../../components/loading/LoadingComponent';
-import Map from '../../components/map-make/Map';
+import Popup from '../../common/popup/Popup.tsx';
+import { Textarea } from '../../components/card/feedwritecard/FeedWriteCard.styled.tsx';
+import LoadingComponent from '../../components/loading/LoadingComponent.tsx';
+import Map from '../../components/map-make/Map.tsx';
 import Path from '../../routers/paths';
-import { UserInfo } from '../../types/userType';
-import { WalkFeed } from '../../types/walkType';
-import { PostForm } from '../walkPosting/WalkPosting.styled';
+import { UserInfo } from '../../types/userType.ts';
+import { WalkFeed } from '../../types/walkType.ts';
+import { PostForm } from '../walkPosting/WalkPosting.styled.tsx';
 
 interface Inputs {
   title: string;
@@ -74,6 +74,7 @@ export function Component() {
   });
 
   const onSumbit = (body: Inputs) => {
+    console.log(body);
     const obj = {
       ...body,
       mapURL: `${coordinates.La} ${coordinates.Ma} ${detailAddress}`,
@@ -129,9 +130,9 @@ export function Component() {
                 <Label htmlFor="title">제목</Label>
                 <InputText
                   id="title"
+                  defaultValue={data?.title ? data?.title : ''}
                   {...register('title', {
                     required: '텍스트 필수입니다.',
-                    value: data?.title ? data?.title : '',
                     maxLength: {
                       value: 20,
                       message: '20자 이내로 작성해주세요 ;)',
@@ -153,9 +154,9 @@ export function Component() {
                   id="time"
                   className=" cursor-pointer"
                   type="datetime-local"
+                  defaultValue={data?.time ? data?.time : ''}
                   {...register('time', {
                     required: '날짜도 필수입니다.',
-                    value: data?.time ? data?.time : '',
                     maxLength: {
                       value: 20,
                       message: '20자 이내로 작성해주세요 ;)',
@@ -204,8 +205,8 @@ export function Component() {
                   id="chatURL"
                   type="text"
                   placeholder="(필수X)채팅방 링크가 있다면 입력해주세요:) "
+                  defaultValue={data?.chatURL ? data?.chatURL : ''}
                   {...register('chatURL', {
-                    value: data?.chatURL ? data?.chatURL : '',
                     pattern: {
                       value: /^(http|https):\/\//gm,
                       message: 'http://, https:// 시작해야 합니다.',
@@ -228,9 +229,9 @@ export function Component() {
                 <InputText
                   id="maximum"
                   type="number"
+                  defaultValue={data?.maximum ? data?.maximum : 0}
                   {...register('maximum', {
                     required: '필수',
-                    value: data?.maximum ? data?.maximum : 0,
                     min: {
                       value: 1,
                       message: '1마리 이상이어야해요!',
@@ -252,8 +253,8 @@ export function Component() {
               {/* 텍스트 입력창 */}
               <Textarea
                 placeholder="글을 작성해주세요"
+                defaultValue={data?.content ? data?.content : ''}
                 {...register('content', {
-                  value: data?.content ? data?.content : '',
                   maxLength: 300,
                 })}
               />

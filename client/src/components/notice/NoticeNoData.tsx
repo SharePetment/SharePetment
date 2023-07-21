@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import LyingDownDog from '../../assets/illustration/lying-down-dog.png';
-import { ErrorText, HomeBtn } from '../../pages/notFound/NotFound.style';
+import { ErrorText, HomeBtn } from '../../pages/notFound/NotFound.styled';
 
 type NoticeNoDataProp = {
   url: string;
