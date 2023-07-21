@@ -112,6 +112,13 @@ export default function SideNav({
               />
             )
           )}
+          {!accessToken && (
+            <Like
+              className="cursor-pointer"
+              stroke="black"
+              onClick={handleClickLike}
+            />
+          )}
 
           {accessToken && (
             <Text className={window.innerWidth < 430 ? 'text-white' : ''}>
@@ -122,7 +129,7 @@ export default function SideNav({
 
         {!feedPopUp && (
           <Wrap onClick={handleClickComment}>
-            <Comment className="cursor-pointer ml-2" />
+            <Comment className="cursor-pointer ml-2" stroke="black" />
           </Wrap>
         )}
 
@@ -141,6 +148,12 @@ export default function SideNav({
               className="cursor-pointer ml-2"
               stroke={window.innerWidth < 430 ? 'white' : 'none'}
             />
+          </Wrap>
+        )}
+
+        {!accessToken && (
+          <Wrap onClick={handleClickShare}>
+            <Share className="cursor-pointer ml-2" stroke="none" />
           </Wrap>
         )}
 
