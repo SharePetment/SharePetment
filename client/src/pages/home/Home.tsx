@@ -263,7 +263,12 @@ export function Component() {
       !accessToken && (
         <>
           {isToastOpen && (
-            <div className="fixed right-8 bottom-8">
+            <div
+              className={
+                window.innerWidth < 420
+                  ? 'fixed top-5 right-2 z-50'
+                  : 'fixed top-28 right-8 z-50'
+              }>
               <Toast />
             </div>
           )}

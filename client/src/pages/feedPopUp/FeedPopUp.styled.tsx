@@ -12,7 +12,6 @@ export const Container = tw.div`
   z-40
   bg-zinc-900/75
   z-50
-  relative
 `;
 
 export const CloseBtn = tw.button`
