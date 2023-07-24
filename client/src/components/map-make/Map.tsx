@@ -71,9 +71,10 @@ export default function Map({
       center: new kakao.maps.LatLng(37.566, 126.977),
       level: 3,
     };
-
+    console.log(options);
     // 지도를 생성합니다.
     const map = new kakao.maps.Map(container, options);
+    console.log(map);
     const marker = new kakao.maps.Marker({
       map: map,
       position: map.getCenter(),
