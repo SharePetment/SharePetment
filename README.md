@@ -61,10 +61,15 @@ npm run dev
 | :---: | :---: | :---: |:---: |
 | <img alt="git logo" src="https://git-scm.com/images/logos/logomark-orange@2x.png" width="65" height="65" > | <img alt="github logo" src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" width="65" height="65"> | <img alt="Discord logo" src="https://assets-global.website-files.com/6257adef93867e50d84d30e2/62595384e89d1d54d704ece7_3437c10597c1526c3dbd98c737c2bcae.svg" height="65" width="65"> |<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Notion-logo.svg/150px-Notion-logo.svg.png" alt="notion" height="65" width="65"> |
 ### Front-end
-| Html | JavaScript | React | Styled-<br>Components  | esLint | 
-| :---: | :---: | :---: | :---: | :---: | 
-| <img alt="Html" src ="https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/HTML5_logo_and_wordmark.svg/440px-HTML5_logo_and_wordmark.svg.png" width="65" height="65" /> | <div style="display: flex; align-items: flex-start;"><img src="https://techstack-generator.vercel.app/js-icon.svg" alt="icon" width="75" height="75" /></div> | <div style="display: flex; align-items: flex-start;"><img src="https://techstack-generator.vercel.app/react-icon.svg" alt="icon" width="65" height="65" /></div> | <img src="https://styled-components.com/logo.png" alt="styled-components icon" width="65" height="65" /> | <div style="display: flex; align-items: flex-start;"><img src="https://techstack-generator.vercel.app/eslint-icon.svg" alt="icon" width="65" height="65" /></div> | <div style="display: flex; align-items: flex-start;"><img src="https://techstack-generator.vercel.app/prettier-icon.svg" alt="icon" width="65" height="65" /></div> | :---: | :---: |:---: | :---: | :---: | 
-|Prettier |  TypeScript |  React-query | Tailwindcss | React Hook Form | :---: | :---: | :---: | :---: | :---: | 
+| Html | JavaScript | React | Styled-<br>Components  | esLint | axios | react-router-dom |
+| :---: | :---: | :---: | :---: | :---: |  :---: |  :---: |
+| <img alt="Html" src ="https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/HTML5_logo_and_wordmark.svg/440px-HTML5_logo_and_wordmark.svg.png" width="65" height="65" /> | <div style="display: flex; align-items: flex-start;"><img src="https://techstack-generator.vercel.app/js-icon.svg" alt="icon" width="75" height="75" /></div> | <div style="display: flex; align-items: flex-start;"><img src="https://techstack-generator.vercel.app/react-icon.svg" alt="icon" width="65" height="65" /></div> | <img src="https://styled-components.com/logo.png" alt="styled-components icon" width="65" height="65" /> | <div style="display: flex; align-items: flex-start;"><img src="https://techstack-generator.vercel.app/eslint-icon.svg" alt="icon" width="65" height="65" /></div> |<img src="https://axios-http.com/assets/logo.svg" width="65" height="65"/> | <img src="https://github.com/codestates-seb/seb44_main_018/assets/57277708/e4cfe63e-a388-4cde-bcd3-900ff30a2f4f" width="100" />
+ |
+<br>
+
+|Prettier |  TypeScript |  React-query | Tailwindcss | React Hook Form | vite | husky |
+|:---: | :---: | :---: | :---: | :---: |  :---: |  :---: | 
+|<div style="display: flex; align-items: flex-start;"><img src="https://techstack-generator.vercel.app/prettier-icon.svg" alt="icon" width="65" height="65" /></div>  | <img src="https://techstack-generator.vercel.app/ts-icon.svg" alt="icon" width="75" height="75" /> |<img src="https://seeklogo.com/images/R/react-query-logo-1340EA4CE9-seeklogo.com.png" alt="icon" width="75" height="75" /> |<img src="https://avatars.githubusercontent.com/u/67109815?s=280&v=4" alt="icon" width="75" height="75" /> | <img alt="hook form" src="https://avatars.githubusercontent.com/u/53986236?s=48&v=4" /> | <img alt="Vite" src ="https://upload.wikimedia.org/wikipedia/commons/f/f1/Vitejs-logo.svg" width="50" height="65" />| |
 
 
 
