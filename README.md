@@ -9,7 +9,7 @@
 - **프로젝트 기간 :** 2023.06.28 - 2023.7.24
 - **한줄 소개 :** 
 - **팀원 :** 김준영(BE 팀장), 오민성, 손기배, 김다은(FE 부팀장), 이재린, 손준석
-- **배포 링크 :** [📮 sharepetment](https://sharepetment.site)
+- **배포 링크 :** [📮 share-petment](https://sharepetment.site)
 
 ## 🛫 Intro
 > 🥲 
