@@ -3,6 +3,8 @@ import tw from 'tailwind-styled-components';
 export const Container = tw.div`
   w-96
   h-[600px]
+  max-sm:w-[350px]
+  max-sm:h-[540px]
   rounded-[28px]
   px-3
   pt-6
@@ -15,7 +17,7 @@ export const Container = tw.div`
   relative
   gap-5
   bg-white
-  z-20
+  z-100
 `;
 
 export const Wrap = tw.div`
@@ -54,6 +56,9 @@ export const Textarea = tw.textarea`
   border
   border-lightgray
   relative
+  resize-none
+  max-sm:h-16
+  max-sm:pr-9
 `;
 
 export const SubmitBtn = tw.button`
@@ -64,4 +69,6 @@ export const SubmitBtn = tw.button`
   z-10
   w-[28px]
   h-[28px]
+  max-sm:right-5
+  max-sm:bottom-7
 `;

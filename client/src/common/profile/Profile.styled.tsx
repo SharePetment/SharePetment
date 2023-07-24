@@ -14,6 +14,5 @@ export const ProfileImage = tw.img<ProfileContainerProps>`
        ? `border-2 border-deepgreen`
        : `border border-lightgray`}
     rounded-full
-    
     object-cover
 `;

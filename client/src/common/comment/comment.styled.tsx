@@ -28,28 +28,27 @@ export const DateText = tw.span`
 export const ContentBox = tw.div`
     py-3
     px-5
+    break-all
 `;
 
 export const Content = tw.span`
-
 py-2
 `;
 
 export const BtnBox = tw.div`
     flex
     justify-between
-    w-[70px]
-    ml-2
+    w-[56px]
+    ml-[16px]
+    text-deepgray
 `;
 export const EditBtn = tw.span`
     cursor-pointer
-    text-lightgray
     text-sm
     hover:text-lightgreen
 `;
 export const DeleteBtn = tw.span`
     cursor-pointer
-    text-lightgray
     text-sm
     hover:text-lightgreen
 `;
@@ -60,8 +59,10 @@ export const Form = tw.form`
 
 export const Input = tw.input`
     py-1
-    px-4
-    w-[230px]
+    pl-4
+    pr-10
+    w-[400px]
+    max-sm:w-[250px]
     rounded-2xl
 
     border-lightgray
@@ -71,6 +72,6 @@ export const Input = tw.input`
 
 export const WriteBtn = tw.button`
     absolute
-    top-[7px]
+    top-[4px]
     right-[9px]
 `;

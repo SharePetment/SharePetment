@@ -1,25 +1,16 @@
 import tw from 'tailwind-styled-components';
 
-export const Overlay = tw.div`
-    absolute
-    w-screen
-    h-screen
-    bg-zinc-900
-    opacity-70
-    z-40
-`;
-
 export const PopupBackGround = tw.div`
-    absolute
     fixed
     top-0
     right-0
     w-full
     h-full
     flex
-    justify-center 
+    justify-center
     items-center
-    z-50
+    z-[9999]
+    bg-zinc-900/75
 `;
 
 export const PopupBox = tw.div`
@@ -29,12 +20,16 @@ export const PopupBox = tw.div`
     items-center
     justify-center 
     h-64
-    z-10
+    z-300
     rounded-3xl
     px-2.5
-    max-sm:w-3/4
-    w-1/3
+    max-sm:w-5/6
+    w-[500px]
     border
+    absolute
+    top-[50%]
+    left-[50%]
+    transform -translate-x-1/2 -translate-y-1/2
 `;
 
 export const Title = tw.h1`
@@ -42,11 +37,15 @@ export const Title = tw.h1`
     font-semibold
     text-center
     mb-8
-    max-sm:w-3/4
+    max-sm:w-100
+    max-sm:text-lg
 `;
-
-export const ButtonBox = tw.div`
+interface Prop {
+  countbtn: string;
+}
+export const ButtonBox = tw.div<Prop>`
     flex
     w-full
-    justify-around
+    ${prop => prop.countbtn === `1` && `justify-center`}
+    ${prop => prop.countbtn === `2` && `justify-around`}
 `;

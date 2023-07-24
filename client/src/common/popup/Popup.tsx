@@ -1,12 +1,11 @@
-import { BooleanStr, Size, Handler } from '../../types/propType';
-import Button from '../button/Button';
+import { BooleanStr, Size, Handler } from '../../types/propType.ts';
+import Button from '../button/Button.tsx';
 import {
   PopupBackGround,
   PopupBox,
   Title,
   ButtonBox,
-  Overlay,
-} from './popup.styled';
+} from './popup.styled.tsx';
 
 interface Prop {
   title: string;
@@ -28,8 +27,7 @@ export default function Popup({
   popupcontrol,
 }: Prop) {
   return (
-    <div className="relative">
-      <Overlay />
+    <>
       <PopupBackGround
         onClick={e => {
           e.preventDefault();
@@ -40,7 +38,7 @@ export default function Popup({
             e.stopPropagation();
           }}>
           <Title>{title}</Title>
-          <ButtonBox>
+          <ButtonBox countbtn={`${countbtn}`}>
             {countbtn === 1 && (
               <Button
                 size={btnsize[0]}
@@ -68,6 +66,6 @@ export default function Popup({
           </ButtonBox>
         </PopupBox>
       </PopupBackGround>
-    </div>
+    </>
   );
 }

@@ -1,5 +1,5 @@
 import tw from 'tailwind-styled-components';
-import { BooleanStr, Size } from '../../types/propType';
+import { BooleanStr, Size } from '../../types/propType.ts';
 
 interface BtnProp {
   isgreen: BooleanStr;

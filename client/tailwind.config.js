@@ -15,6 +15,7 @@ export default {
         lightgreen: '#CCE7C2',
         white: '#FFFFFF',
         popup: '#a1a1aa',
+        yellow: '#EAE784',
       },
     },
     keyframes: {
@@ -22,9 +23,15 @@ export default {
         from: { opacity: 0, transform: 'translate3d(0, 30%, 0)' },
         to: { opacity: 1, transform: 'translateZ(0)' },
       },
+      smoothAppear: {
+        '0%': { opacity: 0, transform: 'translateY(-5%)' },
+        '50%': { opacity: 1, transform: 'translateY(0)' },
+        '100%': { opacity: 0, transform: 'translateY(-5%)' },
+      },
     },
     animation: {
       fadeInUp: 'fadeInUp 0.4s ease-in-out',
+      smoothAppear: 'smoothAppear 1.5s ease-in-out',
     },
   },
   plugins: [],

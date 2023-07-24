@@ -1,14 +1,15 @@
-interface MemberInfo {
+export interface MemberInfo {
   memberId: number;
   nickname: string;
-  imageUrl: string;
+  imageURL: string;
 }
 
 export type CommentProp = {
-  feedCommentsId?: number;
-  walkMatePostId?: number;
-  memberInfo: MemberInfo;
   content: string;
-  createdAt: string[];
-  modifiedAt: string[];
+  createdAt: number[];
+  modifiedAt: number[];
+  memberInfo: MemberInfo;
+  walkMateCommentId?: number;
+  feedCommentsId?: number;
+  walkMatePostId?: string;
 };

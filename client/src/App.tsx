@@ -1,36 +1,48 @@
-import { useState } from 'react';
-import { useNavigate, Outlet } from 'react-router-dom';
-import Footer from './common/footer/Footer';
-import Header from './common/header/Header';
-import Popup from './common/popup/Popup';
+import { Outlet, useMatch, ScrollRestoration } from 'react-router-dom';
+import Footer from './common/footer/Footer.tsx';
+import Header from './common/header/Header.tsx';
+import NavBar from './components/nav/NavBar.tsx';
 
 function App() {
-  const navigate = useNavigate();
-  const [isOpened, setIsOpened] = useState(false);
-  const handleClose = () => {
-    setIsOpened(false);
-  };
-  const handleNavigate = () => {
-    setIsOpened(false);
-    navigate('/123');
-  };
+  const matchHome = useMatch('/'); //object || null
+  const matchInfo = useMatch('/info'); //object || null
+  const matchFeedPopUp = useMatch('/home/:feedId'); //object || null
+  const matchInfoEditing = useMatch('/info/:userId'); //object || null
+  const matchFeed = useMatch('/home');
+  const matchFeedPosting = useMatch('/feed-posting');
+  const matchFeedEditing = useMatch('/feed-posting/:feedId');
+  const loadingFeed = useMatch('/loading');
 
   return (
     <>
-      <Header isloginuser="true" />
+      {!(
+        matchHome ||
+        matchInfo ||
+        matchInfoEditing ||
+        matchFeedPosting ||
+        loadingFeed ||
+        matchFeedPopUp ||
+        matchFeedEditing
+      ) && <Header />}
+      {!(
+        matchHome ||
+        matchInfo ||
+        matchInfoEditing ||
+        matchFeedPosting ||
+        loadingFeed ||
+        matchFeedPopUp
+      ) && <NavBar />}
+      <ScrollRestoration />
       <Outlet />
-      <Footer />
-      {isOpened && (
-        <Popup
-          title="회원가입을 하셔야 사용합니다"
-          handler={[handleClose, handleNavigate]}
-          btnsize={['md', 'md']}
-          countbtn={2}
-          buttontext={['닫기', '확인']}
-          isgreen={['true', 'false']}
-          popupcontrol={handleClose}
-        />
-      )}
+      {!(
+        matchHome ||
+        matchInfo ||
+        matchFeed ||
+        matchInfoEditing ||
+        matchFeedPosting ||
+        matchFeedPopUp ||
+        matchFeedEditing
+      ) && <Footer />}
     </>
   );
 }

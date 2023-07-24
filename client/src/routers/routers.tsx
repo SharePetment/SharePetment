@@ -1,8 +1,8 @@
 import { createBrowserRouter } from 'react-router-dom';
-import App from '../App';
-import Login from '../pages/login/Login';
-import NotFound from '../pages/notFound/NotFound';
-import Path from './paths';
+import App from '../App.tsx';
+import Login from '../pages/login/Login.tsx';
+import NotFound from '../pages/notFound/NotFound.tsx';
+import Path from './paths.ts';
 
 export const router = createBrowserRouter([
   {
@@ -20,7 +20,7 @@ export const router = createBrowserRouter([
       },
       {
         path: Path.InfoEditing,
-        lazy: () => import('../pages/infoEditing/InfoEditing'),
+        lazy: () => import('../pages/info/Info'),
       },
       {
         path: Path.Home,
@@ -48,7 +48,7 @@ export const router = createBrowserRouter([
       },
       {
         path: Path.FeedEditing,
-        lazy: () => import('../pages/feedEditing/FeedEditing'),
+        lazy: () => import('../pages/feedPosting/FeedPosting'),
       },
       {
         path: Path.WalkMate,
@@ -65,6 +65,10 @@ export const router = createBrowserRouter([
       {
         path: Path.WalkEditing,
         lazy: () => import('../pages/walkEditing/WalkEditing'),
+      },
+      {
+        path: Path.Loading,
+        lazy: () => import('../pages/loading/Loading'),
       },
     ],
   },

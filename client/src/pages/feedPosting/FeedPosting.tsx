@@ -1,5 +1,7 @@
+import FeedWriteCard from '../../components/card/feedwritecard/FeedWriteCard.tsx';
+
 export function Component() {
-  return <div>FeedPosting</div>;
+  return <FeedWriteCard />;
 }
 
 Component.displayName = 'FeedPosting';

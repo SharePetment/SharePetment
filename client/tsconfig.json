@@ -16,12 +16,12 @@
 
     /* Linting */
     "strict": true,
-    "noUnusedLocals": true,
+    "noUnusedLocals": false,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
+    "forceConsistentCasingInFileNames": false,
 
   },
-  "include": ["src", "types"],
-  "references": [{ "path": "./tsconfig.node.json" }],
- 
+  "include": ["src"],
+  "references": [{ "path": "./tsconfig.node.json" }]
 }
