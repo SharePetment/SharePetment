@@ -73,7 +73,8 @@ npm run dev
 | Java | mySQL | Rest | AWS | Spring | Spring<br>Boot | 
 | :---: | :---: | :---: | :---: | :---: | :---: |
 | <div style="display: flex; align-items: flex-start;"><img src="https://techstack-generator.vercel.app/java-icon.svg" alt="icon" width="65" height="65" /></div> | <div style="display: flex; align-items: flex-start;"><img src="https://techstack-generator.vercel.app/mysql-icon.svg" alt="icon" width="65" height="65" /></div> | <div style="display: flex; align-items: flex-start;"><img src="https://techstack-generator.vercel.app/restapi-icon.svg" alt="icon" width="65" height="65" /></div> | <div style="display: flex; align-items: flex-start;"><img src="https://techstack-generator.vercel.app/aws-icon.svg" alt="icon" width="65" height="65" /></div> | <img alt="spring logo" src="https://www.vectorlogo.zone/logos/springio/springio-icon.svg" height="50" width="50" > | <img alt="spring-boot logo" src="https://t1.daumcdn.net/cfile/tistory/27034D4F58E660F616" width="65" height="65" > |:---:| :---:| :---:| :---:| :---:|:---:|
-Spring Security| Swagger | Redis| KaKao OAuth2 | Github Actions| Docker 
+Spring Security| Swagger | Redis| KaKao OAuth2 | Github Actions| Docker|
+| :---: | :---: | :---: | :---: | :---: | :---: |
 <br/>
 
 
