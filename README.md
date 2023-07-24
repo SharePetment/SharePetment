@@ -1,6 +1,6 @@
 <h1>📮 Share Petment</h1>
 <div  align="center">
-  <img width="40%" src="" alt="roobits">
+  <img width="40%" src="https://github.com/codestates-seb/seb44_main_018/assets/82816029/9df8aab4-d5c8-4502-8749-4897dd6af963" alt="roobits">
 </div>
 </br>
 
@@ -48,7 +48,8 @@ npm run dev
 
 
 ## ➡️ User flow
-<img width="2800" alt="sharepetment flow" src="">
+<img width="60%" alt="sharepetment flow" src="https://github.com/codestates-seb/seb44_main_018/assets/82816029/12a2a583-6de0-4014-8c45-7567bf0dfe60">
+
 
 ## ➡️ 화면 정의서
 ### [피그마 링크](https://www.figma.com/file/X1rQFh5BxIihpJFPSMyyPU/Main-Project-Prototype?type=design&node-id=0-1&mode=design&t=fQ4k2PiuRBYK0vOI-0)
