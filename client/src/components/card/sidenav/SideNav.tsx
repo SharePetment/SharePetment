@@ -8,7 +8,6 @@ import { ReactComponent as Comment } from '../../../assets/button/comment.svg';
 import { ReactComponent as Delete } from '../../../assets/button/delete.svg';
 import { ReactComponent as Edit } from '../../../assets/button/edit.svg';
 import { ReactComponent as Like } from '../../../assets/button/like.svg';
-import { ReactComponent as Share } from '../../../assets/button/share.svg';
 import { BooleanStr } from '../../../types/propType.ts';
 import { Container, Wrap, Text } from './SideNav.styled.tsx';
 
@@ -18,7 +17,6 @@ interface Prop {
   likes: number;
   like: BooleanStr;
   guesthandler?: () => void;
-  toasthandler?: React.Dispatch<React.SetStateAction<boolean>>;
   deletehandler?: React.Dispatch<React.SetStateAction<boolean>>;
   inperson?: BooleanStr;
   commenthandler?: React.Dispatch<React.SetStateAction<boolean>>;
@@ -31,7 +29,6 @@ export default function SideNav({
   likes,
   like,
   guesthandler,
-  toasthandler,
   deletehandler,
   inperson,
   commenthandler,
@@ -78,20 +75,6 @@ export default function SideNav({
     if (commenthandler) commenthandler(true);
   };
 
-  const handleClickShare = async () => {
-    try {
-      await navigator.clipboard.writeText(
-        `https://share-petment.netlify.app/home/${feedid}`,
-      );
-      if (toasthandler) {
-        toasthandler(true);
-        setTimeout(() => toasthandler(false), 1500);
-      }
-    } catch (err) {
-      if (modalhandler) modalhandler([true, '요청에 실패했어요.']);
-    }
-  };
-
   return (
     <>
       <Container direction={direction}>
@@ -125,10 +108,6 @@ export default function SideNav({
             <Comment className="cursor-pointer ml-2" stroke="black" />
           </Wrap>
         )}
-
-        <Wrap onClick={handleClickShare}>
-          <Share className="cursor-pointer ml-2" stroke="none" />
-        </Wrap>
 
         {inperson === 'true' && (
           <>
