@@ -36,7 +36,10 @@ npm run dev
 2. server/server-application/src/main/java/com/saecdo18/petmily/kakaoLogin/service/KakaoService.java
   (51 line) 주석처리
   (52 line) 주석해제
-3. mysql 설치 
+3. mysql 설치 후 실행
+4. redis 설치 후 실행
+5. server/server-application/src/main/java/com/saecdo18/petmily/ServerApplication.java
+Run 'ServerApplication.main()' 
 
 ```
 
