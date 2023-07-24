@@ -89,3 +89,31 @@ Spring Security| Swagger | Redis| KaKao OAuth2 | Github Actions| Docker
 
 ## API 명세서
 
+
+
+
+
+## Screen Shot
+
+| 로그인 화면 | 홈 화면 | 
+| :---: | :---: |
+|<img src="https://github.com/codestates-seb/seb44_main_018/assets/57277708/d5778b7b-fb4f-4dd9-a455-acde54604e56"  alt="home" width="500"/>| <img src="https://github.com/codestates-seb/seb44_main_018/assets/57277708/b86b8b82-9b3c-4d33-bfb2-6c8b0a944c9b" alt="feed" width="500"/>|
+
+| 피드 상세 페이 | 산책 페이지 | 
+| :---: | :---: |
+|<img src="https://github.com/codestates-seb/seb44_main_018/assets/57277708/eea436f5-a095-4193-a9ba-588c46c00026"  alt="home" width="500"/>| <img src="https://github.com/codestates-seb/seb44_main_018/assets/57277708/7cf7e30b-eca5-429b-8471-904765e2aa11" alt="feed" width="500"/>|
+
+| 산책 상세 페이지 | 산책 생성, 수정 페이지 | 
+| :---: | :---: |
+|<img src="https://github.com/codestates-seb/seb44_main_018/assets/57277708/f2adaa66-b7f1-401c-ae59-c30a82cbd4e1"  alt="home" width="500"/>| <img src="https://github.com/codestates-seb/seb44_main_018/assets/57277708/b28000bc-ea15-4e4b-85d5-eb7451bc3d59" alt="feed" width="500"/>|
+
+
+| 마이 페이지 | 유저 페이지 | 
+| :---: | :---: |
+|<img src="https://github.com/codestates-seb/seb44_main_018/assets/57277708/7727b970-6207-4cb0-8b12-52a4a56ff018"  alt="home" width="500"/>| <img src="https://github.com/codestates-seb/seb44_main_018/assets/57277708/42883685-6946-4e4c-b708-5faab6779b75" alt="feed" width="500"/>|
+
+
+| 유저 정보 수정 페이지 | 펫 등록 & 수정 페이지 | 
+| :---: | :---: |
+|<img src="https://github.com/codestates-seb/seb44_main_018/assets/57277708/ba31acb9-3ee2-4068-a8bd-ea2667279504"  alt="home" width="500"/>| <img src="https://github.com/codestates-seb/seb44_main_018/assets/57277708/79c8ec9e-51b4-4299-90a9-40828cfae9ec" alt="feed" width="500"/>|
+
