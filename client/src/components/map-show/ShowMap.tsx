@@ -17,7 +17,6 @@ export default function ShowMap({ address, lat, lng }: Prop) {
     const container = document.getElementById('myMap');
     const LA = Number(lat);
     const MA = Number(lng);
-    console.log(LA, MA);
     const options = {
       center: new kakao.maps.LatLng(MA, LA),
       level: 3,
@@ -25,7 +24,6 @@ export default function ShowMap({ address, lat, lng }: Prop) {
 
     // 지도를 생성합니다.
     const map = new kakao.maps.Map(container, options);
-    console.log(map);
     // 마커를 생성합니다.
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const marker = new kakao.maps.Marker({

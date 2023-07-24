@@ -148,7 +148,6 @@ export function Component() {
 
   useEffect(() => {
     if (!isLoading && !userData?.animalParents) {
-      console.log(userData);
       navigate('/home');
     }
   }, [userData, navigate, isLoading]);

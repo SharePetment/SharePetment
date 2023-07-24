@@ -5,11 +5,11 @@ self.addEventListener('install', () => {
 });
 
 // activate event
-self.addEventListener('activate', e => {
-  console.log('[Service Worker] actived', e);
+self.addEventListener('activate', () => {
+  console.log('[Service Worker] actived');
 });
 
 // fetch event
-self.addEventListener('fetch', e => {
-  console.log('[Service Worker] fetched resource ' + e.request.url);
+self.addEventListener('fetch', () => {
+  console.log('[Service Worker] fetched resource ');
 });

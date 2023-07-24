@@ -91,7 +91,6 @@ export function Component() {
   });
   useEffect(() => {
     if (!userLoading && !userData?.animalParents) {
-      console.log(userData);
       navigate('/home');
     }
   }, [userData, navigate, userLoading]);

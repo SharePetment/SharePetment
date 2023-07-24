@@ -74,7 +74,6 @@ export function Component() {
   });
 
   const onSumbit = (body: Inputs) => {
-    console.log(body);
     const obj = {
       ...body,
       mapURL: `${coordinates.La} ${coordinates.Ma} ${detailAddress}`,
@@ -102,7 +101,6 @@ export function Component() {
   });
   useEffect(() => {
     if (!userLoading && !userData?.animalParents) {
-      console.log(userData);
       navigate('/home');
     }
   }, [userData, navigate, userLoading]);
