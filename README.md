@@ -69,7 +69,7 @@ npm run dev
 
 |Prettier |  TypeScript |  React-query | Tailwindcss | React Hook Form | vite | husky |
 |:---: | :---: | :---: | :---: | :---: |  :---: |  :---: | 
-|<div style="display: flex; align-items: flex-start;"><img src="https://techstack-generator.vercel.app/prettier-icon.svg" alt="icon" width="65" height="65" /></div>  | <img src="https://techstack-generator.vercel.app/ts-icon.svg" alt="icon" width="75" height="75" /> |<img src="https://seeklogo.com/images/R/react-query-logo-1340EA4CE9-seeklogo.com.png" alt="icon" width="75" height="75" /> |<img src="https://avatars.githubusercontent.com/u/67109815?s=280&v=4" alt="icon" width="75" height="75" /> | <img alt="hook form" src="https://avatars.githubusercontent.com/u/53986236?s=48&v=4" /> | <img alt="Vite" src ="https://upload.wikimedia.org/wikipedia/commons/f/f1/Vitejs-logo.svg" width="50" height="65" />| |
+|<div style="display: flex; align-items: flex-start;"><img src="https://techstack-generator.vercel.app/prettier-icon.svg" alt="icon" width="65" height="65" /></div>  | <img src="https://techstack-generator.vercel.app/ts-icon.svg" alt="icon" width="75" height="75" /> |<img src="https://seeklogo.com/images/R/react-query-logo-1340EA4CE9-seeklogo.com.png" alt="icon" width="75" height="75" /> |<img src="https://avatars.githubusercontent.com/u/67109815?s=280&v=4" alt="icon" width="75" height="75" /> | <img alt="hook form" src="https://avatars.githubusercontent.com/u/53986236?s=48&v=4" /> | <img alt="Vite" src ="https://upload.wikimedia.org/wikipedia/commons/f/f1/Vitejs-logo.svg" width="50" height="65" />| <img alt='husky' src='https://github.com/codestates-seb/seb44_main_018/assets/57277708/5919837a-ab4d-43b5-8570-5d4edce92df4' width='100'/> |
 
 
 
