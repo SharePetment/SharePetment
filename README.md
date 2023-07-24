@@ -91,7 +91,8 @@ Spring Security| Swagger | Redis| KaKao OAuth2 | Github Actions| Docker|
 
 
 ## 🌲 ERD
-
+<a href="https://dbdiagram.io/d/649e3e2a02bd1c4a5e482416">ERD 링크</a>
+<div style="display: flex;"><img src="https://cdn.discordapp.com/attachments/1123422149756067931/1132964064713261117/E18489E185B3E1848FE185B3E18485E185B5E186ABE18489E185A3E186BA_2023-07-17_E1848BE185A9E18492E185AE_8.png" /></div>
 
 ## API 명세서
 
