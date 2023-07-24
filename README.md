@@ -30,6 +30,13 @@ npm run dev
 
 ```
 # Server
+1. server/server-application/src/main/java/com/saecdo18/petmily/jwt/JwtAuthenticationFilter.java
+  (33 line) 주석처리
+  (34 line) 주석해제
+2. server/server-application/src/main/java/com/saecdo18/petmily/kakaoLogin/service/KakaoService.java
+  (51 line) 주석처리
+  (52 line) 주석해제
+3. mysql 설치 
 
 ```
 
