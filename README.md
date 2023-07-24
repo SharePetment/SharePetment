@@ -37,13 +37,13 @@ npm run dev
 | 김준영<br>(BE, 팀장) | 오민성<br>(BE) | 손기배<br>(BE) | 김다은<br>(FE, 부팀장) | 이재린<br>(FE) | 손준석<br> (FE) |
 | :---: | :---: | :---: | :---: | :---: | :---: |
 | 김준영 이미지  | 오민성 이미지 | 손기배 이미지 | 김다은 이미지 | 이재린 이미지 | 손준석 이미지 |
-| [](김준영 깃헙 링크) |    [오민성]() | [손기배]() | [김다은]() | [이재린]() |[손준석]() |
+| [김준영](https://github.com/Junyoungs7) | [오민성](https://github.com/gutack54321) | [손기배](https://github.com/7lpear) | [김다은](https://github.com/ddaeunbb) | [이재린](https://github.com/leejaelll) |[손준석](https://github.com/kd02109) |
 | - 김준영<br> - 예시<br> - 예시<br>| - 오민성 스택<br>| - 손기배 스택<br>| - 김다은 스택<br>|- 이재린 스택<br>| - 손준석 스택<br>|
 
 
 
 ## 📺 Demo
-![anigif](추후 유튜브 영상 링크)
+![유튜브 영상 링크](https://www.youtube.com/watch?v=4TP6GJvfvts)
 
 
 
@@ -51,10 +51,7 @@ npm run dev
 <img width="2800" alt="sharepetment flow" src="">
 
 ## ➡️ 화면 정의서
-### [피그마 링크]()
-
-## 🔧 Skills
-![Roobits Stack (9)]()
+### [피그마 링크](https://www.figma.com/file/X1rQFh5BxIihpJFPSMyyPU/Main-Project-Prototype?type=design&node-id=0-1&mode=design&t=fQ4k2PiuRBYK0vOI-0)
 
 ### Tools
 | Git | Github | Discord | Notion |
