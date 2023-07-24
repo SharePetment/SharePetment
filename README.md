@@ -74,10 +74,15 @@ Run 'ServerApplication.main()'
 | :---: | :---: | :---: |:---: |
 | <img alt="git logo" src="https://git-scm.com/images/logos/logomark-orange@2x.png" width="65" height="65" > | <img alt="github logo" src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" width="65" height="65"> | <img alt="Discord logo" src="https://assets-global.website-files.com/6257adef93867e50d84d30e2/62595384e89d1d54d704ece7_3437c10597c1526c3dbd98c737c2bcae.svg" height="65" width="65"> |<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Notion-logo.svg/150px-Notion-logo.svg.png" alt="notion" height="65" width="65"> |
 ### Front-end
-| Html | JavaScript | React | Styled-<br>Components  | esLint | 
-| :---: | :---: | :---: | :---: | :---: | 
-| <img alt="Html" src ="https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/HTML5_logo_and_wordmark.svg/440px-HTML5_logo_and_wordmark.svg.png" width="65" height="65" /> | <div style="display: flex; align-items: flex-start;"><img src="https://techstack-generator.vercel.app/js-icon.svg" alt="icon" width="75" height="75" /></div> | <div style="display: flex; align-items: flex-start;"><img src="https://techstack-generator.vercel.app/react-icon.svg" alt="icon" width="65" height="65" /></div> | <img src="https://styled-components.com/logo.png" alt="styled-components icon" width="65" height="65" /> | <div style="display: flex; align-items: flex-start;"><img src="https://techstack-generator.vercel.app/eslint-icon.svg" alt="icon" width="65" height="65" /></div> | <div style="display: flex; align-items: flex-start;"><img src="https://techstack-generator.vercel.app/prettier-icon.svg" alt="icon" width="65" height="65" /></div> | :---: | :---: |:---: | :---: | :---: | 
-|Prettier |  TypeScript |  React-query | Tailwindcss | React Hook Form | :---: | :---: | :---: | :---: | :---: | 
+| Html | JavaScript | React | Styled-<br>Components  | esLint | axios | react-router-dom |
+| :---: | :---: | :---: | :---: | :---: |  :---: |  :---: |
+| <img alt="Html" src ="https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/HTML5_logo_and_wordmark.svg/440px-HTML5_logo_and_wordmark.svg.png" width="65" height="65" /> | <div style="display: flex; align-items: flex-start;"><img src="https://techstack-generator.vercel.app/js-icon.svg" alt="icon" width="75" height="75" /></div> | <div style="display: flex; align-items: flex-start;"><img src="https://techstack-generator.vercel.app/react-icon.svg" alt="icon" width="65" height="65" /></div> | <img src="https://styled-components.com/logo.png" alt="styled-components icon" width="65" height="65" /> | <div style="display: flex; align-items: flex-start;"><img src="https://techstack-generator.vercel.app/eslint-icon.svg" alt="icon" width="65" height="65" /></div> |<img src="https://axios-http.com/assets/logo.svg" width="65" height="65"/> | <img src="https://github.com/codestates-seb/seb44_main_018/assets/57277708/e4cfe63e-a388-4cde-bcd3-900ff30a2f4f" width="100" />
+ |
+<br>
+
+|Prettier |  TypeScript |  React-query | Tailwindcss | React Hook Form | vite | husky |
+|:---: | :---: | :---: | :---: | :---: |  :---: |  :---: | 
+|<div style="display: flex; align-items: flex-start;"><img src="https://techstack-generator.vercel.app/prettier-icon.svg" alt="icon" width="65" height="65" /></div>  | <img src="https://techstack-generator.vercel.app/ts-icon.svg" alt="icon" width="75" height="75" /> |<img src="https://seeklogo.com/images/R/react-query-logo-1340EA4CE9-seeklogo.com.png" alt="icon" width="75" height="75" /> |<img src="https://avatars.githubusercontent.com/u/67109815?s=280&v=4" alt="icon" width="75" height="75" /> | <img alt="hook form" src="https://avatars.githubusercontent.com/u/53986236?s=48&v=4" /> | <img alt="Vite" src ="https://upload.wikimedia.org/wikipedia/commons/f/f1/Vitejs-logo.svg" width="50" height="65" />| <img alt='husky' src='https://github.com/codestates-seb/seb44_main_018/assets/57277708/5919837a-ab4d-43b5-8570-5d4edce92df4' width='100'/> |
 
 
 
@@ -99,4 +104,32 @@ Spring Security| Swagger | Redis| KaKao OAuth2 | Github Actions| Docker|
 
 ## API 명세서
 [API 명세서.pdf 다운로드](https://github.com/codestates-seb/seb44_main_018/files/12143992/API.6b79986a7d904a4b90cc15b8b8d05af5.pdf)
+
+
+
+
+
+## Screen Shot
+
+| 로그인 화면 | 홈 화면 | 
+| :---: | :---: |
+|<img src="https://github.com/codestates-seb/seb44_main_018/assets/57277708/d5778b7b-fb4f-4dd9-a455-acde54604e56"  alt="home" width="500"/>| <img src="https://github.com/codestates-seb/seb44_main_018/assets/57277708/b86b8b82-9b3c-4d33-bfb2-6c8b0a944c9b" alt="feed" width="500"/>|
+
+| 피드 상세 페이 | 산책 페이지 | 
+| :---: | :---: |
+|<img src="https://github.com/codestates-seb/seb44_main_018/assets/57277708/eea436f5-a095-4193-a9ba-588c46c00026"  alt="home" width="500"/>| <img src="https://github.com/codestates-seb/seb44_main_018/assets/57277708/7cf7e30b-eca5-429b-8471-904765e2aa11" alt="feed" width="500"/>|
+
+| 산책 상세 페이지 | 산책 생성, 수정 페이지 | 
+| :---: | :---: |
+|<img src="https://github.com/codestates-seb/seb44_main_018/assets/57277708/f2adaa66-b7f1-401c-ae59-c30a82cbd4e1"  alt="home" width="500"/>| <img src="https://github.com/codestates-seb/seb44_main_018/assets/57277708/b28000bc-ea15-4e4b-85d5-eb7451bc3d59" alt="feed" width="500"/>|
+
+
+| 마이 페이지 | 유저 페이지 | 
+| :---: | :---: |
+|<img src="https://github.com/codestates-seb/seb44_main_018/assets/57277708/7727b970-6207-4cb0-8b12-52a4a56ff018"  alt="home" width="500"/>| <img src="https://github.com/codestates-seb/seb44_main_018/assets/57277708/42883685-6946-4e4c-b708-5faab6779b75" alt="feed" width="500"/>|
+
+
+| 유저 정보 수정 페이지 | 펫 등록 & 수정 페이지 | 
+| :---: | :---: |
+|<img src="https://github.com/codestates-seb/seb44_main_018/assets/57277708/ba31acb9-3ee2-4068-a8bd-ea2667279504"  alt="home" width="500"/>| <img src="https://github.com/codestates-seb/seb44_main_018/assets/57277708/79c8ec9e-51b4-4299-90a9-40828cfae9ec" alt="feed" width="500"/>|
 
