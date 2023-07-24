@@ -36,9 +36,11 @@ npm run dev
 ## 👨‍👩‍👧‍👦 Team
 | 김준영<br>(BE, 팀장) | 오민성<br>(BE) | 손기배<br>(BE) | 김다은<br>(FE, 부팀장) | 이재린<br>(FE) | 손준석<br> (FE) |
 | :---: | :---: | :---: | :---: | :---: | :---: |
-| 김준영 이미지  | 오민성 이미지 | 손기배 이미지 | 김다은 이미지 | 이재린 이미지 | 손준석 이미지 |
+| <img width="125" alt="sharepetment flow" src="https://github.com/codestates-seb/seb44_main_018/assets/82816029/0f5fe22d-b2ef-4b5b-85a3-ffbe03a1429c">  | <img width="125" alt="오민성" src="https://github.com/codestates-seb/seb44_main_018/assets/82816029/d92bc9ae-e522-44fa-9fe7-35018e218931"> | <img width="125" alt="손기배" src="https://github.com/codestates-seb/seb44_main_018/assets/82816029/4073e035-a669-425c-bab0-9f7d76f2631d"> | <img width="125" alt="김다은" src="https://github.com/codestates-seb/seb44_main_018/assets/82816029/552cc2c2-b309-4f68-ac22-7e169ed43b3d"> | <img width="125" alt="이재린" src="https://github.com/codestates-seb/seb44_main_018/assets/82816029/dd95f800-5579-43b0-a334-d4e0e92aaa51"> | <img width="125" alt="손준석" src="https://github.com/codestates-seb/seb44_main_018/assets/82816029/d9dcbd97-5ffd-4bc5-be82-baf6d50f0196"> |
 | [김준영](https://github.com/Junyoungs7) | [오민성](https://github.com/gutack54321) | [손기배](https://github.com/7lpear) | [김다은](https://github.com/ddaeunbb) | [이재린](https://github.com/leejaelll) |[손준석](https://github.com/kd02109) |
 | - 김준영<br> - 예시<br> - 예시<br>| - 오민성 스택<br>| - 손기배 스택<br>| - 김다은 스택<br>|- 이재린 스택<br>| - 손준석 스택<br>|
+
+
 
 
 
