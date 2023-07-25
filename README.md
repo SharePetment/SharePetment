@@ -40,10 +40,12 @@ npm run dev
   (51 line) 주석처리
   (52 line) 주석해제
 3. mysql 설치 후 실행
+  - 설치 후 application.yml 파일에서 자신의  mysql id, password 입력
+  - mysql에 testdb 생성
 4. redis 설치 후 실행
-5. server/server-application/src/main/java/com/saecdo18/petmily/ServerApplication.java
+5. S3 생성 후 application.yml 파일에 S3 정보 입력
+6. server/server-application/src/main/java/com/saecdo18/petmily/ServerApplication.java
 Run 'ServerApplication.main()' 
-
 ```
 
 ## 👨‍👩‍👧‍👦 Team
