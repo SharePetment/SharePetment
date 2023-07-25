@@ -47,7 +47,7 @@ public class KakaoService {
         MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
 
         formData.add("grant_type" , "authorization_code");
-        formData.add("client_id" , "07df97c2858e60b2e19f630c2c397b31");
+        formData.add("client_id" , "${client_id}");
         formData.add("redirect_uri" , "http://43.202.86.53:8080/auth/kakao/callback");
 //        formData.add("redirect_uri" , "http://localhost:8080/auth/kakao/callback");
         formData.add("code" , code);
