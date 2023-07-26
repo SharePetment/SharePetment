@@ -166,7 +166,7 @@ public class FeedServiceImpl implements FeedService {
 
         List<Feed> feedList = new ArrayList<>();
         for(FollowMember followMember : followMemberList){
-            Feed followFeed = feedRepository.findByMemberOrderByCreatedAtDesc(followMember.getFollowerMember());
+            Feed followFeed = feedRepository.findFirstByMemberOrderByCreatedAtDesc(followMember.getFollowerMember());
             feedList.add(followFeed);
         }
         if (feedList.size() > size) {
