@@ -2,7 +2,7 @@ import tw from 'tailwind-styled-components';
 
 export const CardContainer = tw.div<{ size: string }>`
   ${prop => prop.size === 'sm' && `w-56 gap-3`}
-  ${prop => prop.size === 'lg' && `w-60 h-72 gap-4`}
+  ${prop => prop.size === 'lg' && `w-full h-72 gap-4`}
   rounded-[28px]
   border-2
   px-4
@@ -57,17 +57,16 @@ export const WriterProfile = tw.div`
 
 export const Backdrop = tw.div<{ size: string }>`
   ${prop => prop.size === 'sm' && `w-[224px] h-[290px]`}
-  ${prop => prop.size === 'lg' && `w-60 h-72`}
+  ${prop => prop.size === 'lg' && `w-full h-72`}
   rounded-[28px]
   bg-defaulttext
   opacity-70
   absolute
-  -top-0.5
-  -left-0.5
+  top-0
+  left-0
 `;
 
 export const CompleteText = tw.div`
-  ml-3
   font-bold
   shrink-0
 `;
@@ -78,6 +77,6 @@ export const CompleteNotice = tw.div`
   absolute
   top-1/2
   left-1/2
-  -translate-x-[72%]
+  -translate-x-[55%]
   -translate-y-[50%]
 `;

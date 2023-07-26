@@ -12,6 +12,7 @@ export const Container = tw.div`
     bg-white
     rounded-2xl
     max-sm:w-3/4
+    relative
 `;
 
 export const Form = tw.form`

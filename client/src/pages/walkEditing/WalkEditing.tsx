@@ -118,7 +118,7 @@ export function Component() {
               </h2>
               <Close
                 className=" stroke-defaulttext fill-defaulttext w-6 h-6 cursor-pointer"
-                onClick={() => navigate('/walkmate')}
+                onClick={() => navigate(-1)}
               />
             </div>
 

@@ -5,6 +5,7 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { useReadLocalStorage } from 'usehooks-ts';
 import { patchPet, postPet } from '../../api/mutationfn.ts';
 import { SERVER_URL } from '../../api/url.ts';
+import { ReactComponent as Close } from '../../assets/button/close.svg';
 import { ReactComponent as Man } from '../../assets/label/man.svg';
 import { ReactComponent as Woman } from '../../assets/label/woman.svg';
 import Button from '../../common/button/Button.tsx';
@@ -131,15 +132,18 @@ export default function PetInfo(prop: Prop) {
   const onSubmit: SubmitHandler<Inputs> = data => handlePetPost(data);
   return (
     <>
-      <PopupBackGround
-        onClick={e => {
-          e.preventDefault();
-          setIsOpened(false);
-        }}>
+      <PopupBackGround>
         <Container
           onClick={e => {
             e.stopPropagation();
           }}>
+          <Close
+            fill="black"
+            className="absolute top-5 right-5 cursor-pointer"
+            onClick={() => {
+              setIsOpened(false);
+            }}
+          />
           <PetProfile
             image={image}
             setImage={setImage}

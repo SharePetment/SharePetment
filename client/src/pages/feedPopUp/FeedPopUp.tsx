@@ -13,6 +13,7 @@ import FeedCard from '../../components/card/feed-card/FeedCard';
 import SideNav from '../../components/card/sidenav/SideNav';
 import LoadingComponent from '../../components/loading/LoadingComponent';
 import NoticeServerError from '../../components/notice/NoticeServerError';
+import Toast from '../../components/toast/Toast';
 import { MemberIdContext } from '../../store/Context';
 import { Feed } from '../../types/feedTypes';
 import changeTime from '../../util/changeTime';
@@ -34,6 +35,7 @@ export function Component() {
   const { feedId } = useParams();
 
   // 알림 토스트 및 팝업창 state
+  const [isToastOpen, setIsToastOpen] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState<[boolean, string]>([false, '']);
   const [isDeleteOpen, setIsDeleteOpen] = useState<boolean>(false);
   const [isCommentOpen, setIsCommentOpen] = useState<boolean>(false);
@@ -161,6 +163,11 @@ export function Component() {
               onClick={e => {
                 if (e.target === e.currentTarget) navigate(-1);
               }}>
+              {isToastOpen && (
+                <div className="fixed right-3 bottom-4 z-50">
+                  <Toast />
+                </div>
+              )}
               <CloseBtn onClick={() => navigate(-1)}>
                 <Close fill="white" />
               </CloseBtn>
@@ -184,6 +191,7 @@ export function Component() {
                 }
                 commenthandler={setIsCommentOpen}
                 modalhandler={setIsOpen}
+                toasthandler={setIsToastOpen}
               />
             </FeedCardContainer>
           </>
@@ -192,6 +200,11 @@ export function Component() {
             onClick={e => {
               if (e.target === e.currentTarget) navigate(-1);
             }}>
+            {isToastOpen && (
+              <div className="fixed right-8 bottom-10 z-50">
+                <Toast />
+              </div>
+            )}
             <CloseBtn onClick={() => navigate(-1)}>
               <Close fill="white" />
             </CloseBtn>
@@ -239,6 +252,7 @@ export function Component() {
                       : 'false'
                   }
                   modalhandler={setIsOpen}
+                  toasthandler={setIsToastOpen}
                 />
                 <FeedInput feedid={data.feedId} blankhandler={setIsOpen} />
               </RightBox>
@@ -316,6 +330,11 @@ export function Component() {
               onClick={e => {
                 if (e.target === e.currentTarget) navigate(-1);
               }}>
+              {isToastOpen && (
+                <div className="fixed right-3 bottom-4 z-50">
+                  <Toast />
+                </div>
+              )}
               <CloseBtn onClick={() => navigate(-1)}>
                 <Close fill="white" />
               </CloseBtn>
@@ -340,6 +359,7 @@ export function Component() {
                 }
                 commenthandler={setIsCommentOpen}
                 modalhandler={setIsOpen}
+                toasthandler={setIsToastOpen}
               />
             </FeedCardContainer>
           </>
@@ -348,6 +368,11 @@ export function Component() {
             onClick={e => {
               if (e.target === e.currentTarget) navigate(-1);
             }}>
+            {isToastOpen && (
+              <div className="fixed right-8 bottom-10 z-50">
+                <Toast />
+              </div>
+            )}
             <CloseBtn onClick={() => navigate(-1)}>
               <Close fill="white" />
             </CloseBtn>

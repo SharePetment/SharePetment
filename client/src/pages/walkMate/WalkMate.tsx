@@ -108,8 +108,8 @@ export function Component() {
   }
 
   return (
-    <div className="mt-10 flex flex-col items-center justify-center">
-      <div className="grid grid-cols-[max-content_max-content] gap-y-6 gap-x-4 max-sm:justify-center max-sm:gap-x-2">
+    <div className="max-w-[1028px] mx-auto mt-10 px-6 max-sm:flex max-sm:flex-col max-sm:items-center">
+      <div className="grid grid-cols-[max-content_max-content] gap-y-6 gap-x-4 max-sm:gap-x-2">
         <Select size="md" direction="row" setZip={setZip} />
         <SearchButton onClick={handleClickSearchAddress}>검색</SearchButton>
         <div className="flex gap-4 max-sm:gap-2">
@@ -127,7 +127,7 @@ export function Component() {
       </div>
 
       <GridContainer>
-        <Link to={Path.WalkPosting}>
+        <Link to={Path.WalkPosting} className="w-full">
           <CardContainer size="lg" className="items-center justify-center">
             <Plus className=" w-8 h-8" />
           </CardContainer>
@@ -141,7 +141,8 @@ export function Component() {
                   {page.map(item => (
                     <Link
                       to={`/walkmate/${item.walkMatePostId}`}
-                      key={item.walkMatePostId}>
+                      key={item.walkMatePostId}
+                      className="w-full">
                       <WalkCard
                         size="lg"
                         time={changeDateFormat(item.time)}
@@ -166,7 +167,8 @@ export function Component() {
                   {page.map(item => (
                     <Link
                       to={`/walkmate/${item.walkMatePostId}`}
-                      key={item.walkMatePostId}>
+                      key={item.walkMatePostId}
+                      className="w-full">
                       <WalkCard
                         size="lg"
                         time={changeDateFormat(item.time)}

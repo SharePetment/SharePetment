@@ -14,6 +14,7 @@ import { fillUserInfo, postQuitMember } from '../../api/mutationfn.ts';
 import { SERVER_URL } from '../../api/url.ts';
 import { ReactComponent as Like } from '../../assets/button/like.svg';
 import { ReactComponent as Logo } from '../../assets/logo.svg';
+import { ReactComponent as ArrowLeft } from '../../assets/mobile/arrow-left.svg';
 import Button from '../../common/button/Button.tsx';
 import {
   ErrorNotice,
@@ -191,13 +192,12 @@ export function Component() {
   if (userId) {
     return (
       <>
-        <Logo
-          width="400"
-          className="ml-8 max-sm:w-80 max-sm:mx-auto cursor-pointer"
-          onClick={() => {
-            navigate('/home');
-          }}
-        />
+        <div
+          className="w-[320px] max-sm:w-[220px] mx-auto flex items-center gap-2 cursor-pointer"
+          onClick={() => navigate(-1)}>
+          <ArrowLeft className="w-7 h-7 stroke-deepgreen" />
+          <Logo width="400" className="ml-8 max-sm:w-80 max-sm:mx-auto " />
+        </div>
         <FormContainer>
           <InfoForm onSubmit={handleSubmit(onSubmit)}>
             {/* 이름 */}

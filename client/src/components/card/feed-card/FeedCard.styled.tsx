@@ -1,6 +1,7 @@
 import tw from 'tailwind-styled-components';
 
 export const Container = tw.div`
+  drop-shadow-2xl
 `;
 
 export const Feed = tw.img`
@@ -8,6 +9,8 @@ export const Feed = tw.img`
   bg-slate-400
   rounded-[28px]
   bg-lightgray
+  border-4
+  border-deepgreen
 `;
 
 export const ContentContainer = tw.div`

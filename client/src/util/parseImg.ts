@@ -1,4 +1,6 @@
+import imageCompression from 'browser-image-compression';
 import { FeedImage } from '../types/feedTypes.ts';
+import { option } from './imageCompressOption.ts';
 
 interface ParseImgProp {
   e: React.ChangeEvent<HTMLInputElement>;
@@ -30,11 +32,12 @@ export const parseImg = ({
       files = Array.from(e.target.files);
     }
 
-    const readAndPreview = (file: File) => {
+    const readAndPreview = async (file: File) => {
       if (/\.(jpe?g|png)$/i.test(file.name)) {
         const reader = new FileReader();
+        const compressedImg = await imageCompression(file, option);
         setPrevFile(prev => {
-          return [...prev, file];
+          return [...prev, compressedImg];
         });
         reader.readAsDataURL(file);
         return new Promise<void>(resolve => {

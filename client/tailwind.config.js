@@ -28,10 +28,19 @@ export default {
         '50%': { opacity: 1, transform: 'translateY(0)' },
         '100%': { opacity: 0, transform: 'translateY(-5%)' },
       },
+      spin: {
+        from: {
+          transform: 'rotate(0deg)',
+        },
+        to: {
+          transform: 'rotate(360deg)',
+        },
+      },
     },
     animation: {
       fadeInUp: 'fadeInUp 0.4s ease-in-out',
       smoothAppear: 'smoothAppear 1.5s ease-in-out',
+      spin: 'spin 1s linear infinite',
     },
   },
   plugins: [],

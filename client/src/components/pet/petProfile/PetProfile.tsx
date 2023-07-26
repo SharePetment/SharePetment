@@ -1,7 +1,11 @@
+import imageCompression from 'browser-image-compression';
 import { ChangeEvent, useState, useRef } from 'react';
 import Cropper, { ReactCropperElement } from 'react-cropper';
 import Button from '../../../common/button/Button.tsx';
+import Popup from '../../../common/popup/Popup.tsx';
 import Profile from '../../../common/profile/Profile.tsx';
+import { option } from '../../../util/imageCompressOption.ts';
+import Spin from '../../spin/Spin.tsx';
 import {
   ButtonBox,
   CropDiv,
@@ -27,7 +31,8 @@ export default function PetProfile({
   setFile,
 }: Prop) {
   const [isViewImageCropper, setIsViewImageCropper] = useState(false);
-
+  const [isError, setIsError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   // 이미지 처리
   const handleProfile = (e: ChangeEvent<HTMLInputElement>) => {
     let file: File | undefined;
@@ -41,6 +46,9 @@ export default function PetProfile({
           setImage(reader.result as string); // 파일의 컨텐츠
           resolve();
         };
+        reader.onerror = () => {
+          setIsError(true);
+        };
       });
     }
   };
@@ -48,19 +56,36 @@ export default function PetProfile({
   const cropperRef = useRef<ReactCropperElement>(null);
   // cropper 채택
   const getCropData = async () => {
-    const cropper = cropperRef.current?.cropper;
-    if (cropper) {
-      const image = cropper.getCroppedCanvas().toDataURL();
-      setImage(image);
-      // string을 file 형태로 변환
-      const cropfile = await fetch(cropper.getCroppedCanvas().toDataURL())
-        .then(res => res.blob())
-        .then(blob => {
-          return new File([blob], 'newAvatar.jpeg', { type: 'image/jpeg' });
-        });
-      setFile(cropfile);
+    try {
+      const cropper = cropperRef.current?.cropper;
+      if (cropper) {
+        setIsLoading(true);
+        const image = cropper.getCroppedCanvas().toDataURL();
+        setImage(image);
+        // string을 file 형태로 변환
+        const cropfile = await fetch(cropper.getCroppedCanvas().toDataURL())
+          .then(res => res.blob())
+          .then(async blob => {
+            const file = new File([blob], 'newAvatar.jpeg', {
+              type: 'image/jpeg',
+            });
+            const compressedFile = await imageCompression(file, option);
+            return compressedFile;
+          })
+          .catch(() => {
+            setIsError(true);
+          });
+        if (cropfile) {
+          setFile(cropfile);
+          setIsLoading(false);
+        }
+      }
+      setIsViewImageCropper(false);
+    } catch (err) {
+      console.error(err);
+      setIsError(true);
+      setIsLoading(false);
     }
-    setIsViewImageCropper(false);
   };
 
   // cropa 실패
@@ -96,29 +121,46 @@ export default function PetProfile({
             ref={cropperRef}
             src={image}
             viewMode={1}
-            width={400}
-            height={400}
             background={false}
             responsive
             autoCropArea={1}
             checkOrientation={false}
             guides
+            className="w-[400px] h-[400px] max-sm:w-[300px] max-sm:h-[300px]"
           />
-          <ButtonBox>
-            <Button
-              text="선택"
-              isgreen="true"
-              handler={getCropData}
-              size="lg"
-            />
-            <Button
-              text="취소"
-              isgreen="false"
-              handler={handleCancle}
-              size="lg"
-            />
-          </ButtonBox>
+          {!isLoading && (
+            <ButtonBox>
+              <Button
+                text="선택"
+                isgreen="true"
+                handler={getCropData}
+                size="sm"
+              />
+              <Button
+                text="취소"
+                isgreen="false"
+                handler={handleCancle}
+                size="sm"
+              />
+            </ButtonBox>
+          )}
+          {isLoading && <Spin></Spin>}
         </CropDiv>
+      )}
+      {isError && (
+        <Popup
+          title={'이미지 변환 과정에서 오류가 발생했습니다.'}
+          handler={[
+            () => {
+              setIsError(false);
+            },
+          ]}
+          isgreen={['true']}
+          btnsize={['md']}
+          buttontext={['확인']}
+          countbtn={1}
+          popupcontrol={() => setIsError(false)}
+        />
       )}
     </>
   );
