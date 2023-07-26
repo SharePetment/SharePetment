@@ -79,6 +79,7 @@ public class FeedController {
                                                               @ApiParam("페이지당 받을 피드 수") @RequestParam(defaultValue = "10") int size) {
 
         log.info("getFeedsByMemberFollow start");
+        log.info("Request Time : {}", LocalTime.now());
         log.info("page : {}, size : {}", page, size);
         long memberId = authenticationGetMemberId.getMemberId();
         FeedDtoList responseList = feedService.getFeedsByMemberFollow(memberId, page, size);
