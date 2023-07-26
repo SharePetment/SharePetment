@@ -20,4 +20,6 @@ public interface FeedRepository extends JpaRepository<Feed, Long> {
 
     List<Feed> findAllByFeedIdIn(ArrayList<Long> longs);
 
+    Feed findByMemberOrderByCreatedAtDesc(Member member);
+
 }

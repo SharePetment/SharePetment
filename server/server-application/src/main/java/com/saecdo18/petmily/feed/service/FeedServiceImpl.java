@@ -164,40 +164,47 @@ public class FeedServiceImpl implements FeedService {
         List<FollowMember> followMemberList = followMemberRepository.findByFollowingId(memberId)
                 .orElseThrow(() -> new RuntimeException("팔로우한 멤버가 없습니다."));
 
-        Set<Feed> feedSet = new HashSet<>();
-        int dataCount = 20;
-        int totalFeedCount = 0;
-
-        Set<String> previousIds = getToRedis(memberId);
-
-        Collections.shuffle(followMemberList);
-
-        while (feedSet.size() < dataCount && totalFeedCount < dataCount) {
-            boolean added = false;
-            for (FollowMember followMember : followMemberList) {
-                PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
-                List<Feed> memberFeedList = feedRepository
-                        .findAllByMemberOrderByCreatedAtDesc(followMember.getFollowerMember(), pageRequest)
-                        .getContent();
-                for (Feed feed : memberFeedList) {
-                    if (!feedSet.contains(feed)) {
-                        feedSet.add(feed);
-                        totalFeedCount++;
-                        added = true;
-                    }
-                }
-            }
-            feedSet = new HashSet<>(filterFeedsByPreviousListIds(new ArrayList<>(feedSet), previousIds));
-            if (!added) {
-                break;
-            }
+        List<Feed> feedList = new ArrayList<>();
+        for(FollowMember followMember : followMemberList){
+            Feed followFeed = feedRepository.findByMemberOrderByCreatedAtDesc(followMember.getFollowerMember());
+            feedList.add(followFeed);
         }
-
-        List<Feed> feedList = new ArrayList<>(feedSet);
-
-        if (feedList.size() > 10) {
+        if (feedList.size() > size) {
             feedList = feedList.subList(0, size);
         }
+
+//        Set<Feed> feedSet = new HashSet<>();
+//        int dataCount = 10;
+//        int totalFeedCount = 0;
+//
+//        Set<String> previousIds = getToRedis(memberId);
+//
+//        Collections.shuffle(followMemberList);
+//
+//        while (feedSet.size() < size && totalFeedCount < size) {
+//            boolean added = false;
+//            for (FollowMember followMember : followMemberList) {
+//                PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
+//                List<Feed> memberFeedList = feedRepository
+//                        .findAllByMemberOrderByCreatedAtDesc(followMember.getFollowerMember(), pageRequest)
+//                        .getContent();
+//                for (Feed feed : memberFeedList) {
+//                    if (!feedSet.contains(feed)) {
+//                        feedSet.add(feed);
+//                        totalFeedCount++;
+//                        added = true;
+//                    }
+//                }
+//            }
+//            feedSet = new HashSet<>(filterFeedsByPreviousListIds(new ArrayList<>(feedSet), previousIds));
+//            if (!added) {
+//                break;
+//            }
+//        }
+//
+//        List<Feed> feedList = new ArrayList<>(feedSet);
+
+
 
         Collections.shuffle(feedList);
         addToRedisSet(feedList, memberId);
