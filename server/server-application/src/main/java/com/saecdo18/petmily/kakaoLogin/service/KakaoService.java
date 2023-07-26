@@ -15,6 +15,7 @@ import com.saecdo18.petmily.member.repository.MemberRepository;
 import com.saecdo18.petmily.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -40,6 +41,8 @@ public class KakaoService {
     private final TokenProvider tokenProvider;
     private final KakaoAccessTokenRepository kakaoAccessTokenRepository;
     private final MemberService memberService;
+    @Value("${kakao.rest}")
+    private String KAKAO_CLIENT_KEY;
 
     public String getAccessToken(String code) throws JsonProcessingException {
         log.info("getAccessToken start");
@@ -47,7 +50,7 @@ public class KakaoService {
         MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
 
         formData.add("grant_type" , "authorization_code");
-        formData.add("client_id" , "07df97c2858e60b2e19f630c2c397b31");
+        formData.add("client_id" , KAKAO_CLIENT_KEY);
         formData.add("redirect_uri" , "http://43.202.86.53:8080/auth/kakao/callback");
 //        formData.add("redirect_uri" , "http://localhost:8080/auth/kakao/callback");
         formData.add("code" , code);
