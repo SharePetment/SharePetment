@@ -78,15 +78,15 @@ public class FeedController {
     public ResponseEntity<FeedDtoList> getFeedsByMemberFollow(@ApiParam("페이지 번호") @RequestParam(defaultValue = "0") int page,
                                                               @ApiParam("페이지당 받을 피드 수") @RequestParam(defaultValue = "10") int size) {
 
+        log.info("getFeedsByMemberFollow start");
+        log.info("page : {}, size : {}", page, size);
         long memberId = authenticationGetMemberId.getMemberId();
         FeedDtoList responseList = feedService.getFeedsByMemberFollow(memberId, page, size);
         if (responseList.getResponseList().size() < size) {
             size = size-responseList.getResponseList().size();
             FeedDtoList addResponseList = feedService.getFeedsRecent(memberId, page, size);
-            log.info("getFeedRecent size = {}" , addResponseList.getResponseList().size());
             responseList.getResponseList().addAll(addResponseList.getResponseList());
         }
-        log.info("init responseList size = {}", responseList.getResponseList().size());
         if (responseList.getResponseList().size() == 0) {
             feedService.deleteRedis(memberId);
         }
