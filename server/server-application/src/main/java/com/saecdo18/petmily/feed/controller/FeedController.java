@@ -90,6 +90,7 @@ public class FeedController {
         }
         if (responseList.getResponseList().size() == 0) {
             feedService.deleteRedis(memberId);
+            log.info("Redis Reset @@@@@@@@@@@@@@@@");
         }
 
         log.info("getFeedsByMemberFollow end");
