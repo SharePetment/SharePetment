@@ -81,15 +81,13 @@ public class FeedController {
         long memberId = authenticationGetMemberId.getMemberId();
         FeedDtoList responseList = feedService.getFeedsByMemberFollow(memberId, page, size);
         if (responseList.getResponseList().size() < size) {
+            size = size-responseList.getResponseList().size();
             FeedDtoList addResponseList = feedService.getFeedsRecent(memberId, page, size);
             log.info("getFeedRecent size = {}" , addResponseList.getResponseList().size());
             responseList.getResponseList().addAll(addResponseList.getResponseList());
         }
         log.info("init responseList size = {}", responseList.getResponseList().size());
-        if (responseList.getResponseList().size() > size) {
-            List<FeedDto.Response> responses = responseList.getResponseList().subList(0, size);
-            responseList.setResponseList(responses);
-        } else if (responseList.getResponseList().size() == 0) {
+        if (responseList.getResponseList().size() == 0) {
             feedService.deleteRedis(memberId);
         }
 

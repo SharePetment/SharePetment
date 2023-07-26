@@ -116,7 +116,6 @@ public class FeedServiceImpl implements FeedService {
 
             List<Feed> filteredDataList = pageDataList.stream()
                     .filter(data -> !previousIds.contains(data.getFeedId().toString()))
-                    .filter(data -> memberId == 0 || data.getMember().getMemberId() != memberId)
                     .collect(Collectors.toList());
 
             log.info("filteredDataList.size : {}", filteredDataList.size());
