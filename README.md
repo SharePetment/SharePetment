@@ -1,4 +1,4 @@
-![게스트화면](https://github.com/SharePetment/SharePetment/assets/45515897/341f16b3-c175-4fa4-bae8-e8cfcb3e0c95)<h1>📮 Share Petment</h1>
+<h1>📮 Share Petment</h1>
 <div  align="center">
   <img width="40%" src="https://github.com/codestates-seb/seb44_main_018/assets/82816029/9df8aab4-d5c8-4502-8749-4897dd6af963" alt="roobits">
 </div>
@@ -171,4 +171,4 @@ Spring Security| Swagger | Redis| KaKao OAuth2 | Github Actions| Docker|
 
 | 회원 탈퇴 |  | 
 | :---: | :---: |
-|<img src="https://github.com/SharePetment/SharePetment/assets/45515897/b77ffb5c-ba17-41ee-be41-7338623472ea"  alt="home" width="500"/>| />|
+|<img src="https://github.com/SharePetment/SharePetment/assets/45515897/b77ffb5c-ba17-41ee-be41-7338623472ea"  alt="home" width="500"/>| |
