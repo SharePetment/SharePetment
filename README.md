@@ -116,7 +116,7 @@ Spring Security| Swagger | Redis| KaKao OAuth2 | Github Actions| Docker|
 
 | 로그인 화면 | 홈 화면 | 
 | :---: | :---: |
-|<img src=![로그인1](https://github.com/SharePetment/SharePetment/assets/45515897/0711bc56-dc36-41d4-8ac1-d9bc89143aa8)  alt="home" width="500"/>| <img src="https://github.com/codestates-seb/seb44_main_018/assets/57277708/b86b8b82-9b3c-4d33-bfb2-6c8b0a944c9b" alt="feed" width="500"/>|
+|<img src="https://github.com/codestates-seb/seb44_main_018/assets/57277708/d5778b7b-fb4f-4dd9-a455-acde54604e56"  alt="home" width="500"/>| <img src="https://github.com/codestates-seb/seb44_main_018/assets/57277708/b86b8b82-9b3c-4d33-bfb2-6c8b0a944c9b" alt="feed" width="500"/>|
 
 | 피드 상세 페이 | 산책 페이지 | 
 | :---: | :---: |
