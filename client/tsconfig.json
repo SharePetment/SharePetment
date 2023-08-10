@@ -20,7 +20,7 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "forceConsistentCasingInFileNames": false,
-
+    "paths": {}
   },
   "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }]

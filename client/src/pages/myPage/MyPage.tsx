@@ -66,7 +66,6 @@ export function Component() {
   const {
     data,
     isLoading,
-
     isError: isUserError,
   } = useQuery<UserInfo>({
     queryKey: ['myPage'],
@@ -176,7 +175,7 @@ export function Component() {
 
   // 유저 이미지와 일치하는 펫 이미지가 있는지 index를 통해 탐색
   useEffect(() => {
-    let indexNumber;
+    let indexNumber: number | undefined;
     if (typeof data?.memberInfo === 'object') {
       const userImage = data?.memberInfo.imageURL;
       const petArray = data?.pets.map(({ images }) => images.uploadFileURL);
