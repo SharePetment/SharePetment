@@ -148,6 +148,21 @@ export const postFeedComment = async (body: PostFeedCommentProp) => {
   return result;
 };
 
+/* ------------------------------ 피드게시물 댓글 수정 ------------------------------ */
+export const patchFeedComment = async (body: PostFeedCommentProp) => {
+  const { url, accessToken, content, feedId } = body;
+  const result = await axios.patch(
+    url,
+    { content, feedId },
+    {
+      headers: {
+        Authorization: accessToken,
+      },
+    },
+  );
+  return result;
+};
+
 /* -------------------------------- 산책게시물 생성 -------------------------------- */
 interface FillWalkPosProp {
   title: string;

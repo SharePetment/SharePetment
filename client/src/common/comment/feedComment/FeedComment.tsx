@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useReadLocalStorage } from 'usehooks-ts';
-import { deleteMutation, patchMutation } from '../../../api/mutationfn.ts';
+import { deleteMutation, patchFeedComment } from '../../../api/mutationfn.ts';
 import { SERVER_URL } from '../../../api/url.ts';
 import { ReactComponent as Write } from '../../../assets/button/write.svg';
 import { BooleanStr } from '../../../types/propType.ts';
@@ -47,7 +47,7 @@ export default function FeedComment({
   const queryClient = useQueryClient();
 
   const commentEditMuation = useMutation({
-    mutationFn: patchMutation,
+    mutationFn: patchFeedComment,
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['feedPopUp', feedid],
