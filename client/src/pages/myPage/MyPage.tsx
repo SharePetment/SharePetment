@@ -60,7 +60,7 @@ export function Component() {
   // 마이 info 데이터 불러오기
   const state = useContext(MemberIdContext);
 
-  const accessToken = useReadLocalStorage<string>('accessToken');
+  const accessToken = useReadLocalStorage<string | null>('accessToken');
 
   // 자신의 유저 정보 조회
   const {

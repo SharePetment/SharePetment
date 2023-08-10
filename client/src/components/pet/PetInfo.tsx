@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState, useEffect } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useReadLocalStorage } from 'usehooks-ts';
-import { patchPet, postPet } from '../../api/mutationfn.ts';
+import { patchFormMuation, postFormMuation } from '../../api/mutationfn.ts';
 import { SERVER_URL } from '../../api/url.ts';
 import { ReactComponent as Close } from '../../assets/button/close.svg';
 import { ReactComponent as Man } from '../../assets/label/man.svg';
@@ -48,7 +48,7 @@ export default function PetInfo(prop: Prop) {
   const [isDisabled, setIsDisabled] = useState(false);
 
   // token
-  const accessToken = useReadLocalStorage<string>('accessToken');
+  const accessToken = useReadLocalStorage<string | null>('accessToken');
 
   // 유저 정보 refatch
   const queryClient = useQueryClient();
@@ -74,7 +74,7 @@ export default function PetInfo(prop: Prop) {
 
   // mutation 작성
   const petPostMutation = useMutation({
-    mutationFn: postPet,
+    mutationFn: postFormMuation,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['myPage'] });
       setIsOpened(false);
@@ -86,7 +86,7 @@ export default function PetInfo(prop: Prop) {
   });
 
   const petPatchMutation = useMutation({
-    mutationFn: patchPet,
+    mutationFn: patchFormMuation,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['myPage'] });
       setIsOpened(false);
@@ -115,7 +115,7 @@ export default function PetInfo(prop: Prop) {
       const data = {
         formData,
         url: `${SERVER_URL}/pets`,
-        accessToken: accessToken as string,
+        accessToken,
       };
       petPostMutation.mutate(data);
     }
@@ -123,7 +123,7 @@ export default function PetInfo(prop: Prop) {
       const data = {
         formData,
         url: `${SERVER_URL}/pets/status/${petId}`,
-        accessToken: accessToken as string,
+        accessToken,
       };
       petPatchMutation.mutate(data);
     }

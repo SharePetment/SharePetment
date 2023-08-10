@@ -43,7 +43,7 @@ export default function FeedCard({
 }: Prop) {
   const navigate = useNavigate();
   const [isMore, setIsMore] = useState(false);
-  const accessToken = useReadLocalStorage('accessToken');
+  const accessToken = useReadLocalStorage<string | null>('accessToken');
 
   const handlerClick = () => {
     if (!accessToken)

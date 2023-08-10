@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useMatch, useNavigate } from 'react-router-dom';
 import { useReadLocalStorage } from 'usehooks-ts';
-import { patchFeedLike } from '../../../api/mutationfn.ts';
+import { patchMutation } from '../../../api/mutationfn.ts';
 import { SERVER_URL } from '../../../api/url.ts';
 import { ReactComponent as Comment } from '../../../assets/button/comment.svg';
 import { ReactComponent as Delete } from '../../../assets/button/delete.svg';
@@ -45,7 +45,7 @@ export default function SideNav({
   const [isLikes, setIsLikes] = useState<number>(likes);
 
   const likeMutation = useMutation({
-    mutationFn: patchFeedLike,
+    mutationFn: patchMutation,
     onSuccess: ({ data }) => {
       queryClient.invalidateQueries({ queryKey: ['feedPopUp'] });
       setIsLike(data.isLike.toString());

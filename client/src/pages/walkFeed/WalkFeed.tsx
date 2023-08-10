@@ -4,9 +4,9 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useReadLocalStorage } from 'usehooks-ts';
 import {
-  addComment,
-  deleteWalkFeed,
-  patchWalkStatus,
+  postComment,
+  deleteMutation,
+  patchMutation,
 } from '../../api/mutationfn';
 import { getServerDataWithJwt } from '../../api/queryfn.ts';
 import { SERVER_URL } from '../../api/url.ts';
@@ -44,8 +44,8 @@ export function Component() {
   const [isOpen, setIsOpen] = useState<[boolean, string]>([false, '']);
 
   // 댓글 등록
-  const addCommentMutation = useMutation({
-    mutationFn: addComment,
+  const postCommentMutation = useMutation({
+    mutationFn: postComment,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['walkFeed', postId] });
       queryClient.invalidateQueries({ queryKey: ['walkmateList'] });
@@ -69,7 +69,7 @@ export function Component() {
       content: data.content.trim(),
     };
     const url = `${SERVER_URL}/walkmates/comments/${postId}`;
-    addCommentMutation.mutate({ ...data, url, accessToken });
+    postCommentMutation.mutate({ ...data, url, accessToken });
     resetField('content');
   };
 
@@ -98,7 +98,7 @@ export function Component() {
 
   // 모집 변경
   const walkStatusMutation = useMutation({
-    mutationFn: patchWalkStatus,
+    mutationFn: patchMutation,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['walkFeed', postId] });
     },
@@ -110,7 +110,7 @@ export function Component() {
       url: `${SERVER_URL}/walkmates/openstatus/${!data?.open}/${
         data?.walkMatePostId
       }`,
-      accessToken: accessToken as string,
+      accessToken,
     });
   };
 
@@ -122,7 +122,7 @@ export function Component() {
 
   // 게시글 삭제
   const walkDeleteMutation = useMutation({
-    mutationFn: deleteWalkFeed,
+    mutationFn: deleteMutation,
     onSuccess: () => {
       navigate('/walkmate');
     },
@@ -136,7 +136,7 @@ export function Component() {
   const handleWalkFeedDelete = () => {
     walkDeleteMutation.mutate({
       url: `${SERVER_URL}/walkmates/${data?.walkMatePostId}`,
-      accessToken: accessToken as string,
+      accessToken,
     });
   };
 
