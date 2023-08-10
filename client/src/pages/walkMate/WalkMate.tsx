@@ -3,20 +3,23 @@ import React, { useState, useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { Link, useNavigate } from 'react-router-dom';
 import { useReadLocalStorage } from 'usehooks-ts';
-import { getServerDataWithJwt } from '../../api/queryfn.ts';
-import { SERVER_URL } from '../../api/url.ts';
-import { ReactComponent as Plus } from '../../assets/button/plus.svg';
-import { GridContainer } from '../../common/grid/Grid.styled.tsx';
-import Select from '../../common/select/Select.tsx';
-import { CardContainer } from '../../components/card/walk-card/walkCard.styled.tsx';
-import WalkCard from '../../components/card/walk-card/walkCard.tsx';
-import LoadingComponent from '../../components/loading/LoadingComponent.tsx';
-import NoticeServerError from '../../components/notice/NoticeServerError.tsx';
-import Path from '../../routers/paths.ts';
-import { UserInfo } from '../../types/userType.ts';
-import { WalkFeed } from '../../types/walkType.ts';
-import { changeDateFormat } from '../../util/changeDateFormat.ts';
-import { FilterButton, SearchButton } from './WalkMate.styled.tsx';
+import { getServerDataWithJwt } from '@/api/queryfn.ts';
+import { SERVER_URL } from '@/api/url.ts';
+import { ReactComponent as Plus } from '@/assets/button/plus.svg';
+import { GridContainer } from '@/common/grid/Grid.styled.tsx';
+import Select from '@/common/select/Select.tsx';
+import { CardContainer } from '@/components/card/walk-card/walkCard.styled.tsx';
+import WalkCard from '@/components/card/walk-card/walkCard.tsx';
+import LoadingComponent from '@/components/loading/LoadingComponent.tsx';
+import NoticeServerError from '@/components/notice/NoticeServerError.tsx';
+import {
+  FilterButton,
+  SearchButton,
+} from '@/pages/walkMate/WalkMate.styled.tsx';
+import Path from '@/routers/paths.ts';
+import { UserInfo } from '@/types/userType.ts';
+import { WalkFeed } from '@/types/walkType.ts';
+import { changeDateFormat } from '@/util/changeDateFormat.ts';
 
 export function Component() {
   const navigate = useNavigate();

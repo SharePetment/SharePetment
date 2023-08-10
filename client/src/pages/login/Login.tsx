@@ -1,11 +1,16 @@
 import { useEffect } from 'react';
 import { useNavigate, Link, Navigate } from 'react-router-dom';
 import { useLocalStorage, useReadLocalStorage } from 'usehooks-ts';
-import LoginPets from '../../assets/illustration/loginpet.png';
-import { ReactComponent as Kakao } from '../../assets/kakao.svg';
-import { ReactComponent as Logo } from '../../assets/logo.svg';
-import Footer from '../../common/footer/Footer.tsx';
-import { Container, LoginBtn, LoginText, GuestText } from './Login.styled.tsx';
+import LoginPets from '@/assets/illustration/loginpet.png';
+import { ReactComponent as Kakao } from '@/assets/kakao.svg';
+import { ReactComponent as Logo } from '@/assets/logo.svg';
+import Footer from '@/common/footer/Footer.tsx';
+import {
+  Container,
+  LoginBtn,
+  LoginText,
+  GuestText,
+} from '@/pages/login/Login.styled.tsx';
 
 export default function Login() {
   const navigate = useNavigate();

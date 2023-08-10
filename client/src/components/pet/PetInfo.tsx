@@ -3,22 +3,22 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState, useEffect } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useReadLocalStorage } from 'usehooks-ts';
-import { patchPet, postPet } from '../../api/mutationfn.ts';
-import { SERVER_URL } from '../../api/url.ts';
-import { ReactComponent as Close } from '../../assets/button/close.svg';
-import { ReactComponent as Man } from '../../assets/label/man.svg';
-import { ReactComponent as Woman } from '../../assets/label/woman.svg';
-import Button from '../../common/button/Button.tsx';
+import { patchPet, postPet } from '@/api/mutationfn.ts';
+import { SERVER_URL } from '@/api/url.ts';
+import { ReactComponent as Close } from '@/assets/button/close.svg';
+import { ReactComponent as Man } from '@/assets/label/man.svg';
+import { ReactComponent as Woman } from '@/assets/label/woman.svg';
+import Button from '@/common/button/Button.tsx';
 import {
   ErrorNotice,
   InputContainer,
   InputText,
   Label,
-} from '../../common/input/Input.styled.tsx';
-import { PopupBackGround } from '../../common/popup/popup.styled.tsx';
-import Popup from '../../common/popup/Popup.tsx';
-import { Container, Form, RadioBox } from './petInfo.styled.tsx';
-import PetProfile from './petProfile/PetProfile.tsx';
+} from '@/common/input/Input.styled.tsx';
+import { PopupBackGround } from '@/common/popup/popup.styled.tsx';
+import Popup from '@/common/popup/Popup.tsx';
+import { Container, Form, RadioBox } from '@/components/pet/petInfo.styled.tsx';
+import PetProfile from '@/components/pet/petProfile/PetProfile.tsx';
 
 type Prop = {
   isOpend: boolean;

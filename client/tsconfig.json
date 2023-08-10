@@ -21,6 +21,11 @@
     "noFallthroughCasesInSwitch": true,
     "forceConsistentCasingInFileNames": false,
 
+    /* import */
+    "baseUrl": "./",
+    "paths": {
+      "@/*" : ["src/*"]
+    }
   },
   "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }]

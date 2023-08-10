@@ -1,13 +1,13 @@
-import { ReactComponent as Man } from '../../../assets/label/man.svg';
-import { ReactComponent as Woman } from '../../../assets/label/woman.svg';
-import Profile from '../../../common/profile/Profile.tsx';
+import { ReactComponent as Man } from '@/assets/label/man.svg';
+import { ReactComponent as Woman } from '@/assets/label/woman.svg';
+import Profile from '@/common/profile/Profile.tsx';
 import {
   Container,
   Info,
   Name,
   NameBox,
   TextBox,
-} from './petInfoBox.styled.tsx';
+} from '@/components/user_my_page/petinfo-box/petInfoBox.styled.tsx';
 
 interface Prop {
   name: string;

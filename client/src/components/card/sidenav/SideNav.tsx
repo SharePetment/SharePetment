@@ -2,15 +2,15 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useMatch, useNavigate } from 'react-router-dom';
 import { useReadLocalStorage } from 'usehooks-ts';
-import { patchFeedLike } from '../../../api/mutationfn.ts';
-import { SERVER_URL } from '../../../api/url.ts';
-import { ReactComponent as Comment } from '../../../assets/button/comment.svg';
-import { ReactComponent as Delete } from '../../../assets/button/delete.svg';
-import { ReactComponent as Edit } from '../../../assets/button/edit.svg';
-import { ReactComponent as Like } from '../../../assets/button/like.svg';
-import { ReactComponent as Share } from '../../../assets/button/share.svg';
-import { BooleanStr } from '../../../types/propType.ts';
 import { Container, Wrap, Text } from './SideNav.styled.tsx';
+import { patchFeedLike } from '@/api/mutationfn.ts';
+import { SERVER_URL } from '@/api/url.ts';
+import { ReactComponent as Comment } from '@/assets/button/comment.svg';
+import { ReactComponent as Delete } from '@/assets/button/delete.svg';
+import { ReactComponent as Edit } from '@/assets/button/edit.svg';
+import { ReactComponent as Like } from '@/assets/button/like.svg';
+import { ReactComponent as Share } from '@/assets/button/share.svg';
+import { BooleanStr } from '@/types/propType.ts';
 
 interface Prop {
   feedid: number;

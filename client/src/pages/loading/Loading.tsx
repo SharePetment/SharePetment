@@ -1,11 +1,8 @@
 import { useEffect, useContext } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useLocalStorage } from 'usehooks-ts';
-import LoadingComponent from '../../components/loading/LoadingComponent';
-import {
-  ContextDispatch,
-  MemberIdDispatchContext,
-} from '../../store/Context.tsx';
+import LoadingComponent from '@/components/loading/LoadingComponent';
+import { ContextDispatch, MemberIdDispatchContext } from '@/store/Context.tsx';
 
 export function Component() {
   const [searchParams] = useSearchParams();

@@ -3,15 +3,15 @@ import {
   useRouteError,
   useNavigate,
 } from 'react-router-dom';
-import { ReactComponent as Error404 } from '../../assets/404.svg';
-import Cat404 from '../../assets/illustration/404cat.png';
-import Footer from '../../common/footer/Footer.tsx';
+import { ReactComponent as Error404 } from '@/assets/404.svg';
+import Cat404 from '@/assets/illustration/404cat.png';
+import Footer from '@/common/footer/Footer.tsx';
 import {
   Container,
   ErrorText,
   ErrorMessage,
   HomeBtn,
-} from './NotFound.styled.tsx';
+} from '@/pages/notFound/NotFound.styled.tsx';
 
 export default function NotFound() {
   const navigate = useNavigate();

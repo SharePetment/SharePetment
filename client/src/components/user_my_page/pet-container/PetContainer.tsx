@@ -1,18 +1,18 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useReadLocalStorage } from 'usehooks-ts';
-import { deletePet, patchUserProfile } from '../../../api/mutationfn.ts';
-import { SERVER_URL } from '../../../api/url.ts';
-import Popup from '../../../common/popup/Popup.tsx';
-import PetInfo from '../../pet/PetInfo.tsx';
 import PetInfoBox from '../petinfo-box/PetInfoBox.tsx';
+import { deletePet, patchUserProfile } from '@/api/mutationfn.ts';
+import { SERVER_URL } from '@/api/url.ts';
+import Popup from '@/common/popup/Popup.tsx';
+import PetInfo from '@/components/pet/PetInfo.tsx';
 import {
   Container,
   DeletePet,
   PetCheckFalse,
   PetCheckTrue,
   SettingPet,
-} from './petContainer.styled.tsx';
+} from '@/components/user_my_page/pet-container/petContainer.styled.tsx';
 
 interface Prop {
   name: string;

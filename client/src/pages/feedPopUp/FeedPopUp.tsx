@@ -2,21 +2,18 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useContext, useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useReadLocalStorage } from 'usehooks-ts';
-import { deleteFeed } from '../../api/mutationfn.ts';
-import { getServerData, getServerDataWithJwt } from '../../api/queryfn.ts';
-import { SERVER_URL } from '../../api/url.ts';
-import { ReactComponent as Close } from '../../assets/button/close.svg';
-import FeedComment from '../../common/comment/feedComment/FeedComment';
-import FeedInput from '../../common/input/feedInput/FeedInput';
-import Popup from '../../common/popup/Popup';
-import FeedCard from '../../components/card/feed-card/FeedCard';
-import SideNav from '../../components/card/sidenav/SideNav';
-import LoadingComponent from '../../components/loading/LoadingComponent';
-import NoticeServerError from '../../components/notice/NoticeServerError';
-import Toast from '../../components/toast/Toast';
-import { MemberIdContext } from '../../store/Context';
-import { Feed } from '../../types/feedTypes';
-import changeTime from '../../util/changeTime';
+import { deleteFeed } from '@/api/mutationfn.ts';
+import { getServerData, getServerDataWithJwt } from '@/api/queryfn.ts';
+import { SERVER_URL } from '@/api/url.ts';
+import { ReactComponent as Close } from '@/assets/button/close.svg';
+import FeedComment from '@/common/comment/feedComment/FeedComment';
+import FeedInput from '@/common/input/feedInput/FeedInput';
+import Popup from '@/common/popup/Popup';
+import FeedCard from '@/components/card/feed-card/FeedCard';
+import SideNav from '@/components/card/sidenav/SideNav';
+import LoadingComponent from '@/components/loading/LoadingComponent';
+import NoticeServerError from '@/components/notice/NoticeServerError';
+import Toast from '@/components/toast/Toast';
 import {
   Container,
   CloseBtn,
@@ -25,7 +22,10 @@ import {
   CommentBox,
   FeedCardContainer,
   CommentContainer,
-} from './FeedPopUp.styled';
+} from '@/pages/feedPopUp/FeedPopUp.styled';
+import { MemberIdContext } from '@/store/Context';
+import { Feed } from '@/types/feedTypes';
+import changeTime from '@/util/changeTime';
 
 export function Component() {
   const accessToken = useReadLocalStorage('accessToken');

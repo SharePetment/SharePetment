@@ -4,17 +4,13 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Navigation } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { useReadLocalStorage } from 'usehooks-ts';
-import { patchFeed, postFeed } from '../../../api/mutationfn.ts';
-import { getServerDataWithJwt } from '../../../api/queryfn.ts';
-import { SERVER_URL } from '../../../api/url.ts';
-import { ReactComponent as Close } from '../../../assets/button/close.svg';
-import { ReactComponent as Plus } from '../../../assets/button/plus.svg';
-import { ReactComponent as Write } from '../../../assets/button/write.svg';
-import Popup from '../../../common/popup/Popup.tsx';
-import { FeedImage, Feed } from '../../../types/feedTypes.ts';
-import { parseImg, deleteImg } from '../../../util/parseImg.ts';
-import LoadingComponent from '../../loading/LoadingComponent.tsx';
-import NoticeServerError from '../../notice/NoticeServerError.tsx';
+import { patchFeed, postFeed } from '@/api/mutationfn.ts';
+import { getServerDataWithJwt } from '@/api/queryfn.ts';
+import { SERVER_URL } from '@/api/url.ts';
+import { ReactComponent as Close } from '@/assets/button/close.svg';
+import { ReactComponent as Plus } from '@/assets/button/plus.svg';
+import { ReactComponent as Write } from '@/assets/button/write.svg';
+import Popup from '@/common/popup/Popup.tsx';
 import {
   Container,
   Wrap,
@@ -23,11 +19,15 @@ import {
   Form,
   Textarea,
   SubmitBtn,
-} from './FeedWriteCard.styled.tsx';
+} from '@/components/card/feedwritecard/FeedWriteCard.styled.tsx';
+import LoadingComponent from '@/components/loading/LoadingComponent.tsx';
+import NoticeServerError from '@/components/notice/NoticeServerError.tsx';
+import { FeedImage, Feed } from '@/types/feedTypes.ts';
+import { parseImg, deleteImg } from '@/util/parseImg.ts';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
-import '../../../common/carousel/carousel.css';
+import '@/common/carousel/carousel.css';
 
 export default function FeedWriteCard() {
   const queryClient = useQueryClient();

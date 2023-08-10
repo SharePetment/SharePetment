@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { useEffect } from 'react';
-import { ReactComponent as Kakao } from '../../assets/label/kakao-talk.svg';
+import { ReactComponent as Kakao } from '@/assets/label/kakao-talk.svg';
 
 interface Prop {
   address: string;

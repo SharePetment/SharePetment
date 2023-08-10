@@ -3,14 +3,9 @@ import { useState, useEffect, useContext } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import { useReadLocalStorage } from 'usehooks-ts';
-import { deleteComment, editComment } from '../../api/mutationfn.ts';
-import { SERVER_URL } from '../../api/url.ts';
-import { ReactComponent as Write } from '../../assets/button/write.svg';
-import { MemberIdContext, State } from '../../store/Context.tsx';
-import { CommentProp } from '../../types/commentType.ts';
-import changeTime from '../../util/changeTime.ts';
-import Popup from '../popup/Popup.tsx';
-import Profile from '../profile/Profile.tsx';
+import { deleteComment, editComment } from '@/api/mutationfn.ts';
+import { SERVER_URL } from '@/api/url.ts';
+import { ReactComponent as Write } from '@/assets/button/write.svg';
 import {
   Container,
   ContentBox,
@@ -25,7 +20,12 @@ import {
   Input,
   WriteBtn,
   Form,
-} from './comment.styled';
+} from '@/common/comment/comment.styled';
+import Popup from '@/common/popup/Popup';
+import Profile from '@/common/profile/Profile';
+import { MemberIdContext, State } from '@/store/Context.tsx';
+import { CommentProp } from '@/types/commentType.ts';
+import changeTime from '@/util/changeTime.ts';
 
 type Inputs = {
   comment: string;

@@ -1,5 +1,5 @@
 import tw from 'tailwind-styled-components';
-import { BooleanStr } from '../../types/propType';
+import { BooleanStr } from '@/types/propType';
 
 export const InfoForm = tw.form`
   flex

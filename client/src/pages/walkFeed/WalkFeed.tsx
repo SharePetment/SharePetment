@@ -3,36 +3,32 @@ import { useContext, useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useReadLocalStorage } from 'usehooks-ts';
-import {
-  addComment,
-  deleteWalkFeed,
-  patchWalkStatus,
-} from '../../api/mutationfn';
-import { getServerDataWithJwt } from '../../api/queryfn.ts';
-import { SERVER_URL } from '../../api/url.ts';
-import { ReactComponent as CommentIcon } from '../../assets/button/comment.svg';
-import { ReactComponent as Delete } from '../../assets/button/delete.svg';
-import { ReactComponent as Edit } from '../../assets/button/edit.svg';
-import { ReactComponent as Calendar } from '../../assets/calendar.svg';
-import { ReactComponent as Dog } from '../../assets/dog.svg';
-import { ReactComponent as Chatlink } from '../../assets/link.svg';
-import { ReactComponent as ArrowLeft } from '../../assets/mobile/arrow-left.svg';
-import { ReactComponent as Pin } from '../../assets/pin.svg';
-import Comment from '../../common/comment/Comment.tsx';
-import Popup from '../../common/popup/Popup.tsx';
-import LoadingComponent from '../../components/loading/LoadingComponent.tsx';
-import ShowMap from '../../components/map-show/ShowMap.tsx';
-import NoticeServerError from '../../components/notice/NoticeServerError.tsx';
-import { MemberIdContext, State } from '../../store/Context.tsx';
-import { UserInfo } from '../../types/userType.ts';
-import { WalkFeed } from '../../types/walkType.ts';
-import { changeDateFormat } from '../../util/changeDateFormat.ts';
+import { addComment, deleteWalkFeed, patchWalkStatus } from '@/api/mutationfn';
+import { getServerDataWithJwt } from '@/api/queryfn.ts';
+import { SERVER_URL } from '@/api/url.ts';
+import { ReactComponent as CommentIcon } from '@/assets/button/comment.svg';
+import { ReactComponent as Delete } from '@/assets/button/delete.svg';
+import { ReactComponent as Edit } from '@/assets/button/edit.svg';
+import { ReactComponent as Calendar } from '@/assets/calendar.svg';
+import { ReactComponent as Dog } from '@/assets/dog.svg';
+import { ReactComponent as Chatlink } from '@/assets/link.svg';
+import { ReactComponent as ArrowLeft } from '@/assets/mobile/arrow-left.svg';
+import { ReactComponent as Pin } from '@/assets/pin.svg';
+import Comment from '@/common/comment/Comment.tsx';
+import Popup from '@/common/popup/Popup.tsx';
+import LoadingComponent from '@/components/loading/LoadingComponent.tsx';
+import ShowMap from '@/components/map-show/ShowMap.tsx';
+import NoticeServerError from '@/components/notice/NoticeServerError.tsx';
 import {
   CommentButton,
   Divider,
   GatherMate,
   WalkInfo,
-} from './WalkFeed.styled';
+} from '@/pages/walkFeed/WalkFeed.styled';
+import { MemberIdContext, State } from '@/store/Context.tsx';
+import { UserInfo } from '@/types/userType.ts';
+import { WalkFeed } from '@/types/walkType.ts';
+import { changeDateFormat } from '@/util/changeDateFormat.ts';
 
 export function Component() {
   const navigate = useNavigate();

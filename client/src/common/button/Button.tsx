@@ -1,5 +1,5 @@
-import { BooleanStr, Size, Handler } from '../../types/propType.ts';
-import { Btn } from './button.styled.tsx';
+import { Btn } from '@/common/button/button.styled';
+import { BooleanStr, Size, Handler } from '@/types/propType.ts';
 
 interface Prop {
   size: Size; //lg, md, sm

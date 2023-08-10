@@ -1,8 +1,4 @@
 import { useNavigate } from 'react-router';
-import Button from '../../common/button/Button.tsx';
-import { PopupBackGround } from '../../common/popup/popup.styled.tsx';
-import Profile from '../../common/profile/Profile.tsx';
-import { Follow } from '../../types/userType.ts';
 import {
   FollowBox,
   FollowListContainer,
@@ -10,6 +6,10 @@ import {
   Title,
   UserName,
 } from './followList.styled.tsx';
+import Button from '@/common/button/Button.tsx';
+import { PopupBackGround } from '@/common/popup/popup.styled.tsx';
+import Profile from '@/common/profile/Profile.tsx';
+import { Follow } from '@/types/userType.ts';
 
 interface Prop {
   setIsListShowed: React.Dispatch<React.SetStateAction<boolean>>;

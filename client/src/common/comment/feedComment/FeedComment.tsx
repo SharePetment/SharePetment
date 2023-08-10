@@ -2,14 +2,9 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useReadLocalStorage } from 'usehooks-ts';
-import {
-  deleteFeedComment,
-  patchFeedComment,
-} from '../../../api/mutationfn.ts';
-import { SERVER_URL } from '../../../api/url.ts';
-import { ReactComponent as Write } from '../../../assets/button/write.svg';
-import { BooleanStr } from '../../../types/propType.ts';
-import Profile from '../../profile/Profile.tsx';
+import { deleteFeedComment, patchFeedComment } from '@/api/mutationfn.ts';
+import { SERVER_URL } from '@/api/url.ts';
+import { ReactComponent as Write } from '@/assets/button/write.svg';
 import {
   Container,
   UserBox,
@@ -19,7 +14,9 @@ import {
   EditText,
   EditInput,
   EditBtn,
-} from './FeedComment.styled.tsx';
+} from '@/common/comment/feedComment/FeedComment.styled.tsx';
+import Profile from '@/common/profile/Profile.tsx';
+import { BooleanStr } from '@/types/propType.ts';
 
 interface Prop {
   feedid: number;

@@ -1,8 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useReadLocalStorage } from 'usehooks-ts';
-import { postSubscribe } from '../../api/mutationfn.ts';
-import { SERVER_URL } from '../../api/url.ts';
-import { SubScribeButton } from './subscribe.styled.tsx';
+import { postSubscribe } from '@/api/mutationfn.ts';
+import { SERVER_URL } from '@/api/url.ts';
+import { SubScribeButton } from '@/components/subscribe/subscribe.styled.tsx';
 
 interface Prop {
   guestFollow: boolean | undefined;
