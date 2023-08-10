@@ -43,7 +43,7 @@ export function Component() {
     formState: { errors },
   } = useForm<Inputs>();
 
-  const accessToken = useReadLocalStorage('accessToken');
+  const accessToken = useReadLocalStorage<string | null>('accessToken');
   // 산책 게시물 불러오기
   const { data, isLoading } = useQuery<WalkFeed>({
     queryKey: ['walkFeed', postId],

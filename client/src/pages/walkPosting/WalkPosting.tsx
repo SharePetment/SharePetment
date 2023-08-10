@@ -41,7 +41,7 @@ export function Component() {
     formState: { errors },
   } = useForm<Inputs>();
 
-  const accessToken = useReadLocalStorage('accessToken');
+  const accessToken = useReadLocalStorage<string | null>('accessToken');
   // 산책게시물 등록 POST
   const walkPostFillMutation = useMutation({
     mutationFn: postWalkFeed,

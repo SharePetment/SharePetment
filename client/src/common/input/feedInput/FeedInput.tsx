@@ -12,7 +12,7 @@ interface Prop {
 }
 
 export default function FeedInput({ feedid, blankhandler }: Prop) {
-  const accessToken = useReadLocalStorage('accessToken');
+  const accessToken = useReadLocalStorage<string | null>('accessToken');
   const inputRef = useRef<HTMLInputElement>(null);
   const queryClient = useQueryClient();
   const { mutate } = useMutation({
@@ -33,7 +33,7 @@ export default function FeedInput({ feedid, blankhandler }: Prop) {
         return blankhandler([true, '공백은 입력할 수 없어요.']);
       const data = {
         url: `${SERVER_URL}/feeds/comments`,
-        token: accessToken as string,
+        accessToken,
         content: inputRef.current.value.trim(),
         feedId: feedid,
       };

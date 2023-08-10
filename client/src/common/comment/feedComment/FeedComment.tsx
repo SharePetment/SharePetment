@@ -2,10 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useReadLocalStorage } from 'usehooks-ts';
-import {
-  deleteFeedComment,
-  patchFeedComment,
-} from '../../../api/mutationfn.ts';
+import { deleteMutation, patchMutation } from '../../../api/mutationfn.ts';
 import { SERVER_URL } from '../../../api/url.ts';
 import { ReactComponent as Write } from '../../../assets/button/write.svg';
 import { BooleanStr } from '../../../types/propType.ts';
@@ -45,12 +42,12 @@ export default function FeedComment({
   time,
 }: Prop) {
   const navigate = useNavigate();
-  const accessToken = useReadLocalStorage('accessToken');
+  const accessToken = useReadLocalStorage<string | null>('accessToken');
   const [isEditOpen, setIsEditOpen] = useState<boolean>(false);
   const queryClient = useQueryClient();
 
   const commentEditMuation = useMutation({
-    mutationFn: patchFeedComment,
+    mutationFn: patchMutation,
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['feedPopUp', feedid],
@@ -60,7 +57,7 @@ export default function FeedComment({
   });
 
   const commentDeleteMutation = useMutation({
-    mutationFn: deleteFeedComment,
+    mutationFn: deleteMutation,
     onSuccess: () =>
       queryClient.invalidateQueries({
         queryKey: ['feedPopUp', feedid],
@@ -78,7 +75,7 @@ export default function FeedComment({
         content: inputRef.current.value.trim(),
         feedId: feedid,
         url: `${SERVER_URL}/feeds/comments/${commentid}`,
-        token: accessToken as string,
+        accessToken,
       };
       commentEditMuation.mutate(body);
     }
@@ -91,7 +88,7 @@ export default function FeedComment({
   const handleDelete = () => {
     const body = {
       url: `${SERVER_URL}/feeds/comments/${commentid}`,
-      accessToken: accessToken as string,
+      accessToken,
     };
     commentDeleteMutation.mutate(body);
   };

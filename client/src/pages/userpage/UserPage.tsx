@@ -43,7 +43,7 @@ export function Component() {
 
   const memberId = useContext(MemberIdContext);
 
-  const accessToken = useReadLocalStorage<string>('accessToken');
+  const accessToken = useReadLocalStorage<string | null>('accessToken');
 
   // 구독 controller
   const [isSubscribed, setIsSubscribed] = useState(false);

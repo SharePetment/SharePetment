@@ -42,7 +42,7 @@ const initaldate: State = {
 
 export default function ContextProvider({ children }: Props) {
   const [state, dispatch] = useReducer(reducer, initaldate);
-  const accessToken = useReadLocalStorage('accessToken');
+  const accessToken = useReadLocalStorage<string | null>('accessToken');
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { data } = useQuery<UserInfo>({

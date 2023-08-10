@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useReadLocalStorage } from 'usehooks-ts';
-import { deletePet, patchUserProfile } from '../../../api/mutationfn.ts';
+import { deleteMutation, patchMutation } from '../../../api/mutationfn.ts';
 import { SERVER_URL } from '../../../api/url.ts';
 import Popup from '../../../common/popup/Popup.tsx';
 import PetInfo from '../../pet/PetInfo.tsx';
@@ -47,7 +47,7 @@ export default function PetContainer(prop: Prop) {
 
   // 펫 삭제 확인 팝업 작성
   const [isDeletePopUp, setIsDeletePopUp] = useState(false);
-  const accessToken = useReadLocalStorage('accessToken');
+  const accessToken = useReadLocalStorage<string | null>('accessToken');
 
   // 펫 삭제 오류 팝업
   const [isDelelteError, setIsDeleteError] = useState(false);
@@ -57,7 +57,7 @@ export default function PetContainer(prop: Prop) {
 
   // 펫 삭제 로직 작성
   const deletePetMutation = useMutation({
-    mutationFn: deletePet,
+    mutationFn: deleteMutation,
     onSuccess() {
       setIsDeletePopUp(false);
       queryClient.invalidateQueries({ queryKey: ['myPage'] });
@@ -71,7 +71,7 @@ export default function PetContainer(prop: Prop) {
   const handleDeletePet = () => {
     deletePetMutation.mutate({
       url: `${SERVER_URL}/pets/${petId}`,
-      token: accessToken as string,
+      accessToken,
     });
   };
 
@@ -81,7 +81,7 @@ export default function PetContainer(prop: Prop) {
 
   // 유저 프로필 이미지 변경
   const mutationPatchUserProfile = useMutation({
-    mutationFn: patchUserProfile,
+    mutationFn: patchMutation,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['myPage'] });
     },

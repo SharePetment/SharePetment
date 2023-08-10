@@ -10,7 +10,7 @@ import {
   useParams,
 } from 'react-router-dom';
 import { useReadLocalStorage } from 'usehooks-ts';
-import { fillUserInfo, postQuitMember } from '../../api/mutationfn.ts';
+import { patchUserInfo, deleteMutation } from '../../api/mutationfn.ts';
 import { SERVER_URL } from '../../api/url.ts';
 import { ReactComponent as Like } from '../../assets/button/like.svg';
 import { ReactComponent as Logo } from '../../assets/logo.svg';
@@ -72,11 +72,11 @@ export function Component() {
   // 주소 값 받아오기
   const [zip, setZip] = useState('');
 
-  const accessToken = useReadLocalStorage<string>('accessToken');
+  const accessToken = useReadLocalStorage<string | null>('accessToken');
 
   // 회원가입 등록 Mutation
   const userInfoFillMutation = useMutation({
-    mutationFn: fillUserInfo,
+    mutationFn: patchUserInfo,
     onSuccess: () => {
       if (userId) return navigate('/my-page');
       navigate('/home');
@@ -171,7 +171,7 @@ export function Component() {
 
   // 회원탈퇴 mutaition
   const userQuitMutation = useMutation({
-    mutationFn: postQuitMember,
+    mutationFn: deleteMutation,
     onSuccess() {
       localStorage.removeItem('accessToken');
       localStorage.removeItem('refreshToken');
@@ -185,7 +185,11 @@ export function Component() {
 
   const onSubmitQuit = (data: QuitProps) => {
     if (data.quitText) {
-      userQuitMutation.mutate({ accessToken });
+      const body = {
+        url: `${SERVER_URL}/auth/kakao/unlink`,
+        accessToken,
+      };
+      userQuitMutation.mutate(body);
     }
   };
 
