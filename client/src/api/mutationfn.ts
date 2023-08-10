@@ -2,23 +2,19 @@ import axios from 'axios';
 import { Subscribe } from '../types/subscribe.ts';
 import { SERVER_URL } from './url.ts';
 
-export interface Comment {
-  id: string;
-  content: string;
-  url: string;
-  tag: string;
-  accessToken: string | null;
-}
-
 interface MutationProp {
   url: string;
   accessToken: string | null;
 }
 
-interface MethodFormProp {
+export interface Comment extends MutationProp {
+  id: string;
+  content: string;
+  tag: string;
+}
+
+interface MethodFormProp extends MutationProp {
   formData: FormData;
-  url: string;
-  accessToken: string | null;
 }
 
 /* ------------------------------ POST METHOD (FORMDATA)------------------------------ */
