@@ -6,6 +6,7 @@ import { useReadLocalStorage } from 'usehooks-ts';
 import { deleteComment, editComment } from '../../api/mutationfn.ts';
 import { SERVER_URL } from '../../api/url.ts';
 import { ReactComponent as Write } from '../../assets/button/write.svg';
+import Path from '../../routers/paths.ts';
 import { MemberIdContext, State } from '../../store/Context.tsx';
 import { CommentProp } from '../../types/commentType.ts';
 import changeTime from '../../util/changeTime.ts';
@@ -119,7 +120,9 @@ export default function Comment(props: CommentProp) {
         <div>
           {/* 유저 정보 기입 */}
           <HeaderBox>
-            <Link to={`/users/${memberId}`} className="hover:cursor-pointer">
+            <Link
+              to={`${Path.User}/${memberId}`}
+              className="hover:cursor-pointer">
               <UserBox>
                 <Profile size="sm" url={imageURL} isgreen={'false'} />
                 <UserName>{nickname}</UserName>

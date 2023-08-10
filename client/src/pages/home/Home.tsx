@@ -20,6 +20,7 @@ import SideNav from '../../components/card/sidenav/SideNav.tsx';
 import LoadingComponent from '../../components/loading/LoadingComponent.tsx';
 import NoticeServerError from '../../components/notice/NoticeServerError.tsx';
 import Toast from '../../components/toast/Toast.tsx';
+import Path from '../../routers/paths.ts';
 import { Feed } from '../../types/feedTypes.ts';
 import CircleProgressBar from './CricleProgressBar.tsx';
 import { Container, ReBtn, TopBtn } from './Home.styled.tsx';
@@ -177,7 +178,7 @@ export function Component() {
                       className="bg-deepgreen text-white w-[120px]  h-[50px]
                       text-base rounded-2xl max-sm:text-xs max-sm:w-[90px]"
                       onClick={() => {
-                        navigate('/my-page');
+                        navigate(Path.MyPage);
                         setFirstVisited(false);
                       }}>
                       네, 등록할래요!
@@ -186,7 +187,7 @@ export function Component() {
                       className="bg-white text-deepgreen w-[120px]  h-[50px]
                       text-base rounded-2xl max-sm:w-[90px] max-sm:text-xs"
                       onClick={() => {
-                        navigate('/home');
+                        navigate(Path.Home);
                         setFirstVisited(false);
                       }}>
                       아뇨, 괜찮습니다!
@@ -337,7 +338,7 @@ export function Component() {
               btnsize={['md']}
               buttontext={['로그인하러가기']}
               countbtn={1}
-              handler={[() => navigate('/')]}
+              handler={[() => navigate(Path.Login)]}
               popupcontrol={() => setIsGuestOpen(false)}
             />
           )}

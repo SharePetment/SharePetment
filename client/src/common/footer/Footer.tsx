@@ -1,10 +1,11 @@
 import { useMatch, Link } from 'react-router-dom';
 import { ReactComponent as Github } from '../../assets/github.svg';
 import { ReactComponent as Notion } from '../../assets/notion.svg';
+import Path from '../../routers/paths.ts';
 import { Container, TopContainer, Text } from './Footer.styled.tsx';
 
 export default function Footer() {
-  const matchLogin = useMatch('/');
+  const matchLogin = useMatch(Path.Login);
   return (
     <Container className={matchLogin === null ? 'mb-12' : ''}>
       <TopContainer>

@@ -8,6 +8,7 @@ import {
 } from '../../../api/mutationfn.ts';
 import { SERVER_URL } from '../../../api/url.ts';
 import { ReactComponent as Write } from '../../../assets/button/write.svg';
+import Path from '../../../routers/paths.ts';
 import { BooleanStr } from '../../../types/propType.ts';
 import Profile from '../../profile/Profile.tsx';
 import {
@@ -102,11 +103,11 @@ export default function FeedComment({
     <Container>
       <UserBox>
         <div
-          onClick={() => navigate(`/users/${memberid}`)}
+          onClick={() => navigate(`${Path.User}/${memberid}`)}
           className="cursor-pointer">
           <Profile size="sm" isgreen="false" url={userimg} />
         </div>
-        <UserId onClick={() => navigate(`/users/${memberid}`)}>
+        <UserId onClick={() => navigate(`${Path.User}/${memberid}`)}>
           {nickname}
         </UserId>
         <Time>{time}</Time>

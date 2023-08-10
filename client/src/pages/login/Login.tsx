@@ -5,6 +5,7 @@ import LoginPets from '../../assets/illustration/loginpet.png';
 import { ReactComponent as Kakao } from '../../assets/kakao.svg';
 import { ReactComponent as Logo } from '../../assets/logo.svg';
 import Footer from '../../common/footer/Footer.tsx';
+import Path from '../../routers/paths.ts';
 import { Container, LoginBtn, LoginText, GuestText } from './Login.styled.tsx';
 
 export default function Login() {
@@ -39,7 +40,9 @@ export default function Login() {
           <LoginText>Log in With KaKao</LoginText>
         </LoginBtn>
       </Link>
-      <GuestText onClick={() => navigate('/home')}>Guest로 시작하기</GuestText>
+      <GuestText onClick={() => navigate(Path.Home)}>
+        Guest로 시작하기
+      </GuestText>
       <Footer />
     </Container>
   );

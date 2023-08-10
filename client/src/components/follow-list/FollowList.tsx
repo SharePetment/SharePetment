@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router';
 import Button from '../../common/button/Button.tsx';
 import { PopupBackGround } from '../../common/popup/popup.styled.tsx';
 import Profile from '../../common/profile/Profile.tsx';
+import Path from '../../routers/paths.ts';
 import { Follow } from '../../types/userType.ts';
 import {
   FollowBox,
@@ -21,7 +22,7 @@ export default function FollowList({ setIsListShowed, follow, path }: Prop) {
   const navigate = useNavigate();
   const handleUserPage = (followerId: number) => {
     setIsListShowed(false);
-    navigate(`/users/${followerId}`);
+    navigate(`${Path.User}/${followerId}`);
   };
   const handleCloseList = () => {
     setIsListShowed(false);

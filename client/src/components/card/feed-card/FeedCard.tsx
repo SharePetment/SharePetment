@@ -8,6 +8,7 @@ import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import Profile from '../../../common/profile/Profile.tsx';
 import '../../../common/carousel/carousel.css';
+import Path from '../../../routers/paths.ts';
 import {
   Container,
   Feed,
@@ -50,7 +51,7 @@ export default function FeedCard({
       if (guesthandler) {
         return guesthandler();
       }
-    navigate(`/users/${memberid}`);
+    navigate(`${Path.User}/${memberid}`);
   };
 
   return (

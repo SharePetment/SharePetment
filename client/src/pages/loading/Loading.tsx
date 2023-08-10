@@ -2,6 +2,7 @@ import { useEffect, useContext } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useLocalStorage } from 'usehooks-ts';
 import LoadingComponent from '../../components/loading/LoadingComponent';
+import Path from '../../routers/paths.ts';
 import {
   ContextDispatch,
   MemberIdDispatchContext,
@@ -31,12 +32,12 @@ export function Component() {
       });
 
       const present = searchParams.get('present');
-      if (present === 'true') setTimeout(() => navigate('/home'), 1000);
+      if (present === 'true') setTimeout(() => navigate(Path.Home), 1000);
       else {
         const incodeName: string | null = searchParams.get('name');
         const name = incodeName ? decodeURIComponent(incodeName) : '';
         const email = searchParams.get('email');
-        navigate('/info', {
+        navigate(Path.Info, {
           state: {
             name,
             email,

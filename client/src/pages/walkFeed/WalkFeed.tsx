@@ -23,6 +23,7 @@ import Popup from '../../common/popup/Popup.tsx';
 import LoadingComponent from '../../components/loading/LoadingComponent.tsx';
 import ShowMap from '../../components/map-show/ShowMap.tsx';
 import NoticeServerError from '../../components/notice/NoticeServerError.tsx';
+import Path from '../../routers/paths.ts';
 import { MemberIdContext, State } from '../../store/Context.tsx';
 import { UserInfo } from '../../types/userType.ts';
 import { WalkFeed } from '../../types/walkType.ts';
@@ -117,14 +118,14 @@ export function Component() {
   // 게시글 수정
   const handleWalkFeedEdit = () => {
     // 수정 페이지로 이동
-    navigate(`/walk-posting/${data?.walkMatePostId}`);
+    navigate(`${Path.WalkPosting}/${data?.walkMatePostId}`);
   };
 
   // 게시글 삭제
   const walkDeleteMutation = useMutation({
     mutationFn: deleteWalkFeed,
     onSuccess: () => {
-      navigate('/walkmate');
+      navigate(Path.WalkMate);
     },
     onError: () => setIsOpen([true, '게시글 삭제에 실패했습니다.']),
   });
@@ -148,7 +149,7 @@ export function Component() {
 
   useEffect(() => {
     if (!isLoading && !userData?.animalParents) {
-      navigate('/home');
+      navigate(Path.Home);
     }
   }, [userData, navigate, isLoading]);
 
@@ -177,7 +178,7 @@ export function Component() {
         <div className="w-[500px] max-sm:w-[320px] mx-auto mt-7">
           <ArrowLeft
             className="hidden max-sm:block w-6 h-6 cursor-pointer"
-            onClick={() => navigate('/walkmate')}
+            onClick={() => navigate(Path.WalkMate)}
           />
           {`${data?.memberInfo?.memberId}` === userId && (
             <div className="flex justify-end gap-4 items-center">

@@ -1,10 +1,11 @@
 import { useMatch, useNavigate } from 'react-router-dom';
 import LoginPets from '../../assets/illustration/loginpet.png';
 import { ErrorText, HomeBtn } from '../../pages/notFound/NotFound.styled.tsx';
+import Path from '../../routers/paths.ts';
 
 export default function NoticeOnlyOwner() {
   const navigate = useNavigate();
-  const matchMypage = useMatch('/my-page');
+  const matchMypage = useMatch(Path.MyPage);
 
   return (
     <div className="flex flex-col items-center justify-center">
@@ -13,7 +14,7 @@ export default function NoticeOnlyOwner() {
       {matchMypage === null && <ErrorText>반려동물 등록하러 갈까요?</ErrorText>}
       <img src={LoginPets} className=" w-80" />
       {matchMypage === null && (
-        <HomeBtn onClick={() => navigate('/my-page')}>
+        <HomeBtn onClick={() => navigate(Path.MyPage)}>
           반려동물 등록하러가기
         </HomeBtn>
       )}

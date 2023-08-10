@@ -11,6 +11,7 @@ import { ReactComponent as Close } from '../../../assets/button/close.svg';
 import { ReactComponent as Plus } from '../../../assets/button/plus.svg';
 import { ReactComponent as Write } from '../../../assets/button/write.svg';
 import Popup from '../../../common/popup/Popup.tsx';
+import Path from '../../../routers/paths.ts';
 import { FeedImage, Feed } from '../../../types/feedTypes.ts';
 import { parseImg, deleteImg } from '../../../util/parseImg.ts';
 import LoadingComponent from '../../loading/LoadingComponent.tsx';
@@ -90,7 +91,7 @@ export default function FeedWriteCard() {
       queryClient.invalidateQueries({ queryKey: ['myPage'] });
       queryClient.invalidateQueries({ queryKey: ['myFeed'] });
       queryClient.invalidateQueries({ queryKey: ['followList'] });
-      navigate('/my-page');
+      navigate(Path.MyPage);
     },
     onError: () => setIsOpen([true, '요청에 실패했습니다.']),
   });
@@ -100,7 +101,7 @@ export default function FeedWriteCard() {
     mutationFn: patchFeed,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['feedPopUp'] });
-      navigate(`/my-page`);
+      navigate(Path.MyPage);
     },
     onError: () => setIsOpen([true, '요청에 실패했습니다.']),
   });
