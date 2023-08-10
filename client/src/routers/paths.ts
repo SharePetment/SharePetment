@@ -1,12 +1,12 @@
-enum Path {
+const enum Path {
   Login = '/',
   Info = '/info',
-  InfoEditing = 'info/:userId',
+  InfoEditing = '/info/:userId',
   Home = '/home',
   MyPage = '/my-page',
   Userpage = '/users/:usersId',
   FeedPopUp = '/home/:feedId',
-  CopyPopUp = 'copy/:feedId',
+  CopyPopUp = '/copy/:feedId',
   FeedPosting = '/feed-posting',
   FeedEditing = '/feed-posting/:feedId',
   WalkMate = '/walkmate',
