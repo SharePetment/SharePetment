@@ -14,6 +14,7 @@ const enum Path {
   WalkPosting = '/walk-posting',
   WalkEditing = '/walk-posting/:postId',
   Loading = '/loading',
+  User = `/users`,
 }
 
 export default Path;

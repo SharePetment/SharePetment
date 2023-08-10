@@ -57,7 +57,7 @@ export function Component() {
       setDetailAddress(data.mapURL.split(' ')[2]);
     },
     onError: () => {
-      navigate('/walkmate');
+      navigate(Path.WalkMate);
     },
   });
 
@@ -101,7 +101,7 @@ export function Component() {
   });
   useEffect(() => {
     if (!userLoading && !userData?.animalParents) {
-      navigate('/home');
+      navigate(Path.Home);
     }
   }, [userData, navigate, userLoading]);
 

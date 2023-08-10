@@ -25,6 +25,7 @@ import {
 } from '../../common/input/Input.styled.tsx';
 import Popup from '../../common/popup/Popup.tsx';
 import Select from '../../common/select/Select.tsx';
+import Path from '../../routers/paths.ts';
 import { ConfirmButton, ExtraInfoLogo, InfoForm } from './Info.styled.tsx';
 
 type InfoProps = {
@@ -54,7 +55,7 @@ export function Component() {
   const navigate = useNavigate();
   const { userId } = useParams();
   const location = useLocation();
-  const matchInfo = useMatch('/info');
+  const matchInfo = useMatch(Path.Info);
 
   // useHookForm 사용
   const {
@@ -78,17 +79,17 @@ export function Component() {
   const userInfoFillMutation = useMutation({
     mutationFn: patchUserInfo,
     onSuccess: () => {
-      if (userId) return navigate('/my-page');
-      navigate('/home');
+      if (userId) return navigate(Path.MyPage);
+      navigate(Path.Home);
     },
     onError: () => {
-      navigate('/');
+      navigate(Path.Login);
     },
   });
 
   useEffect(() => {
     if (!accessToken) {
-      navigate('/');
+      navigate(Path.Login);
     }
   }, [accessToken, navigate]);
 
@@ -176,7 +177,7 @@ export function Component() {
       localStorage.removeItem('accessToken');
       localStorage.removeItem('refreshToken');
       localStorage.removeItem('firstVisited');
-      navigate('/');
+      navigate(Path.Login);
     },
     onError() {
       setIsError(true);

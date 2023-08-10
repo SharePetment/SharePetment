@@ -14,6 +14,7 @@ import SideNav from '../../components/card/sidenav/SideNav';
 import LoadingComponent from '../../components/loading/LoadingComponent';
 import NoticeServerError from '../../components/notice/NoticeServerError';
 import Toast from '../../components/toast/Toast';
+import Path from '../../routers/paths.ts';
 import { MemberIdContext } from '../../store/Context';
 import { Feed } from '../../types/feedTypes';
 import changeTime from '../../util/changeTime';
@@ -61,7 +62,7 @@ export function Component() {
     mutationFn: deleteMutation,
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ['guestFeed'] });
-      navigate('/my-page');
+      navigate(Path.MyPage);
     },
     onError: () => setIsOpen([true, '요청에 실패했어요.']),
   });

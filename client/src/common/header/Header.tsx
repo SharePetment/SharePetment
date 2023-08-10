@@ -12,10 +12,10 @@ import Profile from '../profile/Profile.tsx';
 import { HeaderContainer, NavItem, NavList } from './Header.styled.tsx';
 
 export default function Header() {
-  const matchHome = useMatch('/home');
-  const matchWalkmate = useMatch('/walkmate');
-  const matchPost = useMatch('/feed-posting');
-  const matchMypage = useMatch('/my-page');
+  const matchHome = useMatch(Path.Home);
+  const matchWalkmate = useMatch(Path.WalkMate);
+  const matchPost = useMatch(Path.FeedPosting);
+  const matchMypage = useMatch(Path.MyPage);
   const accessToken = useReadLocalStorage<string | null>('accessToken');
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
@@ -31,7 +31,7 @@ export default function Header() {
   const handleClick = () => {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
-    navigate('/');
+    navigate(Path.Login);
   };
 
   if (accessToken && isSuccess) {
@@ -43,7 +43,7 @@ export default function Header() {
             handler={[
               () => {
                 setIsOpen(false);
-                navigate('/my-page');
+                navigate(Path.MyPage);
               },
             ]}
             isgreen={['true']}
@@ -111,7 +111,7 @@ export default function Header() {
             handler={[
               () => {
                 setIsOpen(false);
-                navigate('/');
+                navigate(Path.Login);
               },
             ]}
             isgreen={['true']}

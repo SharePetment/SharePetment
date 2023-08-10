@@ -9,6 +9,7 @@ import { ReactComponent as Delete } from '../../../assets/button/delete.svg';
 import { ReactComponent as Edit } from '../../../assets/button/edit.svg';
 import { ReactComponent as Like } from '../../../assets/button/like.svg';
 import { ReactComponent as Share } from '../../../assets/button/share.svg';
+import Path from '../../../routers/paths.ts';
 import { BooleanStr } from '../../../types/propType.ts';
 import { Container, Wrap, Text } from './SideNav.styled.tsx';
 
@@ -40,7 +41,7 @@ export default function SideNav({
   const accessToken = useReadLocalStorage<string | null>('accessToken');
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const feedPopUp = useMatch('/home/:feedId');
+  const feedPopUp = useMatch(Path.FeedPopUp);
   const [isLike, setIsLike] = useState<BooleanStr>(like);
   const [isLikes, setIsLikes] = useState<number>(likes);
 
@@ -85,7 +86,7 @@ export default function SideNav({
     if (!accessToken) {
       if (guesthandler) return guesthandler();
     }
-    navigate(`/home/${feedid}`);
+    navigate(`${Path.Home}/${feedid}`);
   };
 
   const handleClickSemiComment = () => {
@@ -133,7 +134,7 @@ export default function SideNav({
         {inperson === 'true' && (
           <>
             <Wrap
-              onClick={() => navigate(`/feed-posting/${feedid}`)}
+              onClick={() => navigate(`${Path.FeedPosting}/${feedid}`)}
               className="cursor-pointer ml-2">
               <Edit stroke="black" />
             </Wrap>
