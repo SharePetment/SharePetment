@@ -16,6 +16,7 @@ import NoticeOnlyOwner from '@/components/notice/NoticeOnlyOwner.tsx';
 import NoticeServerError from '@/components/notice/NoticeServerError.tsx';
 import Subscribe from '@/components/subscribe/Subscribe.tsx';
 import PetInfoBox from '@/components/user_my_page/petinfo-box/PetInfoBox.tsx';
+import Path from '@/routers/paths.ts';
 import {
   GridContainerFeed,
   GridContainerWalk,
@@ -43,7 +44,7 @@ export function Component() {
 
   const memberId = useContext(MemberIdContext);
 
-  const accessToken = useReadLocalStorage<string>('accessToken');
+  const accessToken = useReadLocalStorage<string | null>('accessToken');
 
   // 구독 controller
   const [isSubscribed, setIsSubscribed] = useState(false);
@@ -154,7 +155,7 @@ export function Component() {
 
   // memberId, usersId가 같을시 myPage로 이동
   if (usersId === memberId?.memberId) {
-    return <Navigate to="/my-page" />;
+    return <Navigate to={Path.MyPage} />;
   }
 
   // 찾는 유저가 없을 시 혹은 에러 발생시
@@ -270,7 +271,7 @@ export function Component() {
                             <React.Fragment key={index}>
                               {page.map(item => (
                                 <Link
-                                  to={`/home/${item.feedId}`}
+                                  to={`${Path.Home}/${item.feedId}`}
                                   key={item.feedId}>
                                   <img
                                     className="w-full h-[180px] rounded-[28px] object-cover border hover:drop-shadow-lg transition-all delay-100"
@@ -310,7 +311,7 @@ export function Component() {
                                     <React.Fragment key={index}>
                                       {page.map(item => (
                                         <Link
-                                          to={`/walkmate/${item.walkMatePostId}`}
+                                          to={`${Path.WalkMate}/${item.walkMatePostId}`}
                                           key={item.walkMatePostId}>
                                           <WalkCard
                                             size="sm"

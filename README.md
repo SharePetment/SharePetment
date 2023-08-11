@@ -111,6 +111,7 @@ Spring Security| Swagger | Redis| KaKao OAuth2 | Github Actions| Docker|
 
 
 
+
 ## Screen Shot
 
 | 로그인 화면 | 홈 화면 | 
@@ -135,3 +136,39 @@ Spring Security| Swagger | Redis| KaKao OAuth2 | Github Actions| Docker|
 | :---: | :---: |
 |<img src="https://github.com/codestates-seb/seb44_main_018/assets/57277708/ba31acb9-3ee2-4068-a8bd-ea2667279504"  alt="home" width="500"/>| <img src="https://github.com/codestates-seb/seb44_main_018/assets/57277708/79c8ec9e-51b4-4299-90a9-40828cfae9ec" alt="feed" width="500"/>|
 
+
+
+## 기능 GIF
+
+| 로그인 | 피드 불러오기 | 
+| :---: | :---: |
+|<img src="https://github.com/SharePetment/SharePetment/assets/45515897/e968acbd-9b91-452e-9d39-15c1f5ed1c2a"  alt="home" width="500"/>| <img src="https://github.com/SharePetment/SharePetment/assets/45515897/2858e2e8-3974-4ae9-ab66-961ac8324699" alt="feed" width="500"/>|
+
+| 게스트 화면 | 게시물 공유 | 
+| :---: | :---: |
+|<img src="https://github.com/SharePetment/SharePetment/assets/45515897/d627b56b-e2b6-4ec1-acb8-e02fe459c920"  alt="home" width="500"/>| <img src="https://github.com/SharePetment/SharePetment/assets/45515897/86068adc-d39c-4ca8-bd0c-7b6ec04036c1" alt="feed" width="500"/>|
+
+| 피드 수정 | 피드 올리기 | 
+| :---: | :---: |
+|<img src="https://github.com/SharePetment/SharePetment/assets/45515897/aa17932f-99ed-4084-9144-408434c81d49"  alt="home" width="500"/>| <img src="https://github.com/SharePetment/SharePetment/assets/45515897/2d2eba52-5da9-4923-a502-ddd76ef48471" alt="feed" width="500"/>|
+
+| 회원 수정 | 피드 좋아요, 댓글, 구독 | 
+| :---: | :---: |
+|<img src="https://github.com/SharePetment/SharePetment/assets/45515897/d8632a70-a960-4880-9ce4-2451182498d0"  alt="home" width="500"/>| <img src="https://github.com/SharePetment/SharePetment/assets/45515897/0a0d8c60-eb16-4c3f-89cf-d65e03189854" alt="feed" width="500"/>|
+
+| 마이페이지 - 구독관리 | 펫 등록 및 대표이미지 선정 | 
+| :---: | :---: |
+|<img src="https://github.com/SharePetment/SharePetment/assets/45515897/c3c257d5-6542-4c89-a1ff-711028c2f2f0"  alt="home" width="500"/>| <img src="https://github.com/SharePetment/SharePetment/assets/45515897/351a2f30-4ef2-4cc1-a125-46c7eed908bc" alt="feed" width="500"/>|
+
+
+| 산책 게시물 작성 | 산책 게시물 수정 및 모집 완료 | 
+| :---: | :---: |
+|<img src="https://github.com/SharePetment/SharePetment/assets/45515897/9cf21bf0-28a1-4340-aa86-eefad445dba0"  alt="home" width="500"/>| <img src="https://github.com/SharePetment/SharePetment/assets/45515897/a1330301-e2f9-449c-baf0-2671872ade96" alt="feed" width="500"/>|
+
+| 산책 게시물 필터링 | 산책 게시물 댓글 | 
+| :---: | :---: |
+|<img src="https://github.com/SharePetment/SharePetment/assets/45515897/c37272fe-fddd-420e-9e31-06c4ba8ea902"  alt="home" width="500"/>| <img src="https://github.com/SharePetment/SharePetment/assets/45515897/fb097099-e9ab-4be6-a978-b238b3b0df90" alt="feed" width="500"/>|
+
+| 회원 탈퇴 |  | 
+| :---: | :---: |
+|<img src="https://github.com/SharePetment/SharePetment/assets/45515897/b77ffb5c-ba17-41ee-be41-7338623472ea"  alt="home" width="500"/>| |

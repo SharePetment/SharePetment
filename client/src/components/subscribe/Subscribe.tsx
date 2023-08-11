@@ -14,7 +14,7 @@ export default function Subscribe({ guestFollow, usersId }: Prop) {
   const queryClient = useQueryClient();
 
   // 구독 갱신
-  const accessToken = useReadLocalStorage('accessToken');
+  const accessToken = useReadLocalStorage<string | null>('accessToken');
   const subscribeMutation = useMutation({
     mutationFn: postSubscribe,
     onSuccess() {
@@ -29,7 +29,7 @@ export default function Subscribe({ guestFollow, usersId }: Prop) {
   const handleSubscribe = () => {
     subscribeMutation.mutate({
       url: `${SERVER_URL}/members/following/${usersId}`,
-      accessToken: accessToken as string,
+      accessToken,
     });
   };
 

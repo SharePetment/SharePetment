@@ -7,6 +7,7 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import Profile from '@/common/profile/Profile.tsx';
+import Path from '@/routers/paths.ts';
 import {
   Container,
   Feed,
@@ -43,14 +44,14 @@ export default function FeedCard({
 }: Prop) {
   const navigate = useNavigate();
   const [isMore, setIsMore] = useState(false);
-  const accessToken = useReadLocalStorage('accessToken');
+  const accessToken = useReadLocalStorage<string | null>('accessToken');
 
   const handlerClick = () => {
     if (!accessToken)
       if (guesthandler) {
         return guesthandler();
       }
-    navigate(`/users/${memberid}`);
+    navigate(`${Path.User}/${memberid}`);
   };
 
   return (

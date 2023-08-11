@@ -15,16 +15,16 @@ import Path from '@/routers/paths.ts';
 export default function NavBar() {
   const navigate = useNavigate();
 
-  const matchHome = useMatch('/home');
-  const matchWalkmate = useMatch('/walkmate');
-  const matchPost = useMatch('/feed-posting');
-  const matchMypage = useMatch('/my-page');
+  const matchHome = useMatch(Path.Home);
+  const matchWalkmate = useMatch(Path.WalkMate);
+  const matchPost = useMatch(Path.WalkPosting);
+  const matchMypage = useMatch(Path.MyPage);
   const accessToken = useReadLocalStorage<string | null>('accessToken');
 
   const handleClick = () => {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
-    navigate('/');
+    navigate(Path.Login);
   };
 
   if (accessToken) {

@@ -3,7 +3,6 @@ import { useState, useEffect, useContext } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import { useReadLocalStorage } from 'usehooks-ts';
-import { deleteComment, editComment } from '@/api/mutationfn.ts';
 import { SERVER_URL } from '@/api/url.ts';
 import { ReactComponent as Write } from '@/assets/button/write.svg';
 import {
@@ -93,7 +92,7 @@ export default function Comment(props: CommentProp) {
   const queryClient = useQueryClient();
   // mutation
   const mutation = useMutation({
-    mutationFn: editComment,
+    mutationFn: patchComment,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['walkFeed', walkMatePostId] });
       setIsEdited(false);
@@ -104,7 +103,7 @@ export default function Comment(props: CommentProp) {
   });
 
   const deleteCommentMutaion = useMutation({
-    mutationFn: deleteComment,
+    mutationFn: deleteMutation,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['walkFeed', walkMatePostId] });
     },
@@ -119,7 +118,9 @@ export default function Comment(props: CommentProp) {
         <div>
           {/* 유저 정보 기입 */}
           <HeaderBox>
-            <Link to={`/users/${memberId}`} className="hover:cursor-pointer">
+            <Link
+              to={`${Path.User}/${memberId}`}
+              className="hover:cursor-pointer">
               <UserBox>
                 <Profile size="sm" url={imageURL} isgreen={'false'} />
                 <UserName>{nickname}</UserName>

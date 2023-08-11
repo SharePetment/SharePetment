@@ -4,6 +4,7 @@ import { useInView } from 'react-intersection-observer';
 import { useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
 import { useReadLocalStorage } from 'usehooks-ts';
+
 import { getServerDataWithJwt } from '@/api/queryfn.ts';
 import { SERVER_URL } from '@/api/url.ts';
 import { ReactComponent as Setting } from '@/assets/button/setting.svg';
@@ -20,6 +21,7 @@ import NoticeOnlyOwner from '@/components/notice/NoticeOnlyOwner.tsx';
 import NoticeServerError from '@/components/notice/NoticeServerError.tsx';
 import PlusBtn from '@/components/plus-button/PlusBtn.tsx';
 import PetContainer from '@/components/user_my_page/pet-container/PetContainer.tsx';
+import Path from '@/routers/paths.ts';
 import {
   Container,
   HightliteText,
@@ -60,13 +62,12 @@ export function Component() {
   // 마이 info 데이터 불러오기
   const state = useContext(MemberIdContext);
 
-  const accessToken = useReadLocalStorage<string>('accessToken');
+  const accessToken = useReadLocalStorage<string | null>('accessToken');
 
   // 자신의 유저 정보 조회
   const {
     data,
     isLoading,
-
     isError: isUserError,
   } = useQuery<UserInfo>({
     queryKey: ['myPage'],
@@ -164,7 +165,7 @@ export function Component() {
 
   // 유저 정보 수정 페이지로 이동
   const handleUserEdit = () => {
-    navigate(`/info/${state?.memberId}`, {
+    navigate(`${Path.Info}/${state?.memberId}`, {
       state: {
         name: data?.name,
         nickname: data?.memberInfo.nickname,
@@ -176,7 +177,7 @@ export function Component() {
 
   // 유저 이미지와 일치하는 펫 이미지가 있는지 index를 통해 탐색
   useEffect(() => {
-    let indexNumber;
+    let indexNumber: number | undefined;
     if (typeof data?.memberInfo === 'object') {
       const userImage = data?.memberInfo.imageURL;
       const petArray = data?.pets.map(({ images }) => images.uploadFileURL);
@@ -324,7 +325,7 @@ export function Component() {
                             <React.Fragment key={index}>
                               {page.map(item => (
                                 <Link
-                                  to={`/home/${item.feedId}`}
+                                  to={`${Path.Home}/${item.feedId}`}
                                   key={item.feedId}>
                                   <img
                                     className="w-full h-[180px] rounded-[28px] object-cover border hover:scale-105 transition-all delay-75"
@@ -362,7 +363,7 @@ export function Component() {
                                   <React.Fragment key={index}>
                                     {page.map(item => (
                                       <Link
-                                        to={`/walkmate/${item.walkMatePostId}`}
+                                        to={`${Path.WalkMate}/${item.walkMatePostId}`}
                                         key={item.walkMatePostId}>
                                         <WalkCard
                                           size="sm"
@@ -410,7 +411,7 @@ export function Component() {
                           ) : (
                             commentListData?.map(item => (
                               <Link
-                                to={`/walkmate/${item.walkMatePostId}`}
+                                to={`${Path.WalkMate}/${item.walkMatePostId}`}
                                 key={item.walkMateCommentId}>
                                 <CommentList>
                                   <span className=" whitespace-nowrap overflow-hidden text-ellipsis ">

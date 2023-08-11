@@ -9,7 +9,6 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import { useLocalStorage, useReadLocalStorage } from 'usehooks-ts';
-import { getGuestFeedList, getHostFeedList } from '@/api/queryfn.ts';
 import { SERVER_URL } from '@/api/url.ts';
 import LyingDownDog from '@/assets/illustration/lying-down-dog.png';
 import PetFriends from '@/assets/illustration/pet-friends.png';
@@ -24,10 +23,12 @@ import CircleProgressBar from '@/pages/home/CricleProgressBar.tsx';
 import { Container, ReBtn, TopBtn } from '@/pages/home/Home.styled.tsx';
 import { Feed } from '@/types/feedTypes.ts';
 import '@/common/carousel/carousel.css';
+import { getGuestFeedList, getHostFeedList } from '@/api/queryfn.ts';
+import Path from '@/routers/paths.ts';
 
 export function Component() {
   const queryClient = useQueryClient();
-  const accessToken = useReadLocalStorage<string>('accessToken');
+  const accessToken = useReadLocalStorage<string | null>('accessToken');
   const [isFirstVisited, setFirstVisited] = useLocalStorage(
     'firstVisited',
     true,
@@ -177,7 +178,7 @@ export function Component() {
                       className="bg-deepgreen text-white w-[120px]  h-[50px]
                       text-base rounded-2xl max-sm:text-xs max-sm:w-[90px]"
                       onClick={() => {
-                        navigate('/my-page');
+                        navigate(Path.MyPage);
                         setFirstVisited(false);
                       }}>
                       네, 등록할래요!
@@ -186,7 +187,7 @@ export function Component() {
                       className="bg-white text-deepgreen w-[120px]  h-[50px]
                       text-base rounded-2xl max-sm:w-[90px] max-sm:text-xs"
                       onClick={() => {
-                        navigate('/home');
+                        navigate(Path.Home);
                         setFirstVisited(false);
                       }}>
                       아뇨, 괜찮습니다!
@@ -337,7 +338,7 @@ export function Component() {
               btnsize={['md']}
               buttontext={['로그인하러가기']}
               countbtn={1}
-              handler={[() => navigate('/')]}
+              handler={[() => navigate(Path.Login)]}
               popupcontrol={() => setIsGuestOpen(false)}
             />
           )}

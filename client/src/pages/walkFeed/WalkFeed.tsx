@@ -3,7 +3,6 @@ import { useContext, useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useReadLocalStorage } from 'usehooks-ts';
-import { addComment, deleteWalkFeed, patchWalkStatus } from '@/api/mutationfn';
 import { getServerDataWithJwt } from '@/api/queryfn.ts';
 import { SERVER_URL } from '@/api/url.ts';
 import { ReactComponent as CommentIcon } from '@/assets/button/comment.svg';
@@ -19,6 +18,12 @@ import Popup from '@/common/popup/Popup.tsx';
 import LoadingComponent from '@/components/loading/LoadingComponent.tsx';
 import ShowMap from '@/components/map-show/ShowMap.tsx';
 import NoticeServerError from '@/components/notice/NoticeServerError.tsx';
+import {
+  postComment,
+  deleteMutation,
+  patchMutation,
+} from '@/api/mutationfn';
+import Path from '@/routers/paths.ts';
 import {
   CommentButton,
   Divider,
@@ -40,8 +45,8 @@ export function Component() {
   const [isOpen, setIsOpen] = useState<[boolean, string]>([false, '']);
 
   // 댓글 등록
-  const addCommentMutation = useMutation({
-    mutationFn: addComment,
+  const postCommentMutation = useMutation({
+    mutationFn: postComment,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['walkFeed', postId] });
       queryClient.invalidateQueries({ queryKey: ['walkmateList'] });
@@ -65,7 +70,7 @@ export function Component() {
       content: data.content.trim(),
     };
     const url = `${SERVER_URL}/walkmates/comments/${postId}`;
-    addCommentMutation.mutate({ ...data, url, accessToken });
+    postCommentMutation.mutate({ ...data, url, accessToken });
     resetField('content');
   };
 
@@ -94,7 +99,7 @@ export function Component() {
 
   // 모집 변경
   const walkStatusMutation = useMutation({
-    mutationFn: patchWalkStatus,
+    mutationFn: patchMutation,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['walkFeed', postId] });
     },
@@ -106,21 +111,21 @@ export function Component() {
       url: `${SERVER_URL}/walkmates/openstatus/${!data?.open}/${
         data?.walkMatePostId
       }`,
-      accessToken: accessToken as string,
+      accessToken,
     });
   };
 
   // 게시글 수정
   const handleWalkFeedEdit = () => {
     // 수정 페이지로 이동
-    navigate(`/walk-posting/${data?.walkMatePostId}`);
+    navigate(`${Path.WalkPosting}/${data?.walkMatePostId}`);
   };
 
   // 게시글 삭제
   const walkDeleteMutation = useMutation({
-    mutationFn: deleteWalkFeed,
+    mutationFn: deleteMutation,
     onSuccess: () => {
-      navigate('/walkmate');
+      navigate(Path.WalkMate);
     },
     onError: () => setIsOpen([true, '게시글 삭제에 실패했습니다.']),
   });
@@ -132,7 +137,7 @@ export function Component() {
   const handleWalkFeedDelete = () => {
     walkDeleteMutation.mutate({
       url: `${SERVER_URL}/walkmates/${data?.walkMatePostId}`,
-      accessToken: accessToken as string,
+      accessToken,
     });
   };
 
@@ -144,7 +149,7 @@ export function Component() {
 
   useEffect(() => {
     if (!isLoading && !userData?.animalParents) {
-      navigate('/home');
+      navigate(Path.Home);
     }
   }, [userData, navigate, isLoading]);
 
@@ -173,7 +178,7 @@ export function Component() {
         <div className="w-[500px] max-sm:w-[320px] mx-auto mt-7">
           <ArrowLeft
             className="hidden max-sm:block w-6 h-6 cursor-pointer"
-            onClick={() => navigate('/walkmate')}
+            onClick={() => navigate(Path.WalkMate)}
           />
           {`${data?.memberInfo?.memberId}` === userId && (
             <div className="flex justify-end gap-4 items-center">

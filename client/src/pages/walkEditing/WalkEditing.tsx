@@ -43,7 +43,7 @@ export function Component() {
     formState: { errors },
   } = useForm<Inputs>();
 
-  const accessToken = useReadLocalStorage('accessToken');
+  const accessToken = useReadLocalStorage<string | null>('accessToken');
   // 산책 게시물 불러오기
   const { data, isLoading } = useQuery<WalkFeed>({
     queryKey: ['walkFeed', postId],
@@ -57,7 +57,7 @@ export function Component() {
       setDetailAddress(data.mapURL.split(' ')[2]);
     },
     onError: () => {
-      navigate('/walkmate');
+      navigate(Path.WalkMate);
     },
   });
 
@@ -101,7 +101,7 @@ export function Component() {
   });
   useEffect(() => {
     if (!userLoading && !userData?.animalParents) {
-      navigate('/home');
+      navigate(Path.Home);
     }
   }, [userData, navigate, userLoading]);
 

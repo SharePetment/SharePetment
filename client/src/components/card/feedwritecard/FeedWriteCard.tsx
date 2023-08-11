@@ -4,13 +4,14 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Navigation } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { useReadLocalStorage } from 'usehooks-ts';
-import { patchFeed, postFeed } from '@/api/mutationfn.ts';
 import { getServerDataWithJwt } from '@/api/queryfn.ts';
 import { SERVER_URL } from '@/api/url.ts';
 import { ReactComponent as Close } from '@/assets/button/close.svg';
 import { ReactComponent as Plus } from '@/assets/button/plus.svg';
 import { ReactComponent as Write } from '@/assets/button/write.svg';
 import Popup from '@/common/popup/Popup.tsx';
+import { patchFormMuation, postFormMuation } from '@/api/mutationfn.ts';
+import Path from '@/routers/paths.ts';
 import {
   Container,
   Wrap,
@@ -85,22 +86,22 @@ export default function FeedWriteCard() {
 
   // 피드 게시물 올리기 mutation
   const feedPostingMutation = useMutation({
-    mutationFn: postFeed,
+    mutationFn: postFormMuation,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['myPage'] });
       queryClient.invalidateQueries({ queryKey: ['myFeed'] });
       queryClient.invalidateQueries({ queryKey: ['followList'] });
-      navigate('/my-page');
+      navigate(Path.MyPage);
     },
     onError: () => setIsOpen([true, '요청에 실패했습니다.']),
   });
 
   // 피드 게시물 수정하기 mutation
   const feedEditingMutation = useMutation({
-    mutationFn: patchFeed,
+    mutationFn: patchFormMuation,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['feedPopUp'] });
-      navigate(`/my-page`);
+      navigate(Path.MyPage);
     },
     onError: () => setIsOpen([true, '요청에 실패했습니다.']),
   });

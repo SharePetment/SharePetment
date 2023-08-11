@@ -94,7 +94,7 @@ export function Component() {
   });
   useEffect(() => {
     if (!userLoading && !userData?.animalParents) {
-      navigate('/home');
+      navigate(Path.Home);
     }
   }, [userData, navigate, userLoading]);
 
@@ -169,7 +169,7 @@ export function Component() {
                 <React.Fragment key={index}>
                   {page.map(item => (
                     <Link
-                      to={`/walkmate/${item.walkMatePostId}`}
+                      to={`${Path.WalkMate}/${item.walkMatePostId}`}
                       key={item.walkMatePostId}
                       className="w-full">
                       <WalkCard

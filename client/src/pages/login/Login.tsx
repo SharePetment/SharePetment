@@ -11,10 +11,12 @@ import {
   LoginText,
   GuestText,
 } from '@/pages/login/Login.styled.tsx';
+import Path from '@/routers/paths.ts';
+
 
 export default function Login() {
   const navigate = useNavigate();
-  const accessToken = useReadLocalStorage('accessToken');
+  const accessToken = useReadLocalStorage<string | null>('accessToken');
 
   const [firstVisited, setFirstVisited] = useLocalStorage<boolean | null>(
     'firstVisited',
@@ -38,13 +40,15 @@ export default function Login() {
     <Container>
       <Logo width="400" className="max-sm:w-80" />
       <img src={LoginPets} width="500" />
-      <Link to="https://kauth.kakao.com/oauth/authorize?client_id=07df97c2858e60b2e19f630c2c397b31&redirect_uri=http://43.202.86.53:8080/auth/kakao/callback&response_type=code">
+      <Link to="https://kauth.kakao.com/oauth/authorize?client_id=07df97c2858e60b2e19f630c2c397b31&redirect_uri=http://15.165.146.215:8080/auth/kakao/callback&response_type=code">
         <LoginBtn>
           <Kakao />
           <LoginText>Log in With KaKao</LoginText>
         </LoginBtn>
       </Link>
-      <GuestText onClick={() => navigate('/home')}>Guest로 시작하기</GuestText>
+      <GuestText onClick={() => navigate(Path.Home)}>
+        Guest로 시작하기
+      </GuestText>
       <Footer />
     </Container>
   );

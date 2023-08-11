@@ -2,8 +2,9 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useMatch, useNavigate } from 'react-router-dom';
 import { useReadLocalStorage } from 'usehooks-ts';
+import { patchMutation } from '@/api/mutationfn.ts';
+import Path from '@/routers/paths.ts';
 import { Container, Wrap, Text } from './SideNav.styled.tsx';
-import { patchFeedLike } from '@/api/mutationfn.ts';
 import { SERVER_URL } from '@/api/url.ts';
 import { ReactComponent as Comment } from '@/assets/button/comment.svg';
 import { ReactComponent as Delete } from '@/assets/button/delete.svg';
@@ -40,12 +41,12 @@ export default function SideNav({
   const accessToken = useReadLocalStorage<string | null>('accessToken');
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const feedPopUp = useMatch('/home/:feedId');
+  const feedPopUp = useMatch(Path.FeedPopUp);
   const [isLike, setIsLike] = useState<BooleanStr>(like);
   const [isLikes, setIsLikes] = useState<number>(likes);
 
   const likeMutation = useMutation({
-    mutationFn: patchFeedLike,
+    mutationFn: patchMutation,
     onSuccess: ({ data }) => {
       queryClient.invalidateQueries({ queryKey: ['feedPopUp'] });
       setIsLike(data.isLike.toString());
@@ -85,7 +86,7 @@ export default function SideNav({
     if (!accessToken) {
       if (guesthandler) return guesthandler();
     }
-    navigate(`/home/${feedid}`);
+    navigate(`${Path.Home}/${feedid}`);
   };
 
   const handleClickSemiComment = () => {
@@ -133,7 +134,7 @@ export default function SideNav({
         {inperson === 'true' && (
           <>
             <Wrap
-              onClick={() => navigate(`/feed-posting/${feedid}`)}
+              onClick={() => navigate(`${Path.FeedPosting}/${feedid}`)}
               className="cursor-pointer ml-2">
               <Edit stroke="black" />
             </Wrap>

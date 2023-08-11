@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router';
+import Path from '@/routers/paths.ts';
 import {
   FollowBox,
   FollowListContainer,
@@ -21,7 +22,7 @@ export default function FollowList({ setIsListShowed, follow, path }: Prop) {
   const navigate = useNavigate();
   const handleUserPage = (followerId: number) => {
     setIsListShowed(false);
-    navigate(`/users/${followerId}`);
+    navigate(`${Path.User}/${followerId}`);
   };
   const handleCloseList = () => {
     setIsListShowed(false);

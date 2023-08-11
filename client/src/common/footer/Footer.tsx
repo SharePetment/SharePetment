@@ -4,7 +4,7 @@ import { ReactComponent as Github } from '@/assets/github.svg';
 import { ReactComponent as Notion } from '@/assets/notion.svg';
 
 export default function Footer() {
-  const matchLogin = useMatch('/');
+  const matchLogin = useMatch(Path.Login);
   return (
     <Container className={matchLogin === null ? 'mb-12' : ''}>
       <TopContainer>

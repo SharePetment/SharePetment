@@ -41,7 +41,7 @@ export function Component() {
     formState: { errors },
   } = useForm<Inputs>();
 
-  const accessToken = useReadLocalStorage('accessToken');
+  const accessToken = useReadLocalStorage<string | null>('accessToken');
   // 산책게시물 등록 POST
   const walkPostFillMutation = useMutation({
     mutationFn: postWalkFeed,
@@ -81,7 +81,7 @@ export function Component() {
   });
   useEffect(() => {
     if (!userLoading && !userData?.animalParents) {
-      navigate('/home');
+      navigate(Path.Home);
     }
   }, [userData, navigate, userLoading]);
 
@@ -94,7 +94,7 @@ export function Component() {
           </h2>
           <Close
             className=" stroke-defaulttext fill-defaulttext w-6 h-6 cursor-pointer"
-            onClick={() => navigate('/walkmate')}
+            onClick={() => navigate(Path.WalkMate)}
           />
         </div>
 

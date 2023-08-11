@@ -10,12 +10,12 @@ import {
   useParams,
 } from 'react-router-dom';
 import { useReadLocalStorage } from 'usehooks-ts';
-import { fillUserInfo, postQuitMember } from '@/api/mutationfn.ts';
 import { SERVER_URL } from '@/api/url.ts';
 import { ReactComponent as Like } from '@/assets/button/like.svg';
 import { ReactComponent as Logo } from '@/assets/logo.svg';
 import { ReactComponent as ArrowLeft } from '@/assets/mobile/arrow-left.svg';
 import Button from '@/common/button/Button.tsx';
+import { patchUserInfo, deleteMutation } from '@/api/mutationfn.ts';
 import {
   ErrorNotice,
   FormContainer,
@@ -30,6 +30,8 @@ import {
   ExtraInfoLogo,
   InfoForm,
 } from '@/pages/info/Info.styled.tsx';
+import Path from '@/routers/paths.ts';
+
 
 type InfoProps = {
   nickname: string;
@@ -58,7 +60,7 @@ export function Component() {
   const navigate = useNavigate();
   const { userId } = useParams();
   const location = useLocation();
-  const matchInfo = useMatch('/info');
+  const matchInfo = useMatch(Path.Info);
 
   // useHookForm 사용
   const {
@@ -76,23 +78,23 @@ export function Component() {
   // 주소 값 받아오기
   const [zip, setZip] = useState('');
 
-  const accessToken = useReadLocalStorage<string>('accessToken');
+  const accessToken = useReadLocalStorage<string | null>('accessToken');
 
   // 회원가입 등록 Mutation
   const userInfoFillMutation = useMutation({
-    mutationFn: fillUserInfo,
+    mutationFn: patchUserInfo,
     onSuccess: () => {
-      if (userId) return navigate('/my-page');
-      navigate('/home');
+      if (userId) return navigate(Path.MyPage);
+      navigate(Path.Home);
     },
     onError: () => {
-      navigate('/');
+      navigate(Path.Login);
     },
   });
 
   useEffect(() => {
     if (!accessToken) {
-      navigate('/');
+      navigate(Path.Login);
     }
   }, [accessToken, navigate]);
 
@@ -175,12 +177,12 @@ export function Component() {
 
   // 회원탈퇴 mutaition
   const userQuitMutation = useMutation({
-    mutationFn: postQuitMember,
+    mutationFn: deleteMutation,
     onSuccess() {
       localStorage.removeItem('accessToken');
       localStorage.removeItem('refreshToken');
       localStorage.removeItem('firstVisited');
-      navigate('/');
+      navigate(Path.Login);
     },
     onError() {
       setIsError(true);
@@ -189,7 +191,11 @@ export function Component() {
 
   const onSubmitQuit = (data: QuitProps) => {
     if (data.quitText) {
-      userQuitMutation.mutate({ accessToken });
+      const body = {
+        url: `${SERVER_URL}/auth/kakao/unlink`,
+        accessToken,
+      };
+      userQuitMutation.mutate(body);
     }
   };
 
