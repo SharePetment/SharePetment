@@ -1,6 +1,9 @@
 import { useState } from 'react';
-import PetInfo from '../pet/PetInfo.tsx';
-import { ButtonContainer, PlusIcon } from './plusBtn.styled.tsx';
+import PetInfo from '@/components/pet/PetInfo.tsx';
+import {
+  ButtonContainer,
+  PlusIcon,
+} from '@/components/plus-button/plusBtn.styled.tsx';
 
 export default function PlusBtn() {
   const [isOpened, setIsOpened] = useState(false);

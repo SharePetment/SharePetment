@@ -1,5 +1,5 @@
 import tw from 'tailwind-styled-components';
-import { BooleanStr } from '../../types/propType.ts';
+import { BooleanStr } from '@/types/propType.ts';
 
 export const Divider = tw.div`
   w-full

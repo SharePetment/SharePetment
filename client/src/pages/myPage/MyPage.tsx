@@ -4,31 +4,24 @@ import { useInView } from 'react-intersection-observer';
 import { useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
 import { useReadLocalStorage } from 'usehooks-ts';
-import { getServerDataWithJwt } from '../../api/queryfn.ts';
-import { SERVER_URL } from '../../api/url.ts';
-import { ReactComponent as Setting } from '../../assets/button/setting.svg';
-import { ReactComponent as CommentListIcon } from '../../assets/comment-list.svg';
-import { ReactComponent as FeedIcon } from '../../assets/feed.svg';
-import NoCommentCat from '../../assets/illustration/nocomment-cat.png';
-import { ReactComponent as WalkFeedIcon } from '../../assets/walk-feed.svg';
-import Profile from '../../common/profile/Profile.tsx';
-import WalkCard from '../../components/card/walk-card/walkCard.tsx';
-import FollowList from '../../components/follow-list/FollowList.tsx';
-import LoadingComponent from '../../components/loading/LoadingComponent.tsx';
-import NoticeNoData from '../../components/notice/NoticeNoData.tsx';
-import NoticeOnlyOwner from '../../components/notice/NoticeOnlyOwner.tsx';
-import NoticeServerError from '../../components/notice/NoticeServerError.tsx';
-import PlusBtn from '../../components/plus-button/PlusBtn.tsx';
-import PetContainer from '../../components/user_my_page/pet-container/PetContainer.tsx';
-import Path from '../../routers/paths.ts';
-import { MemberIdContext } from '../../store/Context.tsx';
-import { CommentProp } from '../../types/commentType.ts';
-import { Feed } from '../../types/feedTypes.ts';
-import { Follow, UserInfo } from '../../types/userType.ts';
-import { WalkFeed } from '../../types/walkType.ts';
-import { changeDateFormat } from '../../util/changeDateFormat.ts';
-import changeTime from '../../util/changeTime.ts';
-import { ErrorText } from '../notFound/NotFound.styled.tsx';
+
+import { getServerDataWithJwt } from '@/api/queryfn.ts';
+import { SERVER_URL } from '@/api/url.ts';
+import { ReactComponent as Setting } from '@/assets/button/setting.svg';
+import { ReactComponent as CommentListIcon } from '@/assets/comment-list.svg';
+import { ReactComponent as FeedIcon } from '@/assets/feed.svg';
+import NoCommentCat from '@/assets/illustration/nocomment-cat.png';
+import { ReactComponent as WalkFeedIcon } from '@/assets/walk-feed.svg';
+import Profile from '@/common/profile/Profile.tsx';
+import WalkCard from '@/components/card/walk-card/walkCard.tsx';
+import FollowList from '@/components/follow-list/FollowList.tsx';
+import LoadingComponent from '@/components/loading/LoadingComponent.tsx';
+import NoticeNoData from '@/components/notice/NoticeNoData.tsx';
+import NoticeOnlyOwner from '@/components/notice/NoticeOnlyOwner.tsx';
+import NoticeServerError from '@/components/notice/NoticeServerError.tsx';
+import PlusBtn from '@/components/plus-button/PlusBtn.tsx';
+import PetContainer from '@/components/user_my_page/pet-container/PetContainer.tsx';
+import Path from '@/routers/paths.ts';
 import {
   Container,
   HightliteText,
@@ -43,7 +36,15 @@ import {
   GridContainerFeed,
   GridContainerWalk,
   CommentList,
-} from './myPage.styled.tsx';
+} from '@/pages/myPage/myPage.styled.tsx';
+import { ErrorText } from '@/pages/notFound/NotFound.styled.tsx';
+import { MemberIdContext } from '@/store/Context.tsx';
+import { CommentProp } from '@/types/commentType.ts';
+import { Feed } from '@/types/feedTypes.ts';
+import { Follow, UserInfo } from '@/types/userType.ts';
+import { WalkFeed } from '@/types/walkType.ts';
+import { changeDateFormat } from '@/util/changeDateFormat.ts';
+import changeTime from '@/util/changeTime.ts';
 
 export function Component() {
   // navigate

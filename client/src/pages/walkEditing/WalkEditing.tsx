@@ -4,25 +4,25 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useReadLocalStorage } from 'usehooks-ts';
-import { patchWalkFeed } from '../../api/mutationfn.ts';
-import { getServerDataWithJwt } from '../../api/queryfn.ts';
-import { SERVER_URL } from '../../api/url';
-import { ReactComponent as Close } from '../../assets/button/close.svg';
-import Button from '../../common/button/Button.tsx';
+import { patchWalkFeed } from '@/api/mutationfn.ts';
+import { getServerDataWithJwt } from '@/api/queryfn.ts';
+import { SERVER_URL } from '@/api/url';
+import { ReactComponent as Close } from '@/assets/button/close.svg';
+import Button from '@/common/button/Button.tsx';
 import {
   ErrorNotice,
   InputContainer,
   InputText,
   Label,
-} from '../../common/input/Input.styled';
-import Popup from '../../common/popup/Popup.tsx';
-import { Textarea } from '../../components/card/feedwritecard/FeedWriteCard.styled.tsx';
-import LoadingComponent from '../../components/loading/LoadingComponent.tsx';
-import Map from '../../components/map-make/Map.tsx';
-import Path from '../../routers/paths';
-import { UserInfo } from '../../types/userType.ts';
-import { WalkFeed } from '../../types/walkType.ts';
-import { PostForm } from '../walkPosting/WalkPosting.styled.tsx';
+} from '@/common/input/Input.styled';
+import Popup from '@/common/popup/Popup.tsx';
+import { Textarea } from '@/components/card/feedwritecard/FeedWriteCard.styled.tsx';
+import LoadingComponent from '@/components/loading/LoadingComponent.tsx';
+import Map from '@/components/map-make/Map.tsx';
+import { PostForm } from '@/pages/walkPosting/WalkPosting.styled.tsx';
+import Path from '@/routers/paths';
+import { UserInfo } from '@/types/userType.ts';
+import { WalkFeed } from '@/types/walkType.ts';
 
 interface Inputs {
   title: string;

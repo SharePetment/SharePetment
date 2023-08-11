@@ -1,5 +1,5 @@
-import { MemberInfo } from './commentType.ts';
-import { Pets } from './petType.ts';
+import { MemberInfo } from '@/types/commentType.ts';
+import { Pets } from '@/types/petType.ts';
 
 export interface UserInfo {
   memberInfo: MemberInfo;

@@ -1,7 +1,8 @@
 import { useNavigate } from 'react-router-dom';
-import Cat404 from '../../assets/illustration/404cat.png';
-import { ErrorText, HomeBtn } from '../../pages/notFound/NotFound.styled.tsx';
-import Path from '../../routers/paths.ts';
+import Cat404 from '@/assets/illustration/404cat.png';
+import { ErrorText, HomeBtn } from '@/pages/notFound/NotFound.styled.tsx';
+import Path from '@/routers/paths.ts';
+
 
 export default function NoticeServerError() {
   const navigate = useNavigate();

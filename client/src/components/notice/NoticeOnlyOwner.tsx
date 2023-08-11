@@ -1,7 +1,9 @@
 import { useMatch, useNavigate } from 'react-router-dom';
-import LoginPets from '../../assets/illustration/loginpet.png';
-import { ErrorText, HomeBtn } from '../../pages/notFound/NotFound.styled.tsx';
-import Path from '../../routers/paths.ts';
+
+import LoginPets from '@/assets/illustration/loginpet.png';
+import { ErrorText, HomeBtn } from '@/pages/notFound/NotFound.styled.tsx';
+import Path from '@/routers/paths.ts';
+
 
 export default function NoticeOnlyOwner() {
   const navigate = useNavigate();

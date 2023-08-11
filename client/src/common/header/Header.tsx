@@ -2,14 +2,18 @@ import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useMatch, Link, useNavigate } from 'react-router-dom';
 import { useReadLocalStorage } from 'usehooks-ts';
-import { getServerDataWithJwt } from '../../api/queryfn.ts';
-import { SERVER_URL } from '../../api/url.ts';
-import { ReactComponent as Logo } from '../../assets/logo.svg';
-import Path from '../../routers/paths.ts';
-import Button from '../button/Button.tsx';
-import Popup from '../popup/Popup.tsx';
-import Profile from '../profile/Profile.tsx';
-import { HeaderContainer, NavItem, NavList } from './Header.styled.tsx';
+import { getServerDataWithJwt } from '@/api/queryfn.ts';
+import { SERVER_URL } from '@/api/url.ts';
+import { ReactComponent as Logo } from '@/assets/logo.svg';
+import Button from '@/common/button/Button.tsx';
+import {
+  HeaderContainer,
+  NavItem,
+  NavList,
+} from '@/common/header/Header.styled';
+import Popup from '@/common/popup/Popup.tsx';
+import Profile from '@/common/profile/Profile.tsx';
+import Path from '@/routers/paths.ts';
 
 export default function Header() {
   const matchHome = useMatch(Path.Home);

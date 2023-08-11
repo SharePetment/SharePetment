@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { Subscribe } from '../types/subscribe.ts';
-import { SERVER_URL } from './url.ts';
+import { SERVER_URL } from '@/api/url.ts';
+import { Subscribe } from '@/types/subscribe.ts';
 
 interface MutationProp {
   url: string;

@@ -1,4 +1,4 @@
-import { CommentProp, MemberInfo } from './commentType.ts';
+import { CommentProp, MemberInfo } from '@/types/commentType.ts';
 
 // 산책 게시물 리스트
 export interface WalkFeedList {

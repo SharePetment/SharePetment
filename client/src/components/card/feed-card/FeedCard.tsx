@@ -6,9 +6,8 @@ import { useReadLocalStorage } from 'usehooks-ts';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
-import Profile from '../../../common/profile/Profile.tsx';
-import '../../../common/carousel/carousel.css';
-import Path from '../../../routers/paths.ts';
+import Profile from '@/common/profile/Profile.tsx';
+import Path from '@/routers/paths.ts';
 import {
   Container,
   Feed,
@@ -17,7 +16,8 @@ import {
   UserName,
   Context,
   More,
-} from './FeedCard.styled.tsx';
+} from '@/components/card/feed-card/FeedCard.styled.tsx';
+import '@/common/carousel/carousel.css';
 
 interface ImagesStructure {
   imageId: number;

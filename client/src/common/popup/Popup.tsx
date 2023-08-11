@@ -1,11 +1,11 @@
-import { BooleanStr, Size, Handler } from '../../types/propType.ts';
-import Button from '../button/Button.tsx';
 import {
   PopupBackGround,
   PopupBox,
   Title,
   ButtonBox,
 } from './popup.styled.tsx';
+import Button from '@/common/button/Button.tsx';
+import { BooleanStr, Size, Handler } from '@/types/propType.ts';
 
 interface Prop {
   title: string;

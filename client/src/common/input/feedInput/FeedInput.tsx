@@ -1,10 +1,14 @@
 import { useQueryClient, useMutation } from '@tanstack/react-query';
 import { useRef } from 'react';
 import { useReadLocalStorage } from 'usehooks-ts';
-import { postFeedComment } from '../../../api/mutationfn.ts';
-import { SERVER_URL } from '../../../api/url.ts';
-import { ReactComponent as Write } from '../../../assets/button/write.svg';
-import { Container, Input, CommentBtn } from './FeedInput.styled.tsx';
+import { postFeedComment } from '@/api/mutationfn.ts';
+import { SERVER_URL } from '@/api/url.ts';
+import { ReactComponent as Write } from '@/assets/button/write.svg';
+import {
+  Container,
+  Input,
+  CommentBtn,
+} from '@/common/input/feedInput/FeedInput.styled';
 
 interface Prop {
   feedid: number;

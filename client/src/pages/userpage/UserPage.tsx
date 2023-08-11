@@ -3,31 +3,26 @@ import React, { useState, useContext, useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { useParams, Navigate, Link } from 'react-router-dom';
 import { useReadLocalStorage } from 'usehooks-ts';
-import { getServerDataWithJwt } from '../../api/queryfn.ts';
-import { SERVER_URL } from '../../api/url.ts';
-import { ReactComponent as FeedIcon } from '../../assets/feed.svg';
-import { ReactComponent as WalkFeedIcon } from '../../assets/walk-feed.svg';
-import Profile from '../../common/profile/Profile.tsx';
-import WalkCard from '../../components/card/walk-card/walkCard.tsx';
-import FollowList from '../../components/follow-list/FollowList.tsx';
-import LoadingComponent from '../../components/loading/LoadingComponent.tsx';
-import NoticeNotWrite from '../../components/notice/NoticeNotWrite.tsx';
-import NoticeOnlyOwner from '../../components/notice/NoticeOnlyOwner.tsx';
-import NoticeServerError from '../../components/notice/NoticeServerError.tsx';
-import Subscribe from '../../components/subscribe/Subscribe.tsx';
-import PetInfoBox from '../../components/user_my_page/petinfo-box/PetInfoBox.tsx';
-import Path from '../../routers/paths.ts';
-import { MemberIdContext } from '../../store/Context.tsx';
-import { Feed } from '../../types/feedTypes.ts';
-import { Follow, UserInfo } from '../../types/userType.ts';
-import { WalkFeed } from '../../types/walkType.ts';
-import { changeDateFormat } from '../../util/changeDateFormat.ts';
+import { getServerDataWithJwt } from '@/api/queryfn.ts';
+import { SERVER_URL } from '@/api/url.ts';
+import { ReactComponent as FeedIcon } from '@/assets/feed.svg';
+import { ReactComponent as WalkFeedIcon } from '@/assets/walk-feed.svg';
+import Profile from '@/common/profile/Profile.tsx';
+import WalkCard from '@/components/card/walk-card/walkCard.tsx';
+import FollowList from '@/components/follow-list/FollowList.tsx';
+import LoadingComponent from '@/components/loading/LoadingComponent.tsx';
+import NoticeNotWrite from '@/components/notice/NoticeNotWrite.tsx';
+import NoticeOnlyOwner from '@/components/notice/NoticeOnlyOwner.tsx';
+import NoticeServerError from '@/components/notice/NoticeServerError.tsx';
+import Subscribe from '@/components/subscribe/Subscribe.tsx';
+import PetInfoBox from '@/components/user_my_page/petinfo-box/PetInfoBox.tsx';
+import Path from '@/routers/paths.ts';
 import {
   GridContainerFeed,
   GridContainerWalk,
   TabMenu,
   TabMenuList,
-} from '../myPage/myPage.styled.tsx';
+} from '@/pages/myPage/myPage.styled.tsx';
 import {
   Container,
   HightliteText,
@@ -37,7 +32,12 @@ import {
   UserInfoBox,
   UserName,
   UserNameBox,
-} from './userPage.styled.tsx';
+} from '@/pages/userpage/userPage.styled.tsx';
+import { MemberIdContext } from '@/store/Context.tsx';
+import { Feed } from '@/types/feedTypes.ts';
+import { Follow, UserInfo } from '@/types/userType.ts';
+import { WalkFeed } from '@/types/walkType.ts';
+import { changeDateFormat } from '@/util/changeDateFormat.ts';
 
 export function Component() {
   const { usersId } = useParams();

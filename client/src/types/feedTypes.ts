@@ -1,4 +1,4 @@
-import { CommentProp, MemberInfo } from './commentType.ts';
+import { CommentProp, MemberInfo } from '@/types/commentType.ts';
 
 export type FeedImage = {
   imageId: number;

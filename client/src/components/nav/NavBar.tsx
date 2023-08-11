@@ -1,16 +1,16 @@
 import { Link, useMatch, useNavigate } from 'react-router-dom';
 import { useReadLocalStorage } from 'usehooks-ts';
-import { ReactComponent as HomeActive } from '../../assets/mobile/home-active-app.svg';
-import { ReactComponent as Home } from '../../assets/mobile/home-app.svg';
-import { ReactComponent as Login } from '../../assets/mobile/login-app.svg';
-import { ReactComponent as Logout } from '../../assets/mobile/logout-app.svg';
-import { ReactComponent as MypageActive } from '../../assets/mobile/mypage-active-app.svg';
-import { ReactComponent as Mypage } from '../../assets/mobile/mypage-app.svg';
-import { ReactComponent as PostActive } from '../../assets/mobile/post-active-app.svg';
-import { ReactComponent as Post } from '../../assets/mobile/post-app.svg';
-import { ReactComponent as WalkmateActive } from '../../assets/mobile/walk-active-app.svg';
-import { ReactComponent as Walkmate } from '../../assets/mobile/walk-app.svg';
-import Path from '../../routers/paths.ts';
+import { ReactComponent as HomeActive } from '@/assets/mobile/home-active-app.svg';
+import { ReactComponent as Home } from '@/assets/mobile/home-app.svg';
+import { ReactComponent as Login } from '@/assets/mobile/login-app.svg';
+import { ReactComponent as Logout } from '@/assets/mobile/logout-app.svg';
+import { ReactComponent as MypageActive } from '@/assets/mobile/mypage-active-app.svg';
+import { ReactComponent as Mypage } from '@/assets/mobile/mypage-app.svg';
+import { ReactComponent as PostActive } from '@/assets/mobile/post-active-app.svg';
+import { ReactComponent as Post } from '@/assets/mobile/post-app.svg';
+import { ReactComponent as WalkmateActive } from '@/assets/mobile/walk-active-app.svg';
+import { ReactComponent as Walkmate } from '@/assets/mobile/walk-app.svg';
+import Path from '@/routers/paths.ts';
 
 export default function NavBar() {
   const navigate = useNavigate();
