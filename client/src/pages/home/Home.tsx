@@ -9,6 +9,7 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import { useLocalStorage, useReadLocalStorage } from 'usehooks-ts';
+import { getGuestFeedList, getHostFeedList } from '@/api/queryfn.ts';
 import { SERVER_URL } from '@/api/url.ts';
 import LyingDownDog from '@/assets/illustration/lying-down-dog.png';
 import PetFriends from '@/assets/illustration/pet-friends.png';
@@ -21,10 +22,9 @@ import NoticeServerError from '@/components/notice/NoticeServerError.tsx';
 import Toast from '@/components/toast/Toast.tsx';
 import CircleProgressBar from '@/pages/home/CricleProgressBar.tsx';
 import { Container, ReBtn, TopBtn } from '@/pages/home/Home.styled.tsx';
+import Path from '@/routers/paths.ts';
 import { Feed } from '@/types/feedTypes.ts';
 import '@/common/carousel/carousel.css';
-import { getGuestFeedList, getHostFeedList } from '@/api/queryfn.ts';
-import Path from '@/routers/paths.ts';
 
 export function Component() {
   const queryClient = useQueryClient();

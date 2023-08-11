@@ -10,12 +10,12 @@ import {
   useParams,
 } from 'react-router-dom';
 import { useReadLocalStorage } from 'usehooks-ts';
+import { patchUserInfo, deleteMutation } from '@/api/mutationfn.ts';
 import { SERVER_URL } from '@/api/url.ts';
 import { ReactComponent as Like } from '@/assets/button/like.svg';
 import { ReactComponent as Logo } from '@/assets/logo.svg';
 import { ReactComponent as ArrowLeft } from '@/assets/mobile/arrow-left.svg';
 import Button from '@/common/button/Button.tsx';
-import { patchUserInfo, deleteMutation } from '@/api/mutationfn.ts';
 import {
   ErrorNotice,
   FormContainer,
@@ -31,7 +31,6 @@ import {
   InfoForm,
 } from '@/pages/info/Info.styled.tsx';
 import Path from '@/routers/paths.ts';
-
 
 type InfoProps = {
   nickname: string;

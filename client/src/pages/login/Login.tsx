@@ -13,7 +13,6 @@ import {
 } from '@/pages/login/Login.styled.tsx';
 import Path from '@/routers/paths.ts';
 
-
 export default function Login() {
   const navigate = useNavigate();
   const accessToken = useReadLocalStorage<string | null>('accessToken');

@@ -2,10 +2,9 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useReadLocalStorage } from 'usehooks-ts';
+import { deleteMutation, patchFeedComment } from '@/api/mutationfn.ts';
 import { SERVER_URL } from '@/api/url.ts';
 import { ReactComponent as Write } from '@/assets/button/write.svg';
-import { deleteMutation, patchFeedComment } from '@/api/mutationfn.ts';
-import Path from '@/routers/paths.ts';
 import {
   Container,
   UserBox,
@@ -17,6 +16,7 @@ import {
   EditBtn,
 } from '@/common/comment/feedComment/FeedComment.styled.tsx';
 import Profile from '@/common/profile/Profile.tsx';
+import Path from '@/routers/paths.ts';
 import { BooleanStr } from '@/types/propType.ts';
 
 interface Prop {

@@ -1,6 +1,6 @@
 import imageCompression from 'browser-image-compression';
-import { FeedImage } from '../types/feedTypes.ts';
-import { option } from './imageCompressOption.ts';
+import { FeedImage } from '@/types/feedTypes.ts';
+import { option } from '@/util/imageCompressOption.ts';
 
 interface ParseImgProp {
   e: React.ChangeEvent<HTMLInputElement>;

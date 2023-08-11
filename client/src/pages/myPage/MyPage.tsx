@@ -4,7 +4,6 @@ import { useInView } from 'react-intersection-observer';
 import { useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
 import { useReadLocalStorage } from 'usehooks-ts';
-
 import { getServerDataWithJwt } from '@/api/queryfn.ts';
 import { SERVER_URL } from '@/api/url.ts';
 import { ReactComponent as Setting } from '@/assets/button/setting.svg';
@@ -21,7 +20,6 @@ import NoticeOnlyOwner from '@/components/notice/NoticeOnlyOwner.tsx';
 import NoticeServerError from '@/components/notice/NoticeServerError.tsx';
 import PlusBtn from '@/components/plus-button/PlusBtn.tsx';
 import PetContainer from '@/components/user_my_page/pet-container/PetContainer.tsx';
-import Path from '@/routers/paths.ts';
 import {
   Container,
   HightliteText,
@@ -38,6 +36,7 @@ import {
   CommentList,
 } from '@/pages/myPage/myPage.styled.tsx';
 import { ErrorText } from '@/pages/notFound/NotFound.styled.tsx';
+import Path from '@/routers/paths.ts';
 import { MemberIdContext } from '@/store/Context.tsx';
 import { CommentProp } from '@/types/commentType.ts';
 import { Feed } from '@/types/feedTypes.ts';

@@ -3,12 +3,12 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState, useEffect } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useReadLocalStorage } from 'usehooks-ts';
+import { patchFormMuation, postFormMuation } from '@/api/mutationfn.ts';
 import { SERVER_URL } from '@/api/url.ts';
 import { ReactComponent as Close } from '@/assets/button/close.svg';
 import { ReactComponent as Man } from '@/assets/label/man.svg';
 import { ReactComponent as Woman } from '@/assets/label/woman.svg';
 import Button from '@/common/button/Button.tsx';
-import { patchFormMuation, postFormMuation } from '@/api/mutationfn.ts';
 import {
   ErrorNotice,
   InputContainer,

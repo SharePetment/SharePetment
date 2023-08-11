@@ -1,5 +1,4 @@
 import { useNavigate } from 'react-router';
-import Path from '@/routers/paths.ts';
 import {
   FollowBox,
   FollowListContainer,
@@ -10,6 +9,7 @@ import {
 import Button from '@/common/button/Button.tsx';
 import { PopupBackGround } from '@/common/popup/popup.styled.tsx';
 import Profile from '@/common/profile/Profile.tsx';
+import Path from '@/routers/paths.ts';
 import { Follow } from '@/types/userType.ts';
 
 interface Prop {

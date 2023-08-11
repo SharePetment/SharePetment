@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useContext, useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useReadLocalStorage } from 'usehooks-ts';
+import { deleteMutation } from '@/api/mutationfn.ts';
 import { getServerData, getServerDataWithJwt } from '@/api/queryfn.ts';
 import { SERVER_URL } from '@/api/url.ts';
 import { ReactComponent as Close } from '@/assets/button/close.svg';
@@ -13,8 +14,6 @@ import SideNav from '@/components/card/sidenav/SideNav';
 import LoadingComponent from '@/components/loading/LoadingComponent';
 import NoticeServerError from '@/components/notice/NoticeServerError';
 import Toast from '@/components/toast/Toast';
-import { deleteMutation } from '@/api/mutationfn.ts';
-import Path from '@/routers/paths.ts';
 import {
   Container,
   CloseBtn,
@@ -24,6 +23,7 @@ import {
   FeedCardContainer,
   CommentContainer,
 } from '@/pages/feedPopUp/FeedPopUp.styled';
+import Path from '@/routers/paths.ts';
 import { MemberIdContext } from '@/store/Context';
 import { Feed } from '@/types/feedTypes';
 import changeTime from '@/util/changeTime';

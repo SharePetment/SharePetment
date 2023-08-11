@@ -7,7 +7,6 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import Profile from '@/common/profile/Profile.tsx';
-import Path from '@/routers/paths.ts';
 import {
   Container,
   Feed,
@@ -17,6 +16,7 @@ import {
   Context,
   More,
 } from '@/components/card/feed-card/FeedCard.styled.tsx';
+import Path from '@/routers/paths.ts';
 import '@/common/carousel/carousel.css';
 
 interface ImagesStructure {

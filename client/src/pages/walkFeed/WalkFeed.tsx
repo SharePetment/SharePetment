@@ -3,6 +3,7 @@ import { useContext, useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useReadLocalStorage } from 'usehooks-ts';
+import { postComment, deleteMutation, patchMutation } from '@/api/mutationfn';
 import { getServerDataWithJwt } from '@/api/queryfn.ts';
 import { SERVER_URL } from '@/api/url.ts';
 import { ReactComponent as CommentIcon } from '@/assets/button/comment.svg';
@@ -19,17 +20,12 @@ import LoadingComponent from '@/components/loading/LoadingComponent.tsx';
 import ShowMap from '@/components/map-show/ShowMap.tsx';
 import NoticeServerError from '@/components/notice/NoticeServerError.tsx';
 import {
-  postComment,
-  deleteMutation,
-  patchMutation,
-} from '@/api/mutationfn';
-import Path from '@/routers/paths.ts';
-import {
   CommentButton,
   Divider,
   GatherMate,
   WalkInfo,
 } from '@/pages/walkFeed/WalkFeed.styled';
+import Path from '@/routers/paths.ts';
 import { MemberIdContext, State } from '@/store/Context.tsx';
 import { UserInfo } from '@/types/userType.ts';
 import { WalkFeed } from '@/types/walkType.ts';

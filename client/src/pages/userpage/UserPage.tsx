@@ -16,7 +16,6 @@ import NoticeOnlyOwner from '@/components/notice/NoticeOnlyOwner.tsx';
 import NoticeServerError from '@/components/notice/NoticeServerError.tsx';
 import Subscribe from '@/components/subscribe/Subscribe.tsx';
 import PetInfoBox from '@/components/user_my_page/petinfo-box/PetInfoBox.tsx';
-import Path from '@/routers/paths.ts';
 import {
   GridContainerFeed,
   GridContainerWalk,
@@ -33,6 +32,7 @@ import {
   UserName,
   UserNameBox,
 } from '@/pages/userpage/userPage.styled.tsx';
+import Path from '@/routers/paths.ts';
 import { MemberIdContext } from '@/store/Context.tsx';
 import { Feed } from '@/types/feedTypes.ts';
 import { Follow, UserInfo } from '@/types/userType.ts';
