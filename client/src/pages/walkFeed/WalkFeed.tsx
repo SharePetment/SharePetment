@@ -19,6 +19,7 @@ import Popup from '@/common/popup/Popup.tsx';
 import LoadingComponent from '@/components/loading/LoadingComponent.tsx';
 import ShowMap from '@/components/map-show/ShowMap.tsx';
 import NoticeServerError from '@/components/notice/NoticeServerError.tsx';
+import { useMypageQuery } from '@/hook/query/useMypageQuery';
 import {
   CommentButton,
   Divider,
@@ -27,7 +28,6 @@ import {
 } from '@/pages/walkFeed/WalkFeed.styled';
 import Path from '@/routers/paths.ts';
 import { MemberIdContext, State } from '@/store/Context.tsx';
-import { UserInfo } from '@/types/userType.ts';
 import { WalkFeed } from '@/types/walkType.ts';
 import { changeDateFormat } from '@/util/changeDateFormat.ts';
 
@@ -137,10 +137,9 @@ export function Component() {
     });
   };
 
-  const { data: userData, isLoading } = useQuery<UserInfo>({
-    queryKey: ['myPage'],
-    queryFn: () =>
-      getServerDataWithJwt(`${SERVER_URL}/members`, accessToken as string),
+  const { data: userData, isLoading } = useMypageQuery({
+    url: `${SERVER_URL}/members`,
+    accessToken,
   });
 
   useEffect(() => {

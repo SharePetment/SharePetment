@@ -20,6 +20,7 @@ import NoticeOnlyOwner from '@/components/notice/NoticeOnlyOwner.tsx';
 import NoticeServerError from '@/components/notice/NoticeServerError.tsx';
 import PlusBtn from '@/components/plus-button/PlusBtn.tsx';
 import PetContainer from '@/components/user_my_page/pet-container/PetContainer.tsx';
+import { useMypageQuery } from '@/hook/query/useMypageQuery';
 import {
   Container,
   HightliteText,
@@ -40,7 +41,7 @@ import Path from '@/routers/paths.ts';
 import { MemberIdContext } from '@/store/Context.tsx';
 import { CommentProp } from '@/types/commentType.ts';
 import { Feed } from '@/types/feedTypes.ts';
-import { Follow, UserInfo } from '@/types/userType.ts';
+import { Follow } from '@/types/userType.ts';
 import { WalkFeed } from '@/types/walkType.ts';
 import { changeDateFormat } from '@/util/changeDateFormat.ts';
 import changeTime from '@/util/changeTime.ts';
@@ -68,13 +69,10 @@ export function Component() {
     data,
     isLoading,
     isError: isUserError,
-  } = useQuery<UserInfo>({
-    queryKey: ['myPage'],
-    queryFn: () =>
-      getServerDataWithJwt(`${SERVER_URL}/members`, accessToken as string),
-    onSuccess(data) {
-      setUserProfileImage(data.memberInfo.imageURL);
-    },
+  } = useMypageQuery({
+    url: `${SERVER_URL}/members`,
+    accessToken,
+    successFn: setUserProfileImage,
   });
 
   // 팔로잉 회원 리스트 조회

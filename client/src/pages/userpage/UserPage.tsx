@@ -16,6 +16,7 @@ import NoticeOnlyOwner from '@/components/notice/NoticeOnlyOwner.tsx';
 import NoticeServerError from '@/components/notice/NoticeServerError.tsx';
 import Subscribe from '@/components/subscribe/Subscribe.tsx';
 import PetInfoBox from '@/components/user_my_page/petinfo-box/PetInfoBox.tsx';
+import { useMypageQuery } from '@/hook/query/useMypageQuery';
 import {
   GridContainerFeed,
   GridContainerWalk,
@@ -75,10 +76,9 @@ export function Component() {
   });
 
   // (본인) 유저 데이터 가지고 오기
-  const { data: myData } = useQuery<UserInfo>({
-    queryKey: ['myPage'],
-    queryFn: () =>
-      getServerDataWithJwt(`${SERVER_URL}/members`, accessToken as string),
+  const { data: myData } = useMypageQuery({
+    url: `${SERVER_URL}/members`,
+    accessToken,
   });
 
   // 유저가 작성한 피드 리스트 가져오기

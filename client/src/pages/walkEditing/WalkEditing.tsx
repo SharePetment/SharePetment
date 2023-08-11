@@ -19,9 +19,9 @@ import Popup from '@/common/popup/Popup.tsx';
 import { Textarea } from '@/components/card/feedwritecard/FeedWriteCard.styled.tsx';
 import LoadingComponent from '@/components/loading/LoadingComponent.tsx';
 import Map from '@/components/map-make/Map.tsx';
+import { useMypageQuery } from '@/hook/query/useMypageQuery';
 import { PostForm } from '@/pages/walkPosting/WalkPosting.styled.tsx';
 import Path from '@/routers/paths';
-import { UserInfo } from '@/types/userType.ts';
 import { WalkFeed } from '@/types/walkType.ts';
 
 interface Inputs {
@@ -94,11 +94,11 @@ export function Component() {
   const [isError, setIsError] = useState(false);
 
   // 유저 login, pet 여부 검사
-  const { data: userData, isLoading: userLoading } = useQuery<UserInfo>({
-    queryKey: ['myPage'],
-    queryFn: () =>
-      getServerDataWithJwt(`${SERVER_URL}/members`, accessToken as string),
+  const { data: userData, isLoading: userLoading } = useMypageQuery({
+    url: `${SERVER_URL}/members`,
+    accessToken,
   });
+
   useEffect(() => {
     if (!userLoading && !userData?.animalParents) {
       navigate(Path.Home);
