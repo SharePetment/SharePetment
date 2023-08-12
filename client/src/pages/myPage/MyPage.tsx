@@ -1,4 +1,4 @@
-import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import React, { useState, useEffect, useContext } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { useNavigate } from 'react-router';
@@ -20,7 +20,11 @@ import NoticeOnlyOwner from '@/components/notice/NoticeOnlyOwner.tsx';
 import NoticeServerError from '@/components/notice/NoticeServerError.tsx';
 import PlusBtn from '@/components/plus-button/PlusBtn.tsx';
 import PetContainer from '@/components/user_my_page/pet-container/PetContainer.tsx';
-import { useMypageQuery } from '@/hook/query/useMypageQuery';
+import {
+  useMypageQuery,
+  useFollowQuery,
+  useCommentQuery,
+} from '@/hook/query/QueryHook';
 import {
   Container,
   HightliteText,
@@ -39,9 +43,7 @@ import {
 import { ErrorText } from '@/pages/notFound/NotFound.styled.tsx';
 import Path from '@/routers/paths.ts';
 import { MemberIdContext } from '@/store/Context.tsx';
-import { CommentProp } from '@/types/commentType.ts';
 import { Feed } from '@/types/feedTypes.ts';
-import { Follow } from '@/types/userType.ts';
 import { WalkFeed } from '@/types/walkType.ts';
 import { changeDateFormat } from '@/util/changeDateFormat.ts';
 import changeTime from '@/util/changeTime.ts';
@@ -73,30 +75,19 @@ export function Component() {
     url: `${SERVER_URL}/members`,
     accessToken,
     successFn: setUserProfileImage,
+    parameter: 'image',
   });
 
   // 팔로잉 회원 리스트 조회
-  const { data: followingData, isLoading: followingLoading } = useQuery<
-    Follow[]
-  >({
-    queryKey: ['followList'],
-    queryFn: () =>
-      getServerDataWithJwt(
-        `${SERVER_URL}/members/following/list`,
-        accessToken as string,
-      ),
+  const { data: followingData, isLoading: followingLoading } = useFollowQuery({
+    url: `${SERVER_URL}/members/following/list`,
+    accessToken,
   });
 
   // 자신이 작성한 댓글 리스트 조회
-  const { data: commentListData, isError: commentError } = useQuery<
-    CommentProp[]
-  >({
-    queryKey: ['commentList'],
-    queryFn: () =>
-      getServerDataWithJwt(
-        `${SERVER_URL}/walkmates/comments/bymember`,
-        accessToken as string,
-      ),
+  const { data: commentListData, isError: commentError } = useCommentQuery({
+    url: `${SERVER_URL}/walkmates/comments/bymember`,
+    accessToken,
   });
 
   /* ---------------------------- useInfiniteQuery ---------------------------- */

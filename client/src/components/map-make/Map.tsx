@@ -1,12 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useQuery } from '@tanstack/react-query';
+
 import { useEffect, useState } from 'react';
 import { useReadLocalStorage } from 'usehooks-ts';
-import { getServerDataWithJwt } from '@/api/queryfn.ts';
 import { SERVER_URL } from '@/api/url.ts';
 import { InputText } from '@/common/input/Input.styled.tsx';
-import { UserInfo } from '@/types/userType.ts';
+import { useMypageQuery } from '@/hook/query/QueryHook';
 
 interface placeType {
   place_name: string;
@@ -37,16 +36,15 @@ export default function Map({
   // 마커를 담는 배열
   let markers: any[] = [];
 
-  const accessToken = useReadLocalStorage('accessToken');
+  const accessToken = useReadLocalStorage<string | null>('accessToken');
 
   // 쿼리를 통해 주소 값을 받아옵니다.
-  const { isLoading } = useQuery<UserInfo>({
-    queryKey: ['myMap'],
-    queryFn: () =>
-      getServerDataWithJwt(`${SERVER_URL}/members`, accessToken as string),
-    onSuccess(data) {
-      setMainAddress(data.address);
-    },
+  const { isLoading } = useMypageQuery({
+    key: ['myMap'],
+    url: `${SERVER_URL}/members`,
+    accessToken,
+    successFn: setMainAddress,
+    parameter: 'address',
   });
 
   // 지도 검색 기능

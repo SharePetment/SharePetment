@@ -1,4 +1,4 @@
-import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import React, { useState, useContext, useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { useParams, Navigate, Link } from 'react-router-dom';
@@ -16,7 +16,7 @@ import NoticeOnlyOwner from '@/components/notice/NoticeOnlyOwner.tsx';
 import NoticeServerError from '@/components/notice/NoticeServerError.tsx';
 import Subscribe from '@/components/subscribe/Subscribe.tsx';
 import PetInfoBox from '@/components/user_my_page/petinfo-box/PetInfoBox.tsx';
-import { useMypageQuery } from '@/hook/query/useMypageQuery';
+import { useMypageQuery, useFollowQuery } from '@/hook/query/QueryHook';
 import {
   GridContainerFeed,
   GridContainerWalk,
@@ -36,7 +36,6 @@ import {
 import Path from '@/routers/paths.ts';
 import { MemberIdContext } from '@/store/Context.tsx';
 import { Feed } from '@/types/feedTypes.ts';
-import { Follow, UserInfo } from '@/types/userType.ts';
 import { WalkFeed } from '@/types/walkType.ts';
 import { changeDateFormat } from '@/util/changeDateFormat.ts';
 
@@ -48,7 +47,7 @@ export function Component() {
   const accessToken = useReadLocalStorage<string | null>('accessToken');
 
   // 구독 controller
-  const [isSubscribed, setIsSubscribed] = useState(false);
+  const [isSubscribed, setIsSubscribed] = useState<boolean>(false);
   // userList 보여주기 & 팔로잉 리스트 보여주기
   const [isListShowed, setIsListShowed] = useState(false);
   // active 탭 state
@@ -63,16 +62,11 @@ export function Component() {
     data,
     isLoading,
     isError: isUserError,
-  } = useQuery<UserInfo>({
-    queryKey: ['userPage', usersId],
-    queryFn: () =>
-      getServerDataWithJwt(
-        `${SERVER_URL}/members/${usersId}`,
-        accessToken as string,
-      ),
-    onSuccess(data) {
-      setIsSubscribed(data.guestFollow);
-    },
+  } = useMypageQuery({
+    key: ['userPage', usersId as string],
+    url: `${SERVER_URL}/members/${usersId}`,
+    accessToken,
+    booleanFn: setIsSubscribed,
   });
 
   // (본인) 유저 데이터 가지고 오기
@@ -142,15 +136,10 @@ export function Component() {
   }, [feedListInView.inView]);
 
   // 팔로잉 회원 리스트 조회
-  const { data: followingData, isLoading: followingLoading } = useQuery<
-    Follow[]
-  >({
-    queryKey: ['followList', usersId],
-    queryFn: () =>
-      getServerDataWithJwt(
-        `${SERVER_URL}/members/following/list/${usersId}`,
-        accessToken as string,
-      ),
+  const { data: followingData, isLoading: followingLoading } = useFollowQuery({
+    key: ['followList', usersId as string],
+    url: `${SERVER_URL}/members/following/list/${usersId}`,
+    accessToken,
   });
 
   // memberId, usersId가 같을시 myPage로 이동
