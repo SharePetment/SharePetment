@@ -1,11 +1,10 @@
 import { ErrorMessage } from '@hookform/error-message';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { useReadLocalStorage } from 'usehooks-ts';
 import { postWalkFeed } from '@/api/mutationfn.ts';
-import { getServerDataWithJwt } from '@/api/queryfn.ts';
 import { SERVER_URL } from '@/api/url.ts';
 import { ReactComponent as Close } from '@/assets/button/close.svg';
 import Button from '@/common/button/Button.tsx';
@@ -18,9 +17,9 @@ import {
 import Popup from '@/common/popup/Popup.tsx';
 import { Textarea } from '@/components/card/feedwritecard/FeedWriteCard.styled.tsx';
 import Map from '@/components/map-make/Map.tsx';
+import { useMypageQuery } from '@/hook/query/useMypageQuery';
 import { PostForm } from '@/pages/walkPosting/WalkPosting.styled.tsx';
 import Path from '@/routers/paths.ts';
-import { UserInfo } from '@/types/userType.ts';
 import { WalkFeed } from '@/types/walkType.ts';
 
 interface Inputs {
@@ -74,11 +73,12 @@ export function Component() {
   // PopUpController
   const [isError, setIsError] = useState(false);
   // 화면 분기 처리
-  const { data: userData, isLoading: userLoading } = useQuery<UserInfo>({
-    queryKey: ['myPage'],
-    queryFn: () =>
-      getServerDataWithJwt(`${SERVER_URL}/members`, accessToken as string),
+
+  const { data: userData, isLoading: userLoading } = useMypageQuery({
+    url: `${SERVER_URL}/members`,
+    accessToken,
   });
+
   useEffect(() => {
     if (!userLoading && !userData?.animalParents) {
       navigate(Path.Home);

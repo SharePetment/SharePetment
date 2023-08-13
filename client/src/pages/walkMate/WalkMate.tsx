@@ -1,4 +1,4 @@
-import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import React, { useState, useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { Link, useNavigate } from 'react-router-dom';
@@ -12,12 +12,12 @@ import { CardContainer } from '@/components/card/walk-card/walkCard.styled.tsx';
 import WalkCard from '@/components/card/walk-card/walkCard.tsx';
 import LoadingComponent from '@/components/loading/LoadingComponent.tsx';
 import NoticeServerError from '@/components/notice/NoticeServerError.tsx';
+import { useMypageQuery } from '@/hook/query/useMypageQuery';
 import {
   FilterButton,
   SearchButton,
 } from '@/pages/walkMate/WalkMate.styled.tsx';
 import Path from '@/routers/paths.ts';
-import { UserInfo } from '@/types/userType.ts';
 import { WalkFeed } from '@/types/walkType.ts';
 import { changeDateFormat } from '@/util/changeDateFormat.ts';
 
@@ -87,11 +87,11 @@ export function Component() {
 
   // 화면 분기 처리
   // 유저 login, pet 여부 검사
-  const { data: userData, isLoading: userLoading } = useQuery<UserInfo>({
-    queryKey: ['myPage'],
-    queryFn: () =>
-      getServerDataWithJwt(`${SERVER_URL}/members`, accessToken as string),
+  const { data: userData, isLoading: userLoading } = useMypageQuery({
+    url: `${SERVER_URL}/members`,
+    accessToken,
   });
+
   useEffect(() => {
     if (!userLoading && !userData?.animalParents) {
       navigate(Path.Home);

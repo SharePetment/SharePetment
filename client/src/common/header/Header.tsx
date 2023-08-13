@@ -1,35 +1,26 @@
-import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useMatch, Link, useNavigate } from 'react-router-dom';
 import { useReadLocalStorage } from 'usehooks-ts';
-import { getServerDataWithJwt } from '@/api/queryfn.ts';
+import NavItem from './NavItem';
 import { SERVER_URL } from '@/api/url.ts';
 import { ReactComponent as Logo } from '@/assets/logo.svg';
 import Button from '@/common/button/Button.tsx';
-import {
-  HeaderContainer,
-  NavItem,
-  NavList,
-} from '@/common/header/Header.styled';
+import { HeaderContainer, NavList } from '@/common/header/Header.styled';
 import Popup from '@/common/popup/Popup.tsx';
 import Profile from '@/common/profile/Profile.tsx';
+import { useMypageQuery } from '@/hook/query/useMypageQuery';
 import Path from '@/routers/paths.ts';
 
 export default function Header() {
-  const matchHome = useMatch(Path.Home);
-  const matchWalkmate = useMatch(Path.WalkMate);
-  const matchPost = useMatch(Path.FeedPosting);
   const matchMypage = useMatch(Path.MyPage);
   const accessToken = useReadLocalStorage<string | null>('accessToken');
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const navigate = useNavigate();
 
-  const { data, isSuccess } = useQuery({
-    queryKey: ['myPage'],
-    queryFn: () =>
-      getServerDataWithJwt(`${SERVER_URL}/members`, accessToken as string),
-    enabled: !!accessToken,
+  const { data, isSuccess } = useMypageQuery({
+    url: `${SERVER_URL}/members`,
+    accessToken,
   });
 
   const handleClick = () => {
@@ -65,30 +56,17 @@ export default function Header() {
           </div>
           <nav>
             <NavList>
-              <NavItem active={matchHome !== null ? 'false' : 'true'}>
-                <Link to={Path.Home}>홈</Link>
-              </NavItem>
-              {data?.animalParents && (
-                <NavItem active={matchWalkmate !== null ? 'false' : 'true'}>
-                  <Link to={Path.WalkMate}>산책</Link>
-                </NavItem>
-              )}
+              <NavItem path="Home" />
+              {data?.animalParents && <NavItem path="Walk" />}
               {!data?.animalParents && (
-                <NavItem
-                  active={matchWalkmate !== null ? 'false' : 'true'}
-                  className="cursor-pointer"
-                  onClick={() => setIsOpen(true)}>
-                  산책
-                </NavItem>
+                <NavItem path="NoWalk" handler={() => setIsOpen(true)} />
               )}
-              <NavItem active={matchPost !== null ? 'false' : 'true'}>
-                <Link to={Path.FeedPosting}>포스트</Link>
-              </NavItem>
+              <NavItem path="Post" />
               <li>
                 <Link to={Path.MyPage}>
                   <Profile
                     size="md"
-                    url={data.memberInfo.imageURL}
+                    url={data && data.memberInfo.imageURL}
                     isgreen={matchMypage !== null ? 'true' : 'false'}
                   />
                 </Link>
@@ -133,21 +111,9 @@ export default function Header() {
           </div>
           <nav>
             <NavList>
-              <NavItem active={matchHome !== null ? 'false' : 'true'}>
-                <Link to={Path.Home}>홈</Link>
-              </NavItem>
-              <NavItem
-                active="true"
-                className="cursor-pointer"
-                onClick={() => setIsOpen(true)}>
-                산책
-              </NavItem>
-              <NavItem
-                active="true"
-                className="cursor-pointer"
-                onClick={() => setIsOpen(true)}>
-                포스트
-              </NavItem>
+              <NavItem path="Home" />
+              <NavItem path="NoWalk" />
+              <NavItem path="NoPost" handler={() => setIsOpen(true)} />
               <li>
                 <Button
                   size="sm"
