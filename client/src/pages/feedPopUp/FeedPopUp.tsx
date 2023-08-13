@@ -6,7 +6,7 @@ import { deleteMutation } from '@/api/mutationfn.ts';
 import { getServerData, getServerDataWithJwt } from '@/api/queryfn.ts';
 import { SERVER_URL } from '@/api/url.ts';
 import { ReactComponent as Close } from '@/assets/button/close.svg';
-import FeedComment from '@/common/comment/feedComment/FeedComment';
+import Comment from '@/common/comment/Comment';
 import FeedInput from '@/common/input/feedInput/FeedInput';
 import Popup from '@/common/popup/Popup';
 import FeedCard from '@/components/card/feed-card/FeedCard';
@@ -26,7 +26,6 @@ import {
 import Path from '@/routers/paths.ts';
 import { MemberIdContext } from '@/store/Context';
 import { Feed } from '@/types/feedTypes';
-import changeTime from '@/util/changeTime';
 
 export function Component() {
   const accessToken = useReadLocalStorage<string | null>('accessToken');
@@ -137,23 +136,18 @@ export function Component() {
                     {data.feedComments !== null &&
                       Array.isArray(data.feedComments) &&
                       data.feedComments.map(comment => (
-                        <FeedComment
-                          key={comment.feedCommentsId}
-                          inperson={
-                            comment.memberInfo.memberId ===
-                            Number(state?.memberId)
-                              ? 'true'
-                              : 'false'
-                          }
-                          nickname={comment.memberInfo.nickname}
-                          userimg={comment.memberInfo.imageURL}
-                          content={comment.content}
-                          commentid={comment.feedCommentsId}
-                          feedid={data.feedId}
-                          blankhandler={setIsOpen}
-                          memberid={comment.memberInfo.memberId}
-                          time={changeTime(comment.createdAt)}
-                        />
+                        <>
+                          <Comment
+                            key={comment.feedCommentsId}
+                            content={comment.content}
+                            createdAt={comment.createdAt}
+                            modifiedAt={comment.modifiedAt}
+                            memberInfo={comment.memberInfo}
+                            feedPostId={data.feedId}
+                            feedCommentsId={comment.feedCommentsId}
+                            type="feed"
+                          />
+                        </>
                       ))}
                   </CommentBox>
                   <FeedInput feedid={data.feedId} blankhandler={setIsOpen} />
@@ -222,22 +216,15 @@ export function Component() {
                   {data.feedComments !== null &&
                     Array.isArray(data.feedComments) &&
                     data.feedComments.map(comment => (
-                      <FeedComment
+                      <Comment
                         key={comment.feedCommentsId}
-                        inperson={
-                          comment.memberInfo.memberId ===
-                          Number(state?.memberId)
-                            ? 'true'
-                            : 'false'
-                        }
-                        nickname={comment.memberInfo.nickname}
-                        userimg={comment.memberInfo.imageURL}
                         content={comment.content}
-                        commentid={comment.feedCommentsId}
-                        feedid={data.feedId}
-                        blankhandler={setIsOpen}
-                        memberid={comment.memberInfo.memberId}
-                        time={changeTime(comment.createdAt)}
+                        createdAt={comment.createdAt}
+                        modifiedAt={comment.modifiedAt}
+                        memberInfo={comment.memberInfo}
+                        feedPostId={data.feedId}
+                        feedCommentsId={comment.feedCommentsId}
+                        type="feed"
                       />
                     ))}
                 </CommentBox>
@@ -305,22 +292,15 @@ export function Component() {
                     {getGuestFeed.data.feedComments !== null &&
                       Array.isArray(getGuestFeed.data.feedComments) &&
                       getGuestFeed.data.feedComments.map(comment => (
-                        <FeedComment
+                        <Comment
                           key={comment.feedCommentsId}
-                          inperson={
-                            comment.memberInfo.memberId ===
-                            Number(state?.memberId)
-                              ? 'true'
-                              : 'false'
-                          }
-                          nickname={comment.memberInfo.nickname}
-                          userimg={comment.memberInfo.imageURL}
                           content={comment.content}
-                          commentid={comment.feedCommentsId}
-                          feedid={getGuestFeed.data.feedId}
-                          blankhandler={setIsOpen}
-                          memberid={comment.memberInfo.memberId}
-                          time={changeTime(comment.createdAt)}
+                          createdAt={comment.createdAt}
+                          modifiedAt={comment.modifiedAt}
+                          memberInfo={comment.memberInfo}
+                          feedPostId={getGuestFeed.data.feedId}
+                          feedCommentsId={comment.feedCommentsId}
+                          type="feed"
                         />
                       ))}
                   </CommentBox>
@@ -390,22 +370,15 @@ export function Component() {
                   {getGuestFeed.data.feedComments !== null &&
                     Array.isArray(getGuestFeed.data.feedComments) &&
                     getGuestFeed.data.feedComments.map(comment => (
-                      <FeedComment
+                      <Comment
                         key={comment.feedCommentsId}
-                        inperson={
-                          comment.memberInfo.memberId ===
-                          Number(state?.memberId)
-                            ? 'true'
-                            : 'false'
-                        }
-                        nickname={comment.memberInfo.nickname}
-                        userimg={comment.memberInfo.imageURL}
                         content={comment.content}
-                        commentid={comment.feedCommentsId}
-                        feedid={getGuestFeed.data.feedId}
-                        blankhandler={setIsOpen}
-                        memberid={comment.memberInfo.memberId}
-                        time={changeTime(comment.createdAt)}
+                        createdAt={comment.createdAt}
+                        modifiedAt={comment.modifiedAt}
+                        memberInfo={comment.memberInfo}
+                        feedPostId={getGuestFeed.data.feedId}
+                        feedCommentsId={comment.feedCommentsId}
+                        type="feed"
                       />
                     ))}
                 </CommentBox>

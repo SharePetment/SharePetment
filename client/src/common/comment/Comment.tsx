@@ -1,32 +1,21 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { Link } from 'react-router-dom';
 import { useReadLocalStorage } from 'usehooks-ts';
-import { deleteMutation, patchComment } from '@/api/mutationfn';
 import { SERVER_URL } from '@/api/url.ts';
 import { ReactComponent as Write } from '@/assets/button/write.svg';
 import {
   Container,
   ContentBox,
-  DateText,
-  UserBox,
-  UserName,
-  EditBtn,
-  DeleteBtn,
-  BtnBox,
   Content,
-  HeaderBox,
   Input,
   WriteBtn,
   Form,
 } from '@/common/comment/comment.styled';
+import CommentHeader from '@/common/comment/CommentHeader';
 import Popup from '@/common/popup/Popup';
-import Profile from '@/common/profile/Profile';
-import Path from '@/routers/paths';
-import { MemberIdContext, State } from '@/store/Context.tsx';
+import UseDeleteCommentMutation from '@/hook/api/mutation/useDeleteCommentMutation';
+import UsePatchCommentMutation from '@/hook/api/mutation/usePatchCommentMutation';
 import { CommentProp } from '@/types/commentType.ts';
-import changeTime from '@/util/changeTime.ts';
 
 type Inputs = {
   comment: string;
@@ -40,9 +29,10 @@ export default function Comment(props: CommentProp) {
     feedCommentsId,
     walkMateCommentId,
     walkMatePostId,
+    feedPostId,
+    type,
   } = props;
 
-  const { memberId: userId } = useContext(MemberIdContext) as State;
   const accessToken = useReadLocalStorage<string | null>('accessToken');
 
   const [isEdited, setIsEdited] = useState(false);
@@ -73,13 +63,16 @@ export default function Comment(props: CommentProp) {
       tag: feedCommentsId ? 'feed' : 'walk',
       accessToken,
     };
-    mutation.mutate(postData);
+    patchCommenMutation.mutate(postData);
   };
 
   // 산책 댓글 삭제
-  const handleDeleteComment = (walkMateCommentId: number | undefined) => {
+  const handleDeleteComment = (id: number | undefined) => {
     const data = {
-      url: `${SERVER_URL}/walkmates/comments/${walkMateCommentId}`,
+      url:
+        type === 'walk'
+          ? `${SERVER_URL}/walkmates/comments/${id}`
+          : `${SERVER_URL}/feeds/comments/${id}`,
       accessToken,
     };
     deleteCommentMutaion.mutate(data);
@@ -91,61 +84,48 @@ export default function Comment(props: CommentProp) {
     setFocus('comment');
   }, [setFocus, isEdited]);
 
-  const queryClient = useQueryClient();
-  // mutation
-  const mutation = useMutation({
-    mutationFn: patchComment,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['walkFeed', walkMatePostId] });
-      setIsEdited(false);
-    },
-    onError: () => {
-      setIsCommentError(true);
-    },
-  });
+  // patchmutation
+  const patchCommenMutation =
+    type === 'walk'
+      ? UsePatchCommentMutation({
+          id: walkMatePostId,
+          uniqueKey: 'walkFeed',
+          setIsEdited,
+          setIsCommentError,
+        })
+      : UsePatchCommentMutation({
+          id: feedPostId,
+          uniqueKey: 'feedPopUp',
+          setIsEdited,
+          setIsCommentError,
+        });
 
-  const deleteCommentMutaion = useMutation({
-    mutationFn: deleteMutation,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['walkFeed', walkMatePostId] });
-    },
-    onError: () => {
-      setIsDeletError(true);
-    },
-  });
+  const deleteCommentMutaion =
+    type === 'walk'
+      ? UseDeleteCommentMutation({
+          id: walkMatePostId,
+          uniqueKey: 'walkFeed',
+          setIsDeletError,
+        })
+      : UseDeleteCommentMutation({
+          id: feedPostId,
+          uniqueKey: 'feedPopUp',
+          setIsDeletError,
+        });
 
   return (
     <>
       <Container>
         <div>
           {/* 유저 정보 기입 */}
-          <HeaderBox>
-            <Link
-              to={`${Path.User}/${memberId}`}
-              className="hover:cursor-pointer">
-              <UserBox>
-                <Profile size="sm" url={imageURL} isgreen={'false'} />
-                <UserName>{nickname}</UserName>
-                <DateText>{changeTime(createdAt)}</DateText>
-              </UserBox>
-            </Link>
-            {userId === `${memberId}` && (
-              <BtnBox>
-                <EditBtn
-                  onClick={() => {
-                    setIsEdited(prev => !prev);
-                  }}>
-                  수정
-                </EditBtn>
-                <DeleteBtn
-                  onClick={() => {
-                    setIsDeleted(true);
-                  }}>
-                  삭제
-                </DeleteBtn>
-              </BtnBox>
-            )}
-          </HeaderBox>
+          <CommentHeader
+            memberId={memberId}
+            imageURL={imageURL}
+            nickname={nickname}
+            createdAt={createdAt}
+            setIsEdited={setIsEdited}
+            setIsDeleted={setIsDeleted}
+          />
           {/* 댓글 작성 */}
           <ContentBox>
             {isEdited ? (
@@ -183,7 +163,9 @@ export default function Comment(props: CommentProp) {
             () => {
               //delete 메서드 진행
               setIsDeleted(false);
-              handleDeleteComment(walkMateCommentId);
+              handleDeleteComment(
+                type === 'walk' ? walkMateCommentId : feedCommentsId,
+              );
             },
             () => {
               //delete 메서드 진행
