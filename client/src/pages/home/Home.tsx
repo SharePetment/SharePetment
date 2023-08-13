@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import React, { useState, useEffect } from 'react';
-import { useInView } from 'react-intersection-observer';
 import { useNavigate } from 'react-router-dom';
 import { Mousewheel, Navigation, Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -10,7 +9,6 @@ import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import { useLocalStorage, useReadLocalStorage } from 'usehooks-ts';
 import { getGuestFeedList, getHostFeedList } from '@/api/queryfn.ts';
-import { SERVER_URL } from '@/api/url.ts';
 import LyingDownDog from '@/assets/illustration/lying-down-dog.png';
 import PetFriends from '@/assets/illustration/pet-friends.png';
 import { PopupBackGround } from '@/common/popup/popup.styled.tsx';
@@ -20,6 +18,7 @@ import SideNav from '@/components/card/sidenav/SideNav.tsx';
 import LoadingComponent from '@/components/loading/LoadingComponent.tsx';
 import NoticeServerError from '@/components/notice/NoticeServerError.tsx';
 import Toast from '@/components/toast/Toast.tsx';
+import UseInfinityScroll from '@/hook/query/useInfinityScroll';
 import CircleProgressBar from '@/pages/home/CricleProgressBar.tsx';
 import { Container, ReBtn, TopBtn } from '@/pages/home/Home.styled.tsx';
 import Path from '@/routers/paths.ts';
@@ -50,22 +49,12 @@ export function Component() {
     isSuccess: guestIsSucess,
     isError: guestIsError,
     isLoading: guestIsLoading,
-  } = useInfiniteQuery({
-    queryKey: ['guestFeed'],
-    staleTime: 600000,
-    refetchOnMount: false,
-    cacheTime: 600000,
-    queryFn: ({ pageParam = 0 }) => {
-      return getGuestFeedList(
-        `${SERVER_URL}/feeds/all/list/random?page=${pageParam}&size=10`,
-      );
-    },
-    getNextPageParam: (_, allPages) => {
-      const len = allPages.length;
-      const totalLength = allPages.length;
-      return allPages[totalLength - 1].length === 0 ? undefined : len;
-    },
-    enabled: accessToken === null,
+    ref: guestRef,
+    inView: guestInview,
+  } = UseInfinityScroll<Feed>({
+    queryKey: `guestFeed`,
+    fn: getGuestFeedList,
+    enabledValue: accessToken,
   });
 
   // Host 요청
@@ -75,34 +64,13 @@ export function Component() {
     isSuccess: hostIsSucess,
     isError: hostIsError,
     isLoading: hostIsLoading,
-  } = useInfiniteQuery({
-    queryKey: ['hostFeed'],
-    queryFn: ({ pageParam = 0 }) => {
-      return getHostFeedList(
-        `${SERVER_URL}/feeds/list?page=${pageParam}&size=10`,
-        accessToken,
-      );
-    },
-    staleTime: 600000,
-    cacheTime: 600000,
-    refetchOnMount: false,
-    getNextPageParam: (_, allPages) => {
-      const len = allPages.length;
-      const totalLength = allPages.length;
-      return allPages[totalLength - 1].length === 0 ? undefined : len;
-    },
-    enabled: !!accessToken,
-
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['contextApi'] });
-    },
+    ref: hostRef,
+    inView: hostInview,
+  } = UseInfinityScroll<Feed>({
+    queryKey: `hostFeed`,
+    fn: getHostFeedList,
+    enabledValue: accessToken,
   });
-
-  // 무한 쿼리 구현
-  // 게스트  요청
-  const { ref: guestRef, inView: guestInview } = useInView();
-  // host 요청
-  const { ref: hostRef, inView: hostInview } = useInView();
 
   // 구독자가 있는 경우
   useEffect(() => {
@@ -212,42 +180,44 @@ export function Component() {
         {isScrolled > 500 && <TopBtn onClick={handleTopScroll}>↑</TopBtn>}
         {window.innerWidth > 500 && (
           <div className="w-screen flex flex-col gap-16 justify-center items-center my-12">
-            {hostData.pages.map((page, index) => (
-              <React.Fragment key={index}>
-                {page.map((img: Feed) => (
-                  <div className="flex items-center gap-3" ref={hostRef}>
-                    <FeedCard
-                      memberid={img.memberInfo.memberId}
-                      username={img.memberInfo.nickname}
-                      context={img.content}
-                      userimg={img.memberInfo.imageURL}
-                      images={img.images}
-                      guesthandler={() => setIsGuestOpen(true)}
-                    />
-                    <SideNav
-                      feedid={img.feedId}
-                      direction={window.innerWidth < 640 ? 'row' : 'col'}
-                      likes={img.likes}
-                      like={img.isLike ? 'true' : 'false'}
-                      guesthandler={() => setIsGuestOpen(true)}
-                      toasthandler={setIsToastOpen}
-                    />
-                  </div>
-                ))}
-              </React.Fragment>
-            ))}
+            {hostData &&
+              hostData.pages.map((page, index) => (
+                <React.Fragment key={index}>
+                  {page.map(img => (
+                    <div className="flex items-center gap-3" ref={hostRef}>
+                      <FeedCard
+                        memberid={img.memberInfo.memberId}
+                        username={img.memberInfo.nickname}
+                        context={img.content}
+                        userimg={img.memberInfo.imageURL}
+                        images={img.images}
+                        guesthandler={() => setIsGuestOpen(true)}
+                      />
+                      <SideNav
+                        feedid={img.feedId}
+                        direction={window.innerWidth < 640 ? 'row' : 'col'}
+                        likes={img.likes}
+                        like={img.isLike ? 'true' : 'false'}
+                        guesthandler={() => setIsGuestOpen(true)}
+                        toasthandler={setIsToastOpen}
+                      />
+                    </div>
+                  ))}
+                </React.Fragment>
+              ))}
 
-            {hostData.pages[hostData.pages.length - 1].length === 0 && (
-              <ReBtn
-                className={
-                  window.innerWidth < 430 ? 'bottom-[80px]' : 'bottom-10'
-                }
-                onClick={() => {
-                  window.location.reload();
-                }}>
-                피드 다시 받아오기
-              </ReBtn>
-            )}
+            {hostData &&
+              hostData.pages[hostData.pages.length - 1].length === 0 && (
+                <ReBtn
+                  className={
+                    window.innerWidth < 430 ? 'bottom-[80px]' : 'bottom-10'
+                  }
+                  onClick={() => {
+                    window.location.reload();
+                  }}>
+                  피드 다시 받아오기
+                </ReBtn>
+              )}
           </div>
         )}
         {window.innerWidth < 500 && (
@@ -270,48 +240,50 @@ export function Component() {
                     : 'w-full h-full flex flex-col items-center justify-center mb-30'
                   : 'w-full h-full flex flex-col items-center justify-center'
               }>
-              {hostData.pages.map((page, index) => (
-                <React.Fragment key={index}>
-                  {page.map((img: Feed) => (
-                    <SwiperSlide
-                      className="w-96 max-sm:w-full max-sm:h-full"
-                      key={img.feedId}>
-                      <div
-                        className="flex justify-center items-center gap-5 max-sm:flex-col"
-                        ref={hostRef}>
-                        <FeedCard
-                          memberid={img.memberInfo.memberId}
-                          username={img.memberInfo.nickname}
-                          context={img.content}
-                          userimg={img.memberInfo.imageURL}
-                          images={img.images}
-                          guesthandler={() => setIsGuestOpen(true)}
-                        />
-                        <SideNav
-                          feedid={img.feedId}
-                          direction={window.innerWidth < 640 ? 'row' : 'col'}
-                          likes={img.likes}
-                          like={img.isLike ? 'true' : 'false'}
-                          guesthandler={() => setIsGuestOpen(true)}
-                          toasthandler={setIsToastOpen}
-                        />
-                      </div>
-                    </SwiperSlide>
-                  ))}
-                </React.Fragment>
-              ))}
+              {hostData &&
+                hostData.pages.map((page, index) => (
+                  <React.Fragment key={index}>
+                    {page.map(img => (
+                      <SwiperSlide
+                        className="w-96 max-sm:w-full max-sm:h-full"
+                        key={img.feedId}>
+                        <div
+                          className="flex justify-center items-center gap-5 max-sm:flex-col"
+                          ref={hostRef}>
+                          <FeedCard
+                            memberid={img.memberInfo.memberId}
+                            username={img.memberInfo.nickname}
+                            context={img.content}
+                            userimg={img.memberInfo.imageURL}
+                            images={img.images}
+                            guesthandler={() => setIsGuestOpen(true)}
+                          />
+                          <SideNav
+                            feedid={img.feedId}
+                            direction={window.innerWidth < 640 ? 'row' : 'col'}
+                            likes={img.likes}
+                            like={img.isLike ? 'true' : 'false'}
+                            guesthandler={() => setIsGuestOpen(true)}
+                            toasthandler={setIsToastOpen}
+                          />
+                        </div>
+                      </SwiperSlide>
+                    ))}
+                  </React.Fragment>
+                ))}
             </Swiper>
-            {hostData.pages[hostData.pages.length - 1].length === 0 && (
-              <ReBtn
-                className={
-                  window.innerWidth < 430 ? 'bottom-[80px]' : 'bottom-10'
-                }
-                onClick={() => {
-                  window.location.reload();
-                }}>
-                피드 다시 받아오기
-              </ReBtn>
-            )}
+            {hostData &&
+              hostData.pages[hostData.pages.length - 1].length === 0 && (
+                <ReBtn
+                  className={
+                    window.innerWidth < 430 ? 'bottom-[80px]' : 'bottom-10'
+                  }
+                  onClick={() => {
+                    window.location.reload();
+                  }}>
+                  피드 다시 받아오기
+                </ReBtn>
+              )}
           </Container>
         )}
       </>
@@ -345,42 +317,44 @@ export function Component() {
           {isScrolled > 500 && <TopBtn onClick={handleTopScroll}>↑</TopBtn>}
           {window.innerWidth > 500 && (
             <div className="w-screen flex flex-col gap-16 justify-center items-center my-12">
-              {guestData.pages.map((page, index) => (
-                <React.Fragment key={index}>
-                  {page.map((img: Feed) => (
-                    <div className="flex items-center gap-3" ref={guestRef}>
-                      <FeedCard
-                        memberid={img.memberInfo.memberId}
-                        username={img.memberInfo.nickname}
-                        context={img.content}
-                        userimg={img.memberInfo.imageURL}
-                        images={img.images}
-                        guesthandler={() => setIsGuestOpen(true)}
-                      />
-                      <SideNav
-                        feedid={img.feedId}
-                        direction={window.innerWidth < 640 ? 'row' : 'col'}
-                        likes={img.likes}
-                        like={img.isLike ? 'true' : 'false'}
-                        guesthandler={() => setIsGuestOpen(true)}
-                        toasthandler={setIsToastOpen}
-                      />
-                    </div>
-                  ))}
-                </React.Fragment>
-              ))}
+              {guestData &&
+                guestData.pages.map((page, index) => (
+                  <React.Fragment key={index}>
+                    {page.map(img => (
+                      <div className="flex items-center gap-3" ref={guestRef}>
+                        <FeedCard
+                          memberid={img.memberInfo.memberId}
+                          username={img.memberInfo.nickname}
+                          context={img.content}
+                          userimg={img.memberInfo.imageURL}
+                          images={img.images}
+                          guesthandler={() => setIsGuestOpen(true)}
+                        />
+                        <SideNav
+                          feedid={img.feedId}
+                          direction={window.innerWidth < 640 ? 'row' : 'col'}
+                          likes={img.likes}
+                          like={img.isLike ? 'true' : 'false'}
+                          guesthandler={() => setIsGuestOpen(true)}
+                          toasthandler={setIsToastOpen}
+                        />
+                      </div>
+                    ))}
+                  </React.Fragment>
+                ))}
 
-              {guestData.pages[guestData.pages.length - 1].length === 0 && (
-                <ReBtn
-                  className={
-                    window.innerWidth < 430 ? 'bottom-[80px]' : 'bottom-10'
-                  }
-                  onClick={() => {
-                    window.location.reload();
-                  }}>
-                  피드 다시 받아오기
-                </ReBtn>
-              )}
+              {guestData &&
+                guestData.pages[guestData.pages.length - 1].length === 0 && (
+                  <ReBtn
+                    className={
+                      window.innerWidth < 430 ? 'bottom-[80px]' : 'bottom-10'
+                    }
+                    onClick={() => {
+                      window.location.reload();
+                    }}>
+                    피드 다시 받아오기
+                  </ReBtn>
+                )}
             </div>
           )}
           {window.innerWidth < 500 && (
@@ -391,46 +365,50 @@ export function Component() {
                 mousewheel={true}
                 modules={[Mousewheel, Pagination]}
                 className="w-full h-full flex flex-col items-center justify-center">
-                {guestData.pages.map((page, index) => (
-                  <React.Fragment key={index}>
-                    {page.map((img: Feed) => (
-                      <SwiperSlide className="w-96" key={img.feedId}>
-                        <div
-                          className="flex justify-center items-center gap-5 max-sm:flex-col"
-                          ref={guestRef}>
-                          <FeedCard
-                            memberid={img.memberInfo.memberId}
-                            username={img.memberInfo.nickname}
-                            context={img.content}
-                            userimg={img.memberInfo.imageURL}
-                            images={img.images}
-                            guesthandler={() => setIsGuestOpen(true)}
-                          />
-                          <SideNav
-                            feedid={img.feedId}
-                            direction={window.innerWidth < 640 ? 'row' : 'col'}
-                            likes={img.likes}
-                            like={img.isLike ? 'true' : 'false'}
-                            guesthandler={() => setIsGuestOpen(true)}
-                            toasthandler={setIsToastOpen}
-                          />
-                        </div>
-                      </SwiperSlide>
-                    ))}
-                  </React.Fragment>
-                ))}
+                {guestData &&
+                  guestData.pages.map((page, index) => (
+                    <React.Fragment key={index}>
+                      {page.map((img: Feed) => (
+                        <SwiperSlide className="w-96" key={img.feedId}>
+                          <div
+                            className="flex justify-center items-center gap-5 max-sm:flex-col"
+                            ref={guestRef}>
+                            <FeedCard
+                              memberid={img.memberInfo.memberId}
+                              username={img.memberInfo.nickname}
+                              context={img.content}
+                              userimg={img.memberInfo.imageURL}
+                              images={img.images}
+                              guesthandler={() => setIsGuestOpen(true)}
+                            />
+                            <SideNav
+                              feedid={img.feedId}
+                              direction={
+                                window.innerWidth < 640 ? 'row' : 'col'
+                              }
+                              likes={img.likes}
+                              like={img.isLike ? 'true' : 'false'}
+                              guesthandler={() => setIsGuestOpen(true)}
+                              toasthandler={setIsToastOpen}
+                            />
+                          </div>
+                        </SwiperSlide>
+                      ))}
+                    </React.Fragment>
+                  ))}
               </Swiper>
-              {guestData.pages[guestData.pages.length - 1].length === 0 && (
-                <ReBtn
-                  className={
-                    window.innerWidth < 430 ? 'bottom-[80px]' : 'bottom-10'
-                  }
-                  onClick={() => {
-                    window.location.reload();
-                  }}>
-                  피드 다시 받아오기
-                </ReBtn>
-              )}
+              {guestData &&
+                guestData.pages[guestData.pages.length - 1].length === 0 && (
+                  <ReBtn
+                    className={
+                      window.innerWidth < 430 ? 'bottom-[80px]' : 'bottom-10'
+                    }
+                    onClick={() => {
+                      window.location.reload();
+                    }}>
+                    피드 다시 받아오기
+                  </ReBtn>
+                )}
             </Container>
           )}
         </>

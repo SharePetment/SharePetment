@@ -18,7 +18,10 @@ export const getServerData = async (url: string) => {
 
 /* -------------------------------- 서버에서 데이터 가지고 오기 with jwt ------------------------------- */
 
-export const getServerDataWithJwt = async (url: string, token: string) => {
+export const getServerDataWithJwt = async (
+  url: string,
+  token: string | null | undefined,
+) => {
   const result = await axios.get(url, {
     headers: {
       Authorization: token,
@@ -36,16 +39,26 @@ export const getGuestFeedList = async (url: string) => {
 /* -------------------------------- 기존 유저 피드리스트 가져오기 ------------------------------- */
 export const getHostFeedList = async (
   url: string,
-  accessToken: string | null,
+  token: string | null | undefined,
 ) => {
   const result = await axios.post(
     url,
     {},
     {
       headers: {
-        Authorization: accessToken,
+        Authorization: token,
       },
     },
   );
   return result.data.responseList;
+};
+
+/* ------------------- 서버에서 데이터 가지고 오기 with jwt 무한 스크롤을 위한 데이터 ------------------------------- */
+
+export const getServerDataWithJwtScroll = async (
+  url: string,
+  token: string | null | undefined,
+) => {
+  const result = await getServerDataWithJwt(url, token);
+  return result.responseList;
 };

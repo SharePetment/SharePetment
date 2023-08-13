@@ -1,6 +1,4 @@
-import { useInfiniteQuery } from '@tanstack/react-query';
 import React, { useState, useEffect } from 'react';
-import { useInView } from 'react-intersection-observer';
 import { Link, useNavigate } from 'react-router-dom';
 import { useReadLocalStorage } from 'usehooks-ts';
 import { getServerDataWithJwt } from '@/api/queryfn.ts';
@@ -12,6 +10,7 @@ import { CardContainer } from '@/components/card/walk-card/walkCard.styled.tsx';
 import WalkCard from '@/components/card/walk-card/walkCard.tsx';
 import LoadingComponent from '@/components/loading/LoadingComponent.tsx';
 import NoticeServerError from '@/components/notice/NoticeServerError.tsx';
+import UseInfinityScroll from '@/hook/query/useInfinityScroll';
 import { useMypageQuery } from '@/hook/query/useMypageQuery';
 import {
   FilterButton,
@@ -31,24 +30,13 @@ export function Component() {
   const accessToken = useReadLocalStorage<string | null>('accessToken');
 
   /* ---------------------------- useInfiniteQuery ---------------------------- */
-  const { ref, inView } = useInView();
-  const { data, isLoading, refetch, fetchNextPage, isError } = useInfiniteQuery<
-    WalkFeed[]
-  >({
-    queryKey: ['walkmateList'],
-    queryFn: ({ pageParam = 0 }) => {
-      return getServerDataWithJwt(
-        `${SERVER_URL}/walkmates/walks?openFilter=false&location=${zip}&page=${pageParam}&size=10`,
-        accessToken as string,
-      );
-    },
-    getNextPageParam: (_, allPages) => {
-      const len = allPages.length;
-      const totalLength = allPages.length;
-      return allPages[totalLength - 1].length === 0 ? undefined : len;
-    },
-    enabled: !!zip,
-  });
+  const { data, isLoading, fetchNextPage, isError, ref, inView, refetch } =
+    UseInfinityScroll<WalkFeed>({
+      queryKey: `walkmateList`,
+      fn: getServerDataWithJwt,
+      enabledValue: accessToken,
+      zip,
+    });
 
   const {
     data: advertiseData,
@@ -56,20 +44,11 @@ export function Component() {
     refetch: advertiseRefetch,
     fetchNextPage: advertiseFetchNextPage,
     isError: advertiseIsError,
-  } = useInfiniteQuery<WalkFeed[]>({
-    queryKey: ['walkmateList', 'advertise'],
-    queryFn: ({ pageParam = 0 }) => {
-      return getServerDataWithJwt(
-        `${SERVER_URL}/walkmates/walks?openFilter=true&location=${zip}&page=${pageParam}&size=10`,
-        accessToken as string,
-      );
-    },
-    getNextPageParam: (_, allPages) => {
-      const len = allPages.length;
-      const totalLength = allPages.length;
-      return allPages[totalLength - 1].length === 0 ? undefined : len;
-    },
-    enabled: !!zip,
+  } = UseInfinityScroll<WalkFeed>({
+    queryKey: `walkmateListAdvertise`,
+    fn: getServerDataWithJwt,
+    enabledValue: accessToken,
+    zip,
   });
 
   const handleClickSearchAddress = () => {
