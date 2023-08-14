@@ -10,8 +10,8 @@ import { CardContainer } from '@/components/card/walk-card/walkCard.styled.tsx';
 import WalkCard from '@/components/card/walk-card/walkCard.tsx';
 import LoadingComponent from '@/components/loading/LoadingComponent.tsx';
 import NoticeServerError from '@/components/notice/NoticeServerError.tsx';
-import { useMypageQuery } from '@/hook/query/QueryHook';
-import UseInfinityScroll from '@/hook/query/useInfinityScroll';
+import UseInfinityScroll from '@/hook/api/query/useInfinityScroll';
+import useMypageQuery from '@/hook/api/query/useMypageQuery';
 import {
   FilterButton,
   SearchButton,

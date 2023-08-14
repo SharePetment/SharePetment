@@ -17,7 +17,7 @@ import {
 import Popup from '@/common/popup/Popup.tsx';
 import { Textarea } from '@/components/card/feedwritecard/FeedWriteCard.styled.tsx';
 import Map from '@/components/map-make/Map.tsx';
-import { useMypageQuery } from '@/hook/query/QueryHook';
+import useMypageQuery from '@/hook/api/query/useMypageQuery';
 import { PostForm } from '@/pages/walkPosting/WalkPosting.styled.tsx';
 import Path from '@/routers/paths.ts';
 import { WalkFeed } from '@/types/walkType.ts';

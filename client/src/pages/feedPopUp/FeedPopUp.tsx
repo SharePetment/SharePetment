@@ -13,7 +13,8 @@ import SideNav from '@/components/card/sidenav/SideNav';
 import LoadingComponent from '@/components/loading/LoadingComponent';
 import NoticeServerError from '@/components/notice/NoticeServerError';
 import Toast from '@/components/toast/Toast';
-import { useHostFeedQuery, useGuestFeedQuery } from '@/hook/query/QueryHook';
+import useGuestFeedQuery from '@/hook/api/query/useGuestFeedQuery';
+import useHostFeedQuery from '@/hook/api/query/useHostFeedQuery';
 import {
   Container,
   CloseBtn,

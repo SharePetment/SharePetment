@@ -21,8 +21,9 @@ import NoticeOnlyOwner from '@/components/notice/NoticeOnlyOwner.tsx';
 import NoticeServerError from '@/components/notice/NoticeServerError.tsx';
 import PlusBtn from '@/components/plus-button/PlusBtn.tsx';
 import PetContainer from '@/components/user_my_page/pet-container/PetContainer.tsx';
-import { useMypageQuery, useGetQuery } from '@/hook/query/QueryHook';
-import UseInfinityScroll from '@/hook/query/useInfinityScroll';
+import useGetQuery from '@/hook/api/query/useGetQuery';
+import UseInfinityScroll from '@/hook/api/query/useInfinityScroll';
+import useMypageQuery from '@/hook/api/query/useMypageQuery';
 import {
   Container,
   HightliteText,

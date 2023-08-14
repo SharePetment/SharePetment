@@ -18,7 +18,8 @@ import Popup from '@/common/popup/Popup.tsx';
 import LoadingComponent from '@/components/loading/LoadingComponent.tsx';
 import ShowMap from '@/components/map-show/ShowMap.tsx';
 import NoticeServerError from '@/components/notice/NoticeServerError.tsx';
-import { useWalkFeedQuery, useMypageQuery } from '@/hook/query/QueryHook';
+import useMypageQuery from '@/hook/api/query/useMypageQuery';
+import useWalkFeedQuery from '@/hook/api/query/useWalkFeedQuery';
 import {
   CommentButton,
   Divider,
@@ -270,6 +271,7 @@ export function Component() {
                     memberInfo={comment.memberInfo}
                     walkMateCommentId={comment.walkMateCommentId}
                     walkMatePostId={postId}
+                    type={'walk'}
                   />
                 );
               })}
