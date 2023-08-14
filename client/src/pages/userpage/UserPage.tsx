@@ -16,7 +16,8 @@ import NoticeOnlyOwner from '@/components/notice/NoticeOnlyOwner.tsx';
 import NoticeServerError from '@/components/notice/NoticeServerError.tsx';
 import Subscribe from '@/components/subscribe/Subscribe.tsx';
 import PetInfoBox from '@/components/user_my_page/petinfo-box/PetInfoBox.tsx';
-import { useGetQuery, useMypageQuery } from '@/hook/query/QueryHook';
+import useGetQuery from '@/hook/api/query/useGetQuery';
+import useMypageQuery from '@/hook/api/query/useMypageQuery';
 import {
   GridContainerFeed,
   GridContainerWalk,

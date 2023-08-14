@@ -21,7 +21,7 @@ import {
 } from '@/components/card/feedwritecard/FeedWriteCard.styled.tsx';
 import LoadingComponent from '@/components/loading/LoadingComponent.tsx';
 import NoticeServerError from '@/components/notice/NoticeServerError.tsx';
-import { useFeedDetailQuery } from '@/hook/query/QueryHook';
+import useFeedDetailQuery from '@/hook/api/query/useFeedDetailQuery';
 import Path from '@/routers/paths.ts';
 import { FeedImage } from '@/types/feedTypes.ts';
 import { parseImg, deleteImg } from '@/util/parseImg.ts';

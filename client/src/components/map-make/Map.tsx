@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { useReadLocalStorage } from 'usehooks-ts';
 import { SERVER_URL } from '@/api/url.ts';
 import { InputText } from '@/common/input/Input.styled.tsx';
-import { useMypageQuery } from '@/hook/query/QueryHook';
+import useMypageQuery from '@/hook/api/query/useMypageQuery';
 
 interface placeType {
   place_name: string;
