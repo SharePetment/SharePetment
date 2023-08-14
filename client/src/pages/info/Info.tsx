@@ -10,7 +10,7 @@ import {
   useParams,
 } from 'react-router-dom';
 import { useReadLocalStorage } from 'usehooks-ts';
-import { patchUserInfo, deleteMutation } from '@/api/mutationfn.ts';
+import { patchUserInfo } from '@/api/mutationfn.ts';
 import { SERVER_URL } from '@/api/url.ts';
 import { ReactComponent as Like } from '@/assets/button/like.svg';
 import { ReactComponent as Logo } from '@/assets/logo.svg';
@@ -25,6 +25,7 @@ import {
 } from '@/common/input/Input.styled.tsx';
 import Popup from '@/common/popup/Popup.tsx';
 import Select from '@/common/select/Select.tsx';
+import useDeleteMutation from '@/hook/api/mutation/useDeleteMutation';
 import {
   ConfirmButton,
   ExtraInfoLogo,
@@ -175,17 +176,14 @@ export function Component() {
   const [isError, setIsError] = useState(false);
 
   // 회원탈퇴 mutaition
-  const userQuitMutation = useMutation({
-    mutationFn: deleteMutation,
-    onSuccess() {
+  const userQuitMutation = useDeleteMutation({
+    successFn: () => {
       localStorage.removeItem('accessToken');
       localStorage.removeItem('refreshToken');
       localStorage.removeItem('firstVisited');
       navigate(Path.Login);
     },
-    onError() {
-      setIsError(true);
-    },
+    errorFn: () => setIsError(true),
   });
 
   const onSubmitQuit = (data: QuitProps) => {

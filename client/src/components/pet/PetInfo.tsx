@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState, useEffect } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useReadLocalStorage } from 'usehooks-ts';
-import { patchFormMuation, postFormMuation } from '@/api/mutationfn.ts';
+import { postFormMuation } from '@/api/mutationfn.ts';
 import { SERVER_URL } from '@/api/url.ts';
 import { ReactComponent as Close } from '@/assets/button/close.svg';
 import { ReactComponent as Man } from '@/assets/label/man.svg';
@@ -19,6 +19,7 @@ import { PopupBackGround } from '@/common/popup/popup.styled.tsx';
 import Popup from '@/common/popup/Popup.tsx';
 import { Container, Form, RadioBox } from '@/components/pet/petInfo.styled.tsx';
 import PetProfile from '@/components/pet/petProfile/PetProfile.tsx';
+import usePatchFormMutation from '@/hook/api/mutation/usePatchFormMutation';
 
 type Prop = {
   isOpend: boolean;
@@ -85,13 +86,10 @@ export default function PetInfo(prop: Prop) {
     },
   });
 
-  const petPatchMutation = useMutation({
-    mutationFn: patchFormMuation,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['myPage'] });
-      setIsOpened(false);
-    },
-    onError: () => setIsError(true),
+  const petPatchMutation = usePatchFormMutation({
+    key: ['myPage'],
+    successFn: () => setIsOpened(false),
+    errorFn: () => setIsError(true),
   });
 
   // submit Handler 작성

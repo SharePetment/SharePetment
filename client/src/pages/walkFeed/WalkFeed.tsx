@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useReadLocalStorage } from 'usehooks-ts';
-import { postComment, deleteMutation, patchMutation } from '@/api/mutationfn';
+import { postComment, patchMutation } from '@/api/mutationfn';
 import { SERVER_URL } from '@/api/url.ts';
 import { ReactComponent as CommentIcon } from '@/assets/button/comment.svg';
 import { ReactComponent as Delete } from '@/assets/button/delete.svg';
@@ -18,6 +18,7 @@ import Popup from '@/common/popup/Popup.tsx';
 import LoadingComponent from '@/components/loading/LoadingComponent.tsx';
 import ShowMap from '@/components/map-show/ShowMap.tsx';
 import NoticeServerError from '@/components/notice/NoticeServerError.tsx';
+import useDeleteMutation from '@/hook/api/mutation/useDeleteMutation';
 import useMypageQuery from '@/hook/api/query/useMypageQuery';
 import useWalkFeedQuery from '@/hook/api/query/useWalkFeedQuery';
 import {
@@ -101,13 +102,9 @@ export function Component() {
     onError: () => setIsOpen([true, '댓글 생성에 실패했습니다.']),
   });
 
-  // 게시글 삭제
-  const walkDeleteMutation = useMutation({
-    mutationFn: deleteMutation,
-    onSuccess: () => {
-      navigate(Path.WalkMate);
-    },
-    onError: () => setIsOpen([true, '게시글 삭제에 실패했습니다.']),
+  const walkDeleteMutation = useDeleteMutation({
+    successFn: () => navigate(Path.WalkMate),
+    errorFn: () => setIsOpen([true, '게시글 삭제에 실패했습니다.']),
   });
 
   /* ------------------------------ Handler ------------------------------ */

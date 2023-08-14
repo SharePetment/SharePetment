@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useReadLocalStorage } from 'usehooks-ts';
 import PetInfoBox from '../petinfo-box/PetInfoBox.tsx';
-import { deleteMutation, patchMutation } from '@/api/mutationfn.ts';
+import { patchMutation } from '@/api/mutationfn.ts';
 import { SERVER_URL } from '@/api/url.ts';
 import Popup from '@/common/popup/Popup.tsx';
 import PetInfo from '@/components/pet/PetInfo.tsx';
@@ -13,6 +13,7 @@ import {
   PetCheckTrue,
   SettingPet,
 } from '@/components/user_my_page/pet-container/petContainer.styled.tsx';
+import useDeleteMutation from '@/hook/api/mutation/useDeleteMutation.tsx';
 
 interface Prop {
   name: string;
@@ -56,13 +57,11 @@ export default function PetContainer(prop: Prop) {
   const [isEditError, setIsEditError] = useState(false);
 
   // 펫 삭제 로직 작성
-  const deletePetMutation = useMutation({
-    mutationFn: deleteMutation,
-    onSuccess() {
-      setIsDeletePopUp(false);
-      queryClient.invalidateQueries({ queryKey: ['myPage'] });
-    },
-    onError() {
+
+  const deletePetMutation = useDeleteMutation({
+    keys: [['myPage']],
+    successFn: () => setIsDeletePopUp(false),
+    errorFn: () => {
       setIsDeletePopUp(false);
       setIsDeleteError(true);
     },

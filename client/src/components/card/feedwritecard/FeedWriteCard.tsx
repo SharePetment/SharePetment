@@ -4,7 +4,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Navigation } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { useReadLocalStorage } from 'usehooks-ts';
-import { patchFormMuation, postFormMuation } from '@/api/mutationfn.ts';
+import { postFormMuation } from '@/api/mutationfn.ts';
 import { SERVER_URL } from '@/api/url.ts';
 import { ReactComponent as Close } from '@/assets/button/close.svg';
 import { ReactComponent as Plus } from '@/assets/button/plus.svg';
@@ -21,6 +21,7 @@ import {
 } from '@/components/card/feedwritecard/FeedWriteCard.styled.tsx';
 import LoadingComponent from '@/components/loading/LoadingComponent.tsx';
 import NoticeServerError from '@/components/notice/NoticeServerError.tsx';
+import usePatchFormMutation from '@/hook/api/mutation/usePatchFormMutation';
 import useFeedDetailQuery from '@/hook/api/query/useFeedDetailQuery';
 import Path from '@/routers/paths.ts';
 import { FeedImage } from '@/types/feedTypes.ts';
@@ -88,13 +89,10 @@ export default function FeedWriteCard() {
   });
 
   // 피드 게시물 수정하기 mutation
-  const feedEditingMutation = useMutation({
-    mutationFn: patchFormMuation,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['feedPopUp'] });
-      navigate(Path.MyPage);
-    },
-    onError: () => setIsOpen([true, '요청에 실패했습니다.']),
+  const feedEditingMutation = usePatchFormMutation({
+    key: ['feedPopUp'],
+    successFn: () => navigate(Path.MyPage),
+    errorFn: () => setIsOpen([true, '요청에 실패했습니다.']),
   });
 
   const handleSubmit = () => {
