@@ -11,5 +11,7 @@ export type CommentProp = {
   memberInfo: MemberInfo;
   walkMateCommentId?: number;
   feedCommentsId?: number;
+  feedPostId?: number;
   walkMatePostId?: string;
+  type: 'walk' | 'feed';
 };

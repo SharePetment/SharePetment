@@ -1,10 +1,11 @@
-import { useInfiniteQuery } from '@tanstack/react-query';
 import React, { useState, useEffect, useContext } from 'react';
-import { useInView } from 'react-intersection-observer';
 import { useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
 import { useReadLocalStorage } from 'usehooks-ts';
-import { getServerDataWithJwt } from '@/api/queryfn.ts';
+import {
+  getServerDataWithJwt,
+  getServerDataWithJwtScroll,
+} from '@/api/queryfn.ts';
 import { SERVER_URL } from '@/api/url.ts';
 import { ReactComponent as Setting } from '@/assets/button/setting.svg';
 import { ReactComponent as CommentListIcon } from '@/assets/comment-list.svg';
@@ -21,6 +22,7 @@ import NoticeServerError from '@/components/notice/NoticeServerError.tsx';
 import PlusBtn from '@/components/plus-button/PlusBtn.tsx';
 import PetContainer from '@/components/user_my_page/pet-container/PetContainer.tsx';
 import { useMypageQuery, useGetQuery } from '@/hook/query/QueryHook';
+import UseInfinityScroll from '@/hook/query/useInfinityScroll';
 import {
   Container,
   HightliteText,
@@ -96,64 +98,48 @@ export function Component() {
 
   /* ---------------------------- useInfiniteQuery ---------------------------- */
   // 자신이 작성한 피드리스트 조회
-  const feedListInView = useInView();
   const {
     data: feedData,
     isLoading: feedLoading,
     fetchNextPage: feedFetchNextPage,
     isError: isFeedError,
-  } = useInfiniteQuery<Feed[]>({
-    queryKey: ['myFeed'],
-    queryFn: async ({ pageParam = 0 }) => {
-      const result = await getServerDataWithJwt(
-        `${SERVER_URL}/feeds/my-feed?page=${pageParam}&size=10`,
-        accessToken as string,
-      );
-      return result.responseList;
-    },
-    getNextPageParam: (_, allPages) => {
-      const len = allPages.length;
-      const totalLength = allPages.length;
-      return allPages[totalLength - 1].length === 0 ? undefined : len;
-    },
+    isSuccess: feedSucess,
+    ref: feedRef,
+    inView: feedInview,
+  } = UseInfinityScroll<Feed>({
+    queryKey: `myFeed`,
+    fn: getServerDataWithJwtScroll,
+    enabledValue: accessToken,
   });
-
+  console.log(feedData);
   /* ---------------------------- useInfiniteQuery ---------------------------- */
   // 자신이 작성한 산책 게시물 조회
-  const walkListInView = useInView();
   const {
     data: walkFeedData,
     isLoading: walkFeedLoading,
     fetchNextPage: walkFetchNextPage,
     isError: walkFeedError,
-  } = useInfiniteQuery<WalkFeed[]>({
-    queryKey: ['walkFeedList'],
-    queryFn: ({ pageParam = 0 }) => {
-      return getServerDataWithJwt(
-        `${SERVER_URL}/walkmates/my-walks?openFilter=false&&page=${pageParam}&size=10`,
-        accessToken as string,
-      );
-    },
-    getNextPageParam: (_, allPages) => {
-      const len = allPages.length;
-      const totalLength = allPages.length;
-      return allPages[totalLength - 1].length === 0 ? undefined : len;
-    },
+    ref: walkRef,
+    inView: walkInview,
+  } = UseInfinityScroll<WalkFeed>({
+    queryKey: `walkFeedList`,
+    fn: getServerDataWithJwt,
+    enabledValue: accessToken,
   });
 
   useEffect(() => {
-    if (walkListInView.inView) {
+    if (walkInview) {
       walkFetchNextPage();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [walkListInView.inView]);
+  }, [walkInview]);
 
   useEffect(() => {
-    if (feedListInView.inView) {
+    if (feedInview) {
       feedFetchNextPage();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [feedListInView.inView]);
+  }, [feedInview]);
 
   // 유저 정보 수정 페이지로 이동
   const handleUserEdit = () => {
@@ -302,7 +288,7 @@ export function Component() {
               <div>
                 <div className={currentTab === 0 ? 'block' : 'hidden'}>
                   <div>
-                    {feedData?.pages[0].length === 0 ? (
+                    {feedSucess && feedData?.pages[0].length === 0 ? (
                       <>
                         {isFeedError ? (
                           <NoticeServerError />
@@ -332,7 +318,7 @@ export function Component() {
                             </React.Fragment>
                           ))}
                         </GridContainerFeed>
-                        <div ref={feedListInView.ref}></div>
+                        <div ref={feedRef}></div>
                       </>
                     )}
                   </div>
@@ -373,7 +359,7 @@ export function Component() {
                                   </React.Fragment>
                                 ))}
                               </GridContainerWalk>
-                              <div ref={walkListInView.ref}></div>
+                              <div ref={walkRef}></div>
                             </div>
                           )}
                         </div>
