@@ -1,11 +1,10 @@
 import { ErrorMessage } from '@hookform/error-message';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useReadLocalStorage } from 'usehooks-ts';
 import { patchWalkFeed } from '@/api/mutationfn.ts';
-import { getServerDataWithJwt } from '@/api/queryfn.ts';
 import { SERVER_URL } from '@/api/url';
 import { ReactComponent as Close } from '@/assets/button/close.svg';
 import Button from '@/common/button/Button.tsx';
@@ -19,7 +18,8 @@ import Popup from '@/common/popup/Popup.tsx';
 import { Textarea } from '@/components/card/feedwritecard/FeedWriteCard.styled.tsx';
 import LoadingComponent from '@/components/loading/LoadingComponent.tsx';
 import Map from '@/components/map-make/Map.tsx';
-import { useMypageQuery } from '@/hook/query/useMypageQuery';
+import useMypageQuery from '@/hook/api/query/useMypageQuery';
+import useWalkFeedQuery from '@/hook/api/query/useWalkFeedQuery';
 import { PostForm } from '@/pages/walkPosting/WalkPosting.styled.tsx';
 import Path from '@/routers/paths';
 import { WalkFeed } from '@/types/walkType.ts';
@@ -36,6 +36,15 @@ interface Inputs {
 export function Component() {
   const navigate = useNavigate();
   const { postId } = useParams();
+  const accessToken = useReadLocalStorage<string | null>('accessToken');
+
+  // 주소 값 저장하기
+  const [mainAddress, setMainAddress] = useState('');
+  const [detailAddress, setDetailAddress] = useState('');
+  const [coordinates, setCoordinates] = useState({ La: 0, Ma: 0 });
+
+  // PopUpController
+  const [isError, setIsError] = useState(false);
 
   const {
     register,
@@ -43,24 +52,24 @@ export function Component() {
     formState: { errors },
   } = useForm<Inputs>();
 
-  const accessToken = useReadLocalStorage<string | null>('accessToken');
+  /* ------------------------------ Query ------------------------------ */
   // 산책 게시물 불러오기
-  const { data, isLoading } = useQuery<WalkFeed>({
-    queryKey: ['walkFeed', postId],
-    queryFn: () =>
-      getServerDataWithJwt(
-        `${SERVER_URL}/walkmates/bywalk/${postId}`,
-        accessToken as string,
-      ),
-    onSuccess: data => {
-      setMainAddress(data.location);
-      setDetailAddress(data.mapURL.split(' ')[2]);
-    },
-    onError: () => {
-      navigate(Path.WalkMate);
-    },
+  const { data, isLoading } = useWalkFeedQuery({
+    postId,
+    url: `${SERVER_URL}/walkmates/bywalk/${postId}`,
+    type: 'edit',
+    accessToken,
+    successFn: [setMainAddress, setDetailAddress],
+    errorFn: true,
   });
 
+  // 유저 login, pet 여부 검사
+  const { data: userData, isLoading: userLoading } = useMypageQuery({
+    url: `${SERVER_URL}/members`,
+    accessToken,
+  });
+
+  /* ------------------------------ Mutation ------------------------------ */
   // 산책게시물 수정
   const walkPatchFillMutation = useMutation({
     mutationFn: patchWalkFeed,
@@ -84,20 +93,6 @@ export function Component() {
 
     walkPatchFillMutation.mutate(obj);
   };
-
-  // 주소 값 저장하기
-  const [mainAddress, setMainAddress] = useState('');
-  const [detailAddress, setDetailAddress] = useState('');
-  const [coordinates, setCoordinates] = useState({ La: 0, Ma: 0 });
-
-  // PopUpController
-  const [isError, setIsError] = useState(false);
-
-  // 유저 login, pet 여부 검사
-  const { data: userData, isLoading: userLoading } = useMypageQuery({
-    url: `${SERVER_URL}/members`,
-    accessToken,
-  });
 
   useEffect(() => {
     if (!userLoading && !userData?.animalParents) {

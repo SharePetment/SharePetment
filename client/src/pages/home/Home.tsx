@@ -18,7 +18,7 @@ import SideNav from '@/components/card/sidenav/SideNav.tsx';
 import LoadingComponent from '@/components/loading/LoadingComponent.tsx';
 import NoticeServerError from '@/components/notice/NoticeServerError.tsx';
 import Toast from '@/components/toast/Toast.tsx';
-import UseInfinityScroll from '@/hook/query/useInfinityScroll';
+import UseInfinityScroll from '@/hook/api/query/useInfinityScroll';
 import CircleProgressBar from '@/pages/home/CricleProgressBar.tsx';
 import { Container, ReBtn, TopBtn } from '@/pages/home/Home.styled.tsx';
 import Path from '@/routers/paths.ts';
