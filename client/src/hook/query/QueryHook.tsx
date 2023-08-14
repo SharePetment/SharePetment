@@ -3,9 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { getServerDataWithJwt, getServerData } from '@/api/queryfn';
 import Path from '@/routers/paths';
 import { State } from '@/store/Context';
-import { CommentProp } from '@/types/commentType';
 import { Feed, FeedImage } from '@/types/feedTypes';
-import { Follow, UserInfo } from '@/types/userType';
+import { UserInfo } from '@/types/userType';
 import { WalkFeed } from '@/types/walkType';
 
 interface QueryProp {
@@ -41,6 +40,15 @@ interface FeedDetailProp extends QueryProp {
   secondEnable: boolean;
 }
 
+/* ------------------------------ useGetQuery ------------------------------ */
+export function useGetQuery<T>({ key, url, accessToken }: QueryProp) {
+  const { data, isLoading, isSuccess, isError } = useQuery<T>({
+    queryKey: key,
+    queryFn: () => getServerDataWithJwt(url, accessToken as string),
+  });
+  return { data, isLoading, isSuccess, isError };
+}
+
 /* ------------------------------ key: ['myPage'] ------------------------------ */
 export function useMypageQuery({
   key,
@@ -66,26 +74,6 @@ export function useMypageQuery({
   return { data, isLoading, isSuccess, isError };
 }
 
-/* ------------------------------ key: ['followList'] ------------------------------ */
-export function useFollowQuery({ key, url, accessToken }: QueryProp) {
-  const { data, isLoading, isSuccess, isError } = useQuery<Follow[]>({
-    queryKey: key ? key : ['followList'],
-    queryFn: () => getServerDataWithJwt(url, accessToken as string),
-  });
-
-  return { data, isLoading, isSuccess, isError };
-}
-
-/* ------------------------------ key: ['commentList'] ------------------------------ */
-export function useCommentQuery({ url, accessToken }: QueryProp) {
-  const { data, isLoading, isSuccess, isError } = useQuery<CommentProp[]>({
-    queryKey: ['commentList'],
-    queryFn: () => getServerDataWithJwt(url, accessToken as string),
-  });
-
-  return { data, isLoading, isSuccess, isError };
-}
-
 /* ------------------------------ key: ['guestFeedPopUp'] ------------------------------ */
 /* ------------------------------ key: ['feedPopUp'] ------------------------------ */
 const defaultData: Feed = {
@@ -105,8 +93,8 @@ const defaultData: Feed = {
   isLike: false,
 };
 
-export function useGuestFeedQuery({ key, url, accessToken }: QueryProp) {
-  const { data, isLoading, isSuccess, isError } = useQuery<Feed>({
+export function useGuestFeedQuery<T>({ key, url, accessToken }: QueryProp) {
+  const { data, isLoading, isSuccess, isError } = useQuery<T>({
     queryKey: key,
     queryFn: () => getServerData(url),
     enabled: !!(accessToken === null),

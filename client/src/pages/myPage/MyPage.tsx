@@ -20,11 +20,7 @@ import NoticeOnlyOwner from '@/components/notice/NoticeOnlyOwner.tsx';
 import NoticeServerError from '@/components/notice/NoticeServerError.tsx';
 import PlusBtn from '@/components/plus-button/PlusBtn.tsx';
 import PetContainer from '@/components/user_my_page/pet-container/PetContainer.tsx';
-import {
-  useMypageQuery,
-  useFollowQuery,
-  useCommentQuery,
-} from '@/hook/query/QueryHook';
+import { useMypageQuery, useGetQuery } from '@/hook/query/QueryHook';
 import {
   Container,
   HightliteText,
@@ -43,7 +39,9 @@ import {
 import { ErrorText } from '@/pages/notFound/NotFound.styled.tsx';
 import Path from '@/routers/paths.ts';
 import { MemberIdContext } from '@/store/Context.tsx';
+import { CommentProp } from '@/types/commentType';
 import { Feed } from '@/types/feedTypes.ts';
+import { Follow } from '@/types/userType';
 import { WalkFeed } from '@/types/walkType.ts';
 import { changeDateFormat } from '@/util/changeDateFormat.ts';
 import changeTime from '@/util/changeTime.ts';
@@ -79,13 +77,19 @@ export function Component() {
   });
 
   // 팔로잉 회원 리스트 조회
-  const { data: followingData, isLoading: followingLoading } = useFollowQuery({
+  const { data: followingData, isLoading: followingLoading } = useGetQuery<
+    Follow[]
+  >({
+    key: ['followList'],
     url: `${SERVER_URL}/members/following/list`,
     accessToken,
   });
 
   // 자신이 작성한 댓글 리스트 조회
-  const { data: commentListData, isError: commentError } = useCommentQuery({
+  const { data: commentListData, isError: commentError } = useGetQuery<
+    CommentProp[]
+  >({
+    key: ['commentList'],
     url: `${SERVER_URL}/walkmates/comments/bymember`,
     accessToken,
   });

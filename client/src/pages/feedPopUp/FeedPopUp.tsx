@@ -25,6 +25,7 @@ import {
 } from '@/pages/feedPopUp/FeedPopUp.styled';
 import Path from '@/routers/paths.ts';
 import { MemberIdContext } from '@/store/Context';
+import { Feed } from '@/types/feedTypes';
 import changeTime from '@/util/changeTime';
 
 export function Component() {
@@ -48,7 +49,7 @@ export function Component() {
     state,
   });
 
-  const getGuestFeed = useGuestFeedQuery({
+  const getGuestFeed = useGuestFeedQuery<Feed>({
     key: ['guestFeedPopUp', Number(feedId)],
     url: `${SERVER_URL}/feeds/all/${feedId}`,
     accessToken,
