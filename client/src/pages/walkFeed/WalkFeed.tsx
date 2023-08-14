@@ -1,10 +1,9 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useContext, useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useReadLocalStorage } from 'usehooks-ts';
 import { postComment, deleteMutation, patchMutation } from '@/api/mutationfn';
-import { getServerDataWithJwt } from '@/api/queryfn.ts';
 import { SERVER_URL } from '@/api/url.ts';
 import { ReactComponent as CommentIcon } from '@/assets/button/comment.svg';
 import { ReactComponent as Delete } from '@/assets/button/delete.svg';
@@ -19,7 +18,7 @@ import Popup from '@/common/popup/Popup.tsx';
 import LoadingComponent from '@/components/loading/LoadingComponent.tsx';
 import ShowMap from '@/components/map-show/ShowMap.tsx';
 import NoticeServerError from '@/components/notice/NoticeServerError.tsx';
-import { useMypageQuery } from '@/hook/query/useMypageQuery';
+import { useWalkFeedQuery, useMypageQuery } from '@/hook/query/QueryHook';
 import {
   CommentButton,
   Divider,
@@ -28,7 +27,6 @@ import {
 } from '@/pages/walkFeed/WalkFeed.styled';
 import Path from '@/routers/paths.ts';
 import { MemberIdContext, State } from '@/store/Context.tsx';
-import { WalkFeed } from '@/types/walkType.ts';
 import { changeDateFormat } from '@/util/changeDateFormat.ts';
 
 export function Component() {
@@ -36,19 +34,18 @@ export function Component() {
   const { postId } = useParams();
   const { memberId: userId } = useContext(MemberIdContext) as State;
   const accessToken = useReadLocalStorage<string | null>('accessToken');
+  const queryClient = useQueryClient();
+
+  // 지도 그리기
+  // 위도, 경도, 주소
+  const [address, setAddress] = useState('');
+  const [lat, setLat] = useState('');
+  const [lng, setLng] = useState('');
+
+  const [isDeleted, setIsDeleted] = useState(false);
 
   // 요청 실패 팝업
   const [isOpen, setIsOpen] = useState<[boolean, string]>([false, '']);
-
-  // 댓글 등록
-  const postCommentMutation = useMutation({
-    mutationFn: postComment,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['walkFeed', postId] });
-      queryClient.invalidateQueries({ queryKey: ['walkmateList'] });
-    },
-    onError: () => setIsOpen([true, '댓글 생성에 실패했습니다.']),
-  });
 
   type FormValues = {
     content: string;
@@ -61,37 +58,28 @@ export function Component() {
     formState: { errors },
   } = useForm<FormValues>({ mode: 'onChange' });
 
-  const onSubmit: SubmitHandler<FormValues> = data => {
-    data = {
-      content: data.content.trim(),
-    };
-    const url = `${SERVER_URL}/walkmates/comments/${postId}`;
-    postCommentMutation.mutate({ ...data, url, accessToken });
-    resetField('content');
-  };
-
-  const queryClient = useQueryClient();
-
+  /* ------------------------------ Query ------------------------------ */
   // 산책 게시글 가지고 오기
   const {
     data,
     isLoading: isFeedLoading,
     isError: isFeedError,
-  } = useQuery<WalkFeed>({
-    queryKey: ['walkFeed', postId],
-    queryFn: () =>
-      getServerDataWithJwt(
-        `${SERVER_URL}/walkmates/bywalk/${postId}`,
-        accessToken as string,
-      ),
-    onSuccess(data) {
-      setAddress((data?.location as string) + ' ' + data?.mapURL.split(' ')[2]);
-      setLat(data?.mapURL.split(' ')[0]);
-      setLng(data?.mapURL.split(' ')[1]);
-    },
+  } = useWalkFeedQuery({
+    postId,
+    url: `${SERVER_URL}/walkmates/bywalk/${postId}`,
+    accessToken,
+    type: 'feed',
+    successFn: [setAddress, setLat, setLng],
   });
 
   const reversedData = data ? [...data.comments].reverse() : [];
+
+  const { data: userData, isLoading } = useMypageQuery({
+    url: `${SERVER_URL}/members`,
+    accessToken,
+  });
+
+  /* ------------------------------ Mutation ------------------------------ */
 
   // 모집 변경
   const walkStatusMutation = useMutation({
@@ -101,6 +89,36 @@ export function Component() {
     },
     onError: () => setIsOpen([true, '모집 변경에 실패했습니다.']),
   });
+
+  // 댓글 등록
+  const postCommentMutation = useMutation({
+    mutationFn: postComment,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['walkFeed', postId] });
+      queryClient.invalidateQueries({ queryKey: ['walkmateList'] });
+    },
+    onError: () => setIsOpen([true, '댓글 생성에 실패했습니다.']),
+  });
+
+  // 게시글 삭제
+  const walkDeleteMutation = useMutation({
+    mutationFn: deleteMutation,
+    onSuccess: () => {
+      navigate(Path.WalkMate);
+    },
+    onError: () => setIsOpen([true, '게시글 삭제에 실패했습니다.']),
+  });
+
+  /* ------------------------------ Handler ------------------------------ */
+
+  const onSubmit: SubmitHandler<FormValues> = data => {
+    data = {
+      content: data.content.trim(),
+    };
+    const url = `${SERVER_URL}/walkmates/comments/${postId}`;
+    postCommentMutation.mutate({ ...data, url, accessToken });
+    resetField('content');
+  };
 
   const handleWalkStatus = () => {
     walkStatusMutation.mutate({
@@ -117,16 +135,6 @@ export function Component() {
     navigate(`${Path.WalkPosting}/${data?.walkMatePostId}`);
   };
 
-  // 게시글 삭제
-  const walkDeleteMutation = useMutation({
-    mutationFn: deleteMutation,
-    onSuccess: () => {
-      navigate(Path.WalkMate);
-    },
-    onError: () => setIsOpen([true, '게시글 삭제에 실패했습니다.']),
-  });
-
-  const [isDeleted, setIsDeleted] = useState(false);
   const handleWalkFeedDeletePopUp = () => {
     setIsDeleted(true);
   };
@@ -137,22 +145,11 @@ export function Component() {
     });
   };
 
-  const { data: userData, isLoading } = useMypageQuery({
-    url: `${SERVER_URL}/members`,
-    accessToken,
-  });
-
   useEffect(() => {
     if (!isLoading && !userData?.animalParents) {
       navigate(Path.Home);
     }
   }, [userData, navigate, isLoading]);
-
-  // 지도 그리기
-  // 위도, 경도, 주소
-  const [address, setAddress] = useState('');
-  const [lat, setLat] = useState('');
-  const [lng, setLng] = useState('');
 
   if (isFeedError)
     return (

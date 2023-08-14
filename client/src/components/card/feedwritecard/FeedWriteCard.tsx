@@ -1,11 +1,10 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Navigation } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { useReadLocalStorage } from 'usehooks-ts';
 import { patchFormMuation, postFormMuation } from '@/api/mutationfn.ts';
-import { getServerDataWithJwt } from '@/api/queryfn.ts';
 import { SERVER_URL } from '@/api/url.ts';
 import { ReactComponent as Close } from '@/assets/button/close.svg';
 import { ReactComponent as Plus } from '@/assets/button/plus.svg';
@@ -22,8 +21,9 @@ import {
 } from '@/components/card/feedwritecard/FeedWriteCard.styled.tsx';
 import LoadingComponent from '@/components/loading/LoadingComponent.tsx';
 import NoticeServerError from '@/components/notice/NoticeServerError.tsx';
+import { useFeedDetailQuery } from '@/hook/query/QueryHook';
 import Path from '@/routers/paths.ts';
-import { FeedImage, Feed } from '@/types/feedTypes.ts';
+import { FeedImage } from '@/types/feedTypes.ts';
 import { parseImg, deleteImg } from '@/util/parseImg.ts';
 import 'swiper/css';
 import 'swiper/css/pagination';
@@ -63,25 +63,16 @@ export default function FeedWriteCard() {
 
   // param이 있을 경우,  피드 게시물 정보 가져오기
 
-  const getFeedDetailQuery = useQuery<Feed>({
-    queryKey: ['feedPopUp', Number(feedId)],
-    queryFn: async () => {
-      const result = await getServerDataWithJwt(
-        `${SERVER_URL}/feeds/${feedId}`,
-        accessToken as string,
-      );
-      result.images.map((image: FeedImage) => {
-        setSavedFile(prev => [...prev, image.uploadFileURL]);
-        setPrevFile(prev => [...prev, image]);
-        setGetQuery(true);
-      });
-
-      if (textRef.current) {
-        textRef.current.value = result.content;
-      }
-      return result;
-    },
-    enabled: !!feedId && savedFile.length === 0 && !getQuery,
+  const getFeedDetailQuery = useFeedDetailQuery({
+    feedId: Number(feedId),
+    url: `${SERVER_URL}/feeds/${feedId}`,
+    accessToken,
+    firstFn: setSavedFile,
+    secondFn: setPrevFile,
+    booleanFn: setGetQuery,
+    textRef,
+    firstEnable: savedFile,
+    secondEnable: getQuery,
   });
 
   // 피드 게시물 올리기 mutation

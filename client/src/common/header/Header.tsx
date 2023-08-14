@@ -8,7 +8,7 @@ import Button from '@/common/button/Button.tsx';
 import { HeaderContainer, NavList } from '@/common/header/Header.styled';
 import Popup from '@/common/popup/Popup.tsx';
 import Profile from '@/common/profile/Profile.tsx';
-import { useMypageQuery } from '@/hook/query/useMypageQuery';
+import { useMypageQuery } from '@/hook/query/QueryHook';
 import Path from '@/routers/paths.ts';
 
 export default function Header() {
