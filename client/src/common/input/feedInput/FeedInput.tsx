@@ -1,7 +1,5 @@
-import { useQueryClient, useMutation } from '@tanstack/react-query';
 import { useRef } from 'react';
 import { useReadLocalStorage } from 'usehooks-ts';
-import { postFeedComment } from '@/api/mutationfn.ts';
 import { SERVER_URL } from '@/api/url.ts';
 import { ReactComponent as Write } from '@/assets/button/write.svg';
 import {
@@ -9,6 +7,7 @@ import {
   Input,
   CommentBtn,
 } from '@/common/input/feedInput/FeedInput.styled';
+import usePostFeedCommentMutation from '@/hook/api/mutation/usePostFeedCommentMutation';
 
 interface Prop {
   feedid: number;
@@ -18,14 +17,9 @@ interface Prop {
 export default function FeedInput({ feedid, blankhandler }: Prop) {
   const accessToken = useReadLocalStorage<string | null>('accessToken');
   const inputRef = useRef<HTMLInputElement>(null);
-  const queryClient = useQueryClient();
-  const { mutate } = useMutation({
-    mutationFn: postFeedComment,
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ['feedPopUp', feedid],
-      });
-    },
+
+  const { mutate } = usePostFeedCommentMutation({
+    key: ['feedPopUp', feedid],
   });
 
   const handleClick = () => {

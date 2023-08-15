@@ -1,9 +1,7 @@
 import { ErrorMessage } from '@hookform/error-message';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState, useEffect } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useReadLocalStorage } from 'usehooks-ts';
-import { postFormMuation } from '@/api/mutationfn.ts';
 import { SERVER_URL } from '@/api/url.ts';
 import { ReactComponent as Close } from '@/assets/button/close.svg';
 import { ReactComponent as Man } from '@/assets/label/man.svg';
@@ -20,6 +18,7 @@ import Popup from '@/common/popup/Popup.tsx';
 import { Container, Form, RadioBox } from '@/components/pet/petInfo.styled.tsx';
 import PetProfile from '@/components/pet/petProfile/PetProfile.tsx';
 import usePatchFormMutation from '@/hook/api/mutation/usePatchFormMutation';
+import usePostFormMutation from '@/hook/api/mutation/usePostFormMutation';
 
 type Prop = {
   isOpend: boolean;
@@ -51,9 +50,6 @@ export default function PetInfo(prop: Prop) {
   // token
   const accessToken = useReadLocalStorage<string | null>('accessToken');
 
-  // 유저 정보 refatch
-  const queryClient = useQueryClient();
-
   // 프로필에 사용
   const [image, setImage] = useState(profile);
   const [file, setFile] = useState<File | null>(null);
@@ -74,13 +70,10 @@ export default function PetInfo(prop: Prop) {
   const [isError, setIsError] = useState(false);
 
   // mutation 작성
-  const petPostMutation = useMutation({
-    mutationFn: postFormMuation,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['myPage'] });
-      setIsOpened(false);
-    },
-    onError: () => {
+  const petPostMutation = usePostFormMutation({
+    key: ['myPage'],
+    successFn: () => setIsOpened(false),
+    errorFn: () => {
       setIsDisabled(false);
       setIsError(true);
     },

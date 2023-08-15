@@ -1,8 +1,7 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useReadLocalStorage } from 'usehooks-ts';
-import { postSubscribe } from '@/api/mutationfn.ts';
 import { SERVER_URL } from '@/api/url.ts';
 import { SubScribeButton } from '@/components/subscribe/subscribe.styled.tsx';
+import useSubscribeMutation from '@/hook/api/mutation/useSubscribeMutation';
 
 interface Prop {
   guestFollow: boolean | undefined;
@@ -10,22 +9,13 @@ interface Prop {
 }
 
 export default function Subscribe({ guestFollow, usersId }: Prop) {
-  // query 갱신하기
-  const queryClient = useQueryClient();
-
-  // 구독 갱신
   const accessToken = useReadLocalStorage<string | null>('accessToken');
-  const subscribeMutation = useMutation({
-    mutationFn: postSubscribe,
-    onSuccess() {
-      queryClient.invalidateQueries({
-        queryKey: ['followList'],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ['userPage', usersId],
-      });
-    },
+
+  // 구독 mutation
+  const subscribeMutation = useSubscribeMutation({
+    keys: [['followList'], ['userPage', usersId as string]],
   });
+
   const handleSubscribe = () => {
     subscribeMutation.mutate({
       url: `${SERVER_URL}/members/following/${usersId}`,

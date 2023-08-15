@@ -1,8 +1,6 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useReadLocalStorage } from 'usehooks-ts';
 import PetInfoBox from '../petinfo-box/PetInfoBox.tsx';
-import { patchMutation } from '@/api/mutationfn.ts';
 import { SERVER_URL } from '@/api/url.ts';
 import Popup from '@/common/popup/Popup.tsx';
 import PetInfo from '@/components/pet/PetInfo.tsx';
@@ -14,6 +12,7 @@ import {
   SettingPet,
 } from '@/components/user_my_page/pet-container/petContainer.styled.tsx';
 import useDeleteMutation from '@/hook/api/mutation/useDeleteMutation.tsx';
+import usePatchMutation from '@/hook/api/mutation/usePatchMutation.tsx';
 
 interface Prop {
   name: string;
@@ -39,9 +38,6 @@ export default function PetContainer(prop: Prop) {
     isPetCheck,
     index,
   } = prop;
-
-  // 유저 정보 refatch
-  const queryClient = useQueryClient();
 
   // 펫 등록 수정 띄위기
   const [isPetOpened, setIsPetOpened] = useState(false);
@@ -78,15 +74,9 @@ export default function PetContainer(prop: Prop) {
     setIsDeletePopUp(true);
   };
 
-  // 유저 프로필 이미지 변경
-  const mutationPatchUserProfile = useMutation({
-    mutationFn: patchMutation,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['myPage'] });
-    },
-    onError: () => {
-      setIsEditError(true);
-    },
+  const mutationPatchUserProfile = usePatchMutation({
+    key: ['myPage'],
+    errorFn: () => setIsEditError(true),
   });
 
   // 유저 프로필 변경
