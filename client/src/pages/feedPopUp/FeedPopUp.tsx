@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useReadLocalStorage } from 'usehooks-ts';
 import { SERVER_URL } from '@/api/url.ts';
@@ -14,6 +14,7 @@ import Toast from '@/components/toast/Toast';
 import useDeleteMutation from '@/hook/api/mutation/useDeleteMutation';
 import useGuestFeedQuery from '@/hook/api/query/useGuestFeedQuery';
 import useHostFeedQuery from '@/hook/api/query/useHostFeedQuery';
+import useHandleKeyBoard from '@/hook/useHandleKeyBoard';
 import {
   Container,
   CloseBtn,
@@ -70,15 +71,7 @@ export function Component() {
   };
 
   // ESC 버튼 누를 시, 이전페이지로 이동
-  useEffect(() => {
-    const getBackPage = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        navigate(-1);
-      }
-    };
-    window.addEventListener('keydown', getBackPage);
-    return () => window.removeEventListener('keydown', getBackPage);
-  }, [navigate]);
+  useHandleKeyBoard({ navigate });
 
   if (isLoading && getGuestFeed.isLoading) return <LoadingComponent />;
   if (isError || getGuestFeed.isError)
