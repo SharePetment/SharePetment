@@ -12,13 +12,14 @@ interface Prop {
   key?: string;
   stoped?: boolean;
   zipPattern: string;
+  type: 'country' | 'city' | 'village';
 }
 
-const useZipCode = ({ key, stoped, zipPattern }: Prop) => {
+const useZipCode = ({ key, stoped, zipPattern, type }: Prop) => {
   const { data, isLoading } = useQuery<getData>({
     queryKey: key ? ['country', key] : ['country'],
     queryFn: () => getLocal(zipPattern),
-    enabled: stoped ? !!zipPattern : false,
+    enabled: stoped ? !!zipPattern : type === 'country' ? true : false,
     staleTime: 1000 * 60 * 60,
     cacheTime: 1000 * 60 * 60,
   });
