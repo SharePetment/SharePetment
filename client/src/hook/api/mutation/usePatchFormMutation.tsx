@@ -1,7 +1,7 @@
 import { useQueryClient, useMutation } from '@tanstack/react-query';
 import { patchFormMuation } from '@/api/mutationfn';
 
-interface PatchFormMutationProp {
+export interface PatchFormMutationProp {
   key: string[];
   successFn: () => void;
   errorFn: () => void;

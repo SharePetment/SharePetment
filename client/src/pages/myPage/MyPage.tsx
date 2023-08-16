@@ -112,7 +112,7 @@ export function Component() {
     fn: getServerDataWithJwtScroll,
     enabledValue: accessToken,
   });
-  console.log(feedData);
+
   /* ---------------------------- useInfiniteQuery ---------------------------- */
   // 자신이 작성한 산책 게시물 조회
   const {

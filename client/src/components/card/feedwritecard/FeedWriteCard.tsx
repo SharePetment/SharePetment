@@ -1,3 +1,4 @@
+/* eslint-disable import/no-named-as-default-member */
 import { useState, useCallback, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Navigation } from 'swiper/modules';
@@ -22,6 +23,7 @@ import NoticeServerError from '@/components/notice/NoticeServerError.tsx';
 import usePatchFormMutation from '@/hook/api/mutation/usePatchFormMutation';
 import usePostFormMutation from '@/hook/api/mutation/usePostFormMutation';
 import useFeedDetailQuery from '@/hook/api/query/useFeedDetailQuery';
+import useHandleFeedCardUpload from '@/hook/useHandleFeedCardUpload';
 import useHandleKeyBoard from '@/hook/useHandleKeyBoard';
 import Path from '@/routers/paths.ts';
 import { FeedImage } from '@/types/feedTypes.ts';
@@ -67,7 +69,7 @@ export default function FeedWriteCard() {
   });
 
   const feedPostingMutation = usePostFormMutation({
-    key: ['myPage', 'myFeed', 'followList'],
+    key: ['myFeed', 'myPage', 'followList'],
     successFn: () => navigate(Path.MyPage),
     errorFn: () => setIsOpen([true, '요청에 실패했습니다.']),
   });
@@ -79,33 +81,15 @@ export default function FeedWriteCard() {
     errorFn: () => setIsOpen([true, '요청에 실패했습니다.']),
   });
 
-  const handleSubmit = () => {
-    if (prevFile.length === 0)
-      return setIsOpen([true, '사진을 업로드 해주세요.']);
-    const formData = new FormData();
-    formData.append('content', textRef.current?.value as string);
-    if (feedId === undefined) {
-      prevFile.forEach(file => formData.append('images', file as File));
-      const data = {
-        url: `${SERVER_URL}/feeds`,
-        accessToken,
-        formData,
-      };
-      feedPostingMutation.mutate(data);
-    } else {
-      prevFile.forEach(file => formData.append('addImage', file as File));
-      if (removedFile.length > 0)
-        removedFile.forEach(fileName =>
-          formData.append('deleteImage', fileName as string),
-        );
-      const data = {
-        url: `${SERVER_URL}/feeds/${feedId}`,
-        accessToken,
-        formData,
-      };
-      feedEditingMutation.mutate(data);
-    }
-  };
+  // submit event에서 실행할 함수 생성하기
+  const handleSubmit = useHandleFeedCardUpload({
+    prevFile,
+    removedFile,
+    accessToken: accessToken as string,
+    textRef,
+    setIsOpen,
+    feedId,
+  });
 
   const handleUpload = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
