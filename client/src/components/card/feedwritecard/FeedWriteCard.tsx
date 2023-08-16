@@ -1,10 +1,8 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Navigation } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { useReadLocalStorage } from 'usehooks-ts';
-import { patchFormMuation, postFormMuation } from '@/api/mutationfn.ts';
 import { SERVER_URL } from '@/api/url.ts';
 import { ReactComponent as Close } from '@/assets/button/close.svg';
 import { ReactComponent as Plus } from '@/assets/button/plus.svg';
@@ -21,6 +19,8 @@ import {
 } from '@/components/card/feedwritecard/FeedWriteCard.styled.tsx';
 import LoadingComponent from '@/components/loading/LoadingComponent.tsx';
 import NoticeServerError from '@/components/notice/NoticeServerError.tsx';
+import usePatchFormMutation from '@/hook/api/mutation/usePatchFormMutation';
+import usePostFormMutation from '@/hook/api/mutation/usePostFormMutation';
 import useFeedDetailQuery from '@/hook/api/query/useFeedDetailQuery';
 import Path from '@/routers/paths.ts';
 import { FeedImage } from '@/types/feedTypes.ts';
@@ -31,7 +31,6 @@ import 'swiper/css/navigation';
 import '@/common/carousel/carousel.css';
 
 export default function FeedWriteCard() {
-  const queryClient = useQueryClient();
   const { feedId } = useParams();
   const navigate = useNavigate();
   const textRef = useRef<HTMLTextAreaElement>(null);
@@ -75,26 +74,17 @@ export default function FeedWriteCard() {
     secondEnable: getQuery,
   });
 
-  // 피드 게시물 올리기 mutation
-  const feedPostingMutation = useMutation({
-    mutationFn: postFormMuation,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['myPage'] });
-      queryClient.invalidateQueries({ queryKey: ['myFeed'] });
-      queryClient.invalidateQueries({ queryKey: ['followList'] });
-      navigate(Path.MyPage);
-    },
-    onError: () => setIsOpen([true, '요청에 실패했습니다.']),
+  const feedPostingMutation = usePostFormMutation({
+    key: ['myPage', 'myFeed', 'followList'],
+    successFn: () => navigate(Path.MyPage),
+    errorFn: () => setIsOpen([true, '요청에 실패했습니다.']),
   });
 
   // 피드 게시물 수정하기 mutation
-  const feedEditingMutation = useMutation({
-    mutationFn: patchFormMuation,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['feedPopUp'] });
-      navigate(Path.MyPage);
-    },
-    onError: () => setIsOpen([true, '요청에 실패했습니다.']),
+  const feedEditingMutation = usePatchFormMutation({
+    key: ['feedPopUp'],
+    successFn: () => navigate(Path.MyPage),
+    errorFn: () => setIsOpen([true, '요청에 실패했습니다.']),
   });
 
   const handleSubmit = () => {

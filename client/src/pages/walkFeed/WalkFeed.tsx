@@ -1,9 +1,7 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useContext, useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useReadLocalStorage } from 'usehooks-ts';
-import { postComment, deleteMutation, patchMutation } from '@/api/mutationfn';
 import { SERVER_URL } from '@/api/url.ts';
 import { ReactComponent as CommentIcon } from '@/assets/button/comment.svg';
 import { ReactComponent as Delete } from '@/assets/button/delete.svg';
@@ -18,6 +16,9 @@ import Popup from '@/common/popup/Popup.tsx';
 import LoadingComponent from '@/components/loading/LoadingComponent.tsx';
 import ShowMap from '@/components/map-show/ShowMap.tsx';
 import NoticeServerError from '@/components/notice/NoticeServerError.tsx';
+import useDeleteMutation from '@/hook/api/mutation/useDeleteMutation';
+import usePatchMutation from '@/hook/api/mutation/usePatchMutation';
+import usePostCommentMutation from '@/hook/api/mutation/usePostCommentMutation';
 import useMypageQuery from '@/hook/api/query/useMypageQuery';
 import useWalkFeedQuery from '@/hook/api/query/useWalkFeedQuery';
 import {
@@ -35,7 +36,6 @@ export function Component() {
   const { postId } = useParams();
   const { memberId: userId } = useContext(MemberIdContext) as State;
   const accessToken = useReadLocalStorage<string | null>('accessToken');
-  const queryClient = useQueryClient();
 
   // 지도 그리기
   // 위도, 경도, 주소
@@ -81,33 +81,21 @@ export function Component() {
   });
 
   /* ------------------------------ Mutation ------------------------------ */
-
   // 모집 변경
-  const walkStatusMutation = useMutation({
-    mutationFn: patchMutation,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['walkFeed', postId] });
-    },
-    onError: () => setIsOpen([true, '모집 변경에 실패했습니다.']),
+  const walkStatusMutation = usePatchMutation({
+    key: ['walkFeed', postId as string],
+    errorFn: () => setIsOpen([true, '모집 변경에 실패했습니다.']),
   });
 
   // 댓글 등록
-  const postCommentMutation = useMutation({
-    mutationFn: postComment,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['walkFeed', postId] });
-      queryClient.invalidateQueries({ queryKey: ['walkmateList'] });
-    },
-    onError: () => setIsOpen([true, '댓글 생성에 실패했습니다.']),
+  const postCommentMutation = usePostCommentMutation({
+    keys: [['walkFeed', postId as string], ['walkmateList']],
+    errorFn: () => setIsOpen([true, '댓글 생성에 실패했습니다.']),
   });
 
-  // 게시글 삭제
-  const walkDeleteMutation = useMutation({
-    mutationFn: deleteMutation,
-    onSuccess: () => {
-      navigate(Path.WalkMate);
-    },
-    onError: () => setIsOpen([true, '게시글 삭제에 실패했습니다.']),
+  const walkDeleteMutation = useDeleteMutation({
+    successFn: () => navigate(Path.WalkMate),
+    errorFn: () => setIsOpen([true, '게시글 삭제에 실패했습니다.']),
   });
 
   /* ------------------------------ Handler ------------------------------ */

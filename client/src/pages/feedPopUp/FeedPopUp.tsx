@@ -1,8 +1,6 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useContext, useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useReadLocalStorage } from 'usehooks-ts';
-import { deleteMutation } from '@/api/mutationfn.ts';
 import { SERVER_URL } from '@/api/url.ts';
 import { ReactComponent as Close } from '@/assets/button/close.svg';
 import Comment from '@/common/comment/Comment';
@@ -13,6 +11,7 @@ import SideNav from '@/components/card/sidenav/SideNav';
 import LoadingComponent from '@/components/loading/LoadingComponent';
 import NoticeServerError from '@/components/notice/NoticeServerError';
 import Toast from '@/components/toast/Toast';
+import useDeleteMutation from '@/hook/api/mutation/useDeleteMutation';
 import useGuestFeedQuery from '@/hook/api/query/useGuestFeedQuery';
 import useHostFeedQuery from '@/hook/api/query/useHostFeedQuery';
 import {
@@ -32,7 +31,6 @@ export function Component() {
   const accessToken = useReadLocalStorage<string | null>('accessToken');
   const state = useContext(MemberIdContext);
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
   const { feedId } = useParams();
 
   // 알림 토스트 및 팝업창 state
@@ -55,13 +53,10 @@ export function Component() {
     accessToken,
   });
 
-  const deleteFeedMutation = useMutation({
-    mutationFn: deleteMutation,
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ['guestFeed'] });
-      navigate(Path.MyPage);
-    },
-    onError: () => setIsOpen([true, '요청에 실패했어요.']),
+  const deleteFeedMutation = useDeleteMutation({
+    keys: [['guestFeed']],
+    successFn: () => navigate(Path.MyPage),
+    errorFn: () => setIsOpen([true, '요청에 실패했어요.']),
   });
 
   const handlerDelete = () => {
