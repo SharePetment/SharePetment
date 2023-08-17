@@ -2,14 +2,10 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useMatch, useNavigate } from 'react-router-dom';
 import { useReadLocalStorage } from 'usehooks-ts';
-import { Container, Wrap, Text } from './SideNav.styled.tsx';
+import { Container, Text } from './SideNav.styled.tsx';
 import { patchMutation } from '@/api/mutationfn.ts';
 import { SERVER_URL } from '@/api/url.ts';
-import { ReactComponent as Comment } from '@/assets/button/comment.svg';
-import { ReactComponent as Delete } from '@/assets/button/delete.svg';
-import { ReactComponent as Edit } from '@/assets/button/edit.svg';
-import { ReactComponent as Like } from '@/assets/button/like.svg';
-import { ReactComponent as Share } from '@/assets/button/share.svg';
+import SideNavWrap from '@/components/card/sidenav/SideNavWrap.tsx';
 import Path from '@/routers/paths.ts';
 import { BooleanStr } from '@/types/propType.ts';
 
@@ -68,6 +64,7 @@ export default function SideNav({
     likeMutation.mutate(data);
   };
 
+  // 링크 복사
   const handleClickShare = async () => {
     try {
       await navigator.clipboard.writeText(
@@ -96,55 +93,46 @@ export default function SideNav({
   return (
     <>
       <Container direction={direction}>
-        <Wrap className="pl-2">
-          {isLike === 'true' && accessToken ? (
-            <Like
-              className="cursor-pointer"
-              stroke="black"
-              fill="#69B783"
-              onClick={handleClickLike}
-            />
-          ) : (
-            <Like
-              className="cursor-pointer "
-              stroke="black"
-              onClick={handleClickLike}
-            />
-          )}
-
+        <SideNavWrap class="pl-2">
+          <SideNavWrap.Like
+            onClick={handleClickLike}
+            isLike={isLike}
+            accessToken={accessToken}
+          />
           <Text>{isLikes}</Text>
-        </Wrap>
+        </SideNavWrap>
 
-        {!feedPopUp && (
-          <Wrap onClick={handleClickComment}>
-            <Comment className="cursor-pointer ml-2" stroke="black" />
-          </Wrap>
-        )}
+        {
+          <SideNavWrap
+            onClick={
+              !feedPopUp
+                ? handleClickComment
+                : feedPopUp && window.innerWidth < 420
+                ? handleClickSemiComment
+                : undefined
+            }>
+            <SideNavWrap.Comment />
+          </SideNavWrap>
+        }
 
-        {feedPopUp && window.innerWidth < 420 && (
-          <Wrap onClick={handleClickSemiComment}>
-            <Comment className="cursor-pointer ml-2" stroke="black" />
-          </Wrap>
-        )}
-
-        <Wrap onClick={handleClickShare}>
-          <Share className="cursor-pointer ml-2" stroke="none" />
-        </Wrap>
+        <SideNavWrap onClick={handleClickShare}>
+          <SideNavWrap.Share />
+        </SideNavWrap>
 
         {inperson === 'true' && (
           <>
-            <Wrap
-              onClick={() => navigate(`${Path.FeedPosting}/${feedid}`)}
-              className="cursor-pointer ml-2">
-              <Edit stroke="black" />
-            </Wrap>
-            <Wrap
-              className="cursor-pointer ml-2"
+            <SideNavWrap
+              class="cursor-pointer ml-2"
+              onClick={() => navigate(`${Path.FeedPosting}/${feedid}`)}>
+              <SideNavWrap.Edit />
+            </SideNavWrap>
+            <SideNavWrap
+              class="cursor-pointer ml-2"
               onClick={() => {
                 if (deletehandler) return deletehandler(true);
               }}>
-              <Delete stroke="black" />
-            </Wrap>
+              <SideNavWrap.Delete />
+            </SideNavWrap>
           </>
         )}
       </Container>
