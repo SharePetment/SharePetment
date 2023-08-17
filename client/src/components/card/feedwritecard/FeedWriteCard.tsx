@@ -1,4 +1,3 @@
-/* eslint-disable import/no-named-as-default-member */
 import { useState, useCallback, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Navigation } from 'swiper/modules';

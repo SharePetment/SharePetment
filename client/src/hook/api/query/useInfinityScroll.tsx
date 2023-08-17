@@ -37,9 +37,9 @@ export default function UseInfinityScroll<T>({
   const { data, fetchNextPage, isSuccess, isError, isLoading, refetch } =
     useInfiniteQuery<T[]>({
       queryKey: [queryKey],
-      staleTime: 600000,
-      refetchOnMount: 'always',
-      cacheTime: 600000,
+      staleTime: queryKey === 'myFeed' ? 0 : 600000,
+      refetchOnMount: queryKey === 'myFeed' ? 'always' : false,
+      cacheTime: queryKey === 'myFeed' ? 0 : 600000,
       queryFn: ({ pageParam = 0 }) => {
         let url = ``;
 
