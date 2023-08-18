@@ -15,6 +15,7 @@ import {
   ProfileTail,
   ProfileText,
 } from './petProfile.styled';
+import AlertText from '@/common/popup/AlertText.ts';
 import 'cropperjs/dist/cropper.css';
 
 type Prop = {
@@ -149,16 +150,12 @@ export default function PetProfile({
       )}
       {isError && (
         <Popup
-          title={'이미지 변환 과정에서 오류가 발생했습니다.'}
+          title={AlertText.Failed}
           handler={[
             () => {
               setIsError(false);
             },
           ]}
-          isgreen={['true']}
-          btnsize={['md']}
-          buttontext={['확인']}
-          countbtn={1}
           popupcontrol={() => setIsError(false)}
         />
       )}

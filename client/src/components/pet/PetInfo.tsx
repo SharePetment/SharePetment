@@ -13,6 +13,7 @@ import {
   InputText,
   Label,
 } from '@/common/input/Input.styled.tsx';
+import AlertText from '@/common/popup/AlertText';
 import { PopupBackGround } from '@/common/popup/popup.styled.tsx';
 import Popup from '@/common/popup/Popup.tsx';
 import { Container, Form, RadioBox } from '@/components/pet/petInfo.styled.tsx';
@@ -269,11 +270,7 @@ export default function PetInfo(prop: Prop) {
           popupcontrol={() => {
             setIsError(false);
           }}
-          btnsize={['md']}
-          countbtn={1}
-          title="실패했습니다. 최대 이미지 크기는 5MB입니다. 반드시 프로필을 포함해주세요!"
-          isgreen={['true']}
-          buttontext={['확인']}
+          title={AlertText.Photo}
           handler={[
             () => {
               setIsError(false);

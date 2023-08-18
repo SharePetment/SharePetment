@@ -3,7 +3,7 @@ import { MutationProp } from './mutationProp';
 import { postFormMuation } from '@/api/mutationfn';
 
 export default function usePostFormMutation({
-  keys,
+  key,
   successFn,
   errorFn,
 }: MutationProp) {
@@ -11,8 +11,8 @@ export default function usePostFormMutation({
   const { mutate, isLoading } = useMutation({
     mutationFn: postFormMuation,
     onSuccess: () => {
-      if (keys)
-        keys.map(key => queryClient.invalidateQueries({ queryKey: [key] }));
+      if (key)
+        key.map(each => queryClient.invalidateQueries({ queryKey: [each] }));
       if (successFn) successFn();
     },
     onError: () => errorFn(),

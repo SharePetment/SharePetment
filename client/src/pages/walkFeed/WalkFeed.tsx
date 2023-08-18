@@ -12,6 +12,7 @@ import { ReactComponent as Chatlink } from '@/assets/link.svg';
 import { ReactComponent as ArrowLeft } from '@/assets/mobile/arrow-left.svg';
 import { ReactComponent as Pin } from '@/assets/pin.svg';
 import Comment from '@/common/comment/Comment.tsx';
+import AlertText from '@/common/popup/AlertText';
 import Popup from '@/common/popup/Popup.tsx';
 import LoadingComponent from '@/components/loading/LoadingComponent.tsx';
 import ShowMap from '@/components/map-show/ShowMap.tsx';
@@ -269,11 +270,8 @@ export function Component() {
         <>
           {isDeleted && (
             <Popup
+              title={AlertText.Delete}
               countbtn={2}
-              title="정말로 삭제하시겠습니까?"
-              btnsize={['md', 'md']}
-              isgreen={['true', 'false']}
-              buttontext={['삭제', '취소']}
               popupcontrol={() => {
                 setIsDeleted(false);
               }}
@@ -287,11 +285,7 @@ export function Component() {
           )}
           {isOpen[0] && (
             <Popup
-              countbtn={1}
               title={isOpen[1]}
-              btnsize={['md']}
-              isgreen={['true']}
-              buttontext={['확인']}
               popupcontrol={() => {
                 setIsOpen([false, '']);
               }}
