@@ -18,7 +18,7 @@ interface Prop {
   path?: string;
 }
 
-export default function FollowList({ setIsListShowed, follow, path }: Prop) {
+export default function FollowList({ setIsListShowed, follow }: Prop) {
   const navigate = useNavigate();
   const handleUserPage = (followerId: number) => {
     setIsListShowed(false);
@@ -56,18 +56,7 @@ export default function FollowList({ setIsListShowed, follow, path }: Prop) {
           )}
 
           {(!Array.isArray(follow) ||
-            (Array.isArray(follow) &&
-              follow.length === 0 &&
-              path === undefined)) && (
-            <Button
-              isgreen="true"
-              text="구독을 먼저 해주세요!"
-              size="lg"
-              handler={handleCloseList}
-            />
-          )}
-          {(!Array.isArray(follow) ||
-            (Array.isArray(follow) && follow.length === 0 && !!path)) && (
+            (Array.isArray(follow) && follow.length === 0)) && (
             <Button
               isgreen="true"
               text={'아직 구독한 유저가 없습니다. 😥'}
