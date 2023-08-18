@@ -173,7 +173,6 @@ export default function Comment(props: CommentProp) {
               setIsDeleted(false);
             },
           ]}
-          btnsize={['md', 'md']}
           countbtn={2}
           popupcontrol={() => {
             setIsDeleted(false);
@@ -189,7 +188,6 @@ export default function Comment(props: CommentProp) {
               setIsCommentError(false);
             },
           ]}
-          btnsize={['md']}
           popupcontrol={() => {
             setFocus('comment');
             setIsCommentError(false);
@@ -204,7 +202,6 @@ export default function Comment(props: CommentProp) {
               setIsDeletError(false);
             },
           ]}
-          btnsize={['md']}
           popupcontrol={() => {
             setIsDeletError(false);
           }}

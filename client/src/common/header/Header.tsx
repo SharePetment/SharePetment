@@ -42,7 +42,6 @@ export default function Header() {
                 navigate(Path.MyPage);
               },
             ]}
-            btnsize={['md']}
             buttontext={['펫 등록하러가기']}
             popupcontrol={() => setIsOpen(false)}
           />
@@ -95,7 +94,6 @@ export default function Header() {
                 navigate(Path.Login);
               },
             ]}
-            btnsize={['md']}
             buttontext={['로그인하러가기']}
             popupcontrol={() => setIsOpen(false)}
           />
