@@ -3,6 +3,7 @@
 
 import { useEffect } from 'react';
 import { ReactComponent as Kakao } from '@/assets/label/kakao-talk.svg';
+import * as FC from '@/components/map-show/showMap.styled';
 
 interface Prop {
   address: string;
@@ -49,20 +50,19 @@ export default function ShowMap({ address, lat, lng }: Prop) {
   }, [address, lat, lng]);
 
   return (
-    <div className="flex flex-col relative justify-center items-center bg-white w-full h-[320px] mb-2 rounded-md">
-      <h2 className="justify-self-start self-start px-2 py-1 font-semibold text-lg">
-        {address}
-      </h2>
-      <div id="myMap" className="w-[480px] h-[250px] max-sm:w-5/6"></div>
-      <button className="absolute bg-deepgreen bottom-[0px] right-[10px] z-10 rounded-lg max-sm:right-[25px] max-sm:bottom-[3px]">
-        <a
-          className="text-white flex px-2 py-1"
-          target="_blank"
-          href={`https://map.kakao.com/link/map/${lng},${lat}`}>
-          <Kakao />
-          카카오맵
-        </a>
-      </button>
-    </div>
+    <>
+      <FC.Wrapper>
+        <FC.Address>{address}</FC.Address>
+        <FC.Map id="myMap" />
+        <FC.Button>
+          <FC.KakaoHref
+            target="_blank"
+            href={`https://map.kakao.com/link/map/${lng},${lat}`}>
+            <Kakao />
+            카카오맵
+          </FC.KakaoHref>
+        </FC.Button>
+      </FC.Wrapper>
+    </>
   );
 }
