@@ -14,6 +14,7 @@ import {
   InputText,
   Label,
 } from '@/common/input/Input.styled';
+import AlertText from '@/common/popup/AlertText';
 import Popup from '@/common/popup/Popup.tsx';
 import { Textarea } from '@/components/card/feedwritecard/FeedWriteCard.styled.tsx';
 import LoadingComponent from '@/components/loading/LoadingComponent.tsx';
@@ -257,11 +258,7 @@ export function Component() {
           </main>
           {isError && (
             <Popup
-              title="산책 게시물 수정에 실패했습니다."
-              isgreen={['true']}
-              btnsize={['md']}
-              buttontext={['확인']}
-              countbtn={1}
+              title={AlertText.Failed}
               popupcontrol={() => {
                 setIsError(false);
               }}

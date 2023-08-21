@@ -1,4 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+
 import { useQueryClient } from '@tanstack/react-query';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -11,6 +12,7 @@ import { useLocalStorage, useReadLocalStorage } from 'usehooks-ts';
 import { getGuestFeedList, getHostFeedList } from '@/api/queryfn.ts';
 import LyingDownDog from '@/assets/illustration/lying-down-dog.png';
 import PetFriends from '@/assets/illustration/pet-friends.png';
+import AlertText from '@/common/popup/AlertText';
 import { PopupBackGround } from '@/common/popup/popup.styled.tsx';
 import Popup from '@/common/popup/Popup.tsx';
 import FeedCard from '@/components/card/feed-card/FeedCard.tsx';
@@ -183,8 +185,11 @@ export function Component() {
             {hostData &&
               hostData.pages.map((page, index) => (
                 <React.Fragment key={index}>
-                  {page.map(img => (
-                    <div className="flex items-center gap-3" ref={hostRef}>
+                  {page.map((img, idx) => (
+                    <div
+                      className="flex items-center gap-3"
+                      ref={hostRef}
+                      key={idx}>
                       <FeedCard
                         memberid={img.memberInfo.memberId}
                         username={img.memberInfo.nickname}
@@ -305,11 +310,8 @@ export function Component() {
           )}
           {isGuestOpen && (
             <Popup
-              title="로그인을 해주세요."
-              isgreen={['true']}
-              btnsize={['md']}
+              title={AlertText.Login}
               buttontext={['로그인하러가기']}
-              countbtn={1}
               handler={[() => navigate(Path.Login)]}
               popupcontrol={() => setIsGuestOpen(false)}
             />

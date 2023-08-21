@@ -14,6 +14,7 @@ import {
   InputText,
   Label,
 } from '@/common/input/Input.styled.tsx';
+import AlertText from '@/common/popup/AlertText';
 import Popup from '@/common/popup/Popup.tsx';
 import { Textarea } from '@/components/card/feedwritecard/FeedWriteCard.styled.tsx';
 import Map from '@/components/map-make/Map.tsx';
@@ -231,11 +232,7 @@ export function Component() {
       </main>
       {isError && (
         <Popup
-          title="산책 게시물 생성에 실패했습니다."
-          isgreen={['true']}
-          btnsize={['sm']}
-          buttontext={['확인']}
-          countbtn={1}
+          title={AlertText.Failed}
           popupcontrol={() => {
             setIsError(false);
           }}

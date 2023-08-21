@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useMatch, Link, useNavigate } from 'react-router-dom';
 import { useReadLocalStorage } from 'usehooks-ts';
+import AlertText from '../popup/AlertText';
 import NavItem from './NavItem';
 import { SERVER_URL } from '@/api/url.ts';
 import { ReactComponent as Logo } from '@/assets/logo.svg';
@@ -34,17 +35,14 @@ export default function Header() {
       <>
         {isOpen && (
           <Popup
-            title={'산책게시물을 보려면 펫을 등록해주세요!'}
+            title={AlertText.Pet}
             handler={[
               () => {
                 setIsOpen(false);
                 navigate(Path.MyPage);
               },
             ]}
-            isgreen={['true']}
-            btnsize={['md']}
             buttontext={['펫 등록하러가기']}
-            countbtn={1}
             popupcontrol={() => setIsOpen(false)}
           />
         )}
@@ -89,17 +87,14 @@ export default function Header() {
       <>
         {isOpen && (
           <Popup
-            title={'로그인을 해주세요.'}
+            title={AlertText.Login}
             handler={[
               () => {
                 setIsOpen(false);
                 navigate(Path.Login);
               },
             ]}
-            isgreen={['true']}
-            btnsize={['md']}
             buttontext={['로그인하러가기']}
-            countbtn={1}
             popupcontrol={() => setIsOpen(false)}
           />
         )}

@@ -5,6 +5,7 @@ import { SERVER_URL } from '@/api/url.ts';
 import { ReactComponent as Close } from '@/assets/button/close.svg';
 import Comment from '@/common/comment/Comment';
 import FeedInput from '@/common/input/feedInput/FeedInput';
+import AlertText from '@/common/popup/AlertText';
 import Popup from '@/common/popup/Popup';
 import FeedCard from '@/components/card/feed-card/FeedCard';
 import SideNav from '@/components/card/sidenav/SideNav';
@@ -57,7 +58,7 @@ export function Component() {
   const deleteFeedMutation = useDeleteMutation({
     keys: [['guestFeed']],
     successFn: () => navigate(Path.MyPage),
-    errorFn: () => setIsOpen([true, '요청에 실패했어요.']),
+    errorFn: () => setIsOpen([true, AlertText.Failed]),
   });
 
   const handlerDelete = () => {
@@ -86,20 +87,13 @@ export function Component() {
         {isOpen[0] && (
           <Popup
             title={isOpen[1]}
-            isgreen={['true']}
-            btnsize={['md']}
-            buttontext={['확인']}
-            countbtn={1}
             handler={[() => setIsOpen([false, ''])]}
             popupcontrol={() => setIsOpen([false, ''])}
           />
         )}
         {isDeleteOpen && (
           <Popup
-            title="피드를 삭제할까요?"
-            isgreen={['true']}
-            btnsize={['md', 'md']}
-            buttontext={['삭제할래요', '아니요']}
+            title={AlertText.Delete}
             countbtn={2}
             handler={[handlerDelete, () => setIsDeleteOpen(false)]}
             popupcontrol={() => {
@@ -242,20 +236,13 @@ export function Component() {
         {isOpen[0] && (
           <Popup
             title={isOpen[1]}
-            isgreen={['true']}
-            btnsize={['md']}
-            buttontext={['확인']}
-            countbtn={1}
             handler={[() => setIsOpen([false, ''])]}
             popupcontrol={() => setIsOpen([false, ''])}
           />
         )}
         {isDeleteOpen && (
           <Popup
-            title="피드를 삭제할까요?"
-            isgreen={['true']}
-            btnsize={['md', 'md']}
-            buttontext={['삭제할래요', '아니요']}
+            title={AlertText.Delete}
             countbtn={2}
             handler={[handlerDelete, () => setIsDeleteOpen(false)]}
             popupcontrol={() => {

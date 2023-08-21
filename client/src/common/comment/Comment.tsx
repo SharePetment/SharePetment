@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useReadLocalStorage } from 'usehooks-ts';
+import AlertText from '../popup/AlertText';
 import { SERVER_URL } from '@/api/url.ts';
 import { ReactComponent as Write } from '@/assets/button/write.svg';
 import {
@@ -158,7 +159,7 @@ export default function Comment(props: CommentProp) {
       </Container>
       {isDeleted && (
         <Popup
-          title="정말로 삭제하시겠습니까?"
+          title={AlertText.Delete}
           handler={[
             () => {
               //delete 메서드 진행
@@ -172,9 +173,6 @@ export default function Comment(props: CommentProp) {
               setIsDeleted(false);
             },
           ]}
-          btnsize={['md', 'md']}
-          buttontext={['확인', '취소']}
-          isgreen={['true', 'false']}
           countbtn={2}
           popupcontrol={() => {
             setIsDeleted(false);
@@ -183,17 +181,13 @@ export default function Comment(props: CommentProp) {
       )}
       {isCommentError && (
         <Popup
-          title="댓글 수정에 실패했습니다."
+          title={AlertText.Failed}
           handler={[
             () => {
               setFocus('comment');
               setIsCommentError(false);
             },
           ]}
-          btnsize={['md']}
-          buttontext={['확인']}
-          isgreen={['true']}
-          countbtn={1}
           popupcontrol={() => {
             setFocus('comment');
             setIsCommentError(false);
@@ -202,16 +196,12 @@ export default function Comment(props: CommentProp) {
       )}
       {isDeleteError && (
         <Popup
-          title="댓글 삭제에 실패했습니다."
+          title={AlertText.Failed}
           handler={[
             () => {
               setIsDeletError(false);
             },
           ]}
-          btnsize={['md']}
-          buttontext={['확인']}
-          isgreen={['true']}
-          countbtn={1}
           popupcontrol={() => {
             setIsDeletError(false);
           }}

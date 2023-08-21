@@ -7,6 +7,7 @@ import { SERVER_URL } from '@/api/url.ts';
 import { ReactComponent as Close } from '@/assets/button/close.svg';
 import { ReactComponent as Plus } from '@/assets/button/plus.svg';
 import { ReactComponent as Write } from '@/assets/button/write.svg';
+import AlertText from '@/common/popup/AlertText';
 import Popup from '@/common/popup/Popup.tsx';
 import {
   Container,
@@ -70,14 +71,14 @@ export default function FeedWriteCard() {
   const feedPostingMutation = usePostFormMutation({
     key: ['myFeed', 'myPage', 'followList'],
     successFn: () => navigate(Path.MyPage),
-    errorFn: () => setIsOpen([true, '요청에 실패했습니다.']),
+    errorFn: () => setIsOpen([true, AlertText.Failed]),
   });
 
   // 피드 게시물 수정하기 mutation
   const feedEditingMutation = usePatchFormMutation({
     key: ['feedPopUp'],
     successFn: () => navigate(Path.MyPage),
-    errorFn: () => setIsOpen([true, '요청에 실패했습니다.']),
+    errorFn: () => setIsOpen([true, AlertText.Failed]),
   });
 
   // submit event에서 실행할 함수 생성하기
@@ -131,10 +132,6 @@ export default function FeedWriteCard() {
         <Popup
           title={isOpen[1]}
           handler={[() => setIsOpen([false, ''])]}
-          btnsize={['md']}
-          countbtn={1}
-          buttontext={['확인']}
-          isgreen={['true']}
           popupcontrol={() => setIsOpen([false, ''])}
         />
       )}

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useReadLocalStorage } from 'usehooks-ts';
 import PetInfoBox from '../petinfo-box/PetInfoBox.tsx';
 import { SERVER_URL } from '@/api/url.ts';
+import AlertText from '@/common/popup/AlertText.ts';
 import Popup from '@/common/popup/Popup.tsx';
 import PetInfo from '@/components/pet/PetInfo.tsx';
 import {
@@ -46,11 +47,8 @@ export default function PetContainer(prop: Prop) {
   const [isDeletePopUp, setIsDeletePopUp] = useState(false);
   const accessToken = useReadLocalStorage<string | null>('accessToken');
 
-  // 펫 삭제 오류 팝업
-  const [isDelelteError, setIsDeleteError] = useState(false);
-
-  // 펫 수정 오류 팝업
-  const [isEditError, setIsEditError] = useState(false);
+  // 펫 수정 및 삭제 오류 팝업
+  const [isErrorPopUp, setIsErrorPopUp] = useState(false);
 
   // 펫 삭제 로직 작성
 
@@ -59,7 +57,7 @@ export default function PetContainer(prop: Prop) {
     successFn: () => setIsDeletePopUp(false),
     errorFn: () => {
       setIsDeletePopUp(false);
-      setIsDeleteError(true);
+      setIsErrorPopUp(true);
     },
   });
 
@@ -76,7 +74,7 @@ export default function PetContainer(prop: Prop) {
 
   const mutationPatchUserProfile = usePatchMutation({
     key: ['myPage'],
-    errorFn: () => setIsEditError(true),
+    errorFn: () => setIsErrorPopUp(true),
   });
 
   // 유저 프로필 변경
@@ -128,11 +126,8 @@ export default function PetContainer(prop: Prop) {
       )}
       {isDeletePopUp && (
         <Popup
-          title="해당 등록을 삭제하시겠습니까?"
-          btnsize={['md', 'md']}
-          buttontext={['삭제', '취소']}
+          title={AlertText.Delete}
           countbtn={2}
-          isgreen={['true', 'false']}
           popupcontrol={() => {
             setIsDeletePopUp(false);
           }}
@@ -144,37 +139,16 @@ export default function PetContainer(prop: Prop) {
           ]}
         />
       )}
-      {isDelelteError && (
+      {isErrorPopUp && (
         <Popup
-          title={'펫 삭제에 실패했습니다.'}
+          title={AlertText.Failed}
           handler={[
             () => {
-              setIsDeleteError(false);
+              setIsErrorPopUp(false);
             },
           ]}
-          isgreen={['true']}
-          btnsize={['md']}
-          buttontext={['확인']}
-          countbtn={2}
           popupcontrol={() => {
-            setIsDeleteError(false);
-          }}
-        />
-      )}{' '}
-      {isEditError && (
-        <Popup
-          title={'프로필 이미지 변경에 실패했습니다.'}
-          handler={[
-            () => {
-              setIsEditError(false);
-            },
-          ]}
-          isgreen={['true']}
-          btnsize={['md']}
-          buttontext={['확인']}
-          countbtn={1}
-          popupcontrol={() => {
-            setIsEditError(false);
+            setIsErrorPopUp(false);
           }}
         />
       )}

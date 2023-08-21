@@ -21,6 +21,7 @@ import {
   InputText,
   Label,
 } from '@/common/input/Input.styled.tsx';
+import AlertText from '@/common/popup/AlertText';
 import Popup from '@/common/popup/Popup.tsx';
 import Select from '@/common/select/Select.tsx';
 import useDeleteMutation from '@/hook/api/mutation/useDeleteMutation';
@@ -142,14 +143,6 @@ export function Component() {
         message: ERROR_MESSAGE.DUPLICATE,
       });
     }
-
-    // if (isDuplicated) {
-    //   if (!userId) {
-    //     return setError('nickname', {
-    //       message: ERROR_MESSAGE.DUPLICATE,
-    //     });
-    //   }
-    // }
 
     if (!isDuplicated) {
       return setError('nickname', {
@@ -292,14 +285,10 @@ export function Component() {
         </FormContainer>
         {isError && (
           <Popup
+            title={AlertText.Failed}
             popupcontrol={() => {
               setIsError(false);
             }}
-            btnsize={['md']}
-            countbtn={1}
-            title="실패했습니다. 다시 입력해주세요!"
-            isgreen={['true']}
-            buttontext={['확인']}
             handler={[
               () => {
                 setIsError(false);
