@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { useReadLocalStorage } from 'usehooks-ts';
 import { SERVER_URL } from '@/api/url.ts';
 import { InputText } from '@/common/input/Input.styled.tsx';
+import * as FC from '@/components/map-make/map.styled';
 import useMypageQuery from '@/hook/api/query/useMypageQuery';
 
 interface placeType {
@@ -319,37 +320,32 @@ export default function Map({
   }, [isLoading, mainAddress, searchKeyword]);
 
   return (
-    <div className="flex flex-col items-center mb-1">
-      <div className="relative">
-        <InputText
-          placeholder="주소 검색"
-          type="text"
-          value={inputValue}
-          onChange={handleInput}
-        />
-        <button
-          onClick={handleSendAddress}
-          className="font-semibold border border-[#d9d9d9] px-3 py-1 rounded-xl
-           bg-deepgreen text-[#ffffff] absolute right-2 top-[12px] text-sm">
-          검색
-        </button>
-      </div>
-      <div className="flex  mt-3 justify-between gap-5 max-sm:w-80 max-sm:flex-col">
-        {searchKeyword ? (
-          <div id="search-result" className="h-[400px]">
-            <p className="mb-3">
-              <span className="font-semibold">{searchKeyword} </span>
-              {!!searchKeyword && '검색결과'}
-            </p>
-            <div className="no-scrollbar w-100 h-[300px] overflow-y-scroll max-sm:w-[300px]">
-              <ul id="places-list" className="flex flex-col"></ul>
-            </div>
-            <div id="pagination" className="flex mt-2"></div>
-          </div>
-        ) : null}
-
-        <div id="myMap" className="h-[350px] w-[350px] max-sm:w-[300px]"></div>
-      </div>
-    </div>
+    <>
+      <FC.Wrapper>
+        <FC.SearchWrapper>
+          <InputText
+            placeholder="주소 검색"
+            type="text"
+            value={inputValue}
+            onChange={handleInput}
+          />
+          <FC.SearchButton onClick={handleSendAddress}>검색</FC.SearchButton>
+        </FC.SearchWrapper>
+        <FC.MapWrapper>
+          {searchKeyword ? (
+            <FC.SearchListBox id="search-result">
+              <FC.SearchTitle>
+                <FC.SearchKeyword>{searchKeyword}</FC.SearchKeyword>
+                {!!searchKeyword && '검색결과'}
+              </FC.SearchTitle>
+              <FC.SearchList>
+                <FC.SearchUl id="places-list"></FC.SearchUl>
+              </FC.SearchList>
+            </FC.SearchListBox>
+          ) : null}
+          <FC.Map id="myMap"></FC.Map>
+        </FC.MapWrapper>
+      </FC.Wrapper>
+    </>
   );
 }
