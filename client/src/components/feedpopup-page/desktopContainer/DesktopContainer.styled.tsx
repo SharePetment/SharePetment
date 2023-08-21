@@ -14,6 +14,13 @@ export const Container = tw.div`
   z-50
 `;
 
+export const ToastWrap = tw.div`
+  fixed
+  right-8
+  bottom-10
+  z-50
+`;
+
 export const CloseBtn = tw.button`
   absolute
   right-10
@@ -55,42 +62,4 @@ export const CommentBox = tw.div`
   border-lightgray
   overflow-x-hidden
   overflow-y-auto
-`;
-
-export const FeedCardContainer = tw.div`
-  fixed
-  top-0
-  right-0
-  w-screen
-  h-screen
-  flex
-  justify-center
-  items-center
-  z-10
-  bg-zinc-900/30
-  relative
-  flex-col
-  gap-5
-  pt-10
-`;
-
-export const CommentContainer = tw.div`
-  fixed
-  w-screen
-  h-screen
-  top-0
-  right-0
-  flex
-  justify-center
-  items-center
-  z-30
-  pt-10
-  max-sm:pt-0
-  bg-zinc-900/75
-`;
-
-export const CommentClose = tw.div`
-  absolute
-  right-10
-  top-10
 `;
