@@ -1,10 +1,8 @@
-import imageCompression from 'browser-image-compression';
 import { ChangeEvent, useState, useRef } from 'react';
 import Cropper, { ReactCropperElement } from 'react-cropper';
 import Button from '../../../common/button/Button.tsx';
 import Popup from '../../../common/popup/Popup.tsx';
 import Profile from '../../../common/profile/Profile.tsx';
-import { option } from '../../../util/imageCompressOption.ts';
 import Spin from '../../spin/Spin.tsx';
 import {
   ButtonBox,
@@ -17,6 +15,7 @@ import {
 } from './petProfile.styled';
 import AlertText from '@/common/popup/AlertText.ts';
 import 'cropperjs/dist/cropper.css';
+import { handleCropperData, handlePetImage } from '@/util/petImage.ts';
 
 type Prop = {
   baseImage: string;
@@ -36,58 +35,10 @@ export default function PetProfile({
   const [isLoading, setIsLoading] = useState(false);
   // 이미지 처리
   const handleProfile = (e: ChangeEvent<HTMLInputElement>) => {
-    let file: File | undefined;
-    if (e.target.files) {
-      file = e.target.files[0];
-      setIsViewImageCropper(true);
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      return new Promise<void>(resolve => {
-        reader.onload = () => {
-          setImage(reader.result as string); // 파일의 컨텐츠
-          resolve();
-        };
-        reader.onerror = () => {
-          setIsError(true);
-        };
-      });
-    }
+    handlePetImage({ setImage, setIsError, setIsViewImageCropper, e });
   };
   // cropper 함수
   const cropperRef = useRef<ReactCropperElement>(null);
-  // cropper 채택
-  const getCropData = async () => {
-    try {
-      const cropper = cropperRef.current?.cropper;
-      if (cropper) {
-        setIsLoading(true);
-        const image = cropper.getCroppedCanvas().toDataURL();
-        setImage(image);
-        // string을 file 형태로 변환
-        const cropfile = await fetch(cropper.getCroppedCanvas().toDataURL())
-          .then(res => res.blob())
-          .then(async blob => {
-            const file = new File([blob], 'newAvatar.jpeg', {
-              type: 'image/jpeg',
-            });
-            const compressedFile = await imageCompression(file, option);
-            return compressedFile;
-          })
-          .catch(() => {
-            setIsError(true);
-          });
-        if (cropfile) {
-          setFile(cropfile);
-          setIsLoading(false);
-        }
-      }
-      setIsViewImageCropper(false);
-    } catch (err) {
-      console.error(err);
-      setIsError(true);
-      setIsLoading(false);
-    }
-  };
 
   // cropa 실패
   const handleCancle = () => {
@@ -134,7 +85,16 @@ export default function PetProfile({
               <Button
                 text="선택"
                 isgreen="true"
-                handler={getCropData}
+                handler={() =>
+                  handleCropperData({
+                    cropperRef,
+                    setFile,
+                    setImage,
+                    setIsError,
+                    setIsLoading,
+                    setIsViewImageCropper,
+                  })
+                }
                 size="sm"
               />
               <Button
