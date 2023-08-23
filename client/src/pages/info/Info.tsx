@@ -16,7 +16,7 @@ import Popup from '@/common/popup/Popup.tsx';
 import FormBox from '@/components/info-page/FormBox';
 import useDeleteMutation from '@/hook/api/mutation/useDeleteMutation';
 import usePatchUserInfoMutation from '@/hook/api/mutation/usePatchUserInfoMutation';
-import { ExtraInfoLogo } from '@/pages/info/Info.styled.tsx';
+import * as SC from '@/pages/info/Info.styled.tsx';
 import Path from '@/routers/paths.ts';
 import { InfoProps, QuitProps } from '@/types/infoProp';
 import handleOnSubmit from '@/util/submitInfo';
@@ -107,12 +107,10 @@ export function Component() {
   if (userId) {
     return (
       <>
-        <div
-          className="w-[320px] max-sm:w-[220px] mx-auto flex items-center gap-2 cursor-pointer"
-          onClick={() => navigate(-1)}>
+        <SC.CloseBtn onClick={() => navigate(-1)}>
           <ArrowLeft className="w-7 h-7 stroke-deepgreen" />
           <Logo width="400" className="ml-8 max-sm:w-80 max-sm:mx-auto " />
-        </div>
+        </SC.CloseBtn>
         <FormBox
           register={register}
           handleSubmit={handleSubmit}
@@ -149,10 +147,10 @@ export function Component() {
   } else {
     return (
       <>
-        <ExtraInfoLogo>
+        <SC.ExtraInfoLogo>
           <Like className="stroke-deepgreen fill-deepgreen w-6 h-6" />
-          <span className="ml-2 text-xl font-black">추가정보 입력</span>
-        </ExtraInfoLogo>
+          <SC.Additional>추가정보 입력</SC.Additional>
+        </SC.ExtraInfoLogo>
 
         <FormBox
           register={register}
