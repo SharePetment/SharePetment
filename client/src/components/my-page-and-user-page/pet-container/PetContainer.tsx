@@ -4,14 +4,14 @@ import PetInfoBox from '../petinfo-box/PetInfoBox.tsx';
 import { SERVER_URL } from '@/api/url.ts';
 import AlertText from '@/common/popup/AlertText.ts';
 import Popup from '@/common/popup/Popup.tsx';
-import PetInfo from '@/components/pet/PetInfo.tsx';
 import {
   Container,
   DeletePet,
   PetCheckFalse,
   PetCheckTrue,
   SettingPet,
-} from '@/components/user_my_page/pet-container/petContainer.styled.tsx';
+} from '@/components/my-page-and-user-page/pet-container/petContainer.styled.tsx';
+import PetInfo from '@/components/pet/PetInfo.tsx';
 import useDeleteMutation from '@/hook/api/mutation/useDeleteMutation.tsx';
 import usePatchMutation from '@/hook/api/mutation/usePatchMutation.tsx';
 
