@@ -22,12 +22,7 @@ import usePatchMutation from '@/hook/api/mutation/usePatchMutation';
 import usePostCommentMutation from '@/hook/api/mutation/usePostCommentMutation';
 import useMypageQuery from '@/hook/api/query/useMypageQuery';
 import useWalkFeedQuery from '@/hook/api/query/useWalkFeedQuery';
-import {
-  CommentButton,
-  Divider,
-  GatherMate,
-  WalkInfo,
-} from '@/pages/walkFeed/WalkFeed.styled';
+import * as SC from '@/pages/walkFeed/WalkFeed.styled';
 import Path from '@/routers/paths.ts';
 import { MemberIdContext, State } from '@/store/Context.tsx';
 import { changeDateFormat } from '@/util/changeDateFormat.ts';
@@ -118,8 +113,6 @@ export function Component() {
       accessToken,
     });
   };
-
-  // 게시글 수정
   const handleWalkFeedEdit = () => {
     // 수정 페이지로 이동
     navigate(`${Path.WalkPosting}/${data?.walkMatePostId}`);
@@ -128,6 +121,7 @@ export function Component() {
   const handleWalkFeedDeletePopUp = () => {
     setIsDeleted(true);
   };
+
   const handleWalkFeedDelete = () => {
     walkDeleteMutation.mutate({
       url: `${SERVER_URL}/walkmates/${data?.walkMatePostId}`,
@@ -183,38 +177,38 @@ export function Component() {
           )}
           {/* 제목부분 */}
           <div className="flex items-baseline gap-3 text-3xl font-[900] justify-start mb-7 mt-3">
-            <GatherMate isopen={data?.open ? 'true' : 'false'}>
+            <SC.GatherMate isopen={data?.open ? 'true' : 'false'}>
               {data?.open ? '모집중' : '모집완료'}
-            </GatherMate>
+            </SC.GatherMate>
             <h2 className="max-sm:text-xl">{data?.title}</h2>
           </div>
           {/* 산책정보 안내부분 */}
           <div className="grid grid-cols-2 gap-y-2 max-sm:grid-cols-1 mb-8">
-            <WalkInfo>
+            <SC.WalkInfo>
               <Dog />
               <span>{data?.maximum}마리</span>
-            </WalkInfo>
-            <WalkInfo>
+            </SC.WalkInfo>
+            <SC.WalkInfo>
               <Calendar />
               <span>{changeDateFormat(data?.time as string)}</span>
-            </WalkInfo>
-            <WalkInfo>
+            </SC.WalkInfo>
+            <SC.WalkInfo>
               <Pin />
               <span>{address}</span>
-            </WalkInfo>
-            <WalkInfo>
+            </SC.WalkInfo>
+            <SC.WalkInfo>
               <Chatlink className=" shrink-0" />
               <a href={data?.chatURL as string} target="_blank">
                 <span className=" break-all">{data?.chatURL}</span>
               </a>
-            </WalkInfo>
+            </SC.WalkInfo>
           </div>
           {/* 본문 */}
           <div className="mb-7">{data?.content}</div>
           {/* 지도 이미지 부분 */}
           <ShowMap address={address} lat={lat} lng={lng} />
 
-          <Divider />
+          <SC.Divider />
           {/* 댓글 */}
           <div className="mt-5">
             <div className="flex items-center gap-1 text-deepgray mb-3">
@@ -238,7 +232,7 @@ export function Component() {
                 })}
               />
 
-              <CommentButton
+              <SC.CommentButton
                 disabled={!!errors.content?.message}
                 className={
                   errors.content?.message === undefined
@@ -246,7 +240,7 @@ export function Component() {
                     : 'bg-lightgray'
                 }>
                 Comment
-              </CommentButton>
+              </SC.CommentButton>
             </form>
             {/* 댓글 렌더링 */}
             <ul>
