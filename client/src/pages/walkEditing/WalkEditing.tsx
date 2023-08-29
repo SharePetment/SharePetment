@@ -8,12 +8,7 @@ import { patchWalkFeed } from '@/api/mutationfn.ts';
 import { SERVER_URL } from '@/api/url';
 import { ReactComponent as Close } from '@/assets/button/close.svg';
 import Button from '@/common/button/Button.tsx';
-import {
-  ErrorNotice,
-  InputContainer,
-  InputText,
-  Label,
-} from '@/common/input/Input.styled';
+import * as SC from '@/common/input/Input.styled';
 import AlertText from '@/common/popup/AlertText';
 import Popup from '@/common/popup/Popup.tsx';
 import { Textarea } from '@/components/card/feedwritecard/FeedWriteCard.styled.tsx';
@@ -120,9 +115,9 @@ export function Component() {
 
             <PostForm onSubmit={handleSubmit(onSumbit)}>
               {/* 제목 */}
-              <InputContainer>
-                <Label htmlFor="title">제목</Label>
-                <InputText
+              <SC.InputContainer>
+                <SC.Label htmlFor="title">제목</SC.Label>
+                <SC.InputText
                   id="title"
                   defaultValue={data?.title ? data?.title : ''}
                   {...register('title', {
@@ -137,14 +132,16 @@ export function Component() {
                 <ErrorMessage
                   errors={errors}
                   name="title"
-                  render={({ message }) => <ErrorNotice>{message}</ErrorNotice>}
+                  render={({ message }) => (
+                    <SC.ErrorNotice>{message}</SC.ErrorNotice>
+                  )}
                 />
-              </InputContainer>
+              </SC.InputContainer>
 
               {/* 날짜 */}
-              <InputContainer>
-                <Label htmlFor="time">날짜를 선택해주세요</Label>
-                <InputText
+              <SC.InputContainer>
+                <SC.Label htmlFor="time">날짜를 선택해주세요</SC.Label>
+                <SC.InputText
                   id="time"
                   className=" cursor-pointer"
                   type="datetime-local"
@@ -161,14 +158,16 @@ export function Component() {
                 <ErrorMessage
                   errors={errors}
                   name="time"
-                  render={({ message }) => <ErrorNotice>{message}</ErrorNotice>}
+                  render={({ message }) => (
+                    <SC.ErrorNotice>{message}</SC.ErrorNotice>
+                  )}
                 />
-              </InputContainer>
+              </SC.InputContainer>
 
               {/* 장소 */}
-              <InputContainer>
-                <Label htmlFor="location">산책 장소를 알려주세요</Label>
-                <InputText
+              <SC.InputContainer>
+                <SC.Label htmlFor="location">산책 장소를 알려주세요</SC.Label>
+                <SC.InputText
                   className=" cursor-pointer"
                   id="location"
                   type="text"
@@ -183,9 +182,11 @@ export function Component() {
                 <ErrorMessage
                   errors={errors}
                   name="location"
-                  render={({ message }) => <ErrorNotice>{message}</ErrorNotice>}
+                  render={({ message }) => (
+                    <SC.ErrorNotice>{message}</SC.ErrorNotice>
+                  )}
                 />
-              </InputContainer>
+              </SC.InputContainer>
               <Map
                 mainAddress={mainAddress}
                 setMainAddress={setMainAddress}
@@ -193,9 +194,9 @@ export function Component() {
                 setCoordinates={setCoordinates}
               />
               {/* 오픈채팅 url */}
-              <InputContainer>
-                <Label htmlFor="chatURL">오픈채팅방 링크</Label>
-                <InputText
+              <SC.InputContainer>
+                <SC.Label htmlFor="chatURL">오픈채팅방 링크</SC.Label>
+                <SC.InputText
                   id="chatURL"
                   type="text"
                   placeholder="(필수X)채팅방 링크가 있다면 입력해주세요:) "
@@ -211,16 +212,18 @@ export function Component() {
                 <ErrorMessage
                   errors={errors}
                   name="chatURL"
-                  render={({ message }) => <ErrorNotice>{message}</ErrorNotice>}
+                  render={({ message }) => (
+                    <SC.ErrorNotice>{message}</SC.ErrorNotice>
+                  )}
                 />
-              </InputContainer>
+              </SC.InputContainer>
 
               {/* 산책 마리수 */}
-              <InputContainer>
-                <Label htmlFor="maximum">
+              <SC.InputContainer>
+                <SC.Label htmlFor="maximum">
                   산책 친구들은 몇 마리면 좋을까요?
-                </Label>
-                <InputText
+                </SC.Label>
+                <SC.InputText
                   id="maximum"
                   type="number"
                   defaultValue={data?.maximum ? data?.maximum : 0}
@@ -240,9 +243,11 @@ export function Component() {
                 <ErrorMessage
                   errors={errors}
                   name="maximum"
-                  render={({ message }) => <ErrorNotice>{message}</ErrorNotice>}
+                  render={({ message }) => (
+                    <SC.ErrorNotice>{message}</SC.ErrorNotice>
+                  )}
                 />
-              </InputContainer>
+              </SC.InputContainer>
 
               {/* 텍스트 입력창 */}
               <Textarea

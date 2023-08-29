@@ -1,9 +1,4 @@
-import {
-  PopupBackGround,
-  PopupBox,
-  Title,
-  ButtonBox,
-} from './popup.styled.tsx';
+import * as SC from './popup.styled.tsx';
 import Button from '@/common/button/Button.tsx';
 import { BooleanStr, Size, Handler } from '@/types/propType.ts';
 
@@ -28,17 +23,17 @@ export default function Popup({
 }: Prop) {
   return (
     <>
-      <PopupBackGround
+      <SC.PopupBackGround
         onClick={e => {
           e.preventDefault();
           popupcontrol();
         }}>
-        <PopupBox
+        <SC.PopupBox
           onClick={e => {
             e.stopPropagation();
           }}>
-          <Title>{title}</Title>
-          <ButtonBox countbtn={`${countbtn}`}>
+          <SC.Title>{title}</SC.Title>
+          <SC.ButtonBox countbtn={`${countbtn}`}>
             {countbtn === 1 && (
               <Button
                 size={btnsize[0]}
@@ -63,9 +58,9 @@ export default function Popup({
                 />
               </>
             )}
-          </ButtonBox>
-        </PopupBox>
-      </PopupBackGround>
+          </SC.ButtonBox>
+        </SC.PopupBox>
+      </SC.PopupBackGround>
     </>
   );
 }

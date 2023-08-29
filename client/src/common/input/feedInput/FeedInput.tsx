@@ -2,11 +2,7 @@ import { useRef } from 'react';
 import { useReadLocalStorage } from 'usehooks-ts';
 import { SERVER_URL } from '@/api/url.ts';
 import { ReactComponent as Write } from '@/assets/button/write.svg';
-import {
-  Container,
-  Input,
-  CommentBtn,
-} from '@/common/input/feedInput/FeedInput.styled';
+import * as SC from '@/common/input/feedInput/FeedInput.styled';
 import usePostFeedCommentMutation from '@/hook/api/mutation/usePostFeedCommentMutation';
 
 interface Prop {
@@ -47,16 +43,16 @@ export default function FeedInput({ feedid, blankhandler }: Prop) {
   };
 
   return (
-    <Container>
-      <Input
+    <SC.Container>
+      <SC.Input
         ref={inputRef}
         type="text"
         onKeyUp={e => handleSubmit(e)}
         placeholder="댓글을 입력해주세요."
       />
-      <CommentBtn onClick={handleClick}>
+      <SC.CommentBtn onClick={handleClick}>
         <Write />
-      </CommentBtn>
-    </Container>
+      </SC.CommentBtn>
+    </SC.Container>
   );
 }

@@ -1,6 +1,6 @@
 import { useReadLocalStorage } from 'usehooks-ts';
 import { SERVER_URL } from '@/api/url.ts';
-import { SubScribeButton } from '@/components/subscribe/subscribe.styled.tsx';
+import * as SC from '@/components/subscribe/subscribe.styled.tsx';
 import useSubscribeMutation from '@/hook/api/mutation/useSubscribeMutation';
 
 interface Prop {
@@ -26,9 +26,13 @@ export default function Subscribe({ guestFollow, usersId }: Prop) {
   return (
     <>
       {guestFollow ? (
-        <SubScribeButton onClick={handleSubscribe}>구독해지</SubScribeButton>
+        <SC.SubScribeButton onClick={handleSubscribe}>
+          구독해지
+        </SC.SubScribeButton>
       ) : (
-        <SubScribeButton onClick={handleSubscribe}>구독하기</SubScribeButton>
+        <SC.SubScribeButton onClick={handleSubscribe}>
+          구독하기
+        </SC.SubScribeButton>
       )}
     </>
   );

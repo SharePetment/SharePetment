@@ -5,12 +5,7 @@ import LoginPets from '@/assets/illustration/loginpet.png';
 import { ReactComponent as Kakao } from '@/assets/kakao.svg';
 import { ReactComponent as Logo } from '@/assets/logo.svg';
 import Footer from '@/common/footer/Footer.tsx';
-import {
-  Container,
-  LoginBtn,
-  LoginText,
-  GuestText,
-} from '@/pages/login/Login.styled.tsx';
+import * as SC from '@/pages/login/Login.styled.tsx';
 import Path from '@/routers/paths.ts';
 
 export default function Login() {
@@ -36,19 +31,19 @@ export default function Login() {
   }
 
   return (
-    <Container>
+    <SC.Container>
       <Logo width="400" className="max-sm:w-80" />
       <img src={LoginPets} width="500" />
       <Link to="https://kauth.kakao.com/oauth/authorize?client_id=07df97c2858e60b2e19f630c2c397b31&redirect_uri=http://15.165.146.215:8080/auth/kakao/callback&response_type=code">
-        <LoginBtn>
+        <SC.LoginBtn>
           <Kakao />
-          <LoginText>Log in With KaKao</LoginText>
-        </LoginBtn>
+          <SC.LoginText>Log in With KaKao</SC.LoginText>
+        </SC.LoginBtn>
       </Link>
-      <GuestText onClick={() => navigate(Path.Home)}>
+      <SC.GuestText onClick={() => navigate(Path.Home)}>
         Guest로 시작하기
-      </GuestText>
+      </SC.GuestText>
       <Footer />
-    </Container>
+    </SC.Container>
   );
 }

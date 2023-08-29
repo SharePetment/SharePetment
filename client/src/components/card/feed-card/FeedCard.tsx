@@ -7,15 +7,7 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import Profile from '@/common/profile/Profile.tsx';
-import {
-  Container,
-  Feed,
-  ContentContainer,
-  Wrap,
-  UserName,
-  Context,
-  More,
-} from '@/components/card/feed-card/FeedCard.styled.tsx';
+import * as SC from '@/components/card/feed-card/FeedCard.styled.tsx';
 import Path from '@/routers/paths.ts';
 import '@/common/carousel/carousel.css';
 
@@ -55,7 +47,7 @@ export default function FeedCard({
   };
 
   return (
-    <Container>
+    <SC.Container>
       <Swiper
         pagination={{
           type: 'fraction',
@@ -73,31 +65,34 @@ export default function FeedCard({
           <SwiperSlide
             className="flex justify-center items-center relative bg-slate-100"
             key={image.imageId}>
-            <Feed onClick={() => setIsMore(false)} src={image.uploadFileURL} />
-            <ContentContainer>
-              <Wrap onClick={handlerClick} className="cursor-pointer">
+            <SC.Feed
+              onClick={() => setIsMore(false)}
+              src={image.uploadFileURL}
+            />
+            <SC.ContentContainer>
+              <SC.Wrap onClick={handlerClick} className="cursor-pointer">
                 <Profile size="sm" isgreen="false" url={userimg} />
-                <UserName>{username}</UserName>
-              </Wrap>
+                <SC.UserName>{username}</SC.UserName>
+              </SC.Wrap>
 
               {!isMore && (
-                <Wrap>
-                  <Context ismore="false">{context.slice(0, 15)}</Context>
+                <SC.Wrap>
+                  <SC.Context ismore="false">{context.slice(0, 15)}</SC.Context>
                   {context.length > 15 && (
-                    <More onClick={() => setIsMore(true)}>더보기</More>
+                    <SC.More onClick={() => setIsMore(true)}>더보기</SC.More>
                   )}
-                </Wrap>
+                </SC.Wrap>
               )}
 
               {isMore && (
-                <Wrap>
-                  <Context ismore="true">{context}</Context>
-                </Wrap>
+                <SC.Wrap>
+                  <SC.Context ismore="true">{context}</SC.Context>
+                </SC.Wrap>
               )}
-            </ContentContainer>
+            </SC.ContentContainer>
           </SwiperSlide>
         ))}
       </Swiper>
-    </Container>
+    </SC.Container>
   );
 }

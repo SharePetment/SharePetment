@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useMatch, useNavigate } from 'react-router-dom';
 import { useReadLocalStorage } from 'usehooks-ts';
-import { Container, Text } from './SideNav.styled.tsx';
+import * as SC from './SideNav.styled.tsx';
 import { patchMutation } from '@/api/mutationfn.ts';
 import { SERVER_URL } from '@/api/url.ts';
 import SideNavWrap from '@/components/card/sidenav/SideNavWrap.tsx';
@@ -92,14 +92,14 @@ export default function SideNav({
 
   return (
     <>
-      <Container direction={direction}>
+      <SC.Container direction={direction}>
         <SideNavWrap class="pl-2">
           <SideNavWrap.Like
             onClick={handleClickLike}
             isLike={isLike}
             accessToken={accessToken}
           />
-          <Text>{isLikes}</Text>
+          <SC.Text>{isLikes}</SC.Text>
         </SideNavWrap>
 
         {
@@ -135,7 +135,7 @@ export default function SideNav({
             </SideNavWrap>
           </>
         )}
-      </Container>
+      </SC.Container>
     </>
   );
 }

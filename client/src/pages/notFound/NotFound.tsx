@@ -6,12 +6,7 @@ import {
 import { ReactComponent as Error404 } from '@/assets/404.svg';
 import Cat404 from '@/assets/illustration/404cat.png';
 import Footer from '@/common/footer/Footer.tsx';
-import {
-  Container,
-  ErrorText,
-  ErrorMessage,
-  HomeBtn,
-} from '@/pages/notFound/NotFound.styled.tsx';
+import * as SC from '@/pages/notFound/NotFound.styled.tsx';
 import Path from '@/routers/paths.ts';
 
 export default function NotFound() {
@@ -32,15 +27,17 @@ export default function NotFound() {
   }
 
   return (
-    <Container>
+    <SC.Container>
       <Error404 width={300} height={100} />
       <img src={Cat404} width="300" />
       <div>
-        <ErrorText>죄송합니다. 페이지를 찾을 수 없습니다.</ErrorText>
-        <ErrorMessage>{errorMessage}</ErrorMessage>
+        <SC.ErrorText>죄송합니다. 페이지를 찾을 수 없습니다.</SC.ErrorText>
+        <SC.ErrorMessage>{errorMessage}</SC.ErrorMessage>
       </div>
-      <HomeBtn onClick={() => navigate(Path.Login)}>홈으로 돌아가기</HomeBtn>
+      <SC.HomeBtn onClick={() => navigate(Path.Login)}>
+        홈으로 돌아가기
+      </SC.HomeBtn>
       <Footer />
-    </Container>
+    </SC.Container>
   );
 }
