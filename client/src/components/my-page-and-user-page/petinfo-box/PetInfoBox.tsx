@@ -7,7 +7,7 @@ import {
   Name,
   NameBox,
   TextBox,
-} from '@/components/user_my_page/petinfo-box/petInfoBox.styled.tsx';
+} from '@/components/my-page-and-user-page/petinfo-box/petInfoBox.styled';
 
 interface Prop {
   name: string;

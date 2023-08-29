@@ -1,45 +1,25 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
-import React, { useState, useContext, useEffect } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
-import { useParams, Navigate, Link } from 'react-router-dom';
+import { useParams, Navigate } from 'react-router-dom';
 import { useReadLocalStorage } from 'usehooks-ts';
 import { getServerDataWithJwt } from '@/api/queryfn.ts';
 import { SERVER_URL } from '@/api/url.ts';
-import { ReactComponent as FeedIcon } from '@/assets/feed.svg';
-import { ReactComponent as WalkFeedIcon } from '@/assets/walk-feed.svg';
-import Profile from '@/common/profile/Profile.tsx';
-import WalkCard from '@/components/card/walk-card/walkCard.tsx';
 import FollowList from '@/components/follow-list/FollowList.tsx';
 import LoadingComponent from '@/components/loading/LoadingComponent.tsx';
-import NoticeNotWrite from '@/components/notice/NoticeNotWrite.tsx';
-import NoticeOnlyOwner from '@/components/notice/NoticeOnlyOwner.tsx';
+import PetContainerList from '@/components/my-page-and-user-page/pet-container-list/PetContainerList';
+import Tab from '@/components/my-page-and-user-page/tab/Tab';
+import TabDetail from '@/components/my-page-and-user-page/tab-detail/TabDetail';
+import UserBox from '@/components/my-page-and-user-page/user-box/UserBox';
 import NoticeServerError from '@/components/notice/NoticeServerError.tsx';
-import Subscribe from '@/components/subscribe/Subscribe.tsx';
-import PetInfoBox from '@/components/user_my_page/petinfo-box/PetInfoBox.tsx';
 import useGetQuery from '@/hook/api/query/useGetQuery';
 import useMypageQuery from '@/hook/api/query/useMypageQuery';
-import {
-  GridContainerFeed,
-  GridContainerWalk,
-  TabMenu,
-  TabMenuList,
-} from '@/pages/myPage/myPage.styled.tsx';
-import {
-  Container,
-  HightliteText,
-  ListBox,
-  PetBox,
-  UserBox,
-  UserInfoBox,
-  UserName,
-  UserNameBox,
-} from '@/pages/userpage/userPage.styled.tsx';
+import * as SC from '@/pages/userpage/userPage.styled.tsx';
 import Path from '@/routers/paths.ts';
 import { MemberIdContext } from '@/store/Context.tsx';
 import { Feed } from '@/types/feedTypes.ts';
 import { Follow } from '@/types/userType';
 import { WalkFeed } from '@/types/walkType.ts';
-import { changeDateFormat } from '@/util/changeDateFormat.ts';
 
 export function Component() {
   const { usersId } = useParams();
@@ -159,189 +139,64 @@ export function Component() {
       </div>
     );
   }
+
+  // 로딩시 화면 처리
+  if (isLoading || feedLoading || followingLoading) {
+    return <LoadingComponent />;
+  }
+
   return (
     <>
-      {!(!isLoading && !feedLoading && !followingLoading) ? (
-        <LoadingComponent />
-      ) : (
-        <>
-          <Container>
-            {/* 유저info */}
-            <UserBox>
-              <Profile
-                isgreen="true"
-                size="lg"
-                url={
-                  typeof data?.memberInfo === 'object'
-                    ? data?.memberInfo.imageURL
-                    : ''
-                }
+      <SC.Container>
+        {/* 유저info */}
+        <UserBox
+          data={data}
+          followingData={followingData}
+          handleOpenFollowingList={handleOpenFollowingList}
+          type="userPage"
+          isSubscribed={isSubscribed}
+          usersId={usersId}
+        />
+
+        {/* pet info */}
+        <PetContainerList data={data} type="userPage" />
+
+        {/* tab - 피드, 산책 */}
+        <SC.ListBox>
+          <Tab
+            type="userPage"
+            setCurrentTab={setCurrentTab}
+            currentTab={currentTab}
+          />
+          <div>
+            {/* 피드 */}
+            <div className={currentTab === 0 ? 'block' : 'hidden'}>
+              <TabDetail
+                feedData={feedData}
+                type="feed"
+                ref={feedListInView.ref}
+                isError={isFeedError}
               />
-              <UserNameBox className="flex items-center gap-4">
-                <UserName>{data?.memberInfo.nickname}</UserName>
-                <Subscribe guestFollow={isSubscribed} usersId={usersId} />
-              </UserNameBox>
-              <UserInfoBox>
-                <div>
-                  <span>게시물 </span>
-                  <HightliteText>{data?.feedCount || 0}</HightliteText>
-                </div>
-                <div>
-                  <span>랜선집사</span>
-                  <HightliteText> {data?.followerCount || 0}</HightliteText>
-                </div>
-                <div
-                  className="cursor-pointer"
-                  onClick={handleOpenFollowingList}>
-                  <span>구독 </span>
-                  <HightliteText>{followingData?.length || 0}</HightliteText>
-                </div>
-              </UserInfoBox>
-            </UserBox>
-            {/* pet info */}
-            <PetBox>
-              {Array.isArray(data?.pets) && (
-                <>
-                  {data?.pets.map(
-                    (
-                      { images: { uploadFileURL }, name, information, sex },
-                      index,
-                    ) => (
-                      <PetInfoBox
-                        key={index}
-                        name={name}
-                        information={information}
-                        sex={sex}
-                        uploadFileURL={uploadFileURL}
-                      />
-                    ),
-                  )}
-                </>
-              )}
-            </PetBox>
-            {/* tab - 피드, 산책 */}
-            <ListBox>
-              <TabMenu>
-                <TabMenuList
-                  onClick={() => setCurrentTab(0)}
-                  className={
-                    currentTab === 0
-                      ? `border-t-2 border-t-[green] `
-                      : undefined
-                  }>
-                  <FeedIcon
-                    stroke={currentTab === 0 ? `#69B783` : '#d4d4d8'}
-                    className="cursor-pointer"
-                  />
-                </TabMenuList>
-                <TabMenuList
-                  onClick={() => setCurrentTab(1)}
-                  className={
-                    currentTab === 1 ? `border-t-2 border-t-[green]` : undefined
-                  }>
-                  <WalkFeedIcon
-                    fill={currentTab === 1 ? `#69B783` : '#d4d4d8'}
-                    className="cursor-pointer"
-                  />
-                </TabMenuList>
-              </TabMenu>
-              <div>
-                {/* 피드 */}
-                <div className={currentTab === 0 ? 'block' : 'hidden'}>
-                  <div>
-                    {feedData === undefined ? (
-                      <>
-                        {isFeedError ? (
-                          <NoticeServerError />
-                        ) : (
-                          <NoticeNotWrite />
-                        )}
-                      </>
-                    ) : (
-                      <>
-                        <GridContainerFeed>
-                          {feedData.pages.map((page, index) => (
-                            <React.Fragment key={index}>
-                              {page.map(item => (
-                                <Link
-                                  to={`${Path.Home}/${item.feedId}`}
-                                  key={item.feedId}>
-                                  <img
-                                    className="w-full h-[180px] rounded-[28px] object-cover border hover:drop-shadow-lg transition-all delay-100"
-                                    src={
-                                      item.images[0]
-                                        ? item.images[0].uploadFileURL
-                                        : ''
-                                    }
-                                  />
-                                </Link>
-                              ))}
-                            </React.Fragment>
-                          ))}
-                        </GridContainerFeed>
-                        <div ref={feedListInView.ref}></div>
-                      </>
-                    )}
-                  </div>
-                </div>
-                {/* 산책 게시물 */}
-                <div className={currentTab === 1 ? 'block' : 'hidden'}>
-                  <div className="flex justify-center">
-                    {!myData?.animalParents ? (
-                      <NoticeOnlyOwner />
-                    ) : (
-                      <>
-                        {isWalkFeedError ? (
-                          <NoticeServerError />
-                        ) : (
-                          <>
-                            {!walkFeedData?.pages[0]?.length ? (
-                              <NoticeNotWrite />
-                            ) : (
-                              <div>
-                                <GridContainerWalk>
-                                  {walkFeedData?.pages.map((page, index) => (
-                                    <React.Fragment key={index}>
-                                      {page.map(item => (
-                                        <Link
-                                          to={`${Path.WalkMate}/${item.walkMatePostId}`}
-                                          key={item.walkMatePostId}>
-                                          <WalkCard
-                                            size="sm"
-                                            time={changeDateFormat(item.time)}
-                                            title={item.title}
-                                            friends={item.maximum}
-                                            location={item.location}
-                                            isclosed={`${item.open}`}
-                                            nickname={item.memberInfo.nickname}
-                                            imageURL={item.memberInfo.imageURL}
-                                            key={item.walkMatePostId}
-                                          />
-                                        </Link>
-                                      ))}
-                                    </React.Fragment>
-                                  ))}
-                                </GridContainerWalk>
-                                <div ref={walkListInView.ref}></div>
-                              </div>
-                            )}
-                          </>
-                        )}
-                      </>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </ListBox>
-          </Container>
-          {isListShowed && (
-            <FollowList
-              setIsListShowed={setIsListShowed}
-              follow={followingData}
-              path={'user'}
-            />
-          )}
-        </>
+            </div>
+            {/* 산책 게시물 */}
+            <div className={currentTab === 1 ? 'block' : 'hidden'}>
+              <TabDetail
+                walkData={walkFeedData}
+                type="walkFeed"
+                ref={walkListInView.ref}
+                isError={isWalkFeedError}
+                isPet={myData?.animalParents}
+              />
+            </div>
+          </div>
+        </SC.ListBox>
+      </SC.Container>
+      {isListShowed && (
+        <FollowList
+          setIsListShowed={setIsListShowed}
+          follow={followingData}
+          path={'user'}
+        />
       )}
     </>
   );
