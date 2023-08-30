@@ -1,5 +1,29 @@
 import tw from 'tailwind-styled-components';
 
+export const WalkMateContainer = tw.div`
+  max-w-[1028px]
+  mx-auto
+  mt-10
+  px-6
+  max-sm:flex
+  max-sm:flex-col
+  max-sm:items-center
+`;
+
+export const ButtonWrap = tw.div`
+  grid
+  grid-cols-[max-content_max-content]
+  gap-y-6
+  gap-x-4
+  max-sm:gap-x-2
+`;
+
+export const Wrap = tw.div`
+  flex
+  gap-4
+  max-sm:gap-2
+`;
+
 export const SearchButton = tw.button`
   w-20 
   max-sm:w-[80px]
