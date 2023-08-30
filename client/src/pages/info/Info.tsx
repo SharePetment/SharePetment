@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import {
   useLocation,
@@ -97,12 +97,6 @@ export function Component() {
       userQuitMutation.mutate(body);
     }
   };
-
-  useEffect(() => {
-    if (!accessToken) {
-      navigate(Path.Login);
-    }
-  }, [accessToken, navigate]);
 
   if (userId) {
     return (
