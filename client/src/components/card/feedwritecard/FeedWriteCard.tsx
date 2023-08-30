@@ -9,15 +9,7 @@ import { ReactComponent as Plus } from '@/assets/button/plus.svg';
 import { ReactComponent as Write } from '@/assets/button/write.svg';
 import AlertText from '@/common/popup/AlertText';
 import Popup from '@/common/popup/Popup.tsx';
-import {
-  Container,
-  Wrap,
-  Title,
-  Pluslabel,
-  Form,
-  Textarea,
-  SubmitBtn,
-} from '@/components/card/feedwritecard/FeedWriteCard.styled.tsx';
+import * as SC from '@/components/card/feedwritecard/FeedWriteCard.styled.tsx';
 import LoadingComponent from '@/components/loading/LoadingComponent.tsx';
 import NoticeServerError from '@/components/notice/NoticeServerError.tsx';
 import usePatchFormMutation from '@/hook/api/mutation/usePatchFormMutation';
@@ -140,15 +132,15 @@ export default function FeedWriteCard() {
         onClick={e => {
           if (e.target === e.currentTarget) navigate(-1);
         }}>
-        <Container>
+        <SC.Container>
           <Close
             className="absolute right-6 top-6 cursor-pointer"
             fill="black"
             onClick={() => navigate(-1)}
           />
-          <Wrap>
-            <Title>게시물 작성</Title>
-          </Wrap>
+          <SC.Wrap>
+            <SC.Title>게시물 작성</SC.Title>
+          </SC.Wrap>
 
           <Swiper
             pagination={{
@@ -175,10 +167,10 @@ export default function FeedWriteCard() {
 
             {savedFile.length < 3 && (
               <SwiperSlide>
-                <Form>
-                  <Pluslabel htmlFor="feedimg">
+                <SC.Form>
+                  <SC.Pluslabel htmlFor="feedimg">
                     <Plus className="w-full mt-[180px]" />
-                  </Pluslabel>
+                  </SC.Pluslabel>
                   <input
                     id="feedimg"
                     type="file"
@@ -187,20 +179,20 @@ export default function FeedWriteCard() {
                     style={{ display: 'none' }}
                     multiple
                   />
-                </Form>
+                </SC.Form>
               </SwiperSlide>
             )}
           </Swiper>
 
-          <Textarea
+          <SC.Textarea
             placeholder="글을 입력해주세요."
             maxLength={200}
             ref={textRef}
           />
-          <SubmitBtn type="button" onClick={handleSubmit}>
+          <SC.SubmitBtn type="button" onClick={handleSubmit}>
             <Write />
-          </SubmitBtn>
-        </Container>
+          </SC.SubmitBtn>
+        </SC.Container>
       </div>
     </>
   );

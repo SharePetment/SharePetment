@@ -10,3 +10,8 @@ export const Container = tw.div`
   pt-20
   mb-10
 `;
+
+export const LoadingWrap = tw.div`
+  relative
+  pt-10
+`;

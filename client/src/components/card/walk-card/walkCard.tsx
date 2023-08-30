@@ -1,12 +1,4 @@
-import {
-  CardContainer,
-  WalkDate,
-  Title,
-  WalkMateList,
-  WalkMateItem,
-  LocationTitle,
-  WriterProfile,
-} from './walkCard.styled';
+import * as SC from './walkCard.styled';
 import { ReactComponent as Dog } from '@/assets/dog.svg';
 import { ReactComponent as Pin } from '@/assets/pin.svg';
 import Profile from '@/common/profile/Profile.tsx';
@@ -36,34 +28,34 @@ export default function WalkCard({
   imageURL,
 }: walkCardProps) {
   return (
-    <CardContainer size={size}>
+    <SC.CardContainer size={size}>
       {/* 요일 */}
-      <WalkDate>
+      <SC.WalkDate>
         <div className="text-xs">산책날짜</div>
         <div className=" whitespace-nowrap overflow-hidden">{time}</div>
-      </WalkDate>
+      </SC.WalkDate>
 
       {/* 제목 */}
-      <Title>{title}</Title>
+      <SC.Title>{title}</SC.Title>
 
-      <WalkMateList>
+      <SC.WalkMateList>
         {/* 허용 반려동물 수 */}
-        <WalkMateItem>
+        <SC.WalkMateItem>
           <Dog className="shrink-0" />
           <span>{friends}마리</span>
-        </WalkMateItem>
+        </SC.WalkMateItem>
         {/* 위치 정보 표시 */}
-        <WalkMateItem>
+        <SC.WalkMateItem>
           <Pin className="shrink-0" />
-          <LocationTitle>{location}</LocationTitle>
-        </WalkMateItem>
-      </WalkMateList>
+          <SC.LocationTitle>{location}</SC.LocationTitle>
+        </SC.WalkMateItem>
+      </SC.WalkMateList>
 
       {/* 하단 프로필 */}
-      <WriterProfile>
+      <SC.WriterProfile>
         <Profile size="sm" url={imageURL} isgreen="false" />
         <span className="text-semibold">{nickname}</span>
-      </WriterProfile>
+      </SC.WriterProfile>
 
       {/* 모집완료 처리 */}
       {isclosed === 'false' && (
@@ -71,6 +63,6 @@ export default function WalkCard({
           <CompleteBox size={size} />
         </>
       )}
-    </CardContainer>
+    </SC.CardContainer>
   );
 }

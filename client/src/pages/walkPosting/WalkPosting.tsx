@@ -8,18 +8,13 @@ import { postWalkFeed } from '@/api/mutationfn.ts';
 import { SERVER_URL } from '@/api/url.ts';
 import { ReactComponent as Close } from '@/assets/button/close.svg';
 import Button from '@/common/button/Button.tsx';
-import {
-  ErrorNotice,
-  InputContainer,
-  InputText,
-  Label,
-} from '@/common/input/Input.styled.tsx';
+import * as SCINPUT from '@/common/input/Input.styled.tsx';
 import AlertText from '@/common/popup/AlertText';
 import Popup from '@/common/popup/Popup.tsx';
 import { Textarea } from '@/components/card/feedwritecard/FeedWriteCard.styled.tsx';
 import Map from '@/components/map-make/Map.tsx';
 import useMypageQuery from '@/hook/api/query/useMypageQuery';
-import { PostForm } from '@/pages/walkPosting/WalkPosting.styled.tsx';
+import * as SC from '@/pages/walkPosting/WalkPosting.styled.tsx';
 import Path from '@/routers/paths.ts';
 import { WalkFeed } from '@/types/walkType.ts';
 
@@ -31,7 +26,6 @@ interface Inputs {
   maximum: number;
   content: string;
 }
-
 export function Component() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -99,11 +93,11 @@ export function Component() {
           />
         </div>
 
-        <PostForm onSubmit={handleSubmit(onSumbit)}>
+        <SC.PostForm onSubmit={handleSubmit(onSumbit)}>
           {/* 제목 */}
-          <InputContainer>
-            <Label htmlFor="title">제목</Label>
-            <InputText
+          <SCINPUT.InputContainer>
+            <SCINPUT.Label htmlFor="title">제목</SCINPUT.Label>
+            <SCINPUT.InputText
               id="title"
               {...register('title', {
                 required: '필수입니다.',
@@ -117,14 +111,16 @@ export function Component() {
             <ErrorMessage
               errors={errors}
               name="title"
-              render={({ message }) => <ErrorNotice>{message}</ErrorNotice>}
+              render={({ message }) => (
+                <SCINPUT.ErrorNotice>{message}</SCINPUT.ErrorNotice>
+              )}
             />
-          </InputContainer>
+          </SCINPUT.InputContainer>
 
           {/* 날짜 */}
-          <InputContainer>
-            <Label htmlFor="time">날짜를 선택해주세요</Label>
-            <InputText
+          <SCINPUT.InputContainer>
+            <SCINPUT.Label htmlFor="time">날짜를 선택해주세요</SCINPUT.Label>
+            <SCINPUT.InputText
               id="time"
               className=" cursor-pointer"
               type="datetime-local"
@@ -140,14 +136,18 @@ export function Component() {
             <ErrorMessage
               errors={errors}
               name="time"
-              render={({ message }) => <ErrorNotice>{message}</ErrorNotice>}
+              render={({ message }) => (
+                <SCINPUT.ErrorNotice>{message}</SCINPUT.ErrorNotice>
+              )}
             />
-          </InputContainer>
+          </SCINPUT.InputContainer>
 
           {/* 장소 */}
-          <InputContainer>
-            <Label htmlFor="location">산책 장소를 알려주세요</Label>
-            <InputText
+          <SCINPUT.InputContainer>
+            <SCINPUT.Label htmlFor="location">
+              산책 장소를 알려주세요
+            </SCINPUT.Label>
+            <SCINPUT.InputText
               className=" cursor-pointer"
               id="location"
               type="text"
@@ -162,9 +162,11 @@ export function Component() {
             <ErrorMessage
               errors={errors}
               name="location"
-              render={({ message }) => <ErrorNotice>{message}</ErrorNotice>}
+              render={({ message }) => (
+                <SCINPUT.ErrorNotice>{message}</SCINPUT.ErrorNotice>
+              )}
             />
-          </InputContainer>
+          </SCINPUT.InputContainer>
           <Map
             mainAddress={mainAddress}
             setMainAddress={setMainAddress}
@@ -172,9 +174,9 @@ export function Component() {
             setCoordinates={setCoordinates}
           />
           {/* 오픈채팅 url */}
-          <InputContainer>
-            <Label htmlFor="chatURL">오픈채팅 링크</Label>
-            <InputText
+          <SCINPUT.InputContainer>
+            <SCINPUT.Label htmlFor="chatURL">오픈채팅 링크</SCINPUT.Label>
+            <SCINPUT.InputText
               id="chatURL"
               type="text"
               placeholder="(필수X)채팅방 링크가 있다면 입력해주세요:) "
@@ -189,14 +191,18 @@ export function Component() {
             <ErrorMessage
               errors={errors}
               name="chatURL"
-              render={({ message }) => <ErrorNotice>{message}</ErrorNotice>}
+              render={({ message }) => (
+                <SCINPUT.ErrorNotice>{message}</SCINPUT.ErrorNotice>
+              )}
             />
-          </InputContainer>
+          </SCINPUT.InputContainer>
 
           {/* 산책 마리수 */}
-          <InputContainer>
-            <Label htmlFor="maximum">산책 친구들은 몇 마리면 좋을까요?</Label>
-            <InputText
+          <SCINPUT.InputContainer>
+            <SCINPUT.Label htmlFor="maximum">
+              산책 친구들은 몇 마리면 좋을까요?
+            </SCINPUT.Label>
+            <SCINPUT.InputText
               id="maximum"
               type="number"
               {...register('maximum', {
@@ -215,9 +221,11 @@ export function Component() {
             <ErrorMessage
               errors={errors}
               name="maximum"
-              render={({ message }) => <ErrorNotice>{message}</ErrorNotice>}
+              render={({ message }) => (
+                <SCINPUT.ErrorNotice>{message}</SCINPUT.ErrorNotice>
+              )}
             />
-          </InputContainer>
+          </SCINPUT.InputContainer>
 
           {/* 텍스트 입력창 */}
           <Textarea
@@ -228,7 +236,7 @@ export function Component() {
           />
 
           <Button size="lg" text="게시물 작성" isgreen="true" />
-        </PostForm>
+        </SC.PostForm>
       </main>
       {isError && (
         <Popup

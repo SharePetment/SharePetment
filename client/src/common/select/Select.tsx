@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { SelectContainer } from '@/common/select/select.styled.tsx';
+import * as SC from '@/common/select/select.styled.tsx';
 import SelectComponent from '@/common/select/SelectComponent';
 import useZipCode from '@/hook/useZipCode.tsx';
 import { Size } from '@/types/propType.ts';
@@ -78,7 +78,7 @@ export default function Select({ size, direction, setZip }: Prop) {
   return (
     <>
       {
-        <SelectContainer direction={direction}>
+        <SC.SelectContainer direction={direction}>
           <SelectComponent
             name={'country'}
             size={size}
@@ -103,7 +103,7 @@ export default function Select({ size, direction, setZip }: Prop) {
             data={villageData}
             isLoading={villageLoading}
           />
-        </SelectContainer>
+        </SC.SelectContainer>
       }
     </>
   );

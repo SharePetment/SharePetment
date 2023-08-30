@@ -1,7 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { Navigation } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { SetValue } from 'usehooks-ts';
 import LyingDownDog from '@/assets/illustration/lying-down-dog.png';
 import PetFriends from '@/assets/illustration/pet-friends.png';
 import * as SC from '@/common/popup/popup.styled.tsx';
@@ -12,7 +11,7 @@ import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 
 type Prop = {
-  setFirstVisited: SetValue<boolean>;
+  setFirstVisited: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export default function WelcomePopup({ setFirstVisited }: Prop) {

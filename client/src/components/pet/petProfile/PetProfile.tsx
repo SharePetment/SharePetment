@@ -4,15 +4,7 @@ import Button from '../../../common/button/Button.tsx';
 import Popup from '../../../common/popup/Popup.tsx';
 import Profile from '../../../common/profile/Profile.tsx';
 import Spin from '../../spin/Spin.tsx';
-import {
-  ButtonBox,
-  CropDiv,
-  Label,
-  PetProfileDiv,
-  ProfileHeader,
-  ProfileTail,
-  ProfileText,
-} from './petProfile.styled';
+import * as SC from './petProfile.styled';
 import AlertText from '@/common/popup/AlertText.ts';
 import 'cropperjs/dist/cropper.css';
 import { handleCropperData, handlePetImage } from '@/util/petImage.ts';
@@ -48,15 +40,15 @@ export default function PetProfile({
 
   return (
     <>
-      <PetProfileDiv>
-        <ProfileHeader>
+      <SC.PetProfileDiv>
+        <SC.ProfileHeader>
           <Profile isgreen="false" size="md" url={image} />
-          <ProfileText>
+          <SC.ProfileText>
             반려동물 이미지를
             <br /> 사용해주세요!
-          </ProfileText>
-        </ProfileHeader>
-        <ProfileTail>
+          </SC.ProfileText>
+        </SC.ProfileHeader>
+        <SC.ProfileTail>
           <input
             type="file"
             accept="image/*"
@@ -64,11 +56,11 @@ export default function PetProfile({
             onChange={handleProfile}
             className="hidden"
           />
-          <Label htmlFor="petImage">프로필 등록</Label>
-        </ProfileTail>
-      </PetProfileDiv>
+          <SC.Label htmlFor="petImage">프로필 등록</SC.Label>
+        </SC.ProfileTail>
+      </SC.PetProfileDiv>
       {isViewImageCropper && (
-        <CropDiv>
+        <SC.CropDiv>
           <Cropper
             ref={cropperRef}
             src={image}
@@ -81,7 +73,7 @@ export default function PetProfile({
             className="w-[400px] h-[400px] max-sm:w-[300px] max-sm:h-[300px]"
           />
           {!isLoading && (
-            <ButtonBox>
+            <SC.ButtonBox>
               <Button
                 text="선택"
                 isgreen="true"
@@ -103,10 +95,10 @@ export default function PetProfile({
                 handler={handleCancle}
                 size="sm"
               />
-            </ButtonBox>
+            </SC.ButtonBox>
           )}
           {isLoading && <Spin></Spin>}
-        </CropDiv>
+        </SC.CropDiv>
       )}
       {isError && (
         <Popup

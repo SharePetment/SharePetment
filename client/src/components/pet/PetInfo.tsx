@@ -7,16 +7,11 @@ import { ReactComponent as Close } from '@/assets/button/close.svg';
 import { ReactComponent as Man } from '@/assets/label/man.svg';
 import { ReactComponent as Woman } from '@/assets/label/woman.svg';
 import Button from '@/common/button/Button.tsx';
-import {
-  ErrorNotice,
-  InputContainer,
-  InputText,
-  Label,
-} from '@/common/input/Input.styled.tsx';
+import * as SCINPUT from '@/common/input/Input.styled.tsx';
 import AlertText from '@/common/popup/AlertText';
-import { PopupBackGround } from '@/common/popup/popup.styled.tsx';
+import * as SC from '@/common/popup/popup.styled.tsx';
 import Popup from '@/common/popup/Popup.tsx';
-import { Container, Form, RadioBox } from '@/components/pet/petInfo.styled.tsx';
+import * as SCPET from '@/components/pet/petInfo.styled.tsx';
 import PetProfile from '@/components/pet/petProfile/PetProfile.tsx';
 import usePatchFormMutation from '@/hook/api/mutation/usePatchFormMutation';
 import usePostFormMutation from '@/hook/api/mutation/usePostFormMutation';
@@ -124,8 +119,8 @@ export default function PetInfo(prop: Prop) {
   const onSubmit: SubmitHandler<Inputs> = data => handlePetPost(data);
   return (
     <>
-      <PopupBackGround>
-        <Container
+      <SC.PopupBackGround>
+        <SCPET.Container
           onClick={e => {
             e.stopPropagation();
           }}>
@@ -142,10 +137,10 @@ export default function PetInfo(prop: Prop) {
             baseImage={profile as string}
             setFile={setFile}
           />
-          <Form onSubmit={handleSubmit(onSubmit)}>
-            <InputContainer>
-              <Label htmlFor="name">이름</Label>
-              <InputText
+          <SCPET.Form onSubmit={handleSubmit(onSubmit)}>
+            <SCINPUT.InputContainer>
+              <SCINPUT.Label htmlFor="name">이름</SCINPUT.Label>
+              <SCINPUT.InputText
                 defaultValue={name ? name : ''}
                 {...register('name', {
                   required: '텍스트 필수입니다.',
@@ -168,12 +163,14 @@ export default function PetInfo(prop: Prop) {
               <ErrorMessage
                 errors={errors}
                 name="name"
-                render={({ message }) => <ErrorNotice>{message}</ErrorNotice>}
+                render={({ message }) => (
+                  <SCINPUT.ErrorNotice>{message}</SCINPUT.ErrorNotice>
+                )}
               />
-            </InputContainer>
-            <InputContainer>
-              <Label htmlFor="age">나이</Label>
-              <InputText
+            </SCINPUT.InputContainer>
+            <SCINPUT.InputContainer>
+              <SCINPUT.Label htmlFor="age">나이</SCINPUT.Label>
+              <SCINPUT.InputText
                 defaultValue={age ? age : 0}
                 {...register('age', {
                   required: '텍스트 필수입니다.',
@@ -193,12 +190,14 @@ export default function PetInfo(prop: Prop) {
               <ErrorMessage
                 errors={errors}
                 name="age"
-                render={({ message }) => <ErrorNotice>{message}</ErrorNotice>}
+                render={({ message }) => (
+                  <SCINPUT.ErrorNotice>{message}</SCINPUT.ErrorNotice>
+                )}
               />
-            </InputContainer>
-            <InputContainer>
-              <Label>성별</Label>
-              <RadioBox>
+            </SCINPUT.InputContainer>
+            <SCINPUT.InputContainer>
+              <SCINPUT.Label>성별</SCINPUT.Label>
+              <SCPET.RadioBox>
                 <div className="flex items-center">
                   <label htmlFor="man" className="mr-2">
                     <Man />
@@ -231,15 +230,15 @@ export default function PetInfo(prop: Prop) {
                     errors={errors}
                     name="radio"
                     render={({ message }) => (
-                      <ErrorNotice>{message}</ErrorNotice>
+                      <SCINPUT.ErrorNotice>{message}</SCINPUT.ErrorNotice>
                     )}
                   />
                 </div>
-              </RadioBox>
-            </InputContainer>
-            <InputContainer>
-              <Label htmlFor="information">짧은 자기소개</Label>
-              <InputText
+              </SCPET.RadioBox>
+            </SCINPUT.InputContainer>
+            <SCINPUT.InputContainer>
+              <SCINPUT.Label htmlFor="information">짧은 자기소개</SCINPUT.Label>
+              <SCINPUT.InputText
                 defaultValue={information ? information : ''}
                 {...register('information', {
                   maxLength: {
@@ -253,18 +252,20 @@ export default function PetInfo(prop: Prop) {
               <ErrorMessage
                 errors={errors}
                 name="information"
-                render={({ message }) => <ErrorNotice>{message}</ErrorNotice>}
+                render={({ message }) => (
+                  <SCINPUT.ErrorNotice>{message}</SCINPUT.ErrorNotice>
+                )}
               />
-            </InputContainer>
+            </SCINPUT.InputContainer>
             <Button
               text="반려동물 등록"
               isgreen="true"
               size="lg"
               disabled={isDisabled}
             />
-          </Form>
-        </Container>
-      </PopupBackGround>
+          </SCPET.Form>
+        </SCPET.Container>
+      </SC.PopupBackGround>
       {isError && (
         <Popup
           popupcontrol={() => {

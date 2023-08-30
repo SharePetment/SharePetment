@@ -4,14 +4,7 @@ import { useReadLocalStorage } from 'usehooks-ts';
 import AlertText from '../popup/AlertText';
 import { SERVER_URL } from '@/api/url.ts';
 import { ReactComponent as Write } from '@/assets/button/write.svg';
-import {
-  Container,
-  ContentBox,
-  Content,
-  Input,
-  WriteBtn,
-  Form,
-} from '@/common/comment/comment.styled';
+import * as SC from '@/common/comment/comment.styled';
 import CommentHeader from '@/common/comment/CommentHeader';
 import Popup from '@/common/popup/Popup';
 import UseDeleteCommentMutation from '@/hook/api/mutation/useDeleteCommentMutation';
@@ -116,7 +109,7 @@ export default function Comment(props: CommentProp) {
 
   return (
     <>
-      <Container>
+      <SC.Container>
         <div>
           {/* 유저 정보 기입 */}
           <CommentHeader
@@ -128,10 +121,10 @@ export default function Comment(props: CommentProp) {
             setIsDeleted={setIsDeleted}
           />
           {/* 댓글 작성 */}
-          <ContentBox>
+          <SC.ContentBox>
             {isEdited ? (
-              <Form onSubmit={handleSubmit(onSubmit)}>
-                <Input
+              <SC.Form onSubmit={handleSubmit(onSubmit)}>
+                <SC.Input
                   defaultValue={text}
                   {...register('comment', {
                     required: '텍스트 필수',
@@ -140,7 +133,7 @@ export default function Comment(props: CommentProp) {
                       value.trim().length !== 0 || '공백만 안됨',
                   })}
                 />
-                <WriteBtn>
+                <SC.WriteBtn>
                   <Write
                     type="submit"
                     className={
@@ -149,14 +142,14 @@ export default function Comment(props: CommentProp) {
                         : 'stroke-lightgray cursor-default'
                     }
                   />
-                </WriteBtn>
-              </Form>
+                </SC.WriteBtn>
+              </SC.Form>
             ) : (
-              <Content>{content}</Content>
+              <SC.Content>{content}</SC.Content>
             )}
-          </ContentBox>
+          </SC.ContentBox>
         </div>
-      </Container>
+      </SC.Container>
       {isDeleted && (
         <Popup
           title={AlertText.Delete}

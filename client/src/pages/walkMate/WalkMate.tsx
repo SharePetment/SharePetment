@@ -7,18 +7,14 @@ import { ReactComponent as Plus } from '@/assets/button/plus.svg';
 import { GridContainer } from '@/common/grid/Grid.styled.tsx';
 import Select from '@/common/select/Select.tsx';
 import { CardContainer } from '@/components/card/walk-card/walkCard.styled.tsx';
-import WalkCard from '@/components/card/walk-card/walkCard.tsx';
 import LoadingComponent from '@/components/loading/LoadingComponent.tsx';
 import NoticeServerError from '@/components/notice/NoticeServerError.tsx';
+import WalkCardWrap from '@/components/walkmate-page/WalkCardWrap';
 import UseInfinityScroll from '@/hook/api/query/useInfinityScroll';
 import useMypageQuery from '@/hook/api/query/useMypageQuery';
-import {
-  FilterButton,
-  SearchButton,
-} from '@/pages/walkMate/WalkMate.styled.tsx';
+import * as SC from '@/pages/walkMate/WalkMate.styled.tsx';
 import Path from '@/routers/paths.ts';
 import { WalkFeed } from '@/types/walkType.ts';
-import { changeDateFormat } from '@/util/changeDateFormat.ts';
 
 export function Component() {
   const navigate = useNavigate();
@@ -90,28 +86,30 @@ export function Component() {
   }
 
   return (
-    <div className="max-w-[1028px] mx-auto mt-10 px-6 max-sm:flex max-sm:flex-col max-sm:items-center">
-      <div className="grid grid-cols-[max-content_max-content] gap-y-6 gap-x-4 max-sm:gap-x-2">
+    <SC.WalkMateContainer>
+      <SC.ButtonWrap>
         <Select size="md" direction="row" setZip={setZip} />
-        <SearchButton onClick={handleClickSearchAddress}>검색</SearchButton>
-        <div className="flex gap-4 max-sm:gap-2">
-          <FilterButton
+        <SC.SearchButton onClick={handleClickSearchAddress}>
+          검색
+        </SC.SearchButton>
+        <SC.Wrap>
+          <SC.FilterButton
             totalactive={showFilteredList}
             onClick={() => setShowFilteredList('total')}>
             전체
-          </FilterButton>
-          <FilterButton
+          </SC.FilterButton>
+          <SC.FilterButton
             advertiseactive={showFilteredList}
             onClick={() => setShowFilteredList('advertise')}>
             모집 중
-          </FilterButton>
-        </div>
-      </div>
+          </SC.FilterButton>
+        </SC.Wrap>
+      </SC.ButtonWrap>
 
       <GridContainer>
         <Link to={Path.WalkPosting} className="w-full">
           <CardContainer size="lg" className="items-center justify-center">
-            <Plus className=" w-8 h-8" />
+            <Plus className="w-8 h-8" />
           </CardContainer>
         </Link>
 
@@ -121,22 +119,7 @@ export function Component() {
               data?.pages.map((page, index) => (
                 <React.Fragment key={index}>
                   {page.map(item => (
-                    <Link
-                      to={`/walkmate/${item.walkMatePostId}`}
-                      key={item.walkMatePostId}
-                      className="w-full">
-                      <WalkCard
-                        size="lg"
-                        time={changeDateFormat(item.time)}
-                        title={item.title}
-                        friends={item.maximum}
-                        location={item.location}
-                        isclosed={`${item.open}`}
-                        nickname={item.memberInfo.nickname}
-                        imageURL={item.memberInfo.imageURL}
-                        key={item.walkMatePostId}
-                      />
-                    </Link>
+                    <WalkCardWrap item={item} />
                   ))}
                 </React.Fragment>
               ))}
@@ -147,22 +130,7 @@ export function Component() {
               advertiseData?.pages.map((page, index) => (
                 <React.Fragment key={index}>
                   {page.map(item => (
-                    <Link
-                      to={`${Path.WalkMate}/${item.walkMatePostId}`}
-                      key={item.walkMatePostId}
-                      className="w-full">
-                      <WalkCard
-                        size="lg"
-                        time={changeDateFormat(item.time)}
-                        title={item.title}
-                        friends={item.maximum}
-                        location={item.location}
-                        isclosed={`${item.open}`}
-                        nickname={item.memberInfo.nickname}
-                        imageURL={item.memberInfo.imageURL}
-                        key={item.walkMatePostId}
-                      />
-                    </Link>
+                    <WalkCardWrap item={item} />
                   ))}
                 </React.Fragment>
               ))}
@@ -170,7 +138,7 @@ export function Component() {
         )}
       </GridContainer>
       <div ref={ref}></div>
-    </div>
+    </SC.WalkMateContainer>
   );
 }
 

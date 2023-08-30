@@ -1,14 +1,6 @@
 import { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import {
-  DateText,
-  UserBox,
-  UserName,
-  EditBtn,
-  DeleteBtn,
-  BtnBox,
-  HeaderBox,
-} from '@/common/comment/comment.styled';
+import * as SC from '@/common/comment/comment.styled';
 import Profile from '@/common/profile/Profile';
 import Path from '@/routers/paths';
 import { MemberIdContext, State } from '@/store/Context';
@@ -34,30 +26,30 @@ export default function CommentHeader({
   const { memberId: userId } = useContext(MemberIdContext) as State;
 
   return (
-    <HeaderBox>
+    <SC.HeaderBox>
       <Link to={`${Path.User}/${memberId}`} className="hover:cursor-pointer">
-        <UserBox>
+        <SC.UserBox>
           <Profile size="sm" url={imageURL} isgreen={'false'} />
-          <UserName>{nickname}</UserName>
-          <DateText>{changeTime(createdAt)}</DateText>
-        </UserBox>
+          <SC.UserName>{nickname}</SC.UserName>
+          <SC.DateText>{changeTime(createdAt)}</SC.DateText>
+        </SC.UserBox>
       </Link>
       {userId === `${memberId}` && (
-        <BtnBox>
-          <EditBtn
+        <SC.BtnBox>
+          <SC.EditBtn
             onClick={() => {
               setIsEdited(prev => !prev);
             }}>
             수정
-          </EditBtn>
-          <DeleteBtn
+          </SC.EditBtn>
+          <SC.DeleteBtn
             onClick={() => {
               setIsDeleted(true);
             }}>
             삭제
-          </DeleteBtn>
-        </BtnBox>
+          </SC.DeleteBtn>
+        </SC.BtnBox>
       )}
-    </HeaderBox>
+    </SC.HeaderBox>
   );
 }

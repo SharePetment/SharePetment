@@ -4,14 +4,8 @@ import PetInfoBox from '../petinfo-box/PetInfoBox.tsx';
 import { SERVER_URL } from '@/api/url.ts';
 import AlertText from '@/common/popup/AlertText.ts';
 import Popup from '@/common/popup/Popup.tsx';
+import * as SC from '@/components/my-page-and-user-page/pet-container/petContainer.styled.tsx';
 import PetInfo from '@/components/pet/PetInfo.tsx';
-import {
-  Container,
-  DeletePet,
-  PetCheckFalse,
-  PetCheckTrue,
-  SettingPet,
-} from '@/components/user_my_page/pet-container/petContainer.styled.tsx';
 import useDeleteMutation from '@/hook/api/mutation/useDeleteMutation.tsx';
 import usePatchMutation from '@/hook/api/mutation/usePatchMutation.tsx';
 
@@ -93,14 +87,16 @@ export default function PetContainer(prop: Prop) {
 
   return (
     <>
-      <Container>
+      <SC.Container>
         {isPetCheck !== index && (
-          <PetCheckFalse
+          <SC.PetCheckFalse
             onClick={() => handleChangeUserProfile(petId, index)}
           />
         )}
         {isPetCheck === index && (
-          <PetCheckTrue onClick={() => handleChangeUserProfile(petId, index)} />
+          <SC.PetCheckTrue
+            onClick={() => handleChangeUserProfile(petId, index)}
+          />
         )}
         <PetInfoBox
           name={name}
@@ -108,9 +104,9 @@ export default function PetContainer(prop: Prop) {
           information={information}
           sex={sex}
         />
-        <DeletePet onClick={handleOpenDeletePopup} stroke="black" />
-        <SettingPet onClick={handlePetEditPopUp} />
-      </Container>
+        <SC.DeletePet onClick={handleOpenDeletePopup} stroke="black" />
+        <SC.SettingPet onClick={handlePetEditPopUp} />
+      </SC.Container>
       {isPetOpened && (
         <PetInfo
           method="patch"
