@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { useReadLocalStorage } from 'usehooks-ts';
 import { SERVER_URL } from '@/api/url.ts';
 import { InputText } from '@/common/input/Input.styled.tsx';
-import * as FC from '@/components/map-make/map.styled';
+import * as SC from '@/components/map-make/map.styled';
 import useMypageQuery from '@/hook/api/query/useMypageQuery';
 
 interface placeType {
@@ -321,31 +321,31 @@ export default function Map({
 
   return (
     <>
-      <FC.Wrapper>
-        <FC.SearchWrapper>
+      <SC.Wrapper>
+        <SC.SearchWrapper>
           <InputText
             placeholder="주소 검색"
             type="text"
             value={inputValue}
             onChange={handleInput}
           />
-          <FC.SearchButton onClick={handleSendAddress}>검색</FC.SearchButton>
-        </FC.SearchWrapper>
-        <FC.MapWrapper>
+          <SC.SearchButton onClick={handleSendAddress}>검색</SC.SearchButton>
+        </SC.SearchWrapper>
+        <SC.MapWrapper>
           {searchKeyword ? (
-            <FC.SearchListBox id="search-result">
-              <FC.SearchTitle>
-                <FC.SearchKeyword>{searchKeyword}</FC.SearchKeyword>
+            <SC.SearchListBox id="search-result">
+              <SC.SearchTitle>
+                <SC.SearchKeyword>{searchKeyword}</SC.SearchKeyword>
                 {!!searchKeyword && '검색결과'}
-              </FC.SearchTitle>
-              <FC.SearchList>
-                <FC.SearchUl id="places-list"></FC.SearchUl>
-              </FC.SearchList>
-            </FC.SearchListBox>
+              </SC.SearchTitle>
+              <SC.SearchList>
+                <SC.SearchUl id="places-list"></SC.SearchUl>
+              </SC.SearchList>
+            </SC.SearchListBox>
           ) : null}
-          <FC.Map id="myMap"></FC.Map>
-        </FC.MapWrapper>
-      </FC.Wrapper>
+          <SC.Map id="myMap"></SC.Map>
+        </SC.MapWrapper>
+      </SC.Wrapper>
     </>
   );
 }

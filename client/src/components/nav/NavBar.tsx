@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useReadLocalStorage } from 'usehooks-ts';
+import * as SC from './NavBar.styled';
 import NavTab from './NavTab';
 import { ReactComponent as Login } from '@/assets/mobile/login-app.svg';
 import { ReactComponent as Logout } from '@/assets/mobile/logout-app.svg';
@@ -17,8 +18,8 @@ export default function NavBar() {
 
   if (accessToken) {
     return (
-      <nav className="hidden max-sm:block bg-white fixed bottom-[16px] rounded-[30px] left-1/2 -translate-x-[50%] z-[800] shadow-xl">
-        <ul className="flex gap-8 py-3 px-10 max-sm:px-7 max-sm:gap-7">
+      <SC.NavContainer>
+        <SC.HostList>
           <NavTab route="Home" />
           <NavTab route="WalkMate" />
           <NavTab route="WalkPosting" />
@@ -27,19 +28,19 @@ export default function NavBar() {
           <li className=" cursor-pointer">
             <Logout className="w-9 h-9" onClick={handleClick} />
           </li>
-        </ul>
-      </nav>
+        </SC.HostList>
+      </SC.NavContainer>
     );
   } else {
     return (
-      <nav className="hidden max-sm:block bg-white fixed bottom-[16px] rounded-[30px] left-1/2 -translate-x-[50%] z-[800] shadow-xl">
-        <ul className="flex gap-8 py-3 px-10">
+      <SC.NavContainer>
+        <SC.HostList>
           <NavTab route="Home" />
           <li className="cursor-pointer">
             <Login className="w-9 h-9" onClick={handleClick} />
           </li>
-        </ul>
-      </nav>
+        </SC.HostList>
+      </SC.NavContainer>
     );
   }
 }

@@ -1,4 +1,4 @@
-import { ProfileImage } from '@/common/profile/Profile.styled.tsx';
+import * as SC from '@/common/profile/Profile.styled.tsx';
 
 interface ProfileProps {
   size: 'lg' | 'md' | 'sm';
@@ -7,5 +7,5 @@ interface ProfileProps {
 }
 
 export default function Profile({ size, isgreen, url }: ProfileProps) {
-  return <ProfileImage size={size} isgreen={isgreen} src={url} />;
+  return <SC.ProfileImage size={size} isgreen={isgreen} src={url} />;
 }

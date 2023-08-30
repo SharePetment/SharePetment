@@ -1,4 +1,4 @@
-import { SelectInput } from '@/common/select/select.styled.tsx';
+import * as SC from '@/common/select/select.styled.tsx';
 import { getData } from '@/hook/useZipCode';
 import { BASE_CODE } from '@/util/region';
 
@@ -22,7 +22,7 @@ export default function SelectComponent({
   return (
     <>
       {!isLoading && (
-        <SelectInput
+        <SC.SelectInput
           name={name}
           id={name}
           selectsize={size}
@@ -68,7 +68,7 @@ export default function SelectComponent({
                   : ''}
               </option>
             ))}
-        </SelectInput>
+        </SC.SelectInput>
       )}
     </>
   );

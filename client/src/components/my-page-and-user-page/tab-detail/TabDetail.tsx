@@ -7,7 +7,7 @@ import * as SC from '@/components/my-page-and-user-page/tab-detail/tabDetail.sty
 import NoticeNoData from '@/components/notice/NoticeNoData';
 import NoticeOnlyOwner from '@/components/notice/NoticeOnlyOwner';
 import NoticeServerError from '@/components/notice/NoticeServerError';
-import { ErrorText } from '@/pages/notFound/NotFound.styled';
+import * as SCNOTFOUND from '@/pages/notFound/NotFound.styled';
 import Path from '@/routers/paths';
 import { CommentProp } from '@/types/commentType';
 import { Feed } from '@/types/feedTypes';
@@ -117,7 +117,9 @@ export default function TabDetail({
         <div className="w-[300px]">
           {!commentData?.length ? (
             <div className="flex flex-col items-center justify-center">
-              <ErrorText>아직 댓글을 단 산책 게시물이 없어요.</ErrorText>
+              <SCNOTFOUND.ErrorText>
+                아직 댓글을 단 산책 게시물이 없어요.
+              </SCNOTFOUND.ErrorText>
               <img src={NoCommentCat} className="w-80 mt-10" />
             </div>
           ) : (

@@ -6,7 +6,7 @@ import NavItem from './NavItem';
 import { SERVER_URL } from '@/api/url.ts';
 import { ReactComponent as Logo } from '@/assets/logo.svg';
 import Button from '@/common/button/Button.tsx';
-import { HeaderContainer, NavList } from '@/common/header/Header.styled';
+import * as SC from '@/common/header/Header.styled';
 import Popup from '@/common/popup/Popup.tsx';
 import Profile from '@/common/profile/Profile.tsx';
 import useMypageQuery from '@/hook/api/query/useMypageQuery';
@@ -46,14 +46,14 @@ export default function Header() {
             popupcontrol={() => setIsOpen(false)}
           />
         )}
-        <HeaderContainer>
+        <SC.HeaderContainer>
           <div>
             <Link to={Path.Home}>
               <Logo className="w-52 h-8" />
             </Link>
           </div>
           <nav>
-            <NavList>
+            <SC.NavList>
               <NavItem path="Home" />
               {data?.animalParents && <NavItem path="Walk" />}
               {!data?.animalParents && (
@@ -77,9 +77,9 @@ export default function Header() {
                   handler={handleClick}
                 />
               </li>
-            </NavList>
+            </SC.NavList>
           </nav>
-        </HeaderContainer>
+        </SC.HeaderContainer>
       </>
     );
   } else {
@@ -98,14 +98,14 @@ export default function Header() {
             popupcontrol={() => setIsOpen(false)}
           />
         )}
-        <HeaderContainer>
+        <SC.HeaderContainer>
           <div>
             <Link to={Path.Home}>
               <Logo className="w-52 h-8" />
             </Link>
           </div>
           <nav>
-            <NavList>
+            <SC.NavList>
               <NavItem path="Home" />
               <NavItem path="NoWalk" />
               <NavItem path="NoPost" handler={() => setIsOpen(true)} />
@@ -117,9 +117,9 @@ export default function Header() {
                   handler={handleClick}
                 />
               </li>
-            </NavList>
+            </SC.NavList>
           </nav>
-        </HeaderContainer>
+        </SC.HeaderContainer>
       </>
     );
   }

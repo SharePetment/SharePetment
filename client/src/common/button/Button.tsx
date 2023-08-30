@@ -1,4 +1,4 @@
-import { Btn } from '@/common/button/button.styled';
+import * as SC from '@/common/button/button.styled';
 import { BooleanStr, Size, Handler } from '@/types/propType.ts';
 
 interface Prop {
@@ -20,12 +20,12 @@ export default function Button({
     // 빈함수
   };
   return (
-    <Btn
+    <SC.Btn
       isgreen={isgreen}
       size={size}
       onClick={handler ? handler : voidFn}
       disabled={disabled === undefined ? false : disabled ? true : false}>
       {text}
-    </Btn>
+    </SC.Btn>
   );
 }

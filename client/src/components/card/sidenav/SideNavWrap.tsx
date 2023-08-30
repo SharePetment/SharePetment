@@ -1,4 +1,4 @@
-import { Wrap } from './SideNav.styled.tsx';
+import * as SC from './SideNav.styled.tsx';
 import { ReactComponent as Comment } from '@/assets/button/comment.svg';
 import { ReactComponent as Delete } from '@/assets/button/delete.svg';
 import { ReactComponent as Edit } from '@/assets/button/edit.svg';
@@ -13,9 +13,9 @@ type Prop = {
 
 export default function SideNavWrap(prop: Prop) {
   return (
-    <Wrap className={prop.class} onClick={prop.onClick}>
+    <SC.Wrap className={prop.class} onClick={prop.onClick}>
       {prop.children}
-    </Wrap>
+    </SC.Wrap>
   );
 }
 
