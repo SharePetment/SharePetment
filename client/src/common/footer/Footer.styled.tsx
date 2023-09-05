@@ -1,6 +1,6 @@
 import tw from 'tailwind-styled-components';
 
-export const Container = tw.div`
+export const Container = tw.footer`
   flex
   flex-col
   items-center
@@ -16,7 +16,7 @@ export const TopContainer = tw.div`
   items-center
 `;
 
-export const Text = tw.span`
+export const Text = tw.address`
   text-xs
   font-semibold
   text-[lightgray]

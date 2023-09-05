@@ -13,7 +13,7 @@ export const Feed = tw.img`
   border-deepgreen
 `;
 
-export const ContentContainer = tw.div`
+export const ContentContainer = tw.section`
   absolute
   bottom-10
   bg-zinc-900/30

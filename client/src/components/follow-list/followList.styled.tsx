@@ -16,23 +16,22 @@ h-2/3
 border
 `;
 
-export const Title = tw.span`
+export const Title = tw.h1`
     font-semibold
     text-xl
     my-4
 `;
 
-export const FollowBox = tw.div`
+export const FollowBox = tw.article`
     w-full
     h-5/6
     overflow-y-auto
     flex
     flex-col
     items-center
-
 `;
 
-export const FollowingBox = tw.div`
+export const FollowingBox = tw.section`
     flex
     items-center
     w-3/4
