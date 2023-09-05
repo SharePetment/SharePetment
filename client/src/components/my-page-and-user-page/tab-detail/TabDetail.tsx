@@ -2,6 +2,7 @@ import { InfiniteData } from '@tanstack/react-query';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import NoCommentCat from '@/assets/illustration/nocomment-cat.png';
+import NoCommentCatWebp from '@/assets/illustration/nocomment-cat.webp';
 import WalkCard from '@/components/card/walk-card/walkCard';
 import * as SC from '@/components/my-page-and-user-page/tab-detail/tabDetail.styled';
 import NoticeNoData from '@/components/notice/NoticeNoData';
@@ -120,7 +121,10 @@ export default function TabDetail({
               <SCNOTFOUND.ErrorText>
                 아직 댓글을 단 산책 게시물이 없어요.
               </SCNOTFOUND.ErrorText>
-              <img src={NoCommentCat} className="w-80 mt-10" />
+              <picture>
+                <source srcSet={NoCommentCatWebp} type="image/webp" />
+                <img src={NoCommentCat} className=" w-60" alt="LyingDownDog" />
+              </picture>
             </div>
           ) : (
             commentData?.map(item => (

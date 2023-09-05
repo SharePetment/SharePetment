@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import LyingDownDog from '@/assets/illustration/lying-down-dog.png';
+import LyingDownDogWebp from '@/assets/illustration/lying-down-dog.webp';
 import * as SC from '@/pages/notFound/NotFound.styled.tsx';
 
 type NoticeNoDataProp = {
@@ -13,7 +14,10 @@ export default function NoticeNoData({ url }: NoticeNoDataProp) {
       <SC.ErrorText>
         작성한 피드가 없으시군요! 게시물 등록하러 가볼까요?
       </SC.ErrorText>
-      <img src={LyingDownDog} className="w-80 my-5" />
+      <picture>
+        <source srcSet={LyingDownDogWebp} type="image/webp" />
+        <img src={LyingDownDog} className="w-80 my-5" alt="LyingDownDog" />
+      </picture>
       <SC.HomeBtn onClick={() => navigate(`/${url}`)}>
         게시물 등록하러 가기
       </SC.HomeBtn>

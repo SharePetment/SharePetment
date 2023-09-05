@@ -2,7 +2,9 @@ import { useNavigate } from 'react-router-dom';
 import { Navigation } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import LyingDownDog from '@/assets/illustration/lying-down-dog.png';
+import LyingDownDogWebp from '@/assets/illustration/lying-down-dog.webp';
 import PetFriends from '@/assets/illustration/pet-friends.png';
+import PetFriendsWebp from '@/assets/illustration/pet-friends.webp';
 import * as SC from '@/common/popup/popup.styled.tsx';
 import CircleProgressBar from '@/components/home-page/welcome-popup/CricleProgressBar';
 import Path from '@/routers/paths';
@@ -28,7 +30,10 @@ export default function WelcomePopup({ setFirstVisited }: Prop) {
         <SwiperSlide className=" bg-defaultbg">
           <div className="flex flex-col justify-center items-center h-full font-semibold">
             다양한 반려동물을 구경할 수 있어요.
-            <img src={PetFriends} className=" w-60" />
+            <picture>
+              <source srcSet={PetFriendsWebp} type="image/webp" />
+              <img src={PetFriends} className=" w-60" alt="petFrends" />
+            </picture>
             <CircleProgressBar circle={{ index: 0, total: 3 }} />
           </div>
         </SwiperSlide>
@@ -37,7 +42,10 @@ export default function WelcomePopup({ setFirstVisited }: Prop) {
             <span className="text-center max-sm:w-52">
               우리집 반려동물의 산책 친구를 만들어줄 수 있어요.
             </span>
-            <img src={LyingDownDog} className=" w-60" />
+            <picture>
+              <source srcSet={LyingDownDogWebp} type="image/webp" />
+              <img src={LyingDownDog} className=" w-60" alt="LyingDownDog" />
+            </picture>
             <CircleProgressBar circle={{ index: 1, total: 3 }} />
           </div>
         </SwiperSlide>
