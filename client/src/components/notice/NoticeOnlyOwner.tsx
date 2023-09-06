@@ -1,5 +1,6 @@
 import { useMatch, useNavigate } from 'react-router-dom';
 import LoginPets from '@/assets/illustration/loginpet.png';
+import LoginPetsWebp from '@/assets/illustration/loginpet.webp';
 import * as SC from '@/pages/notFound/NotFound.styled.tsx';
 import Path from '@/routers/paths.ts';
 
@@ -16,7 +17,10 @@ export default function NoticeOnlyOwner() {
       {matchMypage === null && (
         <SC.ErrorText>반려동물 등록하러 갈까요?</SC.ErrorText>
       )}
-      <img src={LoginPets} className=" w-80" />
+      <picture>
+        <source srcSet={LoginPetsWebp} type="image/webp" />
+        <img src={LoginPets} className=" w-80" alt="LyingDownDog" />
+      </picture>
       {matchMypage === null && (
         <SC.HomeBtn onClick={() => navigate(Path.MyPage)}>
           반려동물 등록하러가기
