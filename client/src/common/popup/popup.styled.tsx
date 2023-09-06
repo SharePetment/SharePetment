@@ -13,7 +13,7 @@ export const PopupBackGround = tw.div`
     bg-zinc-900/75
 `;
 
-export const PopupBox = tw.div`
+export const PopupBox = tw.figure`
     bg-[#D9D9D9]
     flex
     flex-col

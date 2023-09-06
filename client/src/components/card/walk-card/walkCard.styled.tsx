@@ -11,20 +11,18 @@ export const CardContainer = tw.div<{ size: string }>`
   flex
   flex-col
   relative
-
   transition 
   duration-300 
   ease-in-out
-
   hover:shadow-lg
-  dark:hover:shadow-black/30"
+  dark:hover:shadow-black/30
 `;
 
 export const WalkDate = tw.div`
   text-deepgray
 `;
 
-export const Title = tw.div`
+export const Title = tw.h1`
   font-semibold
   text-lg
   min-h-[56px]
@@ -66,7 +64,7 @@ export const Backdrop = tw.div<{ size: string }>`
   left-0
 `;
 
-export const CompleteText = tw.div`
+export const CompleteText = tw.h1`
   font-bold
   shrink-0
 `;
@@ -77,6 +75,6 @@ export const CompleteNotice = tw.div`
   absolute
   top-1/2
   left-1/2
-  -translate-x-[55%]
-  -translate-y-[50%]
+  translate-x-[55%]
+  translate-y-[50%]
 `;

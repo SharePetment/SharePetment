@@ -8,7 +8,6 @@ export const Container = tw.div`
 `;
 export const HeaderBox = tw.div`
     flex
-
     items-center
 `;
 export const UserBox = tw.div`
@@ -32,22 +31,22 @@ export const ContentBox = tw.div`
 `;
 
 export const Content = tw.span`
-py-2
+    py-2
 `;
 
 export const BtnBox = tw.div`
-    flex
-    justify-between
-    w-[56px]
-    ml-[16px]
-    text-deepgray
+     flex
+     justify-between
+     w-[56px]
+     ml-[16px]
+     text-deepgray
 `;
-export const EditBtn = tw.span`
+export const EditBtn = tw.button`
     cursor-pointer
     text-sm
     hover:text-lightgreen
 `;
-export const DeleteBtn = tw.span`
+export const DeleteBtn = tw.button`
     cursor-pointer
     text-sm
     hover:text-lightgreen
@@ -64,7 +63,6 @@ export const Input = tw.input`
     w-[400px]
     max-sm:w-[250px]
     rounded-2xl
-
     border-lightgray
     border-2
     outline-none

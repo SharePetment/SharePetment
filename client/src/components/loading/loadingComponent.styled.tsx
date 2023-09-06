@@ -11,7 +11,7 @@ export const Container = tw.div`
   mb-10
 `;
 
-export const LoadingWrap = tw.div`
+export const LoadingWrap = tw.article`
   relative
   pt-10
 `;

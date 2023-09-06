@@ -1,7 +1,7 @@
 import tw from 'tailwind-styled-components';
 import { BooleanStr } from '@/types/propType.ts';
 
-export const HeaderContainer = tw.div`
+export const HeaderContainer = tw.header`
   w-full
   flex
   justify-between

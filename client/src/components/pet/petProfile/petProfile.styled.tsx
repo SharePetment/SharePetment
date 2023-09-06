@@ -1,16 +1,16 @@
 import tw from 'tailwind-styled-components';
-export const PetProfileDiv = tw.div`
+export const PetProfileDiv = tw.article`
     w-3/4
     mb-3
 `;
 
-export const ProfileHeader = tw.div`
+export const ProfileHeader = tw.section`
     flex
     items-center
     justify-center
 `;
 
-export const ProfileText = tw.div`
+export const ProfileText = tw.section`
     ml-2
     w-3/5
     text-bases
@@ -19,7 +19,7 @@ export const ProfileText = tw.div`
     max-sm:text-sm
 `;
 
-export const ProfileTail = tw.div`
+export const ProfileTail = tw.section`
 mt-3
 flex
 items-center

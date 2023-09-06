@@ -1,6 +1,6 @@
 import tw from 'tailwind-styled-components';
 
-export const Container = tw.div`
+export const Container = tw.figure`
   w-96
   h-[600px]
   max-sm:w-[350px]
