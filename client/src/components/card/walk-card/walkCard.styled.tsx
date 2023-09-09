@@ -75,6 +75,6 @@ export const CompleteNotice = tw.div`
   absolute
   top-1/2
   left-1/2
-  translate-x-[55%]
-  translate-y-[50%]
+  translate-x-[-55%]
+  translate-y-[-50%]
 `;

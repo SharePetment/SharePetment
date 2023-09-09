@@ -1,7 +1,6 @@
-import axios from 'axios';
+import axiosInstance from '@/api/axios';
 import { SERVER_URL } from '@/api/url.ts';
 import { Subscribe } from '@/types/subscribe.ts';
-
 interface MutationProp {
   url: string;
   accessToken: string | null;
@@ -21,7 +20,7 @@ interface MethodFormProp extends MutationProp {
 
 export const postFormMuation = async (body: MethodFormProp) => {
   const { formData, url, accessToken } = body;
-  const result = await axios.post(url, formData, {
+  const result = await axiosInstance.post(url, formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
       Authorization: accessToken,
@@ -33,7 +32,7 @@ export const postFormMuation = async (body: MethodFormProp) => {
 /* ------------------------------ PATCH METHOD ------------------------------ */
 export const patchMutation = async (body: MutationProp) => {
   const { url, accessToken } = body;
-  const result = await axios.patch(
+  const result = await axiosInstance.patch(
     url,
     {},
     {
@@ -49,7 +48,7 @@ export const patchMutation = async (body: MutationProp) => {
 
 export const patchFormMuation = async (body: MethodFormProp) => {
   const { formData, url, accessToken } = body;
-  const result = await axios.patch(url, formData, {
+  const result = await axiosInstance.patch(url, formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
       Authorization: accessToken,
@@ -61,7 +60,7 @@ export const patchFormMuation = async (body: MethodFormProp) => {
 /* ------------------------------ DELETE METHOD ------------------------------ */
 export const deleteMutation = async (body: MutationProp) => {
   const { url, accessToken } = body;
-  const result = await axios.delete(url, {
+  const result = await axiosInstance.delete(url, {
     headers: {
       Authorization: accessToken,
     },
@@ -75,7 +74,7 @@ export const patchComment = async (body: Comment) => {
 
   const data = tag === 'feed' ? { feedId: id, content } : { content };
 
-  const result = await axios.patch(url, data, {
+  const result = await axiosInstance.patch(url, data, {
     headers: {
       'Content-Type': 'application/json',
       Authorization: accessToken,
@@ -92,7 +91,7 @@ export interface PostComment extends MutationProp {
 export const postComment = async (body: PostComment) => {
   const { content, url, accessToken } = body;
 
-  const result = await axios.post(
+  const result = await axiosInstance.post(
     url,
     { content },
     {
@@ -115,7 +114,7 @@ export interface PatchUserInfo extends MutationProp {
 export const patchUserInfo = async (body: PatchUserInfo) => {
   const { nickname, address, url, accessToken } = body;
 
-  const result = await axios.patch(
+  const result = await axiosInstance.patch(
     url,
     { nickname, address },
     {
@@ -136,7 +135,7 @@ interface PostFeedCommentProp extends MutationProp {
 
 export const postFeedComment = async (body: PostFeedCommentProp) => {
   const { url, accessToken, content, feedId } = body;
-  const result = await axios.post(
+  const result = await axiosInstance.post(
     url,
     { content, feedId },
     {
@@ -165,7 +164,7 @@ export const postWalkFeed = async (payload: FillWalkPosProp) => {
   const { title, content, mapURL, chatURL, location, time, open, maximum } =
     payload;
 
-  const result = await axios.post(
+  const result = await axiosInstance.post(
     `${SERVER_URL}/walkmates`,
     {
       title,
@@ -190,7 +189,7 @@ export const postWalkFeed = async (payload: FillWalkPosProp) => {
 
 export const postSubscribe = async (body: MutationProp) => {
   const { url, accessToken } = body;
-  const result = await axios.post<Subscribe>(
+  const result = await axiosInstance.post<Subscribe>(
     url,
     {},
     { headers: { Authorization: accessToken } },
@@ -207,7 +206,7 @@ export const patchWalkFeed = async (payload: PatchWalkPosProp) => {
   const { title, content, mapURL, chatURL, location, time, open, maximum } =
     payload;
 
-  const result = await axios.patch(
+  const result = await axiosInstance.patch(
     `${SERVER_URL}/walkmates/${payload.walkId}`,
     {
       title,

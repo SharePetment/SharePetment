@@ -8,7 +8,7 @@ export const NavContainer = tw.nav`
   bottom-[16px]
   rounded-[30px]
   left-1/2
-  translate-x-[50%]
+  translate-x-[-50%]
   z-[800]
   shadow-xl
 `;
