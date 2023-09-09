@@ -1,6 +1,7 @@
 import { useEffect, useContext } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useLocalStorage } from 'usehooks-ts';
+import { EXPIRED_TIME } from '@/api/axios';
 import LoadingComponent from '@/components/loading/LoadingComponent';
 import Path from '@/routers/paths.ts';
 import { ContextDispatch, MemberIdDispatchContext } from '@/store/Context.tsx';
@@ -8,6 +9,7 @@ import { ContextDispatch, MemberIdDispatchContext } from '@/store/Context.tsx';
 export function Component() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const [, setExpiresTime] = useLocalStorage('expiresTime', ``);
   const [, setAccessToken] = useLocalStorage<string | null>('accessToken', '');
   const [, setRefreshToken] = useLocalStorage<string | null>(
     'refreshToken',
@@ -28,6 +30,11 @@ export function Component() {
         type: 'NOT_TOKEN',
       });
 
+      // 만료시간 로컬에 저장하기
+      const date = Date.now() + EXPIRED_TIME;
+
+      setExpiresTime(`${date}`);
+
       const present = searchParams.get('present');
       if (present === 'true') setTimeout(() => navigate(Path.Home), 1000);
       else {
@@ -42,7 +49,14 @@ export function Component() {
         });
       }
     }
-  }, [setAccessToken, setRefreshToken, searchParams, navigate, dispatch]);
+  }, [
+    setAccessToken,
+    setRefreshToken,
+    searchParams,
+    navigate,
+    dispatch,
+    setExpiresTime,
+  ]);
 
   return <LoadingComponent />;
 }

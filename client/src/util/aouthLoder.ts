@@ -11,7 +11,7 @@ export function getToken() {
 export function unAouthLoder() {
   const token = getToken();
   if (!token) {
-    return redirect('/login');
+    return redirect('/');
   }
   return null;
 }
